@@ -1,0 +1,37 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-yo_w00mt)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.80s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test development_rejects_incomplete_unknown_failed_or_unordered_evidence ... FAILED
+
+failures:
+
+---- development_rejects_incomplete_unknown_failed_or_unordered_evidence stdout ----
+
+thread 'development_rejects_incomplete_unknown_failed_or_unordered_evidence' (1980615) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["verify", "001-paypal"]
+stdout: {
+  "development": {
+    "design_fingerprint": "3150a5b591e78b061151befc77fc0196a7df3bfcf9c3f8657d234e3ab12a3c65",
+    "errors": [],
+    "gate": "ready-for-pre-release",
+    "next": "pre-release",
+    "plan_hash": "a5fecb99104415df150134c8326a89282f49c0806de44b375fd347f2d1792832"
+  },
+  "feature": "001-paypal",
+  "phase": "development-verified"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    development_rejects_incomplete_unknown_failed_or_unordered_evidence
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 50 filtered out; finished in 2.44s
+
+error: test failed, to rerun pass `--test workflow`

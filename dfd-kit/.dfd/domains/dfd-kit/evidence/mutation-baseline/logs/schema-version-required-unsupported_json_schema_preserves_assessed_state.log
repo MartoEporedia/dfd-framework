@@ -1,0 +1,31 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-yo_w00mt)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.71s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test unsupported_json_schema_preserves_assessed_state ... FAILED
+
+failures:
+
+---- unsupported_json_schema_preserves_assessed_state stdout ----
+
+thread 'unsupported_json_schema_preserves_assessed_state' (1986493) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["assess", "001-paypal"]
+stdout: {
+  "missing": [],
+  "risk": "low",
+  "route": "light"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(1)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    unsupported_json_schema_preserves_assessed_state
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.81s
+
+error: test failed, to rerun pass `--test workflow`

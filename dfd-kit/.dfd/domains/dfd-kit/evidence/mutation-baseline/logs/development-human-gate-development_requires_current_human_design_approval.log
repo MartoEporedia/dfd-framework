@@ -1,0 +1,32 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-yo_w00mt)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.81s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test development_requires_current_human_design_approval ... FAILED
+
+failures:
+
+---- development_requires_current_human_design_approval stdout ----
+
+thread 'development_requires_current_human_design_approval' (1979570) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["plan", "001-paypal"]
+stdout: {
+  "feature": "001-paypal",
+  "next": "dfd-implement",
+  "phase": "development",
+  "resumed": false
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(1)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    development_requires_current_human_design_approval
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.80s
+
+error: test failed, to rerun pass `--test workflow`

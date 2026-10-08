@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "pilot": true,
+  "current_level": 0,
+  "target_level": 1,
+  "areas": {
+    "process": {
+      "status": "gap",
+      "evidence": [
+        "process.md",
+        "../../../../AGENTS.md"
+      ],
+      "notes": "Policy obbligatoria e setup presenti; nessuna feature completa adottata dimostrata."
+    },
+    "observability": {
+      "status": "observed",
+      "evidence": [
+        "evidence/mutation-baseline/report.json",
+        "evidence/mutation-baseline/provenance.json"
+      ],
+      "notes": "Report locale con esiti, tempi, hash e log; non osservabilità di un servizio remoto."
+    },
+    "security": {
+      "status": "gap",
+      "evidence": [
+        "guardrails.md",
+        "../../../tests/workflow.rs"
+      ],
+      "notes": "Guardrail e test di preservazione disponibili; non equivalgono a un audit o pilota operativo."
+    },
+    "reliability": {
+      "status": "observed",
+      "evidence": [
+        "evidence/mutation-baseline/report.json",
+        "evidence/mutation-baseline/logs/baseline.log"
+      ],
+      "notes": "Baseline locale passata e 18/18 mutanti curati killed; copertura limitata alle mutazioni dichiarate."
+    },
+    "cost": {
+      "status": "unknown",
+      "evidence": [],
+      "notes": "Tempi nel report disponibili, ma nessuna baseline quantitativa di risorse o budget di dominio."
+    },
+    "culture": {
+      "status": "observed",
+      "evidence": [
+        "../../../../AGENTS.md",
+        "../../../CONTRIBUTING.md"
+      ],
+      "notes": "Mandato esplicito a usare DFD; efficacia e continuità da osservare nel pilota."
+    }
+  },
+  "baseline_gaps": [
+    "CI disponibile come template ma non attiva; nessuna prova multipiattaforma osservata.",
+    "Pilota reale delle skill negli harness ancora da eseguire.",
+    "Implementazione preesistente senza cicli feature DFD tracciati; nessuna approvazione retroattiva.",
+    "Baseline quantitativa dei tempi e delle risorse da raccogliere."
+  ],
+  "next_steps": [
+    "Prima feature pilota: risolvere attivazione CI e raccogliere evidenze reali, previa specifica e review.",
+    "Seconda proposta: esecuzione del rollout e relativo tracciamento, da specificare e classificare.",
+    "Terza proposta: learning post-release e aggiornamento della DoD, da specificare e classificare.",
+    "Verificare il pilota nell’harness Codex e poi gli altri harness; retrospettiva dopo tre cicli o prima in caso di blocchi."
+  ]
+}

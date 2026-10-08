@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "scope": "changes",
+      "statement": "Diagnostica JSON, exit code e stato descrivono correttamente errori, prerequisiti e prossimo passo; nessun gate dichiara evidenze o approvazioni inesistenti."
+    },
+    {
+      "id": "OBS-02",
+      "scope": "changes",
+      "statement": "Ogni criterio applicabile è collegato a verifiche reali, risultati e decisioni; file e log delle evidenze mantengono hash, provenienza e ordine temporale verificabili."
+    },
+    {
+      "id": "SEC-01",
+      "scope": "changes",
+      "statement": "Percorsi e symlink non consentono letture o scritture oltre i confini autorizzati del progetto; input non validi vengono rifiutati preservando lo stato."
+    },
+    {
+      "id": "SEC-02",
+      "scope": "changes",
+      "statement": "Installazione, inizializzazione e iterazioni preservano file dell’utente e artefatti esistenti; conflitti e aggiornamenti sono espliciti e ripetibili."
+    },
+    {
+      "id": "SEC-03",
+      "scope": "changes",
+      "statement": "Approvazioni umane sono registrate solo se espresse e pertinenti; modifiche invalidano i fingerprint previsti. Skill e CLI non inventano test, comunicazioni o decisioni."
+    },
+    {
+      "id": "SLO-01",
+      "scope": "changes",
+      "statement": "Comandi, schemi JSON versionati, adapter e contratti restano compatibili oppure documentano migrazione e impatto; versioni non supportate sono rifiutate."
+    },
+    {
+      "id": "SLO-02",
+      "scope": "changes",
+      "statement": "Le verifiche pertinenti passano: test comportamentali, fmt, Clippy e doctor per codice o risorse incorporate; regressioni dei gate hanno test e mutanti mirati, con evidenze red/green per lo sviluppo."
+    },
+    {
+      "id": "SLO-03",
+      "scope": "changes",
+      "statement": "Scritture atomiche per file e lock preservano il contratto documentato anche in caso di errore; non si promette atomicità di transazioni su più file."
+    },
+    {
+      "id": "COST-01",
+      "scope": "changes",
+      "statement": "Il binario per l’utilizzatore funziona senza toolchain, interpreti, rete o servizi AI; dipendenze e costi di sviluppo sono distinti da quelli di esecuzione."
+    },
+    {
+      "id": "COST-02",
+      "scope": "changes",
+      "statement": "Le verifiche sono proporzionate al cambiamento; tempi e risorse sono misurati quando rilevanti, con soglie motivate da dati e senza budget inventati."
+    },
+    {
+      "id": "UX-01",
+      "scope": "changes",
+      "statement": "Help, documentazione e skill condividono comandi e prerequisiti; la specifica può essere ripresa senza sovrascritture, espone i dubbi e li risolve iterativamente."
+    },
+    {
+      "id": "UX-02",
+      "scope": "changes",
+      "statement": "Skill e adapter sono coerenti e reperibili; controlli statici e prove reali nell’harness sono distinti, con istruzioni operative verificabili."
+    },
+    {
+      "id": "SLO-04",
+      "scope": "baseline",
+      "statement": "Attivare CI nel repository e raccogliere esiti reali dei controlli e delle build/test sulle piattaforme dichiarate."
+    },
+    {
+      "id": "UX-03",
+      "scope": "baseline",
+      "statement": "Eseguire un pilota reale delle skill nell’harness Codex e verificare gli altri harness prima di dichiararne la validazione operativa."
+    }
+  ]
+}

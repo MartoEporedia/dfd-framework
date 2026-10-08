@@ -1,0 +1,33 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-yo_w00mt)
+warning: unused variable: `kind`
+   --> src/lib.rs:141:30
+    |
+141 | pub fn classify(risk: &Risk, kind: Kind) -> Result<Classification> {
+    |                              ^^^^ help: if this is intentional, prefix it with an underscore: `_kind`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dfd-kit` (lib) generated 1 warning (run `cargo fix --lib -p dfd-kit` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.71s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test classification_is_proportional_and_new_service_uses_full ... FAILED
+
+failures:
+
+---- classification_is_proportional_and_new_service_uses_full stdout ----
+
+thread 'classification_is_proportional_and_new_service_uses_full' (1977568) panicked at tests/workflow.rs:653:5:
+assertion `left == right` failed
+  left: Some(Light)
+ right: Some(FullComplete)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    classification_is_proportional_and_new_service_uses_full
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test workflow`

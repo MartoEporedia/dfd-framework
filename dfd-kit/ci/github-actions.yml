@@ -1,0 +1,100 @@
+name: DFD Kit
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Copiare questo file in .github/workflows/ nella radice per attivarlo.
+defaults:
+  run:
+    working-directory: dfd-kit
+
+jobs:
+  quality:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: cargo fmt --all --check
+      - run: cargo clippy --locked --all-targets -- -D warnings
+
+  mutations:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: python3 -m unittest discover -s tests -p 'test_mutation_runner.py'
+      - run: python3 scripts/mutation_test.py --online
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dfd-mutation-results
+          path: dfd-kit/target/mutation-results/
+          if-no-files-found: warn
+
+  binaries:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Labels: https://docs.github.com/en/actions/reference/runners/github-hosted-runners
+          - runner: ubuntu-24.04
+            target: x86_64-unknown-linux-musl
+            artifact: dfd-linux-x86_64
+            binary: dfd
+          - runner: macos-15
+            target: aarch64-apple-darwin
+            artifact: dfd-macos-arm64
+            binary: dfd
+          - runner: macos-15-intel
+            target: x86_64-apple-darwin
+            artifact: dfd-macos-x86_64
+            binary: dfd
+          - runner: windows-2025
+            target: x86_64-pc-windows-msvc
+            artifact: dfd-windows-x86_64
+            binary: dfd.exe
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+      - if: runner.os == 'Windows'
+        shell: pwsh
+        run: '"RUSTFLAGS=-C target-feature=+crt-static" >> $env:GITHUB_ENV'
+      - run: cargo test --locked --target ${{ matrix.target }}
+      - run: cargo build --locked --release --target ${{ matrix.target }}
+      - name: Check embedded resources
+        shell: bash
+        run: ./target/${{ matrix.target }}/release/${{ matrix.binary }} doctor
+      - name: Package binary with checksum
+        shell: bash
+        env:
+          DFD_TARGET: ${{ matrix.target }}
+          DFD_ARTIFACT: ${{ matrix.artifact }}
+          DFD_BINARY: ${{ matrix.binary }}
+        run: |
+          mkdir -p dist
+          cp "target/$DFD_TARGET/release/$DFD_BINARY" dist/
+          cd dist
+          if command -v sha256sum >/dev/null 2>&1; then
+            sha256sum "$DFD_BINARY" > SHA256SUMS
+          else
+            shasum -a 256 "$DFD_BINARY" > SHA256SUMS
+          fi
+          tar -czf "$DFD_ARTIFACT.tar.gz" "$DFD_BINARY" SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dfd-kit/dist/${{ matrix.artifact }}.tar.gz
+          if-no-files-found: error

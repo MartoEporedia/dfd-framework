@@ -1,0 +1,24 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-yo_w00mt)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.75s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test source_logs_and_plan_changes_invalidate_development ... FAILED
+
+failures:
+
+---- source_logs_and_plan_changes_invalidate_development stdout ----
+
+thread 'source_logs_and_plan_changes_invalidate_development' (1980103) panicked at tests/workflow.rs:865:9:
+assertion `left == right` failed
+  left: String("ready-for-pre-release")
+ right: "blocked-evidence"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    source_logs_and_plan_changes_invalidate_development
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.88s
+
+error: test failed, to rerun pass `--test workflow`
