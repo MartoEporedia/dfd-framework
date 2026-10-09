@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "owner": "Marco Martorana",
+  "objective": "Completare lo sviluppo con evidenze locali quando la CI è prematura, senza autorizzare implicitamente un rilascio.",
+  "business_metrics": [
+    "Completamento sviluppo senza CI fittizia",
+    "Nessun accesso alla pre-release in development-only"
+  ],
+  "epic": {
+    "reference": "Richiesta del manutentore in conversazione: vai, fallo; aggiorna anche i documenti",
+    "approved_by": "Marco Martorana",
+    "approved_at": "2026-10-09T14:53:19.548216+00:00"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "applicable",
+      "implementation": "Policy lifecycle versionata e validata; gate distinti con compatibilità legacy, documenti e skill coerenti.",
+      "verification": "Test comportamentali lifecycle e suite Rust; mutanti mirati; verifica link e risorse incorporate."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "applicable",
+      "implementation": "Policy lifecycle versionata e validata; gate distinti con compatibilità legacy, documenti e skill coerenti.",
+      "verification": "Test comportamentali lifecycle e suite Rust; mutanti mirati; verifica link e risorse incorporate."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "applicable",
+      "implementation": "Policy lifecycle versionata e validata; gate distinti con compatibilità legacy, documenti e skill coerenti.",
+      "verification": "Test comportamentali lifecycle e suite Rust; mutanti mirati; verifica link e risorse incorporate."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "applicable",
+      "implementation": "Policy lifecycle versionata e validata; gate distinti con compatibilità legacy, documenti e skill coerenti.",
+      "verification": "Test comportamentali lifecycle e suite Rust; mutanti mirati; verifica link e risorse incorporate."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Policy lifecycle versionata e validata; gate distinti con compatibilità legacy, documenti e skill coerenti.",
+      "verification": "Test comportamentali lifecycle e suite Rust; mutanti mirati; verifica link e risorse incorporate."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Policy lifecycle versionata e validata; gate distinti con compatibilità legacy, documenti e skill coerenti.",
+      "verification": "Test comportamentali lifecycle e suite Rust; mutanti mirati; verifica link e risorse incorporate."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Policy lifecycle versionata e validata; gate distinti con compatibilità legacy, documenti e skill coerenti.",
+      "verification": "Test comportamentali lifecycle e suite Rust; mutanti mirati; verifica link e risorse incorporate."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Nessuna modifica al meccanismo di persistenza o ai budget; verifiche esistenti preservate."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "applicable",
+      "implementation": "Policy lifecycle versionata e validata; gate distinti con compatibilità legacy, documenti e skill coerenti.",
+      "verification": "Test comportamentali lifecycle e suite Rust; mutanti mirati; verifica link e risorse incorporate."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "excluded",
+      "justification": "Nessuna modifica al meccanismo di persistenza o ai budget; verifiche esistenti preservate."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Policy lifecycle versionata e validata; gate distinti con compatibilità legacy, documenti e skill coerenti.",
+      "verification": "Test comportamentali lifecycle e suite Rust; mutanti mirati; verifica link e risorse incorporate."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "applicable",
+      "implementation": "Policy lifecycle versionata e validata; gate distinti con compatibilità legacy, documenti e skill coerenti.",
+      "verification": "Test comportamentali lifecycle e suite Rust; mutanti mirati; verifica link e risorse incorporate."
+    }
+  ],
+  "test_plan": "Red/green su sviluppo locale, suite finale obbligatoria e cronologia/hash, CI opzionale motivata e default legacy stretto, blocco pre-release e invalidazione dopo cambio policy; suite completa e mutanti.",
+  "guardrails": "Non indebolire review umana, integrità degli artefatti o rischio; niente deploy. Policy assente conserva CI obbligatoria. Nessuna CI simulata.",
+  "open_questions": []
+}

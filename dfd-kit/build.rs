@@ -18,6 +18,12 @@ fn main() {
             files.push(entry.strip_prefix(&root).unwrap().to_owned());
         }
     }
+    for entry in fs::read_dir(root.join("examples")).unwrap() {
+        let entry = entry.unwrap().path();
+        if entry.extension().is_some_and(|ext| ext == "md") {
+            files.push(entry.strip_prefix(&root).unwrap().to_owned());
+        }
+    }
     for entry in fs::read_dir(root.join("skills")).unwrap() {
         let skill = entry.unwrap().path().join("SKILL.md");
         if skill.is_file() {
@@ -35,6 +41,7 @@ fn main() {
     generated.push_str("];\n");
     println!("cargo:rerun-if-changed=templates");
     println!("cargo:rerun-if-changed=skills");
+    println!("cargo:rerun-if-changed=examples");
     fs::write(
         PathBuf::from(env::var("OUT_DIR").unwrap()).join("bundle.rs"),
         generated,

@@ -23,17 +23,17 @@ Usare la variante di piattaforma appropriata o `./target/release/dfd` dopo la bu
 
 ## 3. Rischio e specifiche iterative
 
-Applicare l’algoritmo di [rischio centrale](../../../../rischio.md): almeno un high implica full completo; almeno due medium implicano full proporzionato; altrimenti light. Un nuovo servizio usa full completo. Dati ignoti non diventano low.
+Applicare l’algoritmo di [rischio centrale](../../../../rischio.md): almeno un high implica full completo; almeno due medium implicano full proporzionato; altrimenti light. Un nuovo servizio usa full completo. Il rapido è una scelta esplicita per fix di contratto noto o editoriali: tutte le dimensioni low, ambito circoscritto, nessun contratto cambiato, dubbio o comportamento critico. Dati ignoti non diventano low.
 
 Valutare le dimensioni canoniche rispetto al toolkit: perdita o sovrascrittura di file, escape dei percorsi, false approvazioni e migrazioni incompatibili possono essere high; nuovi comandi e contratti condivisi richiedono analisi dell’impatto; correzioni editoriali isolate possono essere low se non alterano comportamento o istruzioni operative. Questi esempi non sostituiscono la valutazione per dimensione.
 
-Aprire o riprendere la feature; eseguire assess e specify. Registrare i dubbi aperti e fare domande mirate; ripetere specify e aggiornare la bozza senza sovrascrivere il lavoro. Collegare criteri, test e vincoli. Passare alla review di design solo con una specifica verificabile; registrare con decide la decisione umana effettivamente espressa. Il setup ready certifica completezza strutturale, non approvazione del design.
+Per light/full aprire o riprendere la feature; eseguire assess e specify. Per il rapido usare `quick` e il solo record in `.dfd/changes/`, senza specifica o piano separati. Registrare i dubbi aperti e fare domande mirate; ripetere specify e aggiornare la bozza senza sovrascrivere il lavoro. Collegare criteri, test e vincoli. Passare alla review di design solo con una specifica verificabile; registrare con decide la decisione umana effettivamente espressa. Il setup ready certifica completezza strutturale, non approvazione del design.
 
 ## 4. Sviluppo ed evidenze
 
 Dopo design approvato e attuale, derivare plan, sviluppare con TDD e raccogliere evidenze red/green per task, hash e log. Eseguire le verifiche pertinenti di [CONTRIBUTING.md](../../../CONTRIBUTING.md), inclusi mutanti interessati dai gate modificati; giustificare esclusioni per cambiamenti documentali. verify valuta ciò che è registrato e non esegue i test.
 
-Il gate di sviluppo richiede una CI realmente green quando prevista dal contratto. La CI oggi è un template non attivo: risultati locali non possono essere etichettati come CI. Si può preparare il lavoro mantenendo il gate aperto finché manca l’evidenza richiesta.
+La policy in `lifecycle.json` dichiara `development-only`, con CI non richiesta e motivazione esplicita. Light/full richiedono evidenze red/green e una suite finale locale valida; il rapido richiede regressione red/green per fix o verifica pertinente green per editoriale, senza seconda approvazione individuale; nessun risultato locale viene etichettato come CI. Il gate `development-complete` conclude lo sviluppo senza aprire la pre-release. Per distribuire, passare esplicitamente a `release-preparation`, rivalutare la policy CI e riconfermare design, piano ed evidenze invalidati.
 
 ## 5. Pre-release, rilascio e learning
 
@@ -46,3 +46,7 @@ Motivare esecuzione o esclusione di load, resilienza e sicurezza secondo rischio
 Gli otto [template locali](templates/specifica_feature.md) mantengono la struttura centrale e aggiungono istruzioni per il toolkit. I placeholder sono intenzionali nei template e vanno risolti negli artefatti concreti. Usare il [catalogo](criteria.json) per selezionare i criteri e la [DoD](dod.md) per le condizioni verificabili.
 
 Rivedere il setup dopo variazioni del contratto, regressioni o learning e dopo i primi tre cicli feature, anticipando la retrospettiva se il pilota mostra blocchi. Registrare tempi delle verifiche, dubbi risolti, regressioni e attriti dell’harness. Alzare il livello solo con evidenze dell’adozione effettiva.
+
+## 7. Lavoro individuale e policy facoltative
+
+Il dominio è gestito da un singolo manutentore: team.json assente, senza PR, reviewer indipendente o verifiche integrate obbligatori. Le policy team si attivano solo con scelta esplicita; i ruoli possono coincidere. Le nuove feature usano fingerprint selettivi, con prescrizioni normative nel catalogo e nei guardrail. Template e processo descrittivi non introducono vincoli nascosti; le review legacy restano conservative. I template facoltativi di cambiamento rapido e collaborazione affiancano gli otto template di setup.

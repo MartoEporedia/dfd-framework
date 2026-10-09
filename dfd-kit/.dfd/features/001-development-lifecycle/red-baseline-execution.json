@@ -1,0 +1,7 @@
+{
+  "command": "cargo test --locked --offline --test lifecycle_baseline lifecycle_ (fixture contro dist/dfd-macos-arm64 invariato)",
+  "executed_at": "2026-10-09T14:57:53.080048+00:00",
+  "exit_code": 101,
+  "note": "Riproduzione comportamentale contro il binario precedente; il primo tentativo di test aveva un errore di nome fixture e non è prova red del requisito.",
+  "baseline_binary_sha256": "d24e718ea8fd197d86ce06a95334db717f78141cdecb76dc7d6a5acc3999b055"
+}

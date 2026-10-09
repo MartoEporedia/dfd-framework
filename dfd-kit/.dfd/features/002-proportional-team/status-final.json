@@ -1,0 +1,134 @@
+{
+  "adoption": {
+    "areas": {
+      "cost": {
+        "evidence": [],
+        "notes": "Tempi nel report disponibili, ma nessuna baseline quantitativa di risorse o budget di dominio.",
+        "status": "unknown"
+      },
+      "culture": {
+        "evidence": [
+          "../../../../AGENTS.md",
+          "../../../CONTRIBUTING.md"
+        ],
+        "notes": "Mandato esplicito a usare DFD; efficacia e continuità da osservare nel pilota.",
+        "status": "observed"
+      },
+      "observability": {
+        "evidence": [
+          "evidence/mutation-baseline/report.json",
+          "evidence/mutation-baseline/provenance.json"
+        ],
+        "notes": "Report locale con esiti, tempi, hash e log; non osservabilità di un servizio remoto.",
+        "status": "observed"
+      },
+      "process": {
+        "evidence": [
+          "process.md",
+          "../../../../AGENTS.md"
+        ],
+        "notes": "Policy obbligatoria e setup presenti; nessuna feature completa adottata dimostrata.",
+        "status": "gap"
+      },
+      "reliability": {
+        "evidence": [
+          "evidence/mutation-baseline/report.json",
+          "evidence/mutation-baseline/logs/baseline.log"
+        ],
+        "notes": "Baseline locale passata e 18/18 mutanti curati killed; copertura limitata alle mutazioni dichiarate.",
+        "status": "observed"
+      },
+      "security": {
+        "evidence": [
+          "guardrails.md",
+          "../../../tests/workflow.rs"
+        ],
+        "notes": "Guardrail e test di preservazione disponibili; non equivalgono a un audit o pilota operativo.",
+        "status": "gap"
+      }
+    },
+    "baseline_gaps": [
+      "CI rinviata in development-only; valutarne la necessità e raccogliere prove multipiattaforma prima di dichiarare una distribuzione supportata.",
+      "Pilota reale delle skill negli harness ancora da eseguire.",
+      "Implementazione preesistente senza cicli feature DFD tracciati; nessuna approvazione retroattiva.",
+      "Baseline quantitativa dei tempi e delle risorse da raccogliere."
+    ],
+    "current_level": 0,
+    "next_steps": [
+      "Prima feature pilota: verificare la modalità solo sviluppo con suite locale e gate distinti; CI da valutare alla transizione al rilascio.",
+      "Seconda proposta: esecuzione del rollout e relativo tracciamento, da specificare e classificare.",
+      "Terza proposta: learning post-release e aggiornamento della DoD, da specificare e classificare.",
+      "Verificare il pilota nell’harness Codex e poi gli altri harness; retrospettiva dopo tre cicli o prima in caso di blocchi."
+    ],
+    "pilot": true,
+    "schema_version": 1,
+    "target_level": 1
+  },
+  "assessment_hash": "9495fdde2cf2be71423208193d897cb62dc5b6dd89767d77b405ae2dd81c3e96",
+  "collaboration": null,
+  "created_at": "2026-10-09T19:36:59.538021Z",
+  "decisions": [
+    {
+      "conditions": [],
+      "decision": "approved",
+      "fingerprint": "864b1261f30b4a6b9309617cf2d02218cde7753834bb0ea5b0487504ec8301ef",
+      "note": "Decisioni espresse dal manutentore nella conversazione e richiesta esplicita di implementarle nella documentazione e nella CLI; nessuna release autorizzata.",
+      "recorded_at": "2026-10-09T19:36:59.860308Z",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead"
+    },
+    {
+      "conditions": [],
+      "decision": "approved",
+      "fingerprint": "a4adb7eef773213471157749a4d5cdedcc8404ae94e1edb2c516f46ca754fa0b",
+      "note": "Riuso della decisione già espressa dal manutentore: implementare rapido/light/full, test contro regressioni gravi e collaborazione facoltativa. Chiarimento esplicito successivo: anche singolo dev, senza PR o seconda review obbligatorie. Questa registrazione non approva una release.",
+      "recorded_at": "2026-10-09T20:02:16.042854Z",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead"
+    }
+  ],
+  "development": {
+    "design_fingerprint": "a4adb7eef773213471157749a4d5cdedcc8404ae94e1edb2c516f46ca754fa0b",
+    "errors": [],
+    "gate": "development-complete",
+    "lifecycle": {
+      "ci_required": false,
+      "mode": "development-only",
+      "rationale": "Toolkit in sviluppo locale: CI prematura secondo decisione del manutentore del 2026-10-09. Suite finale locale tracciata obbligatoria; nessuna autorizzazione al rilascio.",
+      "schema_version": 1
+    },
+    "next": "development-complete",
+    "plan_hash": "642a3762cdd399ec4555582c697b3ac0dc1fb92ae9dc02da7d1422143b6040ff"
+  },
+  "domain": "dfd-kit",
+  "errors": [],
+  "gate": "approved",
+  "id": "002-proportional-team",
+  "kind": "feature",
+  "next": "development-complete",
+  "phase": "development-verified",
+  "release": {
+    "decisions": [],
+    "errors": [],
+    "gate": "not-applicable",
+    "next": "development-complete"
+  },
+  "risk": "medium",
+  "route": "full-proportional",
+  "schema_version": 1,
+  "scope": "Percorso rapido con regressioni mirate, review selettive, owner/PR/revisioni e verifica integrata prima del rilascio",
+  "setup": {
+    "domain": "dfd-kit",
+    "errors": [],
+    "gate": "ready",
+    "lifecycle": {
+      "ci_required": false,
+      "mode": "development-only",
+      "rationale": "Toolkit in sviluppo locale: CI prematura secondo decisione del manutentore del 2026-10-09. Suite finale locale tracciata obbligatoria; nessuna autorizzazione al rilascio.",
+      "schema_version": 1
+    },
+    "next": "dfd-assess",
+    "phase": "domain-setup"
+  },
+  "title": "Percorsi proporzionati e collaborazione in team"
+}

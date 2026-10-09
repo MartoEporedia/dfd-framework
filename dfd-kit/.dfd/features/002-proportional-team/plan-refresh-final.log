@@ -1,0 +1,25 @@
+{
+  "development": {
+    "design_fingerprint": "a4adb7eef773213471157749a4d5cdedcc8404ae94e1edb2c516f46ca754fa0b",
+    "errors": [
+      "Evidenze riferite a un design o piano precedente: rieseguire le verifiche.",
+      "Registrare i file di codice, test e strumentazione verificati.",
+      "Documentare refactor e strumentazione osservabilità, oppure motivare perché non necessari.",
+      "Task task-rapid: servono evidenze red e green.",
+      "Task task-selective: servono evidenze red e green.",
+      "Task task-team: servono evidenze red e green.",
+      "Serve evidenza della suite finale verde, locale o CI secondo policy."
+    ],
+    "gate": "blocked-evidence",
+    "lifecycle": {
+      "ci_required": false,
+      "mode": "development-only",
+      "rationale": "Toolkit in sviluppo locale: CI prematura secondo decisione del manutentore del 2026-10-09. Suite finale locale tracciata obbligatoria; nessuna autorizzazione al rilascio.",
+      "schema_version": 1
+    },
+    "next": "dfd-implement",
+    "plan_hash": "642a3762cdd399ec4555582c697b3ac0dc1fb92ae9dc02da7d1422143b6040ff"
+  },
+  "feature": "002-proportional-team",
+  "resumed": true
+}

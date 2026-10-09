@@ -62,7 +62,7 @@
   {
     "id": "tdd-chronology",
     "file": "src/development.rs",
-    "before": "red[task] > green[task] || ci.is_some_and(|date| date < green[task])",
+    "before": "red[task] > green[task]\n            || suite.is_some_and(|date| date < green[task])\n            || (policy.ci_required && ci.is_some_and(|date| date < green[task]))",
     "after": "false",
     "tests": [
       "development_rejects_incomplete_unknown_failed_or_unordered_evidence"
@@ -72,12 +72,13 @@
   {
     "id": "tdd-ci-required",
     "file": "src/development.rs",
-    "before": "    if ci.is_none() {",
+    "before": "    if policy.ci_required && ci.is_none() {",
     "after": "    if false {",
     "tests": [
-      "development_rejects_incomplete_unknown_failed_or_unordered_evidence"
+      "development_rejects_incomplete_unknown_failed_or_unordered_evidence",
+      "lifecycle_release_ci_policy_and_legacy_default_remain_strict"
     ],
-    "purpose": "La suite CI verde è necessaria prima della pre-release."
+    "purpose": "La CI resta obbligatoria nel default legacy e quando richiesta dalla policy."
   },
   {
     "id": "release-review-freshness",
@@ -178,5 +179,135 @@
       "unsupported_json_schema_preserves_assessed_state"
     ],
     "purpose": "Rifiutare versioni JSON non supportate senza cambiare lo stato."
+  },
+  {
+    "id": "lifecycle-final-suite",
+    "file": "src/development.rs",
+    "before": "    if suite.is_none() {",
+    "after": "    if false {",
+    "tests": [
+      "lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology"
+    ],
+    "purpose": "Proteggere lifecycle-final-suite contro regressioni della policy di maturità."
+  },
+  {
+    "id": "lifecycle-legacy-ci",
+    "file": "src/lib.rs",
+    "before": "            ci_required: true,",
+    "after": "            ci_required: false,",
+    "tests": [
+      "lifecycle_release_ci_policy_and_legacy_default_remain_strict"
+    ],
+    "purpose": "La policy assente non può disattivare il requisito CI legacy."
+  },
+  {
+    "id": "lifecycle-fingerprint",
+    "file": "src/lib.rs",
+    "before": "        hashes.insert(policy.clone(), store.hash(&policy)?);",
+    "after": "        let _ = store.hash(&policy)?;",
+    "tests": [
+      "lifecycle_policy_changes_invalidate_reviews_and_existing_release"
+    ],
+    "purpose": "Proteggere lifecycle-fingerprint contro regressioni della policy di maturità."
+  },
+  {
+    "id": "lifecycle-local-chronology",
+    "file": "src/development.rs",
+    "before": "|| suite.is_some_and(|date| date < green[task])",
+    "after": "|| false",
+    "tests": [
+      "lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology"
+    ],
+    "purpose": "Proteggere lifecycle-local-chronology contro regressioni della policy di maturità."
+  },
+  {
+    "id": "rapid-critical-escalation",
+    "file": "src/quick.rs",
+    "before": "        && !change.critical",
+    "after": "        && true",
+    "tests": [
+      "rapid_escalates_unknown_critical_contract_and_medium_risks"
+    ],
+    "purpose": "Un intervento critico non può usare il percorso rapido."
+  },
+  {
+    "id": "rapid-real-regression",
+    "file": "src/quick.rs",
+    "before": "    if change.kind == ChangeKind::BehaviorFix\n        && (red.is_none() || green.is_some_and(|g| red.is_some_and(|r| r > g)))",
+    "after": "    if false",
+    "tests": [
+      "rapid_behavior_fix_requires_real_regression_without_extra_solo_gate"
+    ],
+    "purpose": "Un fix comportamentale richiede una regressione red/green."
+  },
+  {
+    "id": "rapid-review-snapshot",
+    "file": "src/quick.rs",
+    "before": "latest.fingerprint != fingerprint",
+    "after": "false",
+    "tests": [
+      "rapid_reviews_and_logs_are_bound_to_files_and_revision"
+    ],
+    "purpose": "Le review rapide restano legate allo snapshot e alla revisione."
+  },
+  {
+    "id": "solo-no-extra-review",
+    "file": "src/quick.rs",
+    "before": "    } else if policy.independent_review {",
+    "after": "    } else if true {",
+    "tests": [
+      "individual_defaults_need_no_team_context_or_second_reviewer"
+    ],
+    "purpose": "Il percorso rapido individuale non deve imporre una seconda review."
+  },
+  {
+    "id": "team-independent-reviewer",
+    "file": "src/collaboration.rs",
+    "before": "policy.independent_review && owner.trim().eq_ignore_ascii_case(decision.reviewer.trim())",
+    "after": "false",
+    "tests": [
+      "team_requires_independent_review_and_integrated_current_evidence"
+    ],
+    "purpose": "Quando richiesta, la review deve essere indipendente dall’owner."
+  },
+  {
+    "id": "team-integrated-checks",
+    "file": "src/collaboration.rs",
+    "before": "    if policy.integrated_checks_required {",
+    "after": "    if false {",
+    "tests": [
+      "team_requires_independent_review_and_integrated_current_evidence"
+    ],
+    "purpose": "La policy team deve richiedere prove della versione integrata."
+  },
+  {
+    "id": "team-reviewed-revision",
+    "file": "src/collaboration.rs",
+    "before": "decision.revision.as_deref() != Some(context.revision.as_str())",
+    "after": "false",
+    "tests": [
+      "team_requires_independent_review_and_integrated_current_evidence"
+    ],
+    "purpose": "Una review di una revisione precedente non approva quella integrata corrente."
+  },
+  {
+    "id": "real-check-success",
+    "file": "src/collaboration.rs",
+    "before": "    } else if check.exit_code != 0 {",
+    "after": "    } else if false {",
+    "tests": [
+      "rapid_invalid_logs_dates_and_regression_order_never_verify"
+    ],
+    "purpose": "Una verifica fallita non può essere dichiarata green."
+  },
+  {
+    "id": "selective-review-boundary",
+    "file": "src/lib.rs",
+    "before": ".filter(|c| ids.contains(c.id.as_str()))",
+    "after": ".filter(|c| { let _ = &ids; true })",
+    "tests": [
+      "selective_review_ignores_unrelated_domain_changes_but_tracks_contracts"
+    ],
+    "purpose": "Modifiche a criteri estranei non devono invalidare una review selettiva."
   }
 ]

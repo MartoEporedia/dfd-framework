@@ -1,56 +1,229 @@
-# Specifica di Feature – PayPal sul Checkout
+# Specifica di Feature – [Nome Feature]
 
-> **Stato**: esempio illustrativo, non approvato  
-> **Ultimo aggiornamento**: 2026-10-08  
-> **Dominio**: Checkout  
-> **Riferimenti**: [DoD Checkout](checkout_dod.md), [Rischio](../rischio.md), [Adozione](../adozione.md)
+> **Stato**: draft / in review / approvata / implementata  
+> **Data creazione**: YYYY-MM-DD  
+> **Proprietari**: [@team / @persona]  
+> **Servizio / Dominio**: [es. Checkout, Pagamenti, Catalogo]  
+> **Riferimenti**:
+> - [DoD Estesa – Servizio X]
+> - [Architecture Guardrails]
+> - [ADR correlati]
+> - [Ticket / Epic]
 
-Questo esempio mostra una feature pilota in un prodotto esistente. Le verifiche sono pianificate: non sono evidenze di test eseguiti né di risultati di produzione.
+---
 
-## 1. Obiettivo e ambito
+## 1. Contesto e obiettivo
 
-Aggiungere PayPal come opzione di pagamento, conservando gli altri metodi e il flusso Checkout esistente. Monitorare completamento del checkout, fallimenti e abbandoni nello step di pagamento.
+**Contesto**:  
+[Breve descrizione del contesto: problema da risolvere, opportunità, richiesta business, ecc.]
 
-L'intervento comprende avvio del pagamento, gestione della conferma, errori e timeout del nuovo provider. Non comprende una revisione completa dei flussi legacy o di tutti gli SLO del prodotto. La review DFD si aggiunge alla review tecnica del team.
+**Obiettivo**:  
+[Cosa deve ottenere questa feature in termini di valore per l'utente / business]
 
-## 2. Classificazione del rischio
+**Confini**:  
+- Dominio / servizio interessato: [es. Checkout]
+- Servizi / sistemi coinvolti: [es. Payment Service, Inventory Service, Notification Service]
+- Fuori scope: [cosa esplicitamente non è incluso]
 
-| Dimensione | Livello | Motivazione |
-|---|---|---|
-| Sicurezza | Alto | Nuovi flussi di pagamento e callback da autorizzare |
-| Affidabilità / SLO | Alto | Nuova dipendenza esterna nel checkout |
-| Costo | Medio | Richiede stima delle commissioni e del costo operativo |
-| Utenti / business | Alto | Cambiamento di un flusso critico e dei KPI di conversione |
-| Architettura | Alto | Integrazione con un provider e gestione della conferma |
+---
 
-**Percorso**: DFD full completo. La stima dei costi deve essere completata nel pilota; non è una misura osservata.
+## 2. Descrizione funzionale
 
-## 3. Scenari e contratti
+### 2.1 Scenari principali
 
-- Avvio: l'utente seleziona PayPal; il sistema associa la sessione di pagamento all'ordine e presenta l'azione successiva.
-- Conferma: il sistema verifica autenticità e correlazione della notifica prima di aggiornare lo stato dell'ordine.
-- Notifiche duplicate: la stessa conferma non deve produrre ordini o addebiti duplicati.
-- Fallimento o timeout: mostrare un errore comprensibile, conservare uno stato coerente e permettere una nuova scelta di pagamento.
+- **Scenario 1**: [nome scenario]
+  - Attori: [es. utente, sistema]
+  - Precondizioni: [es. utente autenticato, carrello non vuoto]
+  - Flusso:
+    1. [step 1]
+    2. [step 2]
+    3. [step 3]
+  - Postcondizioni: [es. ordine creato, notifica inviata]
 
-Definire nella specifica reale contratti, stati, idempotenza, timeout e policy di retry del provider scelto. I retry non devono duplicare effetti finanziari.
+- **Scenario 2**: [nome scenario]
+  - ...
 
-## 4. Criteri DoD e verifiche previste
+### 2.2 Casi d'uso / user story
 
-| Criterio | Applicazione al cambiamento | Verifica prevista |
-|---|---|---|
-| OBS-01 | Contare richieste, errori e latenza del nuovo flusso | Test dell'emissione delle metriche |
-| OBS-02 | Correlare ordine, operazione, outcome e trace nei log | Test di integrazione dei campi e redazione dei dati |
-| SEC-01 | Limitare l'accesso alle operazioni di pagamento | Test di autorizzazione e callback non valide |
-| SEC-02 | Evitare dati sensibili nei log | Controlli su log di successo ed errore |
-| SLO-02 | Valutare la latenza rispetto al criterio del dominio | Test di carico e dipendenza lenta |
-| SLO-03 | Monitorare regressioni del tasso di errori | Test di failure e piano di canary |
-| COST-02 | Stimare impatto mensile e per transazione | Stima documentata con volumi e ipotesi |
-| UX-02 | Confrontare completamento con la baseline | Analisi del rollout per segmento |
+- Come [tipo di utente], voglio [obiettivo], in modo che [beneficio].
+- Come [tipo di utente], voglio [obiettivo], in modo che [beneficio].
 
-La specifica reale deve valutare anche gli altri criteri richiesti dalla DoD, motivando le esclusioni. Le lacune legacy non coinvolte restano nel piano di adozione.
+### 2.3 Interfacce e contratti
 
-## 5. Review e rilascio previsti
+**API esposte / modificate**:
 
-Richiedere contributi di QA, Security, Ops e Product secondo il RACI. Il Tech Lead registra la decisione di design dopo aver chiarito contratti, rischi e test. Pianificare feature flag, rollout graduale, allarmi e rollback coerenti con la DoD del dominio; il rilascio richiede una review distinta.
+- `METHOD /path` – [breve descrizione]
+  - Request: [campi principali]
+  - Response: [campi principali]
+  - Errori possibili: [codici e significato]
 
-**Punti aperti**: provider e contratti definitivi, costo stimato, soglie di allarme, responsabilità operative e approvazione dell'epic. Questo esempio non supera automaticamente un gate della CLI.
+**Eventi pubblicati / consumati**:
+
+- Evento: `[NomeEvento]`
+  - Pubblicato da: [servizio]
+  - Consumato da: [servizi]
+  - Payload (campi principali): [elenco]
+
+**Dipendenze esterne**:
+
+- [Payment Service, Inventory Service, ecc.]
+
+---
+
+## 3. Allineamento alla DoD Estesa
+
+Questa feature soddisfa i seguenti criteri della **DoD Estesa** del servizio [Nome Servizio]:
+
+### 3.1 Osservabilità
+
+- [ ] **OBS-01** – Metriche obbligatorie per endpoint  
+  Implementazione: [es. "nuovo endpoint `POST /checkout/promo` esposto su ALB, metriche request/error/latency già disponibili"]
+- [ ] **OBS-02** – Log strutturati con tenantId, userId, operation, outcome, errorCode, traceId  
+  Implementazione: [es. "log per applicazione promo con errorCode `PROMO_INVALID`, `PROMO_EXPIRED`"]
+- [ ] **OBS-03** – Trace ID presente su log e metriche  
+  Implementazione: [es. "traceId X-Ray propagato a Payment Service"]
+- [ ] **OBS-04** – Dashboard servizio e business  
+  Implementazione: [es. "nuovo pannello 'Promo Usage' nella dashboard checkout-business"]
+
+**Nuove metriche custom (se applicabile)**:
+
+- [ ] `PromoApplied` (conteggio promo applicati con successo)
+  - Dimensioni: `tenantId`, `promoCode`, `outcome`
+- [ ] `PromoFailed` (conteggio fallimenti applicazione promo)
+  - Dimensioni: `tenantId`, `errorCode`
+
+### 3.2 Sicurezza
+
+- [ ] **SEC-01** – Controlli di accesso IAM per endpoint e task ECS  
+  Implementazione: [es. "nuova policy per ruolo ECS che limita accesso a tabella Promo"]
+- [ ] **SEC-02** – Nessun dato sensibile in chiaro nei log  
+  Implementazione: [es. "promoCode loggato, nessun dato PII aggiuntivo"]
+- [ ] **SEC-03** – Audit log per creazione ordine e tentativo di pagamento  
+  Implementazione: [es. "evento `PromoApplied` loggato con userId, tenantId, timestamp"]
+
+**Nuovi eventi di audit (se applicabile)**:
+
+- [ ] `PromoApplied` – loggato per audit (chi, quando, quale promo)
+
+### 3.3 Affidabilità / SLO
+
+- [ ] **SLO-01** – Disponibilità 99.9% mensile  
+  Impatto: [es. "nessun impatto, usa stessa infrastruttura ECS esistente"]
+- [ ] **SLO-02** – Latenza p95 < 2.5 s per flusso checkout  
+  Impatto: [es. "latenza aggiuntiva stimata < 100 ms per applicazione promo"]
+- [ ] **SLO-03** – Error rate 5xx < 0.5% su `POST /checkout`  
+  Impatto: [es. "nuovi errorCode 4xx (PROMO_INVALID) non contano nel 5xx"]
+
+**Nuovi rischi per affidabilità**:
+
+- [ ] [es. "dipendenza da Promo Service: se down, checkout degradato"]
+
+**Mitigazioni**:
+
+- [ ] [es. "fallback: checkout senza promo, errore chiaro all'utente"]
+
+### 3.4 Costo
+
+- [ ] **COST-01** – Tagging minimo (service, team, env, costCenter)  
+  Implementazione: [es. "nessuna nuova risorsa, solo codice aggiuntivo"]
+- [ ] **COST-02** – Stima impatto sul costo per cambiamento significativo  
+  Stima: [es. "+2% costo mensile stimato per aumento CPU dovuto a logica promo"]
+- [ ] **COST-03** – Soglie di allarme costo (+15% mensile, +20% per transazione)  
+  Impatto: [es. "nessun superamento soglie atteso"]
+
+**Stima impatto economico**:
+
+- Costo mensile aggiuntivo stimato: [X EUR / %]
+- Costo per transazione aggiuntivo stimato: [Y EUR / %]
+
+### 3.5 Esperienza utente / business KPI
+
+- [ ] **UX-01** – Monitoraggio tasso di completamento checkout  
+  Impatto: [es. "da monitorare eventuale aumento abbandono se promo fallisce"]
+- [ ] **UX-02** – Nessuna riduzione > 5% del tasso di completamento su rollout  
+  Piano di validazione: [es. "rollout per tenant con confronto baseline 14 giorni"]
+
+---
+
+## 4. Guardrail globali
+
+Questa feature opera entro i seguenti **guardrail globali**:
+
+- [ ] **Architetturali**: [es. "nessun accesso diretto al DB ordini da parte del Promo Service"]
+- [ ] **Sicurezza**: [es. "nessun dato PII condiviso con sistemi non autorizzati"]
+- [ ] **Osservabilità**: [es. "tutti i nuovi log seguono formato JSON standard"]
+- [ ] **Costo**: [es. "nessun superamento budget di dominio senza approvazione"]
+
+**Eccezioni ai guardrail (se applicabile)**:
+
+- [ ] [descrivere eccezione, motivazione, approvazione]
+
+---
+
+## 5. Test e validazione
+
+### 5.1 Test funzionali
+
+- [ ] Test unitari per logica applicazione promo
+- [ ] Test di integrazione per endpoint `POST /checkout/promo`
+- [ ] Test end-to-end per flusso completo (carrello → applicazione promo → checkout)
+
+### 5.2 Test non funzionali
+
+- [ ] Test di carico per verificare impatto su latenza (SLO-02)
+- [ ] Test di resilienza (Promo Service down → fallback)
+- [ ] Test di sicurezza (accesso non autorizzato a endpoint promo)
+
+### 5.3 Validazione in produzione (shift-right)
+
+- [ ] Canary tecnico:
+  - Metriche monitorate: error rate, latency, custom metric `PromoApplied`, `PromoFailed`
+  - Soglie di rollback: [es. error rate 5xx > 1% per 5 min]
+- [ ] Rollout per tenant / segmento:
+  - Criteri di successo: nessun peggioramento > 5% del tasso di completamento (UX-02)
+  - Piano: [es. 10% tenant → 50% → 100%]
+
+---
+
+## 6. Piano di rilascio
+
+- [ ] Feature flag: [nome flag, sistema (es. AppConfig)]
+- [ ] Fasi di rollout:
+  1. [es. ambiente staging]
+  2. [es. 10% tenant prod]
+  3. [es. 50% tenant prod]
+  4. [es. 100% tenant prod]
+- [ ] Criteri di promozione:
+  - [es. error rate < soglia, nessun impatto negativo su UX-02]
+- [ ] Criteri di rollback:
+  - [es. error rate > soglia, peggioramento UX-02]
+
+---
+
+## 7. Aperture e decisioni da prendere
+
+- [ ] [es. "decidere se implementare circuit breaker su Promo Service"]
+- [ ] [es. "valutare se aggiungere metrica per tempo medio applicazione promo"]
+
+---
+
+## 8. Riferimenti e allegati
+
+- [Link a wireframe / mockup]
+- [Link a documenti tecnici correlati]
+- [Link a ticket / epic]
+
+---
+
+## 9. Storico revisioni
+
+- YYYY-MM-DD: versione iniziale (draft)
+- YYYY-MM-DD: [descrizione modifica]
+
+## Modalità dell’esempio
+
+Questo esempio riguarda un servizio di checkout destinato alla produzione: usa la modalità preparazione al rilascio e mantiene verifiche CI e requisiti operativi pertinenti al rischio. In un prototipo locale, la modalità solo sviluppo può usare una suite finale locale tracciata; rollout e review di release vengono preparati quando si decide di distribuire, rivalutando prima i requisiti.
+
+## Applicazione individuale o in team
+
+Questo esempio coinvolge un contratto di pagamento e conserva il percorso light/full anche se implementato da un solo sviluppatore. Le responsabilità possono coincidere nella stessa persona; PR e reviewer indipendente dipendono dalla policy del progetto. Un successivo fix circoscritto, con contratto invariato e rischio interamente low, può usare il [record rapido](../templates/cambiamento_rapido.md), con una regressione sul difetto.

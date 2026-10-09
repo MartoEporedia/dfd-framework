@@ -1,0 +1,52 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+error[E0425]: cannot find type `Repo` in this scope
+    --> tests/workflow.rs:1537:6
+     |
+1537 | impl Repo {
+     |      ^^^^ not found in this scope
+
+error[E0433]: cannot find type `Repo` in this scope
+    --> tests/workflow.rs:1560:13
+     |
+1560 |     let r = Repo::new();
+     |             ^^^^ use of undeclared type `Repo`
+
+error[E0433]: cannot find type `Repo` in this scope
+    --> tests/workflow.rs:1578:13
+     |
+1578 |     let r = Repo::new();
+     |             ^^^^ use of undeclared type `Repo`
+
+error[E0433]: cannot find type `Repo` in this scope
+    --> tests/workflow.rs:1600:13
+     |
+1600 |     let r = Repo::new();
+     |             ^^^^ use of undeclared type `Repo`
+
+error[E0433]: cannot find type `Repo` in this scope
+    --> tests/workflow.rs:1604:13
+     |
+1604 |     let r = Repo::new();
+     |             ^^^^ use of undeclared type `Repo`
+
+error[E0433]: cannot find type `Repo` in this scope
+    --> tests/workflow.rs:1608:13
+     |
+1608 |     let r = Repo::new();
+     |             ^^^^ use of undeclared type `Repo`
+
+error[E0433]: cannot find type `Repo` in this scope
+    --> tests/workflow.rs:1618:13
+     |
+1618 |     let r = Repo::new();
+     |             ^^^^ use of undeclared type `Repo`
+
+error[E0433]: cannot find type `Repo` in this scope
+    --> tests/workflow.rs:1632:13
+     |
+1632 |     let r = Repo::new();
+     |             ^^^^ use of undeclared type `Repo`
+
+Some errors have detailed explanations: E0425, E0433.
+For more information about an error, try `rustc --explain E0425`.
+error: could not compile `dfd-kit` (test "workflow") due to 8 previous errors

@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "mode": "development-only",
+  "ci_required": false,
+  "rationale": "Toolkit in sviluppo locale: CI prematura secondo decisione del manutentore del 2026-10-09. Suite finale locale tracciata obbligatoria; nessuna autorizzazione al rilascio."
+}

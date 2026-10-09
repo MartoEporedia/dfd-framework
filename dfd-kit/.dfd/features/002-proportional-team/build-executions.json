@@ -1,0 +1,32 @@
+[
+  {
+    "command": "cargo build --locked --offline --release",
+    "executed_at": "2026-10-09T20:02:01.644275+00:00",
+    "exit_code": 0,
+    "log": "build-final.log"
+  },
+  {
+    "command": "./dist/dfd-macos-arm64 install --harness codex",
+    "executed_at": "2026-10-09T20:02:44.922026+00:00",
+    "exit_code": 0,
+    "log": "install-binary.log"
+  },
+  {
+    "command": "./dist/dfd-macos-arm64 init --harness codex --domain dfd-kit --mode brownfield",
+    "executed_at": "2026-10-09T20:02:45.457323+00:00",
+    "exit_code": 0,
+    "log": "init-binary.log"
+  },
+  {
+    "command": "./dist/dfd-macos-arm64 doctor",
+    "executed_at": "2026-10-09T20:02:45.624837+00:00",
+    "exit_code": 0,
+    "log": "doctor-binary.log"
+  },
+  {
+    "command": "python3 /private/tmp/dfd-proportional-doccheck.py",
+    "executed_at": "2026-10-09T20:02:45.635227+00:00",
+    "exit_code": 0,
+    "log": "documentation-binary.log"
+  }
+]

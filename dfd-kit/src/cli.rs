@@ -75,6 +75,41 @@ pub enum Command {
         scope: String,
         #[arg(long, value_enum, default_value = "feature")]
         kind: crate::model::Kind,
+        /// Mantiene i fingerprint conservativi delle versioni precedenti.
+        #[arg(long)]
+        legacy_review: bool,
+    },
+    /// Crea o riprende un solo record per un fix circoscritto.
+    Quick {
+        id: String,
+        #[arg(long)]
+        domain: String,
+        #[arg(long)]
+        title: String,
+        #[arg(long)]
+        owner: String,
+        #[arg(long, value_enum, default_value = "behavior-fix")]
+        kind: crate::quick::ChangeKind,
+    },
+    /// Promuove un record rapido a una feature distinta, preservando l'origine.
+    Promote {
+        id: String,
+        #[arg(long)]
+        to: String,
+    },
+    /// Registra owner e riferimenti di collaborazione; facoltativo per il singolo dev.
+    Context {
+        id: String,
+        #[arg(long)]
+        owner: String,
+        #[arg(long)]
+        branch: String,
+        #[arg(long)]
+        revision: String,
+        #[arg(long, default_value = "")]
+        issue: String,
+        #[arg(long, default_value = "")]
+        pull_request: String,
     },
     /// Classifica risk.json; i dati mancanti restano da chiarire.
     Assess { id: String },
@@ -89,7 +124,7 @@ pub enum Command {
         #[arg(long)]
         refresh: bool,
     },
-    /// Verifica le evidenze di sviluppo e la prontezza per la pre-release.
+    /// Verifica lo sviluppo locale o la prontezza per la pre-release secondo policy.
     Verify { id: String },
     /// Crea o riprende rollout e preparazione operativa dopo lo sviluppo.
     PreRelease {
@@ -113,6 +148,12 @@ pub enum Command {
         role: crate::model::Role,
         #[arg(long)]
         note: String,
+        /// Riferimento alla review esistente, per esempio PR o issue.
+        #[arg(long)]
+        reference: Option<String>,
+        /// File esaminato nella review della revisione corrente. Ripetibile.
+        #[arg(long)]
+        file: Vec<String>,
         /// Condizione: testo|responsabile|fase. Ripetibile.
         #[arg(long)]
         condition: Vec<String>,

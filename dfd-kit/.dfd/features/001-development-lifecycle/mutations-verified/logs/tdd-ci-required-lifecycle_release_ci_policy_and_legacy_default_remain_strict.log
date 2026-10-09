@@ -1,0 +1,42 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.34s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test lifecycle_release_ci_policy_and_legacy_default_remain_strict ... FAILED
+
+failures:
+
+---- lifecycle_release_ci_policy_and_legacy_default_remain_strict stdout ----
+
+thread 'lifecycle_release_ci_policy_and_legacy_default_remain_strict' (3534593) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["verify", "001-paypal"]
+stdout: {
+  "development": {
+    "design_fingerprint": "cf52ff3407d9a26466823b6ac5c4a6944175f27d310a3af6ac75eb990025a12e",
+    "errors": [],
+    "gate": "ready-for-pre-release",
+    "lifecycle": {
+      "ci_required": true,
+      "mode": "release-preparation",
+      "rationale": "Pilota locale; suite finale tracciata e review prima della distribuzione",
+      "schema_version": 1
+    },
+    "next": "dfd-pre-release",
+    "plan_hash": "f382ca0b8af2837d462cd68502d28165dc87249dc560f5f325bc4d794c10dd2a"
+  },
+  "feature": "001-paypal",
+  "phase": "development-verified"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    lifecycle_release_ci_policy_and_legacy_default_remain_strict
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 55 filtered out; finished in 1.79s
+
+error: test failed, to rerun pass `--test workflow`

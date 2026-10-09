@@ -51,13 +51,13 @@
     }
   },
   "baseline_gaps": [
-    "CI disponibile come template ma non attiva; nessuna prova multipiattaforma osservata.",
+    "CI rinviata in development-only; valutarne la necessità e raccogliere prove multipiattaforma prima di dichiarare una distribuzione supportata.",
     "Pilota reale delle skill negli harness ancora da eseguire.",
     "Implementazione preesistente senza cicli feature DFD tracciati; nessuna approvazione retroattiva.",
     "Baseline quantitativa dei tempi e delle risorse da raccogliere."
   ],
   "next_steps": [
-    "Prima feature pilota: risolvere attivazione CI e raccogliere evidenze reali, previa specifica e review.",
+    "Prima feature pilota: verificare la modalità solo sviluppo con suite locale e gate distinti; CI da valutare alla transizione al rilascio.",
     "Seconda proposta: esecuzione del rollout e relativo tracciamento, da specificare e classificare.",
     "Terza proposta: learning post-release e aggiornamento della DoD, da specificare e classificare.",
     "Verificare il pilota nell’harness Codex e poi gli altri harness; retrospettiva dopo tre cicli o prima in caso di blocchi."

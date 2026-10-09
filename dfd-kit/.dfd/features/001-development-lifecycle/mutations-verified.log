@@ -1,0 +1,24 @@
+Baseline: running the complete unmodified suite
+[1/22] killed: risk-medium-boundary
+[2/22] killed: new-service-route
+[3/22] killed: unknown-risk-classification
+[4/22] killed: design-review-freshness
+[5/22] killed: development-human-gate
+[6/22] killed: evidence-file-integrity
+[7/22] killed: tdd-chronology
+[8/22] killed: tdd-ci-required
+[9/22] killed: release-review-freshness
+[10/22] killed: release-development-freshness
+[11/22] killed: planned-resource-approval
+[12/22] killed: rollout-complete-audience
+[13/22] killed: rollout-monotonic-exposure
+[14/22] killed: rollout-positive-duration
+[15/22] killed: resource-ready-proof
+[16/22] killed: stakeholder-communication-required
+[17/22] killed: nonfunctional-test-success
+[18/22] killed: schema-version-required
+[19/22] killed: lifecycle-final-suite
+[20/22] killed: lifecycle-legacy-ci
+[21/22] killed: lifecycle-fingerprint
+[22/22] killed: lifecycle-local-chronology
+Results: {'killed': 22}; report: /Users/martoeporedia/lavori/dfd-framework/dfd-kit/.dfd/features/001-development-lifecycle/mutations-verified/report.json

@@ -1,0 +1,33 @@
+Baseline: running the complete unmodified suite
+[1/31] killed: risk-medium-boundary
+[2/31] killed: new-service-route
+[3/31] killed: unknown-risk-classification
+[4/31] killed: design-review-freshness
+[5/31] killed: development-human-gate
+[6/31] killed: evidence-file-integrity
+[7/31] killed: tdd-chronology
+[8/31] killed: tdd-ci-required
+[9/31] killed: release-review-freshness
+[10/31] killed: release-development-freshness
+[11/31] killed: planned-resource-approval
+[12/31] killed: rollout-complete-audience
+[13/31] killed: rollout-monotonic-exposure
+[14/31] killed: rollout-positive-duration
+[15/31] killed: resource-ready-proof
+[16/31] killed: stakeholder-communication-required
+[17/31] killed: nonfunctional-test-success
+[18/31] killed: schema-version-required
+[19/31] killed: lifecycle-final-suite
+[20/31] killed: lifecycle-legacy-ci
+[21/31] killed: lifecycle-fingerprint
+[22/31] killed: lifecycle-local-chronology
+[23/31] killed: rapid-critical-escalation
+[24/31] killed: rapid-real-regression
+[25/31] killed: rapid-review-snapshot
+[26/31] killed: solo-no-extra-review
+[27/31] killed: team-independent-reviewer
+[28/31] killed: team-integrated-checks
+[29/31] killed: team-reviewed-revision
+[30/31] killed: real-check-success
+[31/31] killed: selective-review-boundary
+Results: {'killed': 31}; report: /Users/martoeporedia/lavori/dfd-framework/dfd-kit/.dfd/features/002-proportional-team/mutations/report.json

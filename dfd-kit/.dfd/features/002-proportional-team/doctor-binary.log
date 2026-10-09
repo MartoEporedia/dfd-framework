@@ -1,0 +1,19 @@
+{
+  "resources": 33,
+  "runtime_dependencies": [],
+  "skills": [
+    "dfd-assess",
+    "dfd-feature",
+    "dfd-implement",
+    "dfd-init",
+    "dfd-plan",
+    "dfd-pre-release",
+    "dfd-review-design",
+    "dfd-review-release",
+    "dfd-setup",
+    "dfd-specify",
+    "dfd-status",
+    "dfd-verify"
+  ],
+  "version": "0.1.0"
+}

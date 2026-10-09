@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "303dc0dbc920502df1933411bfb74768d3ba30c4df55dd696218601272f664c0",
+  "tasks": [
+    {
+      "id": "task-1",
+      "owner": "Marco Martorana",
+      "description": "Introdurre la policy di maturità e allineare gate, skill e documentazione",
+      "criteria": [
+        "OBS-01",
+        "OBS-02",
+        "SEC-01",
+        "SEC-02",
+        "SEC-03",
+        "SLO-01",
+        "SLO-02",
+        "COST-01",
+        "UX-01",
+        "UX-02"
+      ],
+      "implementation": "Policy versionata di dominio, validazione conservativa e fingerprint; suite locale distinta dalla CI; sviluppo completo separato dal rilascio. Aggiornamento coerente di framework, copie incorporate, template e setup.",
+      "verification": "Cinque test lifecycle contro binario precedente e candidato, suite completa, fmt/Clippy/doctor, test runner Python, mutanti gate, verifica link e copie incorporate."
+    }
+  ],
+  "open_questions": []
+}

@@ -59,6 +59,7 @@ pub enum Verdict {
 pub enum Role {
     TechLead,
     Architect,
+    Reviewer,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -78,6 +79,22 @@ pub enum CriterionScope {
 pub enum Applicability {
     Applicable,
     Excluded,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum LifecycleMode {
+    DevelopmentOnly,
+    ReleasePreparation,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Lifecycle {
+    pub schema_version: u32,
+    pub mode: LifecycleMode,
+    pub ci_required: bool,
+    pub rationale: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -147,6 +164,8 @@ pub struct State {
     pub route: Option<Route>,
     pub assessment_hash: Option<String>,
     pub decisions: Vec<Decision>,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub selective_review: bool,
 }
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -165,6 +184,12 @@ pub struct Decision {
     pub conditions: Vec<Condition>,
     pub recorded_at: DateTime<Utc>,
     pub fingerprint: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reference: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub revision: Option<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub files: Vec<FileEvidence>,
 }
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -241,6 +266,7 @@ pub struct FileEvidence {
 pub enum CheckKind {
     Red,
     Green,
+    Suite,
     Ci,
 }
 #[derive(Debug, Serialize, Deserialize)]
@@ -369,4 +395,8 @@ pub struct Rollout {
 pub struct ReleaseHistory {
     pub schema_version: u32,
     pub decisions: Vec<Decision>,
+}
+
+fn is_false(value: &bool) -> bool {
+    !value
 }

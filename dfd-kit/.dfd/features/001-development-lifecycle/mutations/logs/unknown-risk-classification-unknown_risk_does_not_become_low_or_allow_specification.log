@@ -1,0 +1,24 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-d7ql99ra)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.98s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test unknown_risk_does_not_become_low_or_allow_specification ... FAILED
+
+failures:
+
+---- unknown_risk_does_not_become_low_or_allow_specification stdout ----
+
+thread 'unknown_risk_does_not_become_low_or_allow_specification' (3482934) panicked at tests/workflow.rs:244:5:
+assertion `left == right` failed
+  left: String("low")
+ right: Null
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    unknown_risk_does_not_become_low_or_allow_specification
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 55 filtered out; finished in 1.37s
+
+error: test failed, to rerun pass `--test workflow`

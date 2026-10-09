@@ -290,3 +290,7 @@ Per facilitare il riferimento nelle specifiche di feature, ogni criterio ha un c
 
 - **Feedback**:
   - Inviare PR / MR su repo `checkout-dod` o ping su Slack `#checkout-team`
+
+## Modalità dell’esempio
+
+Questo esempio riguarda un servizio di checkout destinato alla produzione: usa la modalità preparazione al rilascio e mantiene verifiche CI e requisiti operativi pertinenti al rischio. In un prototipo locale, la modalità solo sviluppo può usare una suite finale locale tracciata; rollout e review di release vengono preparati quando si decide di distribuire, rivalutando prima i requisiti.

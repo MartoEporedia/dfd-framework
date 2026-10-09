@@ -166,7 +166,7 @@ Il processo DFD è descritto in dettaglio in:
 
 Include:
 
-- fasi (Setup DFD di dominio, Idea/Epic, Design, Sviluppo, Pre-release, Rilascio, Post-release);
+- fasi (Idea/Epic, Design, Sviluppo, Pre-release, Rilascio, Post-release);
 - gate di review (design, release);
 - **Definition of Ready (DoR)** per i passaggi chiave.
 
@@ -235,3 +235,58 @@ Per proporre modifiche al framework:
 
 - aprire una issue / MR su questo repo;
 - o seguire il processo definito in [Criteri di Rischio](rischio.md) (sezione “Eccezioni”).
+
+## Maturità del progetto: solo sviluppo e preparazione al rilascio
+
+La maturità del progetto è distinta dal livello di adozione DFD e dal rischio della feature. La Fase 0 dichiara una modalità, la scelta sulla CI e la relativa motivazione:
+
+| Modalità | Verifiche di sviluppo | Uscita |
+|---|---|---|
+| Solo sviluppo (`development-only`) | Light/full: review di design, TDD e suite finale locale; rapido: verifiche pertinenti. CI facoltativa | Sviluppo completato; nessuna pre-release o autorizzazione a distribuire |
+| Preparazione al rilascio (`release-preparation`) | Stessi controlli, con CI richiesta per default; un’alternativa locale richiede motivazione rispetto a rischio e destinazione e review umana | Prontezza alla pre-release, poi review di release distinta |
+
+L’assenza della CI non è una lacuna bloccante in solo sviluppo. Restano obbligatorie le verifiche applicabili e la tracciabilità di comando, data, risultato e log: un test locale non viene dichiarato CI. Quando prevista, la suite finale deve seguire i test green. Una CI dichiarata fallita continua a bloccare anche quando facoltativa.
+
+Prima di distribuire, passare esplicitamente alla preparazione al rilascio: rivalutare rischio, criteri, policy CI e verifiche nell’ambiente di destinazione. Riconfermare review e aggiornare piano ed evidenze invalidati. La modalità solo sviluppo non attenua controlli di sicurezza o rischio; il completamento locale non sostituisce l’approvazione umana del rilascio. Il learning può provenire anche dagli esperimenti locali, prima di disporre di dati di produzione.
+
+## Percorsi proporzionati e lavoro individuale o in team
+
+DFD si applica sia al singolo sviluppatore sia a un team. La maturità del progetto (solo sviluppo / preparazione al rilascio), il rischio dell’intervento e l’organizzazione del lavoro sono scelte distinte. Il team non è un prerequisito.
+
+| Percorso | Quando | Minimo utile |
+|---|---|---|
+| Rapido | Fix che ripristina un contratto noto o modifica editoriale; ambito circoscritto, rischio interamente low, nessun contratto/guardrail cambiato, nessun comportamento critico o dubbio aperto | Un record con problema, ambito, owner, rischio motivato, criteri pertinenti e verifiche reali |
+| Light | Funzionalità contenuta, fix non ammissibile al rapido o dubbi da chiarire, senza condizioni full | Specifica breve, criteri applicabili, review pertinente ed evidenze |
+| Full | Almeno una dimensione high, almeno due medium o nuovo servizio | Analisi, design e verifiche approfonditi secondo il rischio; preparazione operativa quando si distribuisce |
+
+Il rapido è una scelta esplicita per interventi ammissibili, non il risultato del numero di righe modificate. Una sola medium esclude il rapido e porta almeno a light. Rischio ignoto blocca la scelta; dubbi o variazioni di contratto richiedono chiarimento o promozione. Un comportamento critico richiede full completo. La CLI propone il percorso con i motivi; il manutentore può correggere la valutazione documentandone i fatti, senza override silenziosi dei gate.
+
+### Fix rapidi e test che prevengono danni
+
+Per un fix comportamentale serve una regressione che riproduca il bug, fallisca per il requisito atteso prima della correzione e passi dopo. Un errore di compilazione o ambiente non vale come red. Per una modifica editoriale basta una verifica pertinente di contenuto, link o output: nessun test artificiale. Collegare i criteri realmente coinvolti e motivare il perimetro delle verifiche; non imporre suite completa o mutation test a ogni correzione.
+
+Dare priorità a perdita di dati, autorizzazioni, pagamenti, compatibilità, scritture parziali, retry e rollback. Verificare anche gli effetti del fallimento: un’operazione rifiutata deve preservare i dati; retry e richieste duplicate non devono duplicare effetti. Gli interventi critici escono dal rapido anche se minuscoli. Usare mutanti mirati sugli invarianti importanti per verificare che una protezione rimossa venga rilevata. Numero di test e copertura percentuale da soli non dimostrano protezione dai bug gravi.
+
+Ogni bug importante sfuggito in produzione deve produrre una verifica capace di intercettarlo al livello efficace (unitario, integrazione o end-to-end); aggiornare i criteri DFD quando il problema è sistemico. Il learning degli esperimenti locali resta utile prima della produzione.
+
+### Un solo record e riuso delle decisioni
+
+Il rapido non richiede specifica, piano e report di design separati: usare il [record rapido](templates/cambiamento_rapido.md). Una PR può semplicemente riferirsi a quel record, senza duplicarlo. Con la CLI il record macchina è `.dfd/changes/<id>.json`; log e file verificati sono evidenze di supporto, non nuovi documenti di processo. Riprendere il design già approvato indicato nel contratto noto; non riaprire il design per un ripristino circoscritto.
+
+Il singolo dev può completare il rapido con record ed evidenze, senza PR, secondo reviewer o nuovo gate di approvazione del design. `change-verified` è un esito tecnico, non una decisione umana simulata. Se il team richiede review indipendente, la review ordinaria della PR soddisfa la review del cambiamento: registrarla una volta, con persona, riferimento, revisione e snapshot. Una review registrata volontariamente resta comunque vincolata a ciò che è stato esaminato.
+
+### Collaborazione facoltativa e integrazione
+
+Versionare DoD, guardrail e policy comuni; assegnare ID distinti e owner per intervento. I riferimenti a issue, branch, PR e revisione sono opzionali per il lavoro individuale e richiesti quando la policy del team li rende necessari. I ruoli sono assegnabili per intervento: il reviewer può essere un collega delegato secondo la policy, senza dipendere sempre dalla stessa persona. Una review di PR può soddisfare il gate DFD pertinente: non chiedere due approvazioni equivalenti.
+
+Gli artefatti delle feature restano separati: evitare uno stato centrale da modificare per ogni fix. Il lock della CLI protegge una cartella locale, non coordina cloni diversi. Usare Git e review dei conflitti; non risolvere automaticamente conflitti tra decisioni o evidenze scegliendo l’ultima scrittura. Dopo il merge, rivalutare snapshot e prove interessate.
+
+Prima della distribuzione, la policy team può richiedere review indipendente e prove sulla versione integrata corrente: i test verdi di due branch isolati non dimostrano che i due cambiamenti funzionino insieme. La verifica deve coprire i file dell’intervento, avere revisione coerente, comandi, esiti, date e log reali. Un hash non autentica una persona o un commit: la review semantica verifica origine, completezza dei test e corrispondenza della revisione dichiarata.
+
+### Review selettive ed evoluzione del setup
+
+Per le nuove feature, i contratti normativi dei criteri sono nel catalogo strutturato e i vincoli nei guardrail e nella policy lifecycle. Il fingerprint considera specifica, rischio, criteri valutati e vincoli operativi pertinenti; correzioni ai template, convenzioni descrittive, aggiunta di domini o lacune baseline estranee non invalidano da sole il design. Il catalogo e i guardrail devono contenere tutte le prescrizioni operative: non introdurre obblighi soltanto nel testo di processo escluso dal fingerprint. Nuovi criteri changes da valutare o modifiche ai contratti pertinenti riaprono il design.
+
+Cambiare le regole comuni tramite una modifica revisionata, indicando le feature interessate e le eventuali azioni. I guardrail comuni restano conservativi: una modifica normativa può coinvolgere tutto il dominio. La CLI non distingue semanticamente un refuso da una modifica di sicurezza nei file normativi. Le feature legacy conservano i fingerprint precedenti; non migrare approvazioni automaticamente.
+
+Il rapido conclude lo sviluppo e non autorizza una distribuzione: quando si decide di rilasciare, riprendere/promuovere una feature light/full che riferisce il record rapido, rivalutando policy e integrazione prima della review di release.

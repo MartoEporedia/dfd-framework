@@ -17,3 +17,7 @@ Eseguire `dfd status [<id>]` nella radice del repository adottante. Senza identi
 - Nel brownfield richiamare livello corrente e target del dominio e lacune baseline pertinenti. Il solo uso di una skill non aumenta il livello di adozione.
 
 Presentare fase, blocco concreto e prossimo passo. Il campo `development` distingue piano e verifiche di sviluppo; non dichiara il rilascio completato.
+
+Con development-complete lo sviluppo è concluso nella modalità development-only: non proporre pre-release. Per una distribuzione serve una transizione esplicita di policy con rivalutazione e riconferma delle review; release.gate not-applicable indica questa separazione.
+
+status elenca changes rapidi e features; route rapid/light/full e gate guidano il prossimo passo. Il singolo dev può lavorare senza collaboration.json/team.json. Per rapido verificato fermarsi al completamento dello sviluppo; per distribuire promuovere a feature e valutare i requisiti di release. Non risolvere automaticamente conflitti Git su decisioni o evidenze.

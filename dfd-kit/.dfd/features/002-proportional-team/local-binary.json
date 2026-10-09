@@ -1,0 +1,8 @@
+{
+  "path": "dist/dfd-macos-arm64",
+  "sha256": "78608021c67601b9993f4c7ffef418ba6701563a066e637bc8314071181d0204",
+  "platform": "macos-arm64",
+  "built_at": "2026-10-09T20:02:44.921601+00:00",
+  "command": "cargo build --locked --offline --release",
+  "release_authorized": false
+}

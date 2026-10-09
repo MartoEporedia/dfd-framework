@@ -53,6 +53,7 @@ impl Project {
         self.run(
             &[
                 "feature",
+                "--legacy-review",
                 id,
                 "--domain",
                 "checkout",
@@ -1532,4 +1533,545 @@ fn unsupported_json_schema_preserves_assessed_state() {
     p.save(".dfd/features/001-paypal/risk.json", &risk);
     p.run(&["assess", "001-paypal"], 1);
     assert_eq!(p.read(".dfd/features/001-paypal/state.json"), state);
+}
+
+impl Project {
+    fn lifecycle(&self, mode: &str, ci_required: bool) {
+        self.save(".dfd/domains/checkout/lifecycle.json", &json!({
+            "schema_version":1,"mode":mode,"ci_required":ci_required,
+            "rationale":"Pilota locale; suite finale tracciata e review prima della distribuzione"
+        }));
+    }
+    fn local_developed(&self, mode: &str, ci_required: bool) {
+        self.developed();
+        self.lifecycle(mode, ci_required);
+        self.approve();
+        self.run(&["plan", "001-paypal", "--refresh"], 0);
+        let status = self.run(&["status", "001-paypal"], 0);
+        let mut evidence = self.read(".dfd/features/001-paypal/evidence.json");
+        evidence["design_fingerprint"] = status["development"]["design_fingerprint"].clone();
+        evidence["plan_hash"] = status["development"]["plan_hash"].clone();
+        evidence["checks"][2]["kind"] = json!("suite");
+        self.save(".dfd/features/001-paypal/evidence.json", &evidence);
+    }
+}
+
+#[test]
+fn lifecycle_development_completes_locally_and_never_enters_release() {
+    let r = Project::new();
+    r.local_developed("development-only", false);
+    let result = r.run(&["verify", "001-paypal"], 0);
+    assert_eq!(result["development"]["gate"], "development-complete");
+    assert_eq!(result["phase"], "development-verified");
+    assert_eq!(
+        r.run(&["status", "001-paypal"], 0)["next"],
+        "development-complete"
+    );
+    r.run(&["pre-release", "001-paypal"], 1);
+    assert!(!r.path(".dfd/features/001-paypal/rollout.json").exists());
+    // A real CI result does not override development-only mode.
+    let mut evidence = r.read(".dfd/features/001-paypal/evidence.json");
+    evidence["checks"][2]["kind"] = json!("ci");
+    r.save(".dfd/features/001-paypal/evidence.json", &evidence);
+    r.run(&["verify", "001-paypal"], 0);
+    r.run(&["pre-release", "001-paypal"], 1);
+}
+
+#[test]
+fn lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology() {
+    let r = Project::new();
+    r.local_developed("development-only", false);
+    let path = ".dfd/features/001-paypal/evidence.json";
+    let valid = r.read(path);
+    for change in ["missing", "failed", "early", "future", "tampered"] {
+        let mut evidence = valid.clone();
+        match change {
+            "missing" => {
+                evidence["checks"].as_array_mut().unwrap().pop();
+            }
+            "failed" => evidence["checks"][2]["exit_code"] = json!(1),
+            "early" => evidence["checks"][2]["executed_at"] = json!("2026-01-01T09:00:00Z"),
+            "future" => evidence["checks"][2]["executed_at"] = json!("2999-01-01T10:02:00Z"),
+            _ => evidence["checks"][2]["log"]["sha256"] = json!("0".repeat(64)),
+        }
+        r.save(path, &evidence);
+        assert_eq!(
+            r.run(&["verify", "001-paypal"], 2)["development"]["gate"],
+            "blocked-evidence",
+            "{change}"
+        );
+    }
+    r.save(path, &valid);
+    r.run(&["verify", "001-paypal"], 0);
+}
+
+#[test]
+fn lifecycle_release_ci_policy_and_legacy_default_remain_strict() {
+    let r = Project::new();
+    r.local_developed("release-preparation", true);
+    r.run(&["verify", "001-paypal"], 2);
+    r.run(&["pre-release", "001-paypal"], 1);
+    let r = Project::new();
+    r.local_developed("release-preparation", false);
+    assert_eq!(
+        r.run(&["verify", "001-paypal"], 0)["development"]["gate"],
+        "ready-for-pre-release"
+    );
+    r.run(&["pre-release", "001-paypal"], 0);
+    let r = Project::new();
+    r.developed();
+    let mut evidence = r.read(".dfd/features/001-paypal/evidence.json");
+    evidence["checks"][2]["kind"] = json!("suite");
+    r.save(".dfd/features/001-paypal/evidence.json", &evidence);
+    r.run(&["verify", "001-paypal"], 2);
+}
+
+#[test]
+fn lifecycle_policy_changes_invalidate_reviews_and_existing_release() {
+    let r = Project::new();
+    r.pre_release_ready();
+    r.approve_release();
+    r.lifecycle("development-only", false);
+    let status = r.run(&["status", "001-paypal"], 0);
+    assert_eq!(status["gate"], "stale-review");
+    assert_ne!(status["release"]["gate"], "approved");
+    r.run(&["pre-release", "001-paypal"], 1);
+    r.approve();
+    assert_eq!(
+        r.run(&["status", "001-paypal"], 0)["development"]["gate"],
+        "blocked-plan"
+    );
+}
+
+#[test]
+fn lifecycle_invalid_policy_is_not_ignored() {
+    let r = Project::new();
+    r.ready();
+    for policy in [
+        json!({"schema_version":1,"mode":"unknown","ci_required":false,"rationale":"test"}),
+        json!({"schema_version":1,"mode":"development-only","ci_required":true,"rationale":"test"}),
+        json!({"schema_version":1,"mode":"release-preparation","ci_required":false,"rationale":""}),
+        json!({"schema_version":2,"mode":"release-preparation","ci_required":false,"rationale":"test"}),
+        json!({"schema_version":1,"mode":"release-preparation","rationale":"test"}),
+    ] {
+        r.save(".dfd/domains/checkout/lifecycle.json", &policy);
+        r.run(&["setup", "--domain", "checkout"], 1);
+        r.run(&["pre-release", "001-paypal"], 1);
+    }
+}
+
+impl Project {
+    fn quick_ready(&self, kind: &str) {
+        self.ready();
+        self.lifecycle("development-only", false);
+        self.run(
+            &[
+                "quick",
+                "fix-message",
+                "--domain",
+                "checkout",
+                "--title",
+                "Correggere risultato",
+                "--owner",
+                "Alice",
+                "--kind",
+                kind,
+            ],
+            0,
+        );
+        let path = ".dfd/changes/fix-message.json";
+        let mut q = self.read(path);
+        q["problem"] = json!("L'operazione fallita modifica dati che deve preservare");
+        q["scope"] = json!("Ripristinare la preservazione del singolo record");
+        q["known_contract"] = json!("Un input rifiutato lascia i dati immutati");
+        q["scope_bounded"] = json!(true);
+        q["criteria"] = json!(["OBS-01"]);
+        for dimension in q["risk"]["dimensions"]
+            .as_object_mut()
+            .unwrap()
+            .values_mut()
+        {
+            *dimension = json!({"level":"low","rationale":"Intervento isolato entro il contratto esistente"});
+        }
+        self.write("src/fix.rs", "// Implementazione del fix\n");
+        q["files"] = json!([self.file_evidence("src/fix.rs")]);
+        let mut checks = vec![];
+        for (name, exit, time) in [("red", 1, "10:00:00"), ("green", 0, "10:01:00")] {
+            self.write(
+                &format!("proof/{name}.log"),
+                &format!("Regressione: {name}\n"),
+            );
+            if kind == "editorial" && name == "red" {
+                continue;
+            }
+            checks.push(json!({"kind":name,"task":null,"command":"test preservazione dati","executed_at":format!("2026-01-01T{time}Z"),"exit_code":exit,"log":self.file_evidence(&format!("proof/{name}.log"))}));
+        }
+        q["checks"] = json!(checks);
+        q["verification_notes"] = json!("Regressione mirata: fallimento per il bug atteso, verde dopo il fix; esclusioni valutate");
+        self.save(path, &q);
+    }
+    fn quick_approve(&self, reviewer: &str, expected: i32) -> Value {
+        self.run(
+            &[
+                "decide",
+                "fix-message",
+                "--decision",
+                "approved",
+                "--reviewer",
+                reviewer,
+                "--role",
+                "reviewer",
+                "--note",
+                "Review della PR effettuata sul cambiamento",
+                "--human-confirmed",
+            ],
+            expected,
+        )
+    }
+}
+
+#[test]
+fn rapid_behavior_fix_requires_real_regression_without_extra_solo_gate() {
+    let p = Project::new();
+    p.quick_ready("behavior-fix");
+    let path = ".dfd/changes/fix-message.json";
+    let valid = p.read(path);
+    let mut q = valid.clone();
+    q["checks"].as_array_mut().unwrap().remove(0);
+    p.save(path, &q);
+    p.quick_approve("Bob", 1);
+    p.run(&["verify", "fix-message"], 2);
+    p.save(path, &valid);
+    assert_eq!(
+        p.run(&["verify", "fix-message"], 0)["gate"],
+        "change-verified"
+    );
+    p.quick_approve("Bob", 0);
+    assert_eq!(
+        p.run(&["verify", "fix-message"], 0)["gate"],
+        "change-verified"
+    );
+    assert!(!p.path(".dfd/features/fix-message").exists());
+    assert_eq!(p.run(&["status", "fix-message"], 0)["route"], "rapid");
+    p.run(&["pre-release", "fix-message"], 1);
+}
+
+#[test]
+fn rapid_editorial_uses_pertinent_check_without_artificial_red() {
+    let p = Project::new();
+    p.quick_ready("editorial");
+    p.quick_approve("Bob", 0);
+    p.run(&["verify", "fix-message"], 0);
+    let path = ".dfd/changes/fix-message.json";
+    let mut q = p.read(path);
+    q["checks"][0]["exit_code"] = json!(1);
+    p.save(path, &q);
+    p.quick_approve("Bob", 1);
+    p.run(&["verify", "fix-message"], 2);
+}
+
+#[test]
+fn rapid_escalates_unknown_critical_contract_and_medium_risks() {
+    let p = Project::new();
+    p.quick_ready("behavior-fix");
+    let path = ".dfd/changes/fix-message.json";
+    let valid = p.read(path);
+    for change in ["unknown", "critical", "contract", "medium", "doubt"] {
+        let mut q = valid.clone();
+        match change {
+            "unknown" => q["risk"]["dimensions"]["security"]["level"] = Value::Null,
+            "critical" => q["critical"] = json!(true),
+            "contract" => q["changes_contract"] = json!(true),
+            "medium" => q["risk"]["dimensions"]["architecture"]["level"] = json!("medium"),
+            _ => q["open_questions"] = json!(["Contratto da chiarire"]),
+        }
+        p.save(path, &q);
+        let status = p.run(&["status", "fix-message"], 0);
+        assert_ne!(status["route"], "rapid", "{change}");
+        p.quick_approve("Bob", 1);
+        p.run(&["verify", "fix-message"], 2);
+    }
+}
+
+#[test]
+fn rapid_preserves_record_rejects_collisions_and_promotes_with_origin() {
+    let p = Project::new();
+    p.quick_ready("behavior-fix");
+    let original = p.read(".dfd/changes/fix-message.json");
+    p.run(
+        &[
+            "quick",
+            "fix-message",
+            "--domain",
+            "checkout",
+            "--title",
+            "Altro",
+            "--owner",
+            "Other",
+        ],
+        0,
+    );
+    assert_eq!(p.read(".dfd/changes/fix-message.json"), original);
+    p.run(
+        &[
+            "feature",
+            "fix-message",
+            "--domain",
+            "checkout",
+            "--title",
+            "Altro",
+            "--scope",
+            "ambito",
+        ],
+        1,
+    );
+    p.run(&["promote", "fix-message", "--to", "002-fix"], 0);
+    assert_eq!(
+        p.read(".dfd/features/002-fix/origin.json")["change"],
+        "fix-message"
+    );
+    assert_eq!(p.read(".dfd/changes/fix-message.json"), original);
+    p.run(&["promote", "fix-message", "--to", "002-fix"], 1);
+}
+
+#[test]
+fn rapid_reviews_and_logs_are_bound_to_files_and_revision() {
+    let p = Project::new();
+    p.quick_ready("behavior-fix");
+    p.run(
+        &[
+            "context",
+            "fix-message",
+            "--owner",
+            "Alice",
+            "--branch",
+            "fix/a",
+            "--revision",
+            "rev-1",
+            "--pull-request",
+            "pr-1",
+        ],
+        0,
+    );
+    p.quick_approve("Bob", 0);
+    p.run(&["verify", "fix-message"], 0);
+    p.run(
+        &[
+            "context",
+            "fix-message",
+            "--owner",
+            "Alice",
+            "--branch",
+            "fix/a",
+            "--revision",
+            "rev-2",
+            "--pull-request",
+            "pr-1",
+        ],
+        0,
+    );
+    assert_eq!(p.run(&["verify", "fix-message"], 2)["gate"], "stale-review");
+    p.quick_approve("Bob", 0);
+    p.write("src/fix.rs", "// Modifica successiva alla review\n");
+    p.run(&["verify", "fix-message"], 2);
+    p.quick_approve("Bob", 1);
+}
+
+#[test]
+fn team_requires_independent_review_and_integrated_current_evidence() {
+    let p = Project::new();
+    p.quick_ready("behavior-fix");
+    p.save(
+        ".dfd/domains/checkout/team.json",
+        &json!({"schema_version":1,"independent_review":true,"integrated_checks_required":true}),
+    );
+    p.run(
+        &[
+            "context",
+            "fix-message",
+            "--owner",
+            "Alice",
+            "--branch",
+            "fix/a",
+            "--revision",
+            "rev-1",
+            "--pull-request",
+            "pr-1",
+        ],
+        0,
+    );
+    p.quick_approve("Alice", 1);
+    p.quick_approve("Bob", 0);
+    p.run(&["verify", "fix-message"], 0);
+    let p = Project::new();
+    p.pre_release_ready();
+    p.save(
+        ".dfd/domains/checkout/team.json",
+        &json!({"schema_version":1,"independent_review":true,"integrated_checks_required":true}),
+    );
+    p.run(
+        &[
+            "context",
+            "001-paypal",
+            "--owner",
+            "Alice",
+            "--branch",
+            "feature/a",
+            "--revision",
+            "integrated-1",
+            "--pull-request",
+            "pr-1",
+        ],
+        0,
+    );
+    p.run(
+        &[
+            "decide",
+            "001-paypal",
+            "--decision",
+            "approved",
+            "--reviewer",
+            "Bob",
+            "--role",
+            "reviewer",
+            "--note",
+            "Review PR corrente",
+            "--human-confirmed",
+            "--file",
+            "src/checkout.rs",
+            "--file",
+            "tests/checkout.rs",
+        ],
+        0,
+    );
+    // No integration proof means no pre-release, even with the isolated CI green.
+    p.run(&["pre-release", "001-paypal", "--refresh"], 1);
+    let path = ".dfd/features/001-paypal/collaboration.json";
+    let mut c = p.read(path);
+    p.write(
+        "proof/integration.log",
+        "Suite integrata green sulla revisione integrated-1\n",
+    );
+    c["integration"] = json!({"revision":"integrated-1","files":[p.file_evidence("src/checkout.rs"),p.file_evidence("tests/checkout.rs")],"checks":[{"kind":"ci","task":null,"command":"cargo test integrated","executed_at":"2026-01-01T12:00:00Z","exit_code":0,"log":p.file_evidence("proof/integration.log")}]});
+    p.save(path, &c);
+    p.run(&["pre-release", "001-paypal", "--refresh"], 0);
+    for change in [
+        "missing-file",
+        "failed-check",
+        "future-check",
+        "log-hash",
+        "reviewed-revision",
+    ] {
+        let mut invalid = c.clone();
+        match change {
+            "missing-file" => {
+                invalid["integration"]["files"]
+                    .as_array_mut()
+                    .unwrap()
+                    .pop();
+            }
+            "failed-check" => invalid["integration"]["checks"][0]["exit_code"] = json!(1),
+            "future-check" => {
+                invalid["integration"]["checks"][0]["executed_at"] = json!("2999-01-01T12:00:00Z")
+            }
+            "log-hash" => {
+                invalid["integration"]["checks"][0]["log"]["sha256"] = json!("0".repeat(64))
+            }
+            _ => {
+                invalid["revision"] = json!("new-revision");
+                invalid["integration"]["revision"] = json!("new-revision");
+            }
+        }
+        p.save(path, &invalid);
+        p.run(&["pre-release", "001-paypal", "--refresh"], 1);
+    }
+    c["integration"]["revision"] = json!("another-revision");
+    p.save(path, &c);
+    p.run(&["pre-release", "001-paypal", "--refresh"], 1);
+}
+
+#[test]
+fn selective_review_ignores_unrelated_domain_changes_but_tracks_contracts() {
+    let p = Project::new();
+    p.ready();
+    let path = ".dfd/features/001-paypal/state.json";
+    let mut state = p.read(path);
+    state["selective_review"] = json!(true);
+    p.save(path, &state);
+    p.approve();
+    p.write(
+        ".dfd/domains/checkout/process.md",
+        "# Processo\nCorrezione editoriale senza modifiche ai contratti\n",
+    );
+    let mut catalog = p.read(".dfd/domains/checkout/criteria.json");
+    catalog["criteria"][1]["statement"] = json!("Baseline non coinvolta chiarita");
+    p.save(".dfd/domains/checkout/criteria.json", &catalog);
+    assert_eq!(p.run(&["status", "001-paypal"], 0)["gate"], "approved");
+    catalog["criteria"][0]["statement"] = json!("Nuovo contratto sui contatori");
+    p.save(".dfd/domains/checkout/criteria.json", &catalog);
+    assert_eq!(p.run(&["status", "001-paypal"], 0)["gate"], "stale-review");
+}
+
+#[test]
+fn rapid_invalid_logs_dates_and_regression_order_never_verify() {
+    let p = Project::new();
+    p.quick_ready("behavior-fix");
+    let path = ".dfd/changes/fix-message.json";
+    let valid = p.read(path);
+    for change in [
+        "early-green",
+        "future-green",
+        "fake-hash",
+        "red-passed",
+        "green-failed",
+        "missing-log",
+    ] {
+        let mut q = valid.clone();
+        match change {
+            "early-green" => q["checks"][1]["executed_at"] = json!("2026-01-01T09:00:00Z"),
+            "future-green" => q["checks"][1]["executed_at"] = json!("2999-01-01T11:00:00Z"),
+            "fake-hash" => q["checks"][1]["log"]["sha256"] = json!("0".repeat(64)),
+            "red-passed" => q["checks"][0]["exit_code"] = json!(0),
+            "green-failed" => q["checks"][1]["exit_code"] = json!(1),
+            _ => q["checks"][1]["log"]["path"] = json!("proof/missing.log"),
+        }
+        p.save(path, &q);
+        assert_eq!(
+            p.run(&["verify", "fix-message"], 2)["gate"],
+            "blocked",
+            "{change}"
+        );
+    }
+}
+
+#[test]
+fn individual_defaults_need_no_team_context_or_second_reviewer() {
+    let p = Project::new();
+    p.quick_ready("editorial");
+    assert!(!p.path(".dfd/domains/checkout/team.json").exists());
+    let output = p.run(&["verify", "fix-message"], 0);
+    assert_eq!(output["gate"], "change-verified");
+    assert_eq!(output["decisions"], json!([]));
+    assert_eq!(output["collaboration"], Value::Null);
+    p.run(
+        &[
+            "feature",
+            "new-default",
+            "--domain",
+            "checkout",
+            "--title",
+            "Nuovo intervento",
+            "--scope",
+            "Ambito",
+        ],
+        0,
+    );
+    assert_eq!(
+        p.read(".dfd/features/new-default/state.json")["selective_review"],
+        true
+    );
+    assert_eq!(
+        p.run(&["status"], 0)["changes"].as_array().unwrap().len(),
+        1
+    );
 }

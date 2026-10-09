@@ -1,0 +1,133 @@
+{
+  "adoption": {
+    "areas": {
+      "cost": {
+        "evidence": [],
+        "notes": "Tempi nel report disponibili, ma nessuna baseline quantitativa di risorse o budget di dominio.",
+        "status": "unknown"
+      },
+      "culture": {
+        "evidence": [
+          "../../../../AGENTS.md",
+          "../../../CONTRIBUTING.md"
+        ],
+        "notes": "Mandato esplicito a usare DFD; efficacia e continuità da osservare nel pilota.",
+        "status": "observed"
+      },
+      "observability": {
+        "evidence": [
+          "evidence/mutation-baseline/report.json",
+          "evidence/mutation-baseline/provenance.json"
+        ],
+        "notes": "Report locale con esiti, tempi, hash e log; non osservabilità di un servizio remoto.",
+        "status": "observed"
+      },
+      "process": {
+        "evidence": [
+          "process.md",
+          "../../../../AGENTS.md"
+        ],
+        "notes": "Policy obbligatoria e setup presenti; nessuna feature completa adottata dimostrata.",
+        "status": "gap"
+      },
+      "reliability": {
+        "evidence": [
+          "evidence/mutation-baseline/report.json",
+          "evidence/mutation-baseline/logs/baseline.log"
+        ],
+        "notes": "Baseline locale passata e 18/18 mutanti curati killed; copertura limitata alle mutazioni dichiarate.",
+        "status": "observed"
+      },
+      "security": {
+        "evidence": [
+          "guardrails.md",
+          "../../../tests/workflow.rs"
+        ],
+        "notes": "Guardrail e test di preservazione disponibili; non equivalgono a un audit o pilota operativo.",
+        "status": "gap"
+      }
+    },
+    "baseline_gaps": [
+      "CI rinviata in development-only; valutarne la necessità e raccogliere prove multipiattaforma prima di dichiarare una distribuzione supportata.",
+      "Pilota reale delle skill negli harness ancora da eseguire.",
+      "Implementazione preesistente senza cicli feature DFD tracciati; nessuna approvazione retroattiva.",
+      "Baseline quantitativa dei tempi e delle risorse da raccogliere."
+    ],
+    "current_level": 0,
+    "next_steps": [
+      "Prima feature pilota: verificare la modalità solo sviluppo con suite locale e gate distinti; CI da valutare alla transizione al rilascio.",
+      "Seconda proposta: esecuzione del rollout e relativo tracciamento, da specificare e classificare.",
+      "Terza proposta: learning post-release e aggiornamento della DoD, da specificare e classificare.",
+      "Verificare il pilota nell’harness Codex e poi gli altri harness; retrospettiva dopo tre cicli o prima in caso di blocchi."
+    ],
+    "pilot": true,
+    "schema_version": 1,
+    "target_level": 1
+  },
+  "assessment_hash": "ab840edf59035fd8f4982afd50e131fb62fed20a3b33da6cb85abf07bfe3ceb7",
+  "created_at": "2026-10-09T14:52:12.390393Z",
+  "decisions": [
+    {
+      "conditions": [],
+      "decision": "approved",
+      "fingerprint": "c8877e5dea4c8d64a4f55e8c776cd867f257b57e094ba5d140a58cc58ae8093f",
+      "note": "Decisione già espressa in conversazione: vai, fallo; aggiornare anche i documenti. Due modalità e verifiche locali senza CI prematura; nessun rilascio autorizzato.",
+      "recorded_at": "2026-10-09T14:53:19.796252Z",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead"
+    },
+    {
+      "conditions": [],
+      "decision": "approved",
+      "fingerprint": "303dc0dbc920502df1933411bfb74768d3ba30c4df55dd696218601272f664c0",
+      "note": "Riapplicazione della decisione già espressa dal manutentore (vai, fallo; aggiorna anche i documenti), al setup e alla documentazione aggiornati per la stessa specifica. Policy locale e fingerprint attuali; nessuna approvazione di release.",
+      "recorded_at": "2026-10-09T15:00:34.541801Z",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead"
+    }
+  ],
+  "development": {
+    "design_fingerprint": "303dc0dbc920502df1933411bfb74768d3ba30c4df55dd696218601272f664c0",
+    "errors": [],
+    "gate": "development-complete",
+    "lifecycle": {
+      "ci_required": false,
+      "mode": "development-only",
+      "rationale": "Toolkit in sviluppo locale: CI prematura secondo decisione del manutentore del 2026-10-09. Suite finale locale tracciata obbligatoria; nessuna autorizzazione al rilascio.",
+      "schema_version": 1
+    },
+    "next": "development-complete",
+    "plan_hash": "706c247cf50f7379a2c82af7f97a353c5f7b20620bfec99127e31ccb4e16e432"
+  },
+  "domain": "dfd-kit",
+  "errors": [],
+  "gate": "approved",
+  "id": "001-development-lifecycle",
+  "kind": "feature",
+  "next": "development-complete",
+  "phase": "development-verified",
+  "release": {
+    "decisions": [],
+    "errors": [],
+    "gate": "not-applicable",
+    "next": "development-complete"
+  },
+  "risk": "medium",
+  "route": "full-proportional",
+  "schema_version": 1,
+  "scope": "Policy di maturità del dominio, verifiche locali, gate di rilascio e documentazione coerente",
+  "setup": {
+    "domain": "dfd-kit",
+    "errors": [],
+    "gate": "ready",
+    "lifecycle": {
+      "ci_required": false,
+      "mode": "development-only",
+      "rationale": "Toolkit in sviluppo locale: CI prematura secondo decisione del manutentore del 2026-10-09. Suite finale locale tracciata obbligatoria; nessuna autorizzazione al rilascio.",
+      "schema_version": 1
+    },
+    "next": "dfd-assess",
+    "phase": "domain-setup"
+  },
+  "title": "Sviluppo senza CI prematura"
+}

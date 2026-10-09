@@ -1,0 +1,280 @@
+{
+  "scope": "curated gate mutations",
+  "mutations": [
+    {
+      "id": "risk-medium-boundary",
+      "file": "src/lib.rs",
+      "purpose": "Una sola dimensione medium non deve diventare full.",
+      "tests": [
+        "classification_is_proportional_and_new_service_uses_full"
+      ],
+      "status": "killed",
+      "seconds": 8.35,
+      "logs": [
+        "logs/risk-medium-boundary-classification_is_proportional_and_new_service_uses_full.log"
+      ]
+    },
+    {
+      "id": "new-service-route",
+      "file": "src/lib.rs",
+      "purpose": "Un nuovo servizio deve mantenere full completo anche con rischio low.",
+      "tests": [
+        "classification_is_proportional_and_new_service_uses_full"
+      ],
+      "status": "killed",
+      "seconds": 6.79,
+      "logs": [
+        "logs/new-service-route-classification_is_proportional_and_new_service_uses_full.log"
+      ]
+    },
+    {
+      "id": "unknown-risk-classification",
+      "file": "src/lib.rs",
+      "purpose": "Dati di rischio ignoti non devono diventare low.",
+      "tests": [
+        "unknown_risk_does_not_become_low_or_allow_specification"
+      ],
+      "status": "killed",
+      "seconds": 6.06,
+      "logs": [
+        "logs/unknown-risk-classification-unknown_risk_does_not_become_low_or_allow_specification.log"
+      ]
+    },
+    {
+      "id": "design-review-freshness",
+      "file": "src/lib.rs",
+      "purpose": "La review di design non deve sopravvivere a modifiche della DoD o della specifica.",
+      "tests": [
+        "document_changes_require_review_reconfirmation_and_keep_history"
+      ],
+      "status": "killed",
+      "seconds": 7.79,
+      "logs": [
+        "logs/design-review-freshness-document_changes_require_review_reconfirmation_and_keep_history.log"
+      ]
+    },
+    {
+      "id": "development-human-gate",
+      "file": "src/development.rs",
+      "purpose": "Non iniziare lo sviluppo senza una decisione umana attuale.",
+      "tests": [
+        "development_requires_current_human_design_approval"
+      ],
+      "status": "killed",
+      "seconds": 11.11,
+      "logs": [
+        "logs/development-human-gate-development_requires_current_human_design_approval.log"
+      ]
+    },
+    {
+      "id": "evidence-file-integrity",
+      "file": "src/development.rs",
+      "purpose": "Codice e log modificati devono invalidare le evidenze.",
+      "tests": [
+        "source_logs_and_plan_changes_invalidate_development"
+      ],
+      "status": "killed",
+      "seconds": 6.09,
+      "logs": [
+        "logs/evidence-file-integrity-source_logs_and_plan_changes_invalidate_development.log"
+      ]
+    },
+    {
+      "id": "tdd-chronology",
+      "file": "src/development.rs",
+      "purpose": "Evidenze fuori ordine red/green/CI non devono chiudere lo sviluppo.",
+      "tests": [
+        "development_rejects_incomplete_unknown_failed_or_unordered_evidence"
+      ],
+      "status": "killed",
+      "seconds": 8.39,
+      "logs": [
+        "logs/tdd-chronology-development_rejects_incomplete_unknown_failed_or_unordered_evidence.log"
+      ]
+    },
+    {
+      "id": "tdd-ci-required",
+      "file": "src/development.rs",
+      "purpose": "La CI resta obbligatoria nel default legacy e quando richiesta dalla policy.",
+      "tests": [
+        "development_rejects_incomplete_unknown_failed_or_unordered_evidence",
+        "lifecycle_release_ci_policy_and_legacy_default_remain_strict"
+      ],
+      "status": "killed",
+      "seconds": 9.88,
+      "logs": [
+        "logs/tdd-ci-required-development_rejects_incomplete_unknown_failed_or_unordered_evidence.log",
+        "logs/tdd-ci-required-lifecycle_release_ci_policy_and_legacy_default_remain_strict.log"
+      ]
+    },
+    {
+      "id": "release-review-freshness",
+      "file": "src/release.rs",
+      "purpose": "Modifiche a rollout e note devono rendere stale la review di release.",
+      "tests": [
+        "rollout_and_notes_changes_invalidate_release_review_without_losing_history"
+      ],
+      "status": "killed",
+      "seconds": 4.04,
+      "logs": [
+        "logs/release-review-freshness-rollout_and_notes_changes_invalidate_release_review_without_losing_history.log"
+      ]
+    },
+    {
+      "id": "release-development-freshness",
+      "file": "src/release.rs",
+      "purpose": "Un rollout non deve restare valido dopo nuove evidenze di sviluppo.",
+      "tests": [
+        "changed_source_blocks_release_and_updated_evidence_requires_rollout_refresh"
+      ],
+      "status": "killed",
+      "seconds": 4.44,
+      "logs": [
+        "logs/release-development-freshness-changed_source_blocks_release_and_updated_evidence_requires_rollout_refresh.log"
+      ]
+    },
+    {
+      "id": "planned-resource-approval",
+      "file": "src/release.rs",
+      "purpose": "Risorse pianificate non ammettono approvazione senza condizioni.",
+      "tests": [
+        "planned_resources_need_conditional_decision_and_activation_evidence"
+      ],
+      "status": "killed",
+      "seconds": 5.12,
+      "logs": [
+        "logs/planned-resource-approval-planned_resources_need_conditional_decision_and_activation_evidence.log"
+      ]
+    },
+    {
+      "id": "rollout-complete-audience",
+      "file": "src/release.rs",
+      "purpose": "Il rollout deve raggiungere il 100% dell'audience prevista.",
+      "tests": [
+        "release_rejects_invalid_coverage_steps_tests_communications_and_questions"
+      ],
+      "status": "killed",
+      "seconds": 4.78,
+      "logs": [
+        "logs/rollout-complete-audience-release_rejects_invalid_coverage_steps_tests_communications_and_questions.log"
+      ]
+    },
+    {
+      "id": "rollout-monotonic-exposure",
+      "file": "src/release.rs",
+      "purpose": "Le percentuali di esposizione non devono diminuire nel piano.",
+      "tests": [
+        "release_checks_rollout_progression_and_observation_duration_independently"
+      ],
+      "status": "killed",
+      "seconds": 3.47,
+      "logs": [
+        "logs/rollout-monotonic-exposure-release_checks_rollout_progression_and_observation_duration_independently.log"
+      ]
+    },
+    {
+      "id": "rollout-positive-duration",
+      "file": "src/release.rs",
+      "purpose": "Ogni fase deve prevedere una durata di osservazione positiva.",
+      "tests": [
+        "release_checks_rollout_progression_and_observation_duration_independently"
+      ],
+      "status": "killed",
+      "seconds": 3.96,
+      "logs": [
+        "logs/rollout-positive-duration-release_checks_rollout_progression_and_observation_duration_independently.log"
+      ]
+    },
+    {
+      "id": "resource-ready-proof",
+      "file": "src/release.rs",
+      "purpose": "Una risorsa pronta richiede evidenze anche quando owner e riferimenti sono completi.",
+      "tests": [
+        "ready_resource_requires_proof_even_with_complete_owner_and_reference"
+      ],
+      "status": "killed",
+      "seconds": 4.09,
+      "logs": [
+        "logs/resource-ready-proof-ready_resource_requires_proof_even_with_complete_owner_and_reference.log"
+      ]
+    },
+    {
+      "id": "stakeholder-communication-required",
+      "file": "src/release.rs",
+      "purpose": "Comunicazioni assenti non devono superare il gate di release.",
+      "tests": [
+        "release_requires_a_real_communication_record"
+      ],
+      "status": "killed",
+      "seconds": 7.28,
+      "logs": [
+        "logs/stakeholder-communication-required-release_requires_a_real_communication_record.log"
+      ]
+    },
+    {
+      "id": "nonfunctional-test-success",
+      "file": "src/release.rs",
+      "purpose": "Test non funzionali falliti devono bloccare la release.",
+      "tests": [
+        "nonfunctional_execution_requires_success_and_unchanged_log"
+      ],
+      "status": "killed",
+      "seconds": 13.36,
+      "logs": [
+        "logs/nonfunctional-test-success-nonfunctional_execution_requires_success_and_unchanged_log.log"
+      ]
+    },
+    {
+      "id": "schema-version-required",
+      "file": "src/store.rs",
+      "purpose": "Rifiutare versioni JSON non supportate senza cambiare lo stato.",
+      "tests": [
+        "unsupported_json_schema_preserves_assessed_state"
+      ],
+      "status": "killed",
+      "seconds": 38.05,
+      "logs": [
+        "logs/schema-version-required-unsupported_json_schema_preserves_assessed_state.log"
+      ]
+    },
+    {
+      "id": "lifecycle-final-suite",
+      "file": "src/development.rs",
+      "purpose": "Proteggere lifecycle-final-suite contro regressioni della policy di maturità.",
+      "tests": [
+        "lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology"
+      ],
+      "status": "killed",
+      "seconds": 23.04,
+      "logs": [
+        "logs/lifecycle-final-suite-lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology.log"
+      ]
+    },
+    {
+      "id": "lifecycle-release-boundary",
+      "file": "src/release.rs",
+      "purpose": "Proteggere lifecycle-release-boundary contro regressioni della policy di maturità.",
+      "tests": [
+        "lifecycle_development_completes_locally_and_never_enters_release"
+      ],
+      "status": "timeout",
+      "seconds": 236.5,
+      "logs": [
+        "logs/lifecycle-release-boundary-lifecycle_development_completes_locally_and_never_enters_release.log",
+        "logs/lifecycle-release-boundary-full-suite.log"
+      ],
+      "full_suite_fallback": true
+    }
+  ],
+  "baseline": "passed",
+  "complete": false,
+  "source_sha256": {
+    "src/development.rs": "6bc0035ae203823cc1e6409185e7c637cb860896f352919edb32da3a7acb8c0a",
+    "src/lib.rs": "7be5daf996c816a112a29f17e71a8d63907fd53b02aad3a65fcafa19026647f0",
+    "src/release.rs": "aa741bb7109503be8a97434be18c555d770f923d2cba181709883e81c207bdbb",
+    "src/store.rs": "2d61433b4e46c3c218723413e49183c0cc537272b360d73f518b6e47e123a170",
+    "tests/workflow.rs": "8caa1e46f282de80910acd226e7354d46320dff6d0289b2c8c8dd09c264f1e40"
+  },
+  "manifest_sha256": "21597e0ab7b18fc9fcfddc4eb34a2e3a2f37dec56845b9822b8afe147fd72c5d",
+  "baseline_seconds": 34.81
+}

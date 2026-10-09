@@ -1,0 +1,43 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-p2yimg47)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.11s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test lifecycle_release_ci_policy_and_legacy_default_remain_strict ... FAILED
+
+failures:
+
+---- lifecycle_release_ci_policy_and_legacy_default_remain_strict stdout ----
+
+thread 'lifecycle_release_ci_policy_and_legacy_default_remain_strict' (3543584) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["verify", "001-paypal"]
+stdout: {
+  "development": {
+    "design_fingerprint": "5b873ccc203b4d75a9dba085b920992ffdab8c7a5bafad8811f4d66234b8b1fd",
+    "errors": [],
+    "gate": "ready-for-pre-release",
+    "lifecycle": {
+      "ci_required": false,
+      "mode": "release-preparation",
+      "rationale": "Compatibilità legacy: CI richiesta prima della pre-release.",
+      "schema_version": 1
+    },
+    "next": "dfd-pre-release",
+    "plan_hash": "ebe304a7a442046241541b874baaebac164d54b2176833d013d36ba9a4fc648c"
+  },
+  "feature": "001-paypal",
+  "phase": "development-verified"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    lifecycle_release_ci_policy_and_legacy_default_remain_strict
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 55 filtered out; finished in 4.74s
+
+error: test failed, to rerun pass `--test workflow`

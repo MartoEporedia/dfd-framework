@@ -1,0 +1,26 @@
+{
+  "decisions": [
+    {
+      "conditions": [],
+      "decision": "approved",
+      "fingerprint": "864b1261f30b4a6b9309617cf2d02218cde7753834bb0ea5b0487504ec8301ef",
+      "note": "Decisioni espresse dal manutentore nella conversazione e richiesta esplicita di implementarle nella documentazione e nella CLI; nessuna release autorizzata.",
+      "recorded_at": "2026-10-09T19:36:59.860308Z",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead"
+    },
+    {
+      "conditions": [],
+      "decision": "approved",
+      "fingerprint": "a4adb7eef773213471157749a4d5cdedcc8404ae94e1edb2c516f46ca754fa0b",
+      "note": "Riuso della decisione già espressa dal manutentore: implementare rapido/light/full, test contro regressioni gravi e collaborazione facoltativa. Chiarimento esplicito successivo: anche singolo dev, senza PR o seconda review obbligatorie. Questa registrazione non approva una release.",
+      "recorded_at": "2026-10-09T20:02:16.042854Z",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead"
+    }
+  ],
+  "errors": [],
+  "feature": "002-proportional-team",
+  "gate": "approved",
+  "route": "full-proportional"
+}

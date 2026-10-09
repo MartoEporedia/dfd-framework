@@ -1,0 +1,74 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-6yenoi8x)
+warning: variable `red` is assigned to, but never used
+   --> src/quick.rs:216:9
+    |
+216 |     let mut red = None;
+    |         ^^^^^^^
+    |
+    = note: consider using `_red` instead
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `red` is never read
+   --> src/quick.rs:224:35
+    |
+224 |                 CheckKind::Red => red = Some(date),
+    |                                   ^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dfd-kit` (lib) generated 2 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.00s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test rapid_behavior_fix_requires_real_regression_without_extra_solo_gate ... FAILED
+
+failures:
+
+---- rapid_behavior_fix_requires_real_regression_without_extra_solo_gate stdout ----
+
+thread 'rapid_behavior_fix_requires_real_regression_without_extra_solo_gate' (3851730) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["decide", "fix-message", "--decision", "approved", "--reviewer", "Bob", "--role", "reviewer", "--note", "Review della PR effettuata sul cambiamento", "--human-confirmed"]
+stdout: {
+  "change": "fix-message",
+  "collaboration": null,
+  "decisions": [
+    {
+      "conditions": [],
+      "decision": "approved",
+      "files": [
+        {
+          "path": "src/fix.rs",
+          "sha256": "114d01337552ac9967ef484fded6c4813e7c799cd3da8963f66f07f28c1a96e2"
+        }
+      ],
+      "fingerprint": "0ae3f322073caf5934301dd7ab48cd901de9776eba82624a970b5bbe176eaae0",
+      "note": "Review della PR effettuata sul cambiamento",
+      "recorded_at": "2026-10-09T20:00:01.041926Z",
+      "reviewer": "Bob",
+      "role": "reviewer"
+    }
+  ],
+  "domain": "checkout",
+  "errors": [],
+  "gate": "change-verified",
+  "independent_review_required": false,
+  "next": "development-complete",
+  "owner": "Alice",
+  "release": "not-approved",
+  "route": "rapid"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(1)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    rapid_behavior_fix_requires_real_regression_without_extra_solo_gate
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 64 filtered out; finished in 1.52s
+
+error: test failed, to rerun pass `--test workflow`

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "a4adb7eef773213471157749a4d5cdedcc8404ae94e1edb2c516f46ca754fa0b",
+  "tasks": [
+    {
+      "id": "task-rapid",
+      "owner": "Marco Martorana",
+      "description": "Record rapido e autonomia individuale",
+      "criteria": [
+        "OBS-01",
+        "OBS-02",
+        "SEC-01",
+        "SEC-02",
+        "SEC-03",
+        "SLO-01",
+        "SLO-02",
+        "COST-01",
+        "UX-01",
+        "UX-02"
+      ],
+      "implementation": "Implementare quick, prove pertinenti, escalation e promozione conservativa; aggiornare documenti e skill.",
+      "verification": "Red iniziale rapid_; green sui test rapid_ e suite finale, mutanti su criticità/regressione/gate individuale."
+    },
+    {
+      "id": "task-team",
+      "owner": "Marco Martorana",
+      "description": "Collaborazione facoltativa e integrazione corrente",
+      "criteria": [
+        "OBS-01",
+        "OBS-02",
+        "SEC-03",
+        "SLO-01",
+        "SLO-02",
+        "UX-01"
+      ],
+      "implementation": "Implementare context e team.json opzionali, review indipendente e prove integrate sulla revisione corrente.",
+      "verification": "Red iniziale team_requires_; green con owner/reviewer, revisione, log, snapshot e copertura integrata; mutanti mirati."
+    },
+    {
+      "id": "task-selective",
+      "owner": "Marco Martorana",
+      "description": "Review selettive e compatibilità",
+      "criteria": [
+        "SEC-03",
+        "SLO-01",
+        "SLO-02",
+        "UX-01",
+        "UX-02"
+      ],
+      "implementation": "Fingerprint selettivo per nuove feature, conservativo per legacy; criteri e guardrail normativi, template descrittivi.",
+      "verification": "Red iniziale selective_review_; green selettività più suite legacy e mutation sulla selezione dei criteri."
+    }
+  ],
+  "open_questions": []
+}

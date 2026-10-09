@@ -1,0 +1,13 @@
+{
+  "domain": "dfd-kit",
+  "errors": [],
+  "gate": "ready",
+  "lifecycle": {
+    "ci_required": false,
+    "mode": "development-only",
+    "rationale": "Toolkit in sviluppo locale: CI prematura secondo decisione del manutentore del 2026-10-09. Suite finale locale tracciata obbligatoria; nessuna autorizzazione al rilascio.",
+    "schema_version": 1
+  },
+  "next": "dfd-assess",
+  "phase": "domain-setup"
+}

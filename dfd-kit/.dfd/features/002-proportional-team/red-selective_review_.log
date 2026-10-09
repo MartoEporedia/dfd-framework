@@ -1,0 +1,38 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running unittests src/lib.rs (target/debug/deps/dfd_kit-35254a93fa68183c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dfd-afc7614dccc6bcdd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/workflow.rs (target/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test selective_review_ignores_unrelated_domain_changes_but_tracks_contracts ... FAILED
+
+failures:
+
+---- selective_review_ignores_unrelated_domain_changes_but_tracks_contracts stdout ----
+
+thread 'selective_review_ignores_unrelated_domain_changes_but_tracks_contracts' (3806896) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["decide", "001-paypal", "--decision", "approved", "--reviewer", "TL", "--role", "tech-lead", "--note", "Review semantica effettuata", "--human-confirmed"]
+stdout: 
+stderr: DFD: JSON non valido in .dfd/features/001-paypal/state.json: unknown field `selective_review`, expected one of `schema_version`, `id`, `title`, `domain`, `kind`, `scope`, `phase`, `created_at`, `risk`, `route`, `assessment_hash`, `decisions`
+
+  left: Some(1)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    selective_review_ignores_unrelated_domain_changes_but_tracks_contracts
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 62 filtered out; finished in 1.39s
+
+error: test failed, to rerun pass `--test workflow`

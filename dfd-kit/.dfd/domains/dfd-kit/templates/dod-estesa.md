@@ -201,3 +201,5 @@ Per facilitare il riferimento nelle specifiche di feature, ogni criterio ha un c
 Usare la [DoD di dominio](../dod.md), il [catalogo](../criteria.json) e le [convenzioni di processo](../process.md). Sostituire gli esempi del servizio web con comportamenti della CLI e delle skill: integrità dei file, correttezza dei gate, compatibilità, esiti dei comandi e attriti nell’harness. Non riusare valori di esempio come evidenze.
 
 Collegare verifiche realmente eseguite e motivare le esclusioni. Per rollout e review di release, identificare binario candidato/checksum, progetti di prova, pilota dell’harness, risorse e rollback della distribuzione; risorse non provate restano planned. Registrare dubbi nella specifica e riprendere l’iterazione senza sovrascritture. Placeholder e checklist vuote sono intenzionali in questo template.
+
+La policy lifecycle.json distingue solo sviluppo e preparazione al rilascio: verifiche locali tracciate nel primo caso; rivalutare CI e requisiti operativi prima della distribuzione.

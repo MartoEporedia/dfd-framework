@@ -1,0 +1,89 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.14s
+     Running unittests src/lib.rs (target/debug/deps/dfd_kit-35254a93fa68183c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dfd-afc7614dccc6bcdd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/workflow.rs (target/debug/deps/workflow-b4feff8855944554)
+
+running 63 tests
+test classification_is_proportional_and_new_service_uses_full ... ok
+test concurrent_mutation_lock_is_preserved ... ok
+test adoption_observation_requires_sources_and_domain_must_be_in_scope ... ok
+test approval_requires_explicit_human_confirmation ... ok
+test changes_criteria_require_coverage_or_justified_exclusion ... ok
+test baseline_gaps_outside_scope_do_not_block_pilot_design ... ok
+test conditional_decision_records_owner_and_due_phase ... ok
+test changed_risk_requires_new_assessment_and_invalidates_review ... ok
+test date_with_offset_is_accepted_and_future_date_is_rejected ... ok
+test doctor_works_without_project_or_external_tools ... ok
+test changed_source_blocks_release_and_updated_evidence_requires_rollout_refresh ... ok
+test development_requires_current_human_design_approval ... ok
+test development_verifies_and_can_be_resumed_without_changing_work ... ok
+test all_adapters_install_embedded_skills_and_preserve_instructions ... ok
+test design_conditions_due_before_release_must_be_reconfirmed ... ok
+test independent_features_keep_state_separate ... ok
+test development_conditions_are_not_silently_resolved ... ok
+test iterative_specification_preserves_work_and_exposes_questions ... ok
+test full_release_uses_full_checklist_and_requires_operational_resources ... ok
+test init_adds_missing_setup_files_and_preserves_local_changes ... ok
+test lifecycle_invalid_policy_is_not_ignored ... ok
+test lifecycle_development_completes_locally_and_never_enters_release ... ok
+test document_changes_require_review_reconfirmation_and_keep_history ... ok
+test malformed_risk_does_not_modify_state ... ok
+test lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology ... ok
+test modified_managed_file_stops_installation_before_any_changes ... ok
+test lifecycle_policy_changes_invalidate_reviews_and_existing_release ... ok
+test partial_specification_is_preserved ... ok
+test placeholder_design_blocks_approval ... ok
+test nonfunctional_execution_requires_success_and_unchanged_log ... ok
+test domain_changes_invalidate_its_reviews_and_local_templates_are_used ... ok
+test plan_refresh_preserves_tasks_and_requires_new_evidence ... ok
+test rapid_behavior_fix_requires_real_regression_and_human_review ... ok
+test planned_resources_need_conditional_decision_and_activation_evidence ... ok
+test rapid_editorial_uses_pertinent_check_without_artificial_red ... ok
+test lifecycle_release_ci_policy_and_legacy_default_remain_strict ... ok
+test pre_release_requires_current_development_and_preserves_partial_files ... ok
+test rapid_preserves_record_rejects_collisions_and_promotes_with_origin ... ok
+test rapid_escalates_unknown_critical_contract_and_medium_risks ... ok
+test plan_questions_missing_coverage_and_partial_artifacts_block_development ... ok
+test rapid_reviews_and_logs_are_bound_to_files_and_revision ... ok
+test development_rejects_incomplete_unknown_failed_or_unordered_evidence ... ok
+test ready_resource_requires_proof_even_with_complete_owner_and_reference ... ok
+test release_changes_requested_preserves_human_history_on_incomplete_preparation ... ok
+test release_requires_a_real_communication_record ... ok
+test selective_review_ignores_unrelated_domain_changes_but_tracks_contracts ... ok
+test repeated_init_preserves_domain_work_and_is_fingerprint_stable ... ok
+test rollout_resume_preserves_content_phase_and_review ... ok
+test semantic_notes_and_adoption_changes_invalidate_review ... ok
+test release_checks_rollout_progression_and_observation_duration_independently ... ok
+test setup_blocks_design_and_is_visible_without_features ... ok
+test release_review_requires_completion_and_human_decision_separate_from_design ... ok
+test specification_cannot_be_overwritten ... ok
+test symlinks_cannot_redirect_managed_writes_or_artifact_reads ... ok
+test unmanaged_compatible_skill_is_preserved_and_blocks_installation ... ok
+test rollout_and_notes_changes_invalidate_release_review_without_losing_history ... ok
+test traversal_and_unowned_manifest_paths_are_rejected ... ok
+test switch_adapter_keeps_feature_and_review_without_duplicate_entrypoints ... ok
+test unknown_risk_does_not_become_low_or_allow_specification ... ok
+test unsupported_json_schema_preserves_assessed_state ... ok
+test team_requires_independent_review_and_integrated_current_evidence ... ok
+test source_logs_and_plan_changes_invalidate_development ... ok
+test release_rejects_invalid_coverage_steps_tests_communications_and_questions ... ok
+
+test result: ok. 63 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 27.33s
+
+   Doc-tests dfd_kit
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

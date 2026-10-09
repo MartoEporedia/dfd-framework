@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "medium",
+      "rationale": "Policy condivisa da setup, fingerprint, sviluppo, release e skill."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Toolkit in sviluppo; nessuna distribuzione o modifica di un servizio cliente."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Riuso delle verifiche locali; nessun servizio o costo aggiuntivo."
+    },
+    "reliability": {
+      "level": "medium",
+      "rationale": "Cambia la semantica del gate di sviluppo; mantenere CI stretta per default e isolamento dalla release."
+    },
+    "security": {
+      "level": "low",
+      "rationale": "Nessuna nuova esecuzione esterna o riduzione dei controlli sui file."
+    }
+  }
+}

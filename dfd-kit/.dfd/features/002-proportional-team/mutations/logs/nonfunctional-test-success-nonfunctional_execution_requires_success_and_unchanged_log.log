@@ -1,0 +1,47 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-6yenoi8x)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.34s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test nonfunctional_execution_requires_success_and_unchanged_log ... FAILED
+
+failures:
+
+---- nonfunctional_execution_requires_success_and_unchanged_log stdout ----
+
+thread 'nonfunctional_execution_requires_success_and_unchanged_log' (3847680) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["review-release", "001-paypal"]
+stdout: {
+  "feature": "001-paypal",
+  "release": {
+    "checklist": "review_release_light.md",
+    "decisions": [
+      {
+        "conditions": [],
+        "decision": "approved",
+        "fingerprint": "710b96a5fb2a486a42f49d10da16a41be6fb176831d1c57c5b75eee98fc30572",
+        "note": "Review di release effettuata",
+        "recorded_at": "2026-10-09T19:59:13.412730Z",
+        "reviewer": "TL",
+        "role": "tech-lead"
+      }
+    ],
+    "errors": [],
+    "gate": "stale-review",
+    "next": "dfd-review-release",
+    "pending_activation": []
+  }
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    nonfunctional_execution_requires_success_and_unchanged_log
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 64 filtered out; finished in 2.02s
+
+error: test failed, to rerun pass `--test workflow`

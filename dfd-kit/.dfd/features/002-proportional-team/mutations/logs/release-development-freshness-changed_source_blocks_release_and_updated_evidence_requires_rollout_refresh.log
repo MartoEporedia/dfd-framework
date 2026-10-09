@@ -1,0 +1,24 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-6yenoi8x)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.00s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test changed_source_blocks_release_and_updated_evidence_requires_rollout_refresh ... FAILED
+
+failures:
+
+---- changed_source_blocks_release_and_updated_evidence_requires_rollout_refresh stdout ----
+
+thread 'changed_source_blocks_release_and_updated_evidence_requires_rollout_refresh' (3843772) panicked at tests/workflow.rs:1180:5:
+assertion `left == right` failed
+  left: String("stale-review")
+ right: "blocked"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    changed_source_blocks_release_and_updated_evidence_requires_rollout_refresh
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 64 filtered out; finished in 2.11s
+
+error: test failed, to rerun pass `--test workflow`

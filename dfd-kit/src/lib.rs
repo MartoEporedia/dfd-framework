@@ -1,6 +1,8 @@
 pub mod cli;
+mod collaboration;
 mod development;
 pub mod model;
+mod quick;
 mod release;
 mod store;
 
@@ -337,6 +339,25 @@ fn setup_files() -> Vec<String> {
     files
 }
 
+fn lifecycle(store: &Store, domain: &str) -> Result<Lifecycle> {
+    let relative = format!(".dfd/domains/{domain}/lifecycle.json");
+    if !store.path(&relative)?.exists() {
+        return Ok(Lifecycle {
+            schema_version: 1,
+            mode: LifecycleMode::ReleasePreparation,
+            ci_required: true,
+            rationale: "Compatibilità legacy: CI richiesta prima della pre-release.".into(),
+        });
+    }
+    let policy: Lifecycle = store.json(&relative)?;
+    if !nonblank(&policy.rationale)
+        || (policy.mode == LifecycleMode::DevelopmentOnly && policy.ci_required)
+    {
+        return Err(Error::message("Policy lifecycle: motivare la modalità e la scelta CI; development-only richiede ci_required false."));
+    }
+    Ok(policy)
+}
+
 fn setup_errors(store: &Store, domain: &str) -> Result<Vec<String>> {
     slug(domain)?;
     if !config(store)?.domains.contains(&domain.to_string()) {
@@ -344,6 +365,8 @@ fn setup_errors(store: &Store, domain: &str) -> Result<Vec<String>> {
     }
     let root = format!(".dfd/domains/{domain}");
     let mut errors = vec![];
+    lifecycle(store, domain)?;
+    collaboration::policy(store, domain)?;
     for file in ["dod.md", "guardrails.md", "process.md"] {
         let relative = format!("{root}/{file}");
         if !store.path(&relative)?.is_file() {
@@ -409,6 +432,7 @@ fn setup_status(store: &Store, domain: &str) -> Result<Value> {
     let errors = setup_errors(store, domain)?;
     Ok(
         json!({"domain":domain,"phase":"domain-setup","gate":if errors.is_empty() {"ready"} else {"blocked"},"errors":errors,
+        "lifecycle":lifecycle(store, domain)?,
         "next":if errors.is_empty() {"dfd-assess"} else {"dfd-setup"}}),
     )
 }
@@ -518,7 +542,10 @@ fn init(store: &Store, harness: Harness, domain: &str, mode: Mode) -> Result<Val
             )?;
         }
     }
-    for name in DOMAIN_TEMPLATES {
+    for name in DOMAIN_TEMPLATES
+        .into_iter()
+        .chain(["cambiamento_rapido.md", "collaborazione.md"])
+    {
         let relative = format!("{domain_root}/templates/{name}");
         if !store.path(&relative)?.exists() {
             store.write(
@@ -541,6 +568,7 @@ fn new_feature(
     title: &str,
     scope: &str,
     kind: Kind,
+    selective_review: bool,
 ) -> Result<Value> {
     slug(id)?;
     slug(domain)?;
@@ -556,6 +584,9 @@ fn new_feature(
     }
     if !nonblank(title) || !nonblank(scope) {
         return Err(Error::message("Titolo e ambito sono obbligatori."));
+    }
+    if quick::exists(store, id)? {
+        return Err(Error::message("ID già usato da un record rapido."));
     }
     if store.path(&format!(".dfd/features/{id}"))?.exists() {
         return Err(Error::message(
@@ -575,6 +606,7 @@ fn new_feature(
         route: None,
         assessment_hash: None,
         decisions: vec![],
+        selective_review,
     };
     let dimensions = DIMENSIONS
         .iter()
@@ -831,23 +863,58 @@ fn design_fingerprint(store: &Store, state: &State) -> Result<String> {
         let relative = format!(".dfd/features/{}/{file}", state.id);
         hashes.insert(relative.clone(), store.hash(&relative)?);
     }
-    for file in ["dod.md", "criteria.json", "adoption.json"] {
-        let relative = format!(".dfd/domains/{}/{file}", state.domain);
-        hashes.insert(relative.clone(), store.hash(&relative)?);
-    }
-    for file in setup_files() {
-        let relative = format!(".dfd/domains/{}/{file}", state.domain);
+    if state.selective_review {
+        let design: Design = store.json(&format!(".dfd/features/{}/design.json", state.id))?;
+        let catalog: Catalog =
+            store.json(&format!(".dfd/domains/{}/criteria.json", state.domain))?;
+        let ids: BTreeSet<_> = design.criteria.iter().map(|c| c.id.as_str()).collect();
+        let mut criteria: Vec<_> = catalog
+            .criteria
+            .iter()
+            .filter(|c| ids.contains(c.id.as_str()))
+            .collect();
+        criteria.sort_by(|a, b| a.id.cmp(&b.id));
         hashes.insert(
-            relative.clone(),
-            if store.path(&relative)?.is_file() {
-                store.hash(&relative)?
-            } else {
-                "absent".into()
-            },
+            "selected-criteria".into(),
+            hash(&serde_json::to_vec(&criteria)?),
         );
+        let guardrails = format!(".dfd/domains/{}/guardrails.md", state.domain);
+        hashes.insert(guardrails.clone(), store.hash(&guardrails)?);
+    } else {
+        for file in ["dod.md", "criteria.json", "adoption.json"] {
+            let relative = format!(".dfd/domains/{}/{file}", state.domain);
+            hashes.insert(relative.clone(), store.hash(&relative)?);
+        }
+        for file in setup_files() {
+            let relative = format!(".dfd/domains/{}/{file}", state.domain);
+            hashes.insert(
+                relative.clone(),
+                if store.path(&relative)?.is_file() {
+                    store.hash(&relative)?
+                } else {
+                    "absent".into()
+                },
+            );
+        }
     }
-    for relative in [".dfd/guardrails.md", ".dfd/config.json"] {
-        hashes.insert(relative.to_string(), store.hash(relative)?);
+    // Absent policy preserves legacy fingerprints; creating or removing it invalidates reviews.
+    let policy = format!(".dfd/domains/{}/lifecycle.json", state.domain);
+    if store.path(&policy)?.exists() {
+        hashes.insert(policy.clone(), store.hash(&policy)?);
+    }
+    hashes.insert(
+        ".dfd/guardrails.md".into(),
+        store.hash(".dfd/guardrails.md")?,
+    );
+    if state.selective_review {
+        hashes.insert(
+            "project-context".into(),
+            hash(&serde_json::to_vec(
+                &json!({"mode":config(store)?.mode,"domain":state.domain}),
+            )?),
+        );
+    } else {
+        hashes.insert(".dfd/config.json".into(), store.hash(".dfd/config.json")?);
     }
     let notes = format!(".dfd/features/{}/review-notes.md", state.id);
     hashes.insert(
@@ -916,6 +983,8 @@ struct HumanDecision {
     note: String,
     conditions: Vec<String>,
     confirmed: bool,
+    reference: Option<String>,
+    files: Vec<String>,
 }
 fn decision_record(input: HumanDecision, fingerprint: String) -> Result<Decision> {
     if !input.confirmed {
@@ -953,6 +1022,9 @@ fn decision_record(input: HumanDecision, fingerprint: String) -> Result<Decision
         conditions,
         recorded_at: Utc::now(),
         fingerprint,
+        reference: input.reference,
+        revision: None,
+        files: vec![],
     })
 }
 fn decide(store: &Store, id: &str, input: HumanDecision) -> Result<(Value, i32)> {
@@ -965,7 +1037,11 @@ fn decide(store: &Store, id: &str, input: HumanDecision) -> Result<(Value, i32)>
         )));
     }
     let fingerprint = design_fingerprint(store, &state)?;
-    state.decisions.push(decision_record(input, fingerprint)?);
+    let files = input.files.clone();
+    let mut decision = decision_record(input, fingerprint)?;
+    let context = collaboration::context(store, id)?;
+    collaboration::bind(store, context.as_ref(), &files, &mut decision)?;
+    state.decisions.push(decision);
     state.phase = "design-reviewed".into();
     store.save(&format!(".dfd/features/{id}/state.json"), &state, false)?;
     review_design(store, id)
@@ -978,6 +1054,7 @@ fn status_feature(store: &Store, id: &str) -> Result<Value> {
     let mut output = serde_json::to_value(&state)?;
     output["gate"] = json!(gate);
     output["errors"] = json!(errors);
+    output["collaboration"] = serde_json::to_value(collaboration::context(store, id)?)?;
     output["adoption"] = serde_json::to_value(adoption(store, &state.domain)?)?;
     let setup = setup_status(store, &state.domain)?;
     output["setup"] = setup.clone();
@@ -992,7 +1069,9 @@ fn status_feature(store: &Store, id: &str) -> Result<Value> {
     } else if !store.path(&format!(".dfd/features/{id}/spec.md"))?.exists() {
         "dfd-specify"
     } else if matches!(gate, "approved" | "approved-with-conditions") {
-        if development["gate"] == "ready-for-pre-release" {
+        if development["gate"] == "development-complete" {
+            "development-complete"
+        } else if development["gate"] == "ready-for-pre-release" {
             release["next"].as_str().unwrap()
         } else if development["gate"] == "not-started" || development["gate"] == "blocked-plan" {
             "dfd-plan"
@@ -1007,6 +1086,9 @@ fn status_feature(store: &Store, id: &str) -> Result<Value> {
 fn status(store: &Store, id: Option<&str>) -> Result<Value> {
     let config = config(store)?;
     if let Some(id) = id {
+        if quick::exists(store, id)? {
+            return quick::status(store, id);
+        }
         return status_feature(store, id);
     }
     let directory = store.path(".dfd/features")?;
@@ -1031,7 +1113,7 @@ fn status(store: &Store, id: Option<&str>) -> Result<Value> {
         .map(|domain| setup_status(store, domain))
         .collect::<Result<Vec<_>>>()?;
     Ok(
-        json!({"version":VERSION,"mode":config.mode,"domains":config.domains,"setups":setups,"features":features}),
+        json!({"version":VERSION,"mode":config.mode,"domains":config.domains,"setups":setups,"features":features,"changes":quick::list(store)?}),
     )
 }
 
@@ -1094,13 +1176,77 @@ pub fn execute(cli: Cli) -> Result<(Value, i32)> {
             title,
             scope,
             kind,
-        } => Ok((new_feature(&store, &id, &domain, &title, &scope, kind)?, 0)),
+            legacy_review,
+        } => Ok((
+            new_feature(&store, &id, &domain, &title, &scope, kind, !legacy_review)?,
+            0,
+        )),
+        Command::Quick {
+            id,
+            domain,
+            title,
+            owner,
+            kind,
+        } => Ok((
+            quick::create(&store, &id, &domain, &title, &owner, kind)?,
+            0,
+        )),
+        Command::Promote { id, to } => Ok((quick::promote(&store, &id, &to)?, 0)),
+        Command::Context {
+            id,
+            owner,
+            branch,
+            revision,
+            issue,
+            pull_request,
+        } => Ok((
+            collaboration::set(
+                &store,
+                &id,
+                collaboration::Context {
+                    schema_version: 1,
+                    owner,
+                    branch,
+                    revision,
+                    issue,
+                    pull_request,
+                    integration: None,
+                },
+            )?,
+            0,
+        )),
         Command::Setup { domain } => setup(&store, &domain),
-        Command::Assess { id } => assess(&store, &id),
+        Command::Assess { id } => {
+            if quick::exists(&store, &id)? {
+                let output = quick::status(&store, &id)?;
+                let exit = if output["route"] == "unknown" { 2 } else { 0 };
+                Ok((output, exit))
+            } else {
+                assess(&store, &id)
+            }
+        }
         Command::Specify { id } => Ok((specify(&store, &id)?, 0)),
-        Command::ReviewDesign { id } => review_design(&store, &id),
+        Command::ReviewDesign { id } => {
+            if quick::exists(&store, &id)? {
+                let output = quick::status(&store, &id)?;
+                let exit = if output["errors"].as_array().unwrap().is_empty() {
+                    0
+                } else {
+                    2
+                };
+                Ok((output, exit))
+            } else {
+                review_design(&store, &id)
+            }
+        }
         Command::Plan { id, refresh } => development::plan(&store, &id, refresh),
-        Command::Verify { id } => development::verify(&store, &id),
+        Command::Verify { id } => {
+            if quick::exists(&store, &id)? {
+                quick::verify(&store, &id)
+            } else {
+                development::verify(&store, &id)
+            }
+        }
         Command::PreRelease { id, refresh } => release::prepare(&store, &id, refresh),
         Command::ReviewRelease { id } => release::review(&store, &id),
         Command::Decide {
@@ -1110,10 +1256,18 @@ pub fn execute(cli: Cli) -> Result<(Value, i32)> {
             reviewer,
             role,
             note,
+            reference,
+            file,
             condition,
             human_confirmed,
         } => (match stage {
-            ReviewStage::Design => decide,
+            ReviewStage::Design => {
+                if quick::exists(&store, &id)? {
+                    quick::decide
+                } else {
+                    decide
+                }
+            }
             ReviewStage::Release => release::decide,
         })(
             &store,
@@ -1125,6 +1279,8 @@ pub fn execute(cli: Cli) -> Result<(Value, i32)> {
                 note,
                 conditions: condition,
                 confirmed: human_confirmed,
+                reference,
+                files: file,
             },
         ),
         Command::Status { id } => Ok((status(&store, id.as_deref())?, 0)),

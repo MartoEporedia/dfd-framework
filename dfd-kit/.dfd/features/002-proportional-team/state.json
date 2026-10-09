@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "002-proportional-team",
+  "title": "Percorsi proporzionati e collaborazione in team",
+  "domain": "dfd-kit",
+  "kind": "feature",
+  "scope": "Percorso rapido con regressioni mirate, review selettive, owner/PR/revisioni e verifica integrata prima del rilascio",
+  "phase": "development-verified",
+  "created_at": "2026-10-09T19:36:59.538021Z",
+  "risk": "medium",
+  "route": "full-proportional",
+  "assessment_hash": "9495fdde2cf2be71423208193d897cb62dc5b6dd89767d77b405ae2dd81c3e96",
+  "decisions": [
+    {
+      "decision": "approved",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead",
+      "note": "Decisioni espresse dal manutentore nella conversazione e richiesta esplicita di implementarle nella documentazione e nella CLI; nessuna release autorizzata.",
+      "conditions": [],
+      "recorded_at": "2026-10-09T19:36:59.860308Z",
+      "fingerprint": "864b1261f30b4a6b9309617cf2d02218cde7753834bb0ea5b0487504ec8301ef"
+    },
+    {
+      "decision": "approved",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead",
+      "note": "Riuso della decisione già espressa dal manutentore: implementare rapido/light/full, test contro regressioni gravi e collaborazione facoltativa. Chiarimento esplicito successivo: anche singolo dev, senza PR o seconda review obbligatorie. Questa registrazione non approva una release.",
+      "conditions": [],
+      "recorded_at": "2026-10-09T20:02:16.042854Z",
+      "fingerprint": "a4adb7eef773213471157749a4d5cdedcc8404ae94e1edb2c516f46ca754fa0b"
+    }
+  ]
+}

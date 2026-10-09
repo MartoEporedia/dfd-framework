@@ -1,0 +1,6 @@
+{
+  "domain": "dfd-kit",
+  "harness": "codex",
+  "mode": "brownfield",
+  "next": "Completare la Fase 0 e verificare con dfd setup --domain <dominio>."
+}

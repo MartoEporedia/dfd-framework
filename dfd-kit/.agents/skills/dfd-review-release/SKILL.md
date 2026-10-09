@@ -18,3 +18,7 @@ dfd decide <id> --stage release --decision approved --reviewer "..." --role tech
 Per condizioni usare `approved-with-conditions` e ripetere `--condition "testo|responsabile|fase"`. Le risorse pianificate richiedono un'approvazione condizionata con attivazione assegnata; quelle dichiarate pronte richiedono evidenze. Risolvere le condizioni di design dovute entro la release e far registrare la decisione aggiornata prima dell'approvazione di release. Le decisioni di release hanno uno storico separato da quelle di design.
 
 Rieseguire `status`. Le modifiche a rollout, note, design, decisione di design o evidenze rendono la review da riconfermare; le lacune strutturali bloccano il gate. Le condizioni non sono chiuse automaticamente: ottenere una nuova decisione umana dopo la loro risoluzione. Riportare esito, condizioni e prossima azione. La CLI registra l'esito della review e non esegue il rollout.
+
+Valutare la policy CI in lifecycle.json rispetto a rischio e destinazione, incluse motivazione ed evidenze locali alternative quando ci_required false. La modalità development-only non ammette approvazione di release.
+
+Valutare origine e completezza delle prove integrate quando richieste, snapshot correnti e review della PR. La CLI verifica dichiarazioni e hash, senza autenticare identità o revisioni Git. Ogni bug grave sfuggito deve portare a una regressione utile e, se sistemico, a criteri aggiornati: non misurare la sicurezza del rilascio dal solo numero di test.

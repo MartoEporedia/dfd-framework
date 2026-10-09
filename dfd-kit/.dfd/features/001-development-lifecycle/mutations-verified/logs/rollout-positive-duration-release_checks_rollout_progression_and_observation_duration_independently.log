@@ -1,0 +1,37 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-p2yimg47)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.08s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test release_checks_rollout_progression_and_observation_duration_independently ... FAILED
+
+failures:
+
+---- release_checks_rollout_progression_and_observation_duration_independently stdout ----
+
+thread 'release_checks_rollout_progression_and_observation_duration_independently' (3538507) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["review-release", "001-paypal"]
+stdout: {
+  "feature": "001-paypal",
+  "release": {
+    "checklist": "review_release_light.md",
+    "decisions": [],
+    "errors": [],
+    "gate": "awaiting-human-review",
+    "next": "dfd-review-release",
+    "pending_activation": []
+  }
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    release_checks_rollout_progression_and_observation_duration_independently
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 55 filtered out; finished in 2.81s
+
+error: test failed, to rerun pass `--test workflow`

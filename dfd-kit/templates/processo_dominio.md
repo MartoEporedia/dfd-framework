@@ -19,3 +19,18 @@ TODO: dichiarare se i template in templates/ sono usati senza modifiche oppure a
 ## Collocazione e uso degli artefatti
 
 TODO: indicare dove vivono gli artefatti del dominio e delle feature, come si svolgono le review e come si aggiornano le specifiche in modo iterativo per chiarire i dubbi.
+
+## Maturità del progetto: solo sviluppo e preparazione al rilascio
+
+La maturità del progetto è distinta dal livello di adozione DFD e dal rischio della feature. La Fase 0 dichiara una modalità, la scelta sulla CI e la relativa motivazione:
+
+| Modalità | Verifiche di sviluppo | Uscita |
+|---|---|---|
+| Solo sviluppo (`development-only`) | Review di design, TDD ed evidenze reali; suite finale locale o CI disponibile, senza obbligo di introdurre CI | Sviluppo completato; nessuna pre-release o autorizzazione a distribuire |
+| Preparazione al rilascio (`release-preparation`) | Stessi controlli, con CI richiesta per default; un’alternativa locale richiede motivazione rispetto a rischio e destinazione e review umana | Prontezza alla pre-release, poi review di release distinta |
+
+L’assenza della CI non è una lacuna bloccante in solo sviluppo. Restano obbligatorie le verifiche applicabili e la tracciabilità di comando, data, risultato e log: un test locale non viene dichiarato CI. La suite finale deve seguire i test green. Una CI dichiarata fallita continua a bloccare anche quando facoltativa.
+
+Prima di distribuire, passare esplicitamente alla preparazione al rilascio: rivalutare rischio, criteri, policy CI e verifiche nell’ambiente di destinazione. Riconfermare review e aggiornare piano ed evidenze invalidati. La modalità solo sviluppo non attenua controlli di sicurezza o rischio; il completamento locale non sostituisce l’approvazione umana del rilascio. Il learning può provenire anche dagli esperimenti locali, prima di disporre di dati di produzione.
+
+Dichiarare la policy in `lifecycle.json` secondo il contratto del toolkit; motivare la scelta CI e la transizione al rilascio.

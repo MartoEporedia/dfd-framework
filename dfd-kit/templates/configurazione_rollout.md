@@ -14,8 +14,6 @@
 ## 1. Panoramica
 
 **Feature**: [breve descrizione, es. “Nuovo metodo di pagamento PayPal”]  
-**Artefatto da rilasciare**: [immagine / pacchetto / build immutabile]  
-**Revisione verificata**: [commit / versione]  
 **Ambiente**: [staging / prod]  
 **Tipo di rollout**:  
 - [ ] Canary tecnico (frazione di traffico)  
@@ -173,3 +171,16 @@ Monitorati su CloudWatch (o sistema equivalente):
 | YYYY-MM-DD | 1    | completata | Nessun errore critico                   |
 | YYYY-MM-DD | 2    | completata | Leggero aumento latenza, entro soglie   |
 | YYYY-MM-DD | 3    | in corso   | Monitoraggio in corso                   |
+
+## Maturità e policy delle verifiche
+
+- Modalità del dominio: solo sviluppo / preparazione al rilascio.
+- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
+- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
+- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
+
+In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
+
+## Proporzionalità e collaborazione
+
+Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.

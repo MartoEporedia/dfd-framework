@@ -55,7 +55,7 @@ Tutti i criteri `changes` devono essere valutati nella feature, come applicabili
 
 `dfd setup --domain <dominio>` restituisce `phase: domain-setup`, `gate: blocked` o `ready`, `errors` e `next`. Verifica documenti presenti, contenuto non vuoto, placeholder di setup e criteri validi, univoci e coerenti tra DoD e catalogo. I placeholder dei template riusabili sono intenzionali. Il controllo non valuta la semantica delle policy, non conferisce approvazione umana e non certifica il livello di adozione. `status` senza ID mantiene `domains` come lista dei nomi e aggiunge `setups`; con ID include `setup` e propone `dfd-setup` prima delle altre azioni quando la Fase 0 è incompleta.
 
-Il setup è un prerequisito del design condiviso dalle feature, paragonabile alla constitution di SDD. `feature` e `assess` permettono di raccogliere idea e rischio; `specify` richiede la Fase 0 pronta e usa il template locale `templates/specifica_feature.md`. Il gate di design controlla nuovamente il setup. Aggiornarlo quando cambiano architettura, pattern ricorrenti o learning di produzione. Il fingerprint include anche guardrail, convenzioni e tutti i template del dominio: le modifiche invalidano le review delle feature interessate, conservando lo storico.
+Il setup è un prerequisito del design condiviso dalle feature, paragonabile alla constitution di SDD. `feature` e `assess` permettono di raccogliere idea e rischio; `specify` richiede la Fase 0 pronta e usa il template locale `templates/specifica_feature.md`. Il gate di design controlla nuovamente il setup. Aggiornarlo quando cambiano architettura, pattern ricorrenti o learning di produzione. I guardrail e i criteri normativi pertinenti fanno parte del fingerprint. Per le nuove feature, convenzioni e template descrittivi non invalidano la review; le feature legacy mantengono le dipendenze precedenti, conservando lo storico.
 
 Per domini preesistenti rieseguire `init` con gli stessi parametri: aggiunge file di setup mancanti e preserva gli artefatti locali. `.dfd/guardrails.md` resta un riferimento comune del progetto; i guardrail di dominio possono richiamarlo.
 
@@ -91,9 +91,9 @@ La definizione della specifica è iterativa, soprattutto per dipanare dubbi. `sp
 
 Per esclusioni usare `applicability: excluded` e `justification`. Le date di approvazione dell'epic devono essere ISO 8601 con timezone e non future. Il controllo verifica presenza e riferimenti, non autenticità dell'approvazione, qualità semantica o esecuzione dei test.
 
-`design-review.md` è rigenerabile; salvare note semantiche in `review-notes.md`. `decide` registra una decisione umana solo dopo la sua espressione: il flag `--human-confirmed` è una dichiarazione, non autenticazione. In questa versione i ruoli ammessi sono `tech-lead` e `architect` secondo il RACI. Per approvazione condizionata ripetere `--condition "testo|responsabile|fase"`; le condizioni restano aperte e visibili. Le condizioni dovute entro lo sviluppo richiedono una nuova decisione umana dopo la risoluzione; quelle per `pre-release`, `release`, `rollout` e `post-release` restano visibili e non bloccano la chiusura dello sviluppo. Fasi di scadenza diverse sono trattate conservativamente come dovute entro lo sviluppo. Le condizioni di design dovute entro la release devono essere risolte e la decisione riconfermata prima di approvare la release.
+`design-review.md` è rigenerabile; salvare note semantiche in `review-notes.md`. `decide` registra una decisione umana solo dopo la sua espressione: il flag `--human-confirmed` è una dichiarazione, non autenticazione. In questa versione i ruoli ammessi sono `tech-lead`, `architect` e `reviewer` delegato secondo il RACI; nel lavoro individuale le responsabilità possono coincidere. Per approvazione condizionata ripetere `--condition "testo|responsabile|fase"`; le condizioni restano aperte e visibili. Le condizioni dovute entro lo sviluppo richiedono una nuova decisione umana dopo la risoluzione; quelle per `pre-release`, `release`, `rollout` e `post-release` restano visibili e non bloccano la chiusura dello sviluppo. Fasi di scadenza diverse sono trattate conservativamente come dovute entro lo sviluppo. Le condizioni di design dovute entro la release devono essere risolte e la decisione riconfermata prima di approvare la release.
 
-Il fingerprint include specifica, design strutturato, rischio, DoD, catalogo, adozione, guardrail, configurazione, note di review e contesto della feature. Modifiche successive rendono la decisione `stale-review`; nuovi problemi strutturali danno `blocked`. Lo storico resta disponibile. I file locali sono modificabili: l'MVP non garantisce un audit resistente a manomissioni né blocca merge/deploy.
+Per le nuove feature il fingerprint include specifica, design strutturato, rischio, criteri selezionati, guardrail, lifecycle, modalità di adozione, note di review e contesto della feature. Il fingerprint legacy comprende anche DoD, intero catalogo, adozione dettagliata, configurazione e template/processo locali. Modifiche successive rendono la decisione `stale-review`; nuovi problemi strutturali danno `blocked`. Lo storico resta disponibile. I file locali sono modificabili: l'MVP non garantisce un audit resistente a manomissioni né blocca merge/deploy.
 
 ## Sviluppo (TDD DFD)
 
@@ -157,15 +157,15 @@ L'harness esegue test e implementazione, salva i log reali e compila `evidence.j
 }
 ```
 
-I percorsi sono relativi alla radice del progetto. Registrare file di codice, test e strumentazione coinvolti; log non vuoti, hash SHA-256 esatti, comando e data ISO 8601 con timezone non futura. Per ogni task serve un red con exit code positivo e un green con exit code zero; la suite completa CI deve essere verde e successiva ai green. Il fallimento red deve dipendere dal requisito atteso: un errore di ambiente non è una prova TDD. Documentare refactor e osservabilità, oppure motivarne la non necessità. Per la CI scaricare il log reale: un test locale non va dichiarato come CI.
+I percorsi sono relativi alla radice del progetto. Registrare file di codice, test e strumentazione coinvolti; log non vuoti, hash SHA-256 esatti, comando e data ISO 8601 con timezone non futura. Per ogni task serve un red con exit code positivo e un green con exit code zero; la suite finale (`kind: suite` locale oppure `kind: ci`) deve essere verde e successiva ai green; quando CI richiesta, serve anche una CI verde successiva ai green. Il fallimento red deve dipendere dal requisito atteso: un errore di ambiente non è una prova TDD. Documentare refactor e osservabilità, oppure motivarne la non necessità. Per la CI scaricare il log reale: un test locale non va dichiarato come CI.
 
 `status <id>` espone `development.design_fingerprint` e `development.plan_hash` quando il piano è valido. `plan_hash` è SHA-256 della serializzazione JSON compatta dei due hash SHA-256 di `plan.json` e `plan.md` con chiavi `json` e `markdown`. Usare i valori restituiti dalla CLI; dopo cambiamenti al piano o al design aggiornare i riferimenti solo dopo le nuove verifiche. Cambiamenti ai file o ai log invalidano gli hash registrati. La CLI verifica i file elencati, non scopre automaticamente file omessi.
 
 ### Gate di sviluppo
 
-`development.gate` distingue `not-started`, `blocked-plan`, `blocked-evidence`, `ready-for-pre-release`. Il gate di design resta in `gate`. `status` calcola entrambi dagli artefatti correnti; la fase in `state.json` registra l'ultimo passaggio eseguito e non sostituisce il gate. Le decisioni umane e le condizioni restano nello stato della feature.
+`development.gate` distingue `not-started`, `blocked-plan`, `blocked-evidence`, `development-complete`, `ready-for-pre-release`. Il gate di design resta in `gate`. `status` calcola entrambi dagli artefatti correnti; la fase in `state.json` registra l'ultimo passaggio eseguito e non sostituisce il gate. Le decisioni umane e le condizioni restano nello stato della feature.
 
-`verify <id>` produce il report rigenerabile `development-review.md`. Solo con evidenze complete e attuali registra `phase: development-verified`; se una verifica successiva fallisce, riporta la fase a `development`. Restituisce `0` per prontezza alla pre-release e `2` per lacune, senza approvare il rilascio. Gli hash controllano integrità locale: non autenticano i log, non provano l'esecuzione dichiarata e non certificano qualità semantica, copertura o implementazione. Dopo la verifica positiva proseguire con `pre-release` e `review-release`.
+`verify <id>` produce il report rigenerabile `development-review.md`. Solo con evidenze complete e attuali registra `phase: development-verified`; se una verifica successiva fallisce, riporta la fase a `development`. Restituisce `0` per sviluppo completato oppure prontezza alla pre-release secondo la policy e `2` per lacune, senza approvare il rilascio. Gli hash controllano integrità locale: non autenticano i log, non provano l'esecuzione dichiarata e non certificano qualità semantica, copertura o implementazione. Con `development-complete` il percorso si ferma allo sviluppo verificato. Solo con `ready-for-pre-release` proseguire con `pre-release` e `review-release`.
 
 ## Pre-release
 
@@ -221,7 +221,7 @@ Esempio di struttura per una release light; i valori sono illustrativi, non evid
 
 ### Rollout e preparazione operativa
 
-- `owner`, `artifact`, `revision`, `environment`, motivazione della strategia, on-call e piano di rollback sono richiesti. La corrispondenza della revisione alle evidenze CI deve essere verificata semanticamente: la CLI non interroga registry o repository remoti.
+- `owner`, `artifact`, `revision`, `environment`, motivazione della strategia, on-call e piano di rollback sono richiesti. La corrispondenza della revisione alle evidenze finali locali/CI previste dalla policy deve essere verificata semanticamente: la CLI non interroga registry o repository remoti.
 - Strategie: `direct`, `canary`, `segmented`, `combined`. Le fasi descrivono esposizione nell'ambiente finale; staging resta una prova separata. ID univoci, audience, durata positiva, promozione e stop sono richiesti. La percentuale deve essere da 1 a 100, non decrescente, fino al 100% dell'audience prevista. Diretto usa una fase; canary/combinato almeno due, con esposizione iniziale parziale.
 - Ogni criterio applicabile del design richiede `signal`, `threshold`, `verification`, e citazione nel Markdown. Esclusioni del design non vanno reintrodotte; soglie e baseline derivano dal dominio o dalla review. La CLI non inventa valori e non certifica la loro adeguatezza.
 - Risorse (`alarms`, `dashboards`, `feature_flag`): `planned` richiede owner, riferimento e piano di attivazione; `ready` richiede owner, riferimento ed evidenze locali `{path, sha256}` attuali; `excluded` richiede motivazione e nessuna evidenza. Allarmi e dashboard devono essere dichiarati; nel full non possono essere esclusi. Il controllo dell'esposizione può essere escluso motivando il meccanismo alternativo, anche senza un flag dedicato.
@@ -234,7 +234,7 @@ Esempio di struttura per una release light; i valori sono illustrativi, non evid
 
 `release.gate` distingue `not-started`, `blocked`, `awaiting-human-review`, `stale-review`, `changes-requested`, `approved`, `approved-with-conditions`. `review-release` restituisce `2` se preparazione assente o lacune strutturali; altrimenti `0`, anche se attende una decisione umana. Il gate e le condizioni sono l'autorità sul percorso.
 
-`decide` usa `--stage design` come default, preservando la compatibilità dei comandi precedenti. Con `--stage release` registra la decisione in `release-decisions.json` (`schema_version: 1`, `decisions`), con lo stesso contratto di reviewer, ruolo dichiarato, nota, condizioni e conferma umana. Il RACI mantiene Tech Lead/Architect come responsabile della decisione; partecipanti e rilievi degli altri ruoli vanno nelle note. Nessuna approvazione automatica deriva da una checklist compilata.
+`decide` usa `--stage design` come default, preservando la compatibilità dei comandi precedenti. Con `--stage release` registra la decisione in `release-decisions.json` (`schema_version: 1`, `decisions`), con lo stesso contratto di reviewer, ruolo dichiarato, nota, condizioni e conferma umana. Il RACI mantiene Tech Lead/Architect o reviewer delegato dalla policy come responsabile della decisione; partecipanti e rilievi degli altri ruoli vanno nelle note. Nessuna approvazione automatica deriva da una checklist compilata.
 
 Le approvazioni richiedono preparazione strutturalmente valida. Le risorse ancora pianificate impediscono `approved` e richiedono `approved-with-conditions` con attivazioni assegnate. Le condizioni di design dovute entro pre-release/release vanno risolte e riconfermate prima della decisione di release. `changes-requested` può essere registrato su una bozza incompleta, conservando il gate bloccato e lo storico.
 
@@ -245,3 +245,70 @@ Il riferimento allo sviluppo include fingerprint del design, ultima decisione di
 ## Scritture concorrenti
 
 I comandi che modificano il progetto acquisiscono `.dfd/lock` e scrivono ogni file tramite sostituzione atomica. In caso di interruzione forzata può restare il lock: rimuoverlo solo dopo aver verificato che non ci siano comandi DFD attivi. Una singola scrittura è atomica; l’installazione di più file non è una transazione unica. Gli errori di preflight preservano i file gestiti.
+
+## Policy di maturità del dominio
+
+File opzionale `.dfd/domains/<dominio>/lifecycle.json`:
+
+```json
+{
+  "schema_version": 1,
+  "mode": "development-only",
+  "ci_required": false,
+  "rationale": "Prototipo locale: CI prematura; suite finale locale tracciata obbligatoria"
+}
+```
+
+Campi obbligatori e nessun campo ignoto. `mode` ammette `development-only` e `release-preparation`. Motivazione non vuota; solo sviluppo richiede `ci_required: false`. In preparazione al rilascio valutare la scelta con rischio e destinazione: `true` richiede evidenze `ci`; `false` accetta la suite locale come alternativa motivata da valutare nella review umana. Una policy assente mantiene il comportamento precedente: preparazione al rilascio con CI richiesta. Policy malformate sono errori, senza fallback. La CLI non certifica l’adeguatezza della motivazione.
+
+Il fingerprint include il file quando presente; aggiunta, rimozione o modifica invalidano le review, il piano e le evidenze. Per i domini senza file i fingerprint restano compatibili. Aggiornare prima la policy, rivalutare la specifica e registrare la decisione umana pertinente; usare plan --refresh e rieseguire le verifiche coinvolte.
+
+`kind: suite` identifica una suite finale locale; `kind: ci` resta una CI effettiva. Entrambe richiedono esito zero, timestamp valido non futuro e log non vuoto con hash attuale. Ogni check dichiarato non valido blocca anche se facoltativo. La suite finale deve seguire tutti i green; la CI richiesta deve anch’essa seguirli. In solo sviluppo verify restituisce development-complete, status propone development-complete e release.gate è not-applicable. pre-release rifiuta la modalità anche in presenza di CI verde; non crea artefatti. In preparazione al rilascio il gate positivo resta ready-for-pre-release.
+
+Il formato con suite e lifecycle.json richiede la CLI aggiornata; non introdurre questi artefatti con una vecchia CLI. La modalità di adozione greenfield/brownfield, il livello di adozione e il percorso light/full restano indipendenti dalla maturità.
+
+## Percorso rapido
+
+```sh
+dfd quick fix-id --domain checkout --title "Ripristinare il comportamento previsto" --owner "Dev" --kind behavior-fix
+# Compilare il solo .dfd/changes/fix-id.json e collegare log/file reali
+dfd assess fix-id
+dfd verify fix-id
+# Se la policy team richiede review, o si vuole registrarne una realmente espressa:
+dfd decide fix-id --decision approved --reviewer "Reviewer" --role reviewer --note "Review PR effettuata" --human-confirmed
+# Se emergono rischi o quando si prepara una distribuzione:
+dfd promote fix-id --to feature-fix-id
+```
+
+`quick` riprende il record senza sovrascriverlo; ID condivisi con feature normali sono rifiutati. Tipi `behavior-fix` ed `editorial`. Campi: schema_version 1, id, domain, title, owner, kind, problem, scope, known_contract, scope_bounded, changes_contract, critical, open_questions, risk (schema 1 e cinque dimensioni come risk.json), criteria (ID pertinenti), files (path/sha256), checks (come evidence.json), verification_notes, collaboration (null oppure contesto), decisions. Il comando crea i campi senza inventare rischio, test o review.
+
+Rapido richiede tutte le dimensioni low, scope_bounded true, changes_contract e critical false, nessun dubbio e contratto noto per i fix. Per unknown mostra route unknown e blocca; una sola medium passa almeno a light; critical implica full-complete. In caso di escalation non si possono registrare approvazioni rapide. `assess` e `review-design` leggono anche record rapidi senza creare report aggiuntivi. `verify` controlla i file/log reali e il green; per behavior-fix richiede un red fallito per il requisito e cronologicamente precedente. In editoriale non impone red o TDD artificiale. Se lifecycle richiede CI, questa deve essere reale e successiva al green; nessuna suite completa obbligatoria aggiuntiva per policy che non la richiedono.
+
+Senza policy di review indipendente, il singolo dev ottiene change-verified su evidenze valide, senza una nuova approvazione di design. Non viene registrata alcuna decisione umana automatica. Con independent_review true occorrono contesto PR/revisione e review realmente espressa da persona diversa dall’owner; gate awaiting-human-review fino alla decisione. Review registrate sono vincolate al fingerprint del record, dei criteri, delle policy e agli hash dei file: cambi successivi le rendono stale-review oppure bloccano per evidenze non attuali. Approvazioni con condizioni richiedono promozione a light/full. `decide` richiede sempre human-confirmed quando si registra una decisione, anche se facoltativa.
+
+`status` include changes oltre alle features. Gate rapidi: blocked, awaiting-human-review, stale-review, changes-requested, change-verified. verify restituisce 0 solo con change-verified, altrimenti 2; input non validi restano errori 1. Il completamento rapido non approva una release. promote crea una feature distinta e origin.json con riferimento/hash al record, conservandolo; copia rischio e contesto. La dichiarazione critical forza una escalation conservativa high sull’affidabilità da rivalutare nel percorso full. Nessuna decisione rapida viene trasferita come approvazione di design o release.
+
+## Contesto individuale e team
+
+Nessun file team.json è richiesto per il singolo dev. La policy opzionale di dominio usa schema_version 1, independent_review e integrated_checks_required booleani. Assenza equivale a false/false; valori malformati non sono ignorati.
+
+```sh
+dfd context feature-id --owner "Alice" --branch "fix/alice-123" --revision "commit-integrato" --issue "issue-123" --pull-request "pr-123"
+dfd decide feature-id --decision approved --reviewer "Bob" --role reviewer --note "Review PR corrente" --reference "pr-123" --file src/flusso.rs --file tests/flusso.rs --human-confirmed
+```
+
+context è facoltativo, scrive collaboration.json della feature o il campo collaboration del record rapido. Campi: schema_version, owner, branch, revision, issue, pull_request e integration (null o oggetto). Aggiornare la revisione non modifica la specifica approvata, ma le prove e le review sul cambiamento devono riferirsi alla revisione corrente. decide accetta reference opzionale e file ripetibili; registra reference/revision e snapshot dei file esaminati, riusando la PR come fonte della decisione senza richiedere un’approvazione equivalente aggiuntiva. Owner e reviewer sono dichiarazioni, non identità autenticate.
+
+In light/full, la policy team è valutata prima di pre-release e della review di release. independent_review richiede reviewer diverso dall’owner, PR e revisione corrente e snapshot che copra tutti i file di evidence.json. integrated_checks_required richiede integration con revision uguale al contesto, files attuali che coprano i file verificati e checks di tipo suite/ci con esiti, date e log validi; kind ci se la policy lifecycle richiede CI. Esempio di struttura, con valori da sostituire con prove reali:
+
+```json
+{"revision":"commit-integrato","files":[{"path":"src/flusso.rs","sha256":"<hash>"}],"checks":[{"kind":"suite","task":null,"command":"test versione integrata","executed_at":"<data ISO 8601>","exit_code":0,"log":{"path":"proof/integration.log","sha256":"<hash>"}}]}
+```
+
+La CLI non interroga Git/GitHub, non autentica le revisioni dichiarate e non certifica che una suite copra tutte le interazioni: la review semantica controlla provenienza e adeguatezza. Un lock coordina solo la stessa cartella locale; Git coordina cloni e conflitti, senza un registro centrale modificato da ogni intervento.
+
+## Fingerprint selettivi e compatibilità
+
+Le nuove feature usano selective_review true. Specifica, design, rischio, criteri presenti nel design, guardrail del dominio/comuni, lifecycle e contesto di adozione greenfield/brownfield restano dipendenze del design. Testi di processo, template, adozione dettagliata, criteri baseline non citati e registrazione di altri domini non invalidano automaticamente quel design. Ogni prescrizione normativa deve stare nel catalogo o nei guardrail/policy fingerprintati, non solo nella documentazione descrittiva. L’aggiunta di un criterio changes non valutato blocca comunque il design.
+
+Le feature preesistenti senza campo selective_review mantengono false e i vecchi fingerprint. Per creare una nuova feature con compatibilità conservativa usare --legacy-review; non migrare manualmente decisioni esistenti. I file di review, codice e integrazione rimangono vincolati ai rispettivi snapshot: selettività non significa accettare evidenze obsolete. I nuovi comandi e formati richiedono la CLI aggiornata.

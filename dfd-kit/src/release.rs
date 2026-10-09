@@ -18,15 +18,26 @@ fn development_fingerprint(store: &Store, state: &State) -> Result<String> {
         let path = format!(".dfd/features/{}/{name}", state.id);
         files.insert(path.clone(), store.hash(&path)?);
     }
-    Ok(hash(&serde_json::to_vec(
-        &json!({"design":design_fingerprint(store, state)?, "decision":state.decisions.last(), "files":files}),
-    )?))
+    let mut value = json!({"design":design_fingerprint(store, state)?, "decision":state.decisions.last(), "files":files});
+    let context = collaboration::context(store, &state.id)?;
+    if context.is_some()
+        || store
+            .path(&format!(".dfd/domains/{}/team.json", state.domain))?
+            .exists()
+    {
+        value["team_policy"] = serde_json::to_value(collaboration::policy(store, &state.domain)?)?;
+        value["collaboration"] = serde_json::to_value(context)?;
+    }
+    Ok(hash(&serde_json::to_vec(&value)?))
 }
 
 fn entry_errors(store: &Store, state: &State) -> Result<Vec<String>> {
+    if lifecycle(store, &state.domain)?.mode == LifecycleMode::DevelopmentOnly {
+        return Ok(vec!["Pre-release non prevista in development-only: passare esplicitamente a release-preparation e riconfermare design, piano ed evidenze.".into()]);
+    }
     let development = development::status(store, state)?;
     if development["gate"] == "ready-for-pre-release" {
-        return Ok(vec![]);
+        return collaboration::release_errors(store, state);
     }
     let mut errors = vec!["Pre-release: completare e verificare lo sviluppo attuale.".into()];
     errors.extend(
@@ -420,6 +431,11 @@ fn planned(rollout: &Rollout) -> Vec<String> {
 pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
     let root = format!(".dfd/features/{}", state.id);
     let history = history(store, &state.id)?;
+    if lifecycle(store, &state.domain)?.mode == LifecycleMode::DevelopmentOnly {
+        return Ok(
+            json!({"gate":"not-applicable","errors":[],"decisions":history.decisions,"next":"development-complete"}),
+        );
+    }
     let any = store.path(&format!("{root}/rollout.json"))?.exists()
         || store.path(&format!("{root}/rollout.md"))?.exists();
     if !any && history.decisions.is_empty() {

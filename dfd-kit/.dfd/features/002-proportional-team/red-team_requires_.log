@@ -1,0 +1,42 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.23s
+     Running unittests src/lib.rs (target/debug/deps/dfd_kit-35254a93fa68183c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dfd-afc7614dccc6bcdd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/workflow.rs (target/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test team_requires_independent_review_and_integrated_current_evidence ... FAILED
+
+failures:
+
+---- team_requires_independent_review_and_integrated_current_evidence stdout ----
+
+thread 'team_requires_independent_review_and_integrated_current_evidence' (3806829) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["quick", "fix-message", "--domain", "checkout", "--title", "Correggere risultato", "--owner", "Alice", "--kind", "behavior-fix"]
+stdout: 
+stderr: error: unrecognized subcommand 'quick'
+
+Usage: dfd [OPTIONS] <COMMAND>
+
+For more information, try '--help'.
+
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    team_requires_independent_review_and_integrated_current_evidence
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 62 filtered out; finished in 1.36s
+
+error: test failed, to rerun pass `--test workflow`

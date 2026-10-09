@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "owner": "Marco Martorana",
+  "objective": "Ridurre il processo sui fix circoscritti, supportando il singolo sviluppatore per default e la collaborazione facoltativa, con test contro regressioni gravi.",
+  "business_metrics": [
+    "Un artefatto per il fix rapido",
+    "Nessuna approvazione obsoleta o evidenza integrata non corrente accettata"
+  ],
+  "epic": {
+    "reference": "Decisioni del manutentore nella conversazione: percorsi rapido/light/full, test utili contro bachi gravi, collaborazione in team; implementa nella doc e nella cli; chiarimento successivo: anche singolo dev, senza obbligo di team",
+    "approved_by": "Marco Martorana",
+    "approved_at": "2026-10-09T19:36:59.766873+00:00"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "applicable",
+      "implementation": "Diagnostica rapida con route, gate e prossimo passo; nessuna approvazione umana generata automaticamente.",
+      "verification": "Test rapid_escalates e individual_defaults: rischio ignoto/critico e stato tecnico individuale corretto."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "applicable",
+      "implementation": "File e log con hash, esiti e cronologia; review e integrazione legate agli snapshot.",
+      "verification": "Test rapid_invalid_logs, rapid_reviews e team_requires: hash, date, revisione e copertura dei file."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "applicable",
+      "implementation": "Riusare Store e validazione slug per tutti i nuovi percorsi; nessuna esecuzione esterna della CLI.",
+      "verification": "Suite esistente su percorsi/symlink e preservazione; nuovi record rifiutano collisioni e schema incoerente."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "applicable",
+      "implementation": "Ripresa non distruttiva del record, promozione su ID distinto e installazione gestita delle skill.",
+      "verification": "Test rapid_preserves e suite install/init: record originale conservato e collisioni rifiutate."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Review indipendente soltanto se configurata; decisioni esplicite con snapshot; nessuna migrazione automatica di approvazioni legacy.",
+      "verification": "Test solo/team, review stale e selettività; mutanti contro reviewer coincidente, revisione obsoleta e extra gate individuale."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Nuovi comandi quick/promote/context; campi opzionali preservano schemi legacy e fingerprint in assenza di nuove policy.",
+      "verification": "Suite completa incluse fixture legacy e test default selective_review; contratto documentato."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Regressioni dei nuovi gate e mutanti curati, suite completa, fmt, Clippy, test Python e doctor.",
+      "verification": "Log reali red/green, suite finale locale e report mutation con baseline verde; nessuna CI dichiarata."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Nessuna modifica al meccanismo di persistenza o ai budget; verifiche esistenti preservate."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "applicable",
+      "implementation": "Tutta la verifica del record avviene nel binario; nessun servizio o runtime aggiunto per gli utilizzatori.",
+      "verification": "Test CLI con PATH vuoto e build offline; distinzione esplicita fra strumenti di sviluppo e utilizzo."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "excluded",
+      "justification": "Nessuna modifica al meccanismo di persistenza o ai budget; verifiche esistenti preservate."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Percorsi proporzionati e iterativi; un record per il rapido; skill/help/documenti coerenti su solo e team.",
+      "verification": "Test ripresa, escalation e autonomia individuale; verifica link/anchor e copie canoniche dei documenti."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "applicable",
+      "implementation": "Aggiornare skill canoniche e reinstallare con la CLI; non equiparare doctor a un pilota reale degli harness.",
+      "verification": "doctor, integrità manifest e parità delle risorse installate; pilota harness resta baseline esplicita."
+    }
+  ],
+  "test_plan": "Test red/green su percorso rapido, escalation rischio/contratti, regressioni obbligatorie, review umana e snapshot/revisioni; verifiche integrate prima della distribuzione; review selettive e compatibilità. Mutanti mirati ai nuovi gate e suite esistente.",
+  "guardrails": "Non indebolire review umana, integrità degli artefatti o rischio; niente deploy. Policy assente conserva CI obbligatoria. Nessuna CI simulata.",
+  "open_questions": []
+}

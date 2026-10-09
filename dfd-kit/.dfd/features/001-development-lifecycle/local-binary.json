@@ -1,0 +1,6 @@
+{
+  "artifact": "dist/dfd-macos-arm64",
+  "sha256": "937179f7263e1a1444a85c82bb5333b01691ddc7c0c61116e230b648d71afa2a",
+  "build_command": "cargo build --locked --offline --release",
+  "note": "Artefatto locale generato, escluso da Git; checksum registrato come provenienza, senza richiedere il binario nel repository."
+}

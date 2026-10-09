@@ -64,7 +64,7 @@
     {
       "id": "SLO-04",
       "scope": "baseline",
-      "statement": "Attivare CI nel repository e raccogliere esiti reali dei controlli e delle build/test sulle piattaforme dichiarate."
+      "statement": "Valutare e attivare CI quando necessaria per rischio e destinazione del rilascio, raccogliendo esiti reali; in solo sviluppo mantenere una suite finale locale tracciata."
     },
     {
       "id": "UX-03",

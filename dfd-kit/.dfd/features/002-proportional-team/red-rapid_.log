@@ -1,0 +1,107 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.45s
+     Running unittests src/lib.rs (target/debug/deps/dfd_kit-35254a93fa68183c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dfd-afc7614dccc6bcdd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/workflow.rs (target/debug/deps/workflow-b4feff8855944554)
+
+running 5 tests
+test rapid_preserves_record_rejects_collisions_and_promotes_with_origin ... FAILED
+test rapid_escalates_unknown_critical_contract_and_medium_risks ... FAILED
+test rapid_editorial_uses_pertinent_check_without_artificial_red ... FAILED
+test rapid_behavior_fix_requires_real_regression_and_human_review ... FAILED
+test rapid_reviews_and_logs_are_bound_to_files_and_revision ... FAILED
+
+failures:
+
+---- rapid_preserves_record_rejects_collisions_and_promotes_with_origin stdout ----
+
+thread 'rapid_preserves_record_rejects_collisions_and_promotes_with_origin' (3806714) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["quick", "fix-message", "--domain", "checkout", "--title", "Correggere risultato", "--owner", "Alice", "--kind", "behavior-fix"]
+stdout: 
+stderr: error: unrecognized subcommand 'quick'
+
+Usage: dfd [OPTIONS] <COMMAND>
+
+For more information, try '--help'.
+
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- rapid_escalates_unknown_critical_contract_and_medium_risks stdout ----
+
+thread 'rapid_escalates_unknown_critical_contract_and_medium_risks' (3806713) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["quick", "fix-message", "--domain", "checkout", "--title", "Correggere risultato", "--owner", "Alice", "--kind", "behavior-fix"]
+stdout: 
+stderr: error: unrecognized subcommand 'quick'
+
+Usage: dfd [OPTIONS] <COMMAND>
+
+For more information, try '--help'.
+
+  left: Some(2)
+ right: Some(0)
+
+---- rapid_editorial_uses_pertinent_check_without_artificial_red stdout ----
+
+thread 'rapid_editorial_uses_pertinent_check_without_artificial_red' (3806712) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["quick", "fix-message", "--domain", "checkout", "--title", "Correggere risultato", "--owner", "Alice", "--kind", "editorial"]
+stdout: 
+stderr: error: unrecognized subcommand 'quick'
+
+Usage: dfd [OPTIONS] <COMMAND>
+
+For more information, try '--help'.
+
+  left: Some(2)
+ right: Some(0)
+
+---- rapid_behavior_fix_requires_real_regression_and_human_review stdout ----
+
+thread 'rapid_behavior_fix_requires_real_regression_and_human_review' (3806711) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["quick", "fix-message", "--domain", "checkout", "--title", "Correggere risultato", "--owner", "Alice", "--kind", "behavior-fix"]
+stdout: 
+stderr: error: unrecognized subcommand 'quick'
+
+Usage: dfd [OPTIONS] <COMMAND>
+
+For more information, try '--help'.
+
+  left: Some(2)
+ right: Some(0)
+
+---- rapid_reviews_and_logs_are_bound_to_files_and_revision stdout ----
+
+thread 'rapid_reviews_and_logs_are_bound_to_files_and_revision' (3806715) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["quick", "fix-message", "--domain", "checkout", "--title", "Correggere risultato", "--owner", "Alice", "--kind", "behavior-fix"]
+stdout: 
+stderr: error: unrecognized subcommand 'quick'
+
+Usage: dfd [OPTIONS] <COMMAND>
+
+For more information, try '--help'.
+
+  left: Some(2)
+ right: Some(0)
+
+
+failures:
+    rapid_behavior_fix_requires_real_regression_and_human_review
+    rapid_editorial_uses_pertinent_check_without_artificial_red
+    rapid_escalates_unknown_critical_contract_and_medium_risks
+    rapid_preserves_record_rejects_collisions_and_promotes_with_origin
+    rapid_reviews_and_logs_are_bound_to_files_and_revision
+
+test result: FAILED. 0 passed; 5 failed; 0 ignored; 0 measured; 58 filtered out; finished in 2.15s
+
+error: test failed, to rerun pass `--test workflow`

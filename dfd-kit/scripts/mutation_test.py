@@ -13,7 +13,7 @@ import tempfile
 import time
 
 PACKAGE = Path(__file__).resolve().parents[1]
-SOURCES = {"src/lib.rs", "src/store.rs", "src/development.rs", "src/release.rs"}
+SOURCES = {"src/lib.rs", "src/store.rs", "src/development.rs", "src/release.rs", "src/quick.rs", "src/collaboration.rs"}
 
 
 def outcome(returncode, output):
@@ -103,7 +103,7 @@ def execute(args, output):
     # Copy only build inputs; never mutate the user's sources or binary artifacts.
     with tempfile.TemporaryDirectory(prefix="dfd-mutants-", dir=PACKAGE / "target") as directory:
         workspace = Path(directory)
-        for folder in ["src", "tests", "skills", "templates"]:
+        for folder in ["src", "tests", "skills", "templates", "examples"]:
             shutil.copytree(PACKAGE / folder, workspace / folder)
         for file in ["Cargo.toml", "Cargo.lock", "build.rs"]:
             shutil.copy2(PACKAGE / file, workspace / file)

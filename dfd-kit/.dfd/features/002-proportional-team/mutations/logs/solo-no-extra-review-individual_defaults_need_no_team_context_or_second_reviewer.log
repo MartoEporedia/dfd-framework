@@ -1,0 +1,39 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-6yenoi8x)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.73s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test individual_defaults_need_no_team_context_or_second_reviewer ... FAILED
+
+failures:
+
+---- individual_defaults_need_no_team_context_or_second_reviewer stdout ----
+
+thread 'individual_defaults_need_no_team_context_or_second_reviewer' (3852848) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["verify", "fix-message"]
+stdout: {
+  "change": "fix-message",
+  "collaboration": null,
+  "decisions": [],
+  "domain": "checkout",
+  "errors": [],
+  "gate": "awaiting-human-review",
+  "independent_review_required": false,
+  "next": "dfd-review-design",
+  "owner": "Alice",
+  "release": "not-approved",
+  "route": "rapid"
+}
+
+stderr: 
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    individual_defaults_need_no_team_context_or_second_reviewer
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 64 filtered out; finished in 1.54s
+
+error: test failed, to rerun pass `--test workflow`

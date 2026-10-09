@@ -1,0 +1,25 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 47.01s
+     Running unittests src/lib.rs (target/debug/deps/dfd_kit-35254a93fa68183c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dfd-afc7614dccc6bcdd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/workflow.rs (target/debug/deps/workflow-b4feff8855944554)
+
+running 5 tests
+test lifecycle_invalid_policy_is_not_ignored ... ok
+test lifecycle_policy_changes_invalidate_reviews_and_existing_release ... ok
+test lifecycle_development_completes_locally_and_never_enters_release ... ok
+test lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology ... ok
+test lifecycle_release_ci_policy_and_legacy_default_remain_strict ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 51 filtered out; finished in 26.33s
+

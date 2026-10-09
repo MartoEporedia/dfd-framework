@@ -1,0 +1,58 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-p2yimg47)
+warning: unused variable: `rollout`
+   --> src/release.rs:522:13
+    |
+522 |         let rollout: Rollout = store.json(&format!(".dfd/features/{id}/rollout.json"))?;
+    |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_rollout`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dfd-kit` (lib) generated 1 warning (run `cargo fix --lib -p dfd-kit` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.11s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test planned_resources_need_conditional_decision_and_activation_evidence ... FAILED
+
+failures:
+
+---- planned_resources_need_conditional_decision_and_activation_evidence stdout ----
+
+thread 'planned_resources_need_conditional_decision_and_activation_evidence' (3536675) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["decide", "001-paypal", "--stage", "release", "--decision", "approved", "--reviewer", "TL", "--role", "tech-lead", "--note", "OK", "--human-confirmed"]
+stdout: {
+  "feature": "001-paypal",
+  "release": {
+    "checklist": "review_release_light.md",
+    "decisions": [
+      {
+        "conditions": [],
+        "decision": "approved",
+        "fingerprint": "6fb0ea6780f3ccbeeddac11b59c5201a27e72a3af351db79ee6f7a011f87eaad",
+        "note": "OK",
+        "recorded_at": "2026-10-09T15:12:03.349628Z",
+        "reviewer": "TL",
+        "role": "tech-lead"
+      }
+    ],
+    "errors": [],
+    "gate": "approved",
+    "next": "rollout",
+    "pending_activation": [
+      "Allarmi del rilascio"
+    ]
+  }
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(1)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    planned_resources_need_conditional_decision_and_activation_evidence
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 55 filtered out; finished in 1.86s
+
+error: test failed, to rerun pass `--test workflow`

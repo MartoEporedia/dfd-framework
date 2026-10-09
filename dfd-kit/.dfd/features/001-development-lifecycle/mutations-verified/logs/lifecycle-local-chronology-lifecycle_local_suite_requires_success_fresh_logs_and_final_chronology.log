@@ -1,0 +1,43 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-p2yimg47)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.27s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology ... FAILED
+
+failures:
+
+---- lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology stdout ----
+
+thread 'lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology' (3545129) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["verify", "001-paypal"]
+stdout: {
+  "development": {
+    "design_fingerprint": "94cc4e4854717cb05f914045fd05ef299cac1d73eec7f111569745541ac8bbe8",
+    "errors": [],
+    "gate": "development-complete",
+    "lifecycle": {
+      "ci_required": false,
+      "mode": "development-only",
+      "rationale": "Pilota locale; suite finale tracciata e review prima della distribuzione",
+      "schema_version": 1
+    },
+    "next": "development-complete",
+    "plan_hash": "9aa5a135060a3d5054cb90a02571e29a75e6cd847d7cd4398bbc2e48a6d4ffc5"
+  },
+  "feature": "001-paypal",
+  "phase": "development-verified"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 55 filtered out; finished in 2.01s
+
+error: test failed, to rerun pass `--test workflow`

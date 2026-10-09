@@ -1,0 +1,33 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-6yenoi8x)
+warning: unused variable: `c`
+   --> src/lib.rs:874:22
+    |
+874 |             .filter(|c| { let _ = &ids; true })
+    |                      ^ help: if this is intentional, prefix it with an underscore: `_c`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dfd-kit` (lib) generated 1 warning (run `cargo fix --lib -p dfd-kit` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.01s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test selective_review_ignores_unrelated_domain_changes_but_tracks_contracts ... FAILED
+
+failures:
+
+---- selective_review_ignores_unrelated_domain_changes_but_tracks_contracts stdout ----
+
+thread 'selective_review_ignores_unrelated_domain_changes_but_tracks_contracts' (3855671) panicked at tests/workflow.rs:2009:5:
+assertion `left == right` failed
+  left: String("stale-review")
+ right: "approved"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    selective_review_ignores_unrelated_domain_changes_but_tracks_contracts
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 64 filtered out; finished in 1.52s
+
+error: test failed, to rerun pass `--test workflow`

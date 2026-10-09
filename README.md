@@ -84,3 +84,11 @@ Focus: controlli di accesso, audit, protezione dati, conformità, review di sicu
 4. **[Esempio PayPal](examples/checkout_paypal_spec.md)** – per vedere come una feature può impattare UX e KPI.
 
 Focus: feedback utenti, segnalazioni post-release, impatto su UX e business KPI.
+
+## Progetti ancora in sviluppo
+
+DFD supporta la modalità **solo sviluppo**, con specifiche iterative, review e verifiche locali tracciate anche quando la CI è prematura. La **preparazione al rilascio** si attiva esplicitamente quando si decide di distribuire, rivalutando rischio, policy CI e requisiti operativi. Vedere [fondamenta](fondamenta.md#maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio) e [processo](processo-e2e.md#maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio).
+
+## Processo proporzionato, anche per un solo dev
+
+Scegliere **rapido** per fix circoscritti entro un contratto noto, **light** per cambiamenti contenuti da specificare e **full** per rischi maggiori. Il rapido usa un solo [record](templates/cambiamento_rapido.md), con regressione red/green per bug e verifiche pertinenti per modifiche editoriali. DFD funziona per singoli sviluppatori e team; PR, review indipendente e verifiche integrate dipendono dalle [convenzioni di collaborazione](templates/collaborazione.md). Vedere [rischio](rischio.md#percorsi-proporzionati-rapido-light-e-full) e [CLI](dfd-kit/README.md).

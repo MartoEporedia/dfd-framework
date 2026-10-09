@@ -40,10 +40,10 @@ Describe the problem, affected documents, and validation performed in each PR. L
 Dal 2026-10-09, tutti gli sviluppi della CLI e delle skill in `dfd-kit/` devono seguire DFD, inclusi bugfix, refactor e modifiche agli artefatti di supporto necessari al cambiamento.
 
 - Riprendere gli artefatti DFD esistenti e verificare lo stato con la CLI. Se manca il setup del dominio, completare prima la Fase 0: DoD, guardrail, template locali e convenzioni di processo.
-- Aprire o riprendere una feature con ambito esplicito, classificare il rischio e scegliere il percorso light/full previsto dal framework.
-- Definire la specifica iterativamente, chiarendo i dubbi e collegando criteri DoD, test e vincoli; completare la review di design prima dello sviluppo.
-- Derivare il piano dal design approvato, sviluppare con TDD e raccogliere evidenze reali. Eseguire le verifiche e i mutation test pertinenti al cambiamento.
+- Classificare il rischio e scegliere il percorso rapido/light/full. Per un intervento rapido usare un solo record con ambito esplicito; per light/full aprire o riprendere una feature.
+- Definire la specifica iterativamente, chiarendo i dubbi e collegando criteri DoD, test e vincoli. Light/full richiedono review di design; il percorso rapido individuale non richiede una seconda approvazione umana.
+- Per light/full derivare il piano dal design approvato. Raccogliere evidenze reali: regressione red/green per fix comportamentali, verifica pertinente per modifiche editoriali, mutation test mirati agli invarianti importanti.
 - Preparare la pre-release e la review di release quando il cambiamento è destinato al rilascio. Aggiornare gli artefatti e riconfermare i gate invalidati dalle modifiche.
-- Registrare le decisioni umane solo quando espresse; riusare quelle già pertinenti nella conversazione. Un controllo automatico positivo non sostituisce la review umana.
+- Registrare le decisioni umane solo quando espresse; riusare quelle già pertinenti nella conversazione. Un controllo automatico positivo non sostituisce una review umana richiesta dal percorso o dalla policy. Il lavoro individuale è supportato senza PR o reviewer indipendente obbligatori; attivare i vincoli team solo tramite policy esplicita.
 
 Il percorso operativo e i comandi sono descritti in [CONTRIBUTING.md](dfd-kit/CONTRIBUTING.md) e nel [contratto del toolkit](dfd-kit/templates/contratto_toolkit.md). Il setup e gli artefatti delle feature devono vivere nel repository, senza dipendere dalla sola cronologia della chat.

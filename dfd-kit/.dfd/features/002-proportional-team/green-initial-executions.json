@@ -1,0 +1,14 @@
+[
+  {
+    "command": "cargo test --locked --offline team_requires_",
+    "executed_at": "2026-10-09T19:46:17.112203+00:00",
+    "exit_code": 0,
+    "log": "green-team.log"
+  },
+  {
+    "command": "cargo test --locked --offline selective_review_",
+    "executed_at": "2026-10-09T19:46:20.199820+00:00",
+    "exit_code": 0,
+    "log": "green-selective.log"
+  }
+]

@@ -1,0 +1,37 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-6yenoi8x)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.38s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test ready_resource_requires_proof_even_with_complete_owner_and_reference ... FAILED
+
+failures:
+
+---- ready_resource_requires_proof_even_with_complete_owner_and_reference stdout ----
+
+thread 'ready_resource_requires_proof_even_with_complete_owner_and_reference' (3846619) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["review-release", "001-paypal"]
+stdout: {
+  "feature": "001-paypal",
+  "release": {
+    "checklist": "review_release_light.md",
+    "decisions": [],
+    "errors": [],
+    "gate": "awaiting-human-review",
+    "next": "dfd-review-release",
+    "pending_activation": []
+  }
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    ready_resource_requires_proof_even_with_complete_owner_and_reference
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 64 filtered out; finished in 1.76s
+
+error: test failed, to rerun pass `--test workflow`

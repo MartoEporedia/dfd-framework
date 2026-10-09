@@ -90,7 +90,7 @@ pub(super) fn plan(store: &Store, id: &str, refresh: bool) -> Result<(Value, i32
             task.verification
         ));
     }
-    markdown.push_str("## Ciclo di sviluppo\n\nPer ogni task: test rosso sul comportamento atteso, implementazione minima, test verde, refactor e riesecuzione dei test. Conservare le evidenze e verificare la suite in CI.\n");
+    markdown.push_str("## Ciclo di sviluppo\n\nPer ogni task: test rosso sul comportamento atteso, implementazione minima, test verde, refactor e riesecuzione dei test. Conservare le evidenze e verificare la suite finale secondo lifecycle.json: locale (suite) o CI quando richiesta.\n");
     store.save(
         &format!("{root}/plan.json"),
         &Plan {
@@ -247,6 +247,8 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
     let task_ids: BTreeSet<_> = plan.tasks.iter().map(|task| task.id.as_str()).collect();
     let mut red = BTreeMap::new();
     let mut green = BTreeMap::new();
+    let policy = lifecycle(store, &state.domain)?;
+    let mut suite = None;
     let mut ci = None;
     for check in &evidence.checks {
         let mut valid = true;
@@ -278,8 +280,16 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
             }
         }
         match check.kind {
-            CheckKind::Ci if check.exit_code == 0 && valid => {
-                ci = Some(executed_at.unwrap());
+            CheckKind::Suite | CheckKind::Ci if check.exit_code == 0 && valid => {
+                let date = executed_at.unwrap();
+                suite = Some(suite.map_or(date, |latest: DateTime<chrono::FixedOffset>| {
+                    latest.max(date)
+                }));
+                if check.kind == CheckKind::Ci {
+                    ci = Some(ci.map_or(date, |latest: DateTime<chrono::FixedOffset>| {
+                        latest.max(date)
+                    }));
+                }
             }
             CheckKind::Red | CheckKind::Green => {
                 if let Some(task) = &check.task {
@@ -294,19 +304,27 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
                     errors.push("Test red/green senza task.".into());
                 }
             }
-            CheckKind::Ci => errors.push("Suite CI non verde.".into()),
+            CheckKind::Suite | CheckKind::Ci => {
+                errors.push("Suite finale locale/CI non verde o non valida.".into())
+            }
         }
     }
     for task in &task_ids {
         if !red.contains_key(task) || !green.contains_key(task) {
             errors.push(format!("Task {task}: servono evidenze red e green."));
-        } else if red[task] > green[task] || ci.is_some_and(|date| date < green[task]) {
+        } else if red[task] > green[task]
+            || suite.is_some_and(|date| date < green[task])
+            || (policy.ci_required && ci.is_some_and(|date| date < green[task]))
+        {
             errors.push(format!(
-                "Task {task}: rispettare l'ordine red → green → CI finale."
+                "Task {task}: rispettare l'ordine red → green → suite finale (CI quando richiesta)."
             ));
         }
     }
-    if ci.is_none() {
+    if suite.is_none() {
+        errors.push("Serve evidenza della suite finale verde, locale o CI secondo policy.".into());
+    }
+    if policy.ci_required && ci.is_none() {
         errors.push("Serve evidenza della suite completa verde in CI.".into());
     }
     if let Some(decision) = state.decisions.last() {
@@ -321,15 +339,18 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
     }
     let ready = errors.is_empty();
     Ok(
-        json!({"gate":if ready {"ready-for-pre-release"} else {"blocked-evidence"}, "errors":errors,
-        "design_fingerprint":fingerprint,"plan_hash":plan_hash(store, &state.id)?,"next":if ready {"pre-release"} else {"dfd-implement"}}),
+        json!({"gate":if !ready {"blocked-evidence"} else if policy.mode == LifecycleMode::DevelopmentOnly {"development-complete"} else {"ready-for-pre-release"}, "errors":errors,"lifecycle":policy,
+        "design_fingerprint":fingerprint,"plan_hash":plan_hash(store, &state.id)?,"next":if !ready {"dfd-implement"} else if policy.mode == LifecycleMode::DevelopmentOnly {"development-complete"} else {"dfd-pre-release"}}),
     )
 }
 
 pub(super) fn verify(store: &Store, id: &str) -> Result<(Value, i32)> {
     let mut state = state(store, id)?;
     let output = status(store, &state)?;
-    let ready = output["gate"] == "ready-for-pre-release";
+    let ready = matches!(
+        output["gate"].as_str(),
+        Some("ready-for-pre-release" | "development-complete")
+    );
     let mut report = format!("# Verifica sviluppo DFD\n\nGate: {}\n\n", output["gate"]);
     for error in output["errors"].as_array().unwrap() {
         report.push_str(&format!("- {}\n", error.as_str().unwrap()));

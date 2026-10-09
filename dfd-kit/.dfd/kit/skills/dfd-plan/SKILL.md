@@ -12,3 +12,7 @@ Usare `dfd plan <id>`. Crea `plan.md`, `plan.json` ed `evidence.json` oppure rip
 Registrare dubbi in `plan.json.open_questions`, chiarirli iterativamente e conservarne l'esito nel piano. Se cambiano ambito, criteri o decisioni del design, aggiornare prima la specifica e riconfermare la review pertinente. Dopo una nuova approvazione usare `dfd plan <id> --refresh`: aggiorna il riferimento al design preservando i task; rivederli e rigenerare le evidenze coinvolte.
 
 Presentare task e condizioni aperte, poi proseguire con `dfd-implement`. Il piano è un artefatto di lavoro, non prova dell'esecuzione dei test.
+
+Leggere lifecycle.json del dominio e includere la suite finale locale o CI richiesta nel piano; una transizione di modalità invalida review, piano ed evidenze e richiede rivalutazione.
+
+Il percorso rapido usa il solo record del cambiamento: non generare un piano separato. Il lavoro individuale non richiede PR o review indipendente; applicare tali vincoli solo se configurati.

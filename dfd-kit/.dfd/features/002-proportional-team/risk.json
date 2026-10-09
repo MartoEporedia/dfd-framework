@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "medium",
+      "rationale": "Gate proporzionati e review devono preservare integrità, isolamento e controlli sui rischi; nessuna esecuzione esterna o distribuzione."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Gate proporzionati e review devono preservare integrità, isolamento e controlli sui rischi; nessuna esecuzione esterna o distribuzione."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Gate proporzionati e review devono preservare integrità, isolamento e controlli sui rischi; nessuna esecuzione esterna o distribuzione."
+    },
+    "reliability": {
+      "level": "medium",
+      "rationale": "Gate proporzionati e review devono preservare integrità, isolamento e controlli sui rischi; nessuna esecuzione esterna o distribuzione."
+    },
+    "security": {
+      "level": "medium",
+      "rationale": "Gate proporzionati e review devono preservare integrità, isolamento e controlli sui rischi; nessuna esecuzione esterna o distribuzione."
+    }
+  }
+}

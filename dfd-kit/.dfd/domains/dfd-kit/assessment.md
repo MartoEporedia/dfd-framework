@@ -13,14 +13,14 @@ La [baseline locale conservata](evidence/mutation-baseline/report.json) registra
 
 ## 2. Lacune baseline
 
-- CI disponibile come template ma non attiva; nessuna prova multipiattaforma osservata.
+- CI disponibile come template, rinviata in solo sviluppo; prove multipiattaforma da raccogliere prima di dichiarare il supporto al rilascio.
 - Pilota reale delle skill negli harness ancora da eseguire.
 - Implementazione preesistente senza cicli feature DFD tracciati; nessuna approvazione retroattiva.
 - Baseline quantitativa dei tempi e delle risorse da raccogliere.
 
 ## 3. Pilota e prossimi interventi
 
-1. Prima feature pilota: risolvere attivazione CI e raccogliere evidenze reali, previa specifica e review.
+1. Prima feature pilota: modalità solo sviluppo con suite locale tracciata; valutare CI alla transizione al rilascio.
 2. Seconda proposta: esecuzione del rollout e relativo tracciamento, da specificare e classificare.
 3. Terza proposta: learning post-release e aggiornamento della DoD, da specificare e classificare.
 4. Verificare il pilota nell’harness Codex e poi gli altri harness; retrospettiva dopo tre cicli o prima in caso di blocchi.

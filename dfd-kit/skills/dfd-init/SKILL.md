@@ -17,3 +17,5 @@ Le risorse del toolkit sono in `.dfd/kit/` nel repository adottante. Prima dell'
 6. Completare la Fase 0 con `dfd-setup`: collegare `.dfd/domains/<dominio>/guardrails.md` alle policy esistenti e agli eventuali guardrail comuni `.dfd/guardrails.md`; documentare convenzioni in `process.md` e adattamenti nei template locali. Separare fatti osservati, proposte e informazioni mancanti. Chiedere input mirati solo sui punti che impediscono di definire il pilota.
 
 Riferimento per formati e comandi: `.dfd/kit/templates/contratto_toolkit.md`. L'inizializzazione è ripetibile e preserva gli artefatti esistenti. Le review DFD si aggiungono alle review del team. Al termine indicare dominio pilota, lacune note e stato della Fase 0 verificato con `dfd setup --domain <dominio>` e prima feature da trattare con `dfd-assess`.
+
+Concordare la maturità nel setup: solo sviluppo se CI e distribuzione sono premature, preparazione al rilascio quando si pianifica la distribuzione. Dichiarare lifecycle.json con motivazione tramite dfd-setup; init preserva i domini esistenti e non cambia implicitamente la policy.

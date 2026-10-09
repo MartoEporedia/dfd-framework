@@ -315,3 +315,24 @@ Per supporto:
 - [Processo End-to-End](processo-e2e.md) – per allineare fasi e gate.  
 - [Criteri di Rischio](rischio.md) – per classificare feature e scegliere full vs light.  
 - [Modello RACI](raci.md) – per chiarire ruoli e responsabilità.
+
+## Maturità del progetto: solo sviluppo e preparazione al rilascio
+
+La maturità del progetto è distinta dal livello di adozione DFD e dal rischio della feature. La Fase 0 dichiara una modalità, la scelta sulla CI e la relativa motivazione:
+
+| Modalità | Verifiche di sviluppo | Uscita |
+|---|---|---|
+| Solo sviluppo (`development-only`) | Light/full: review di design, TDD e suite finale locale; rapido: verifiche pertinenti. CI facoltativa | Sviluppo completato; nessuna pre-release o autorizzazione a distribuire |
+| Preparazione al rilascio (`release-preparation`) | Stessi controlli, con CI richiesta per default; un’alternativa locale richiede motivazione rispetto a rischio e destinazione e review umana | Prontezza alla pre-release, poi review di release distinta |
+
+L’assenza della CI non è una lacuna bloccante in solo sviluppo. Restano obbligatorie le verifiche applicabili e la tracciabilità di comando, data, risultato e log: un test locale non viene dichiarato CI. Quando prevista, la suite finale deve seguire i test green. Una CI dichiarata fallita continua a bloccare anche quando facoltativa.
+
+Prima di distribuire, passare esplicitamente alla preparazione al rilascio: rivalutare rischio, criteri, policy CI e verifiche nell’ambiente di destinazione. Riconfermare review e aggiornare piano ed evidenze invalidati. La modalità solo sviluppo non attenua controlli di sicurezza o rischio; il completamento locale non sostituisce l’approvazione umana del rilascio. Il learning può provenire anche dagli esperimenti locali, prima di disporre di dati di produzione.
+
+## Adozione proporzionata, individuale o in team
+
+DFD è utilizzabile da un singolo sviluppatore o da un team. Organizzazione del lavoro, maturità del progetto e rischio dell’intervento sono scelte indipendenti: non servono CI, PR o reviewer aggiuntivi solo per iniziare.
+
+Concordare nel setup i percorsi rapido/light/full. Un fix rapido usa un [solo record](templates/cambiamento_rapido.md), con rischio interamente low e verifiche pertinenti; dubbi o impatto maggiore richiedono light/full. Il lavoro individuale è il default della CLI: nessun team.json richiesto. Attivare le [policy di collaborazione](templates/collaborazione.md) quando servono, senza imporle ai progetti individuali.
+
+Conservare contratti normativi nei criteri e nei guardrail. Le nuove review selettive riaprono solo i design interessati da modifiche pertinenti; template descrittivi e lacune baseline estranee non richiedono da soli nuove approvazioni. Le feature legacy mantengono il comportamento conservativo. Vedere [fondamenta](fondamenta.md#percorsi-proporzionati-e-lavoro-individuale-o-in-team) per regole e limiti.

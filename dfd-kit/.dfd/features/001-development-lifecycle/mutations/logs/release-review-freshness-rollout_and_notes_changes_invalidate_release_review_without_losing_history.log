@@ -1,0 +1,24 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-d7ql99ra)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.04s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test rollout_and_notes_changes_invalidate_release_review_without_losing_history ... FAILED
+
+failures:
+
+---- rollout_and_notes_changes_invalidate_release_review_without_losing_history stdout ----
+
+thread 'rollout_and_notes_changes_invalidate_release_review_without_losing_history' (3487220) panicked at tests/workflow.rs:1150:9:
+assertion `left == right` failed
+  left: String("approved")
+ right: "stale-review"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    rollout_and_notes_changes_invalidate_release_review_without_losing_history
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 55 filtered out; finished in 1.45s
+
+error: test failed, to rerun pass `--test workflow`

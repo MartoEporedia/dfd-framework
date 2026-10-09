@@ -1,0 +1,14 @@
+[
+  {
+    "command": "cargo test --locked --offline lifecycle_",
+    "executed_at": "2026-10-09T15:02:58.699872+00:00",
+    "exit_code": 0,
+    "log": "green-current.log"
+  },
+  {
+    "command": "cargo test --locked --offline",
+    "executed_at": "2026-10-09T15:04:16.159618+00:00",
+    "exit_code": 0,
+    "log": "suite-current.log"
+  }
+]

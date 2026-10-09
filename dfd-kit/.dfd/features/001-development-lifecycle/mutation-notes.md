@@ -1,0 +1,3 @@
+# Scelta dei mutanti
+
+Il controllo esplicito development-only all’ingresso di pre-release è ridondante rispetto alla richiesta del gate ready-for-pre-release: rimuoverlo non permette una release perché development-complete resta distinto. Il candidato lifecycle-release-boundary può quindi sopravvivere senza cambiare il comportamento autorizzato. Non viene mantenuto nel catalogo finale: il nuovo test comportamentale conserva la verifica del confine e il mutante lifecycle-legacy-ci verifica invece una regressione reale del default conservativo. I report di esecuzione sono conservati separatamente; nessun risultato viene sovrascritto per dichiarare eliminato un mutante equivalente.

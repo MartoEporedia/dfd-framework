@@ -16,3 +16,7 @@ Definire trigger, procedura e verifica del rollback; predisporre allarmi, dashbo
 Registrare solo comunicazioni realmente effettuate con audience, owner, data e riferimento. Non inviare messaggi o configurare servizi esterni senza l'autorizzazione pertinente; predisporre il contenuto e riportare l'attività ancora necessaria. L'installazione della skill non costituisce una dichiarazione che gli stakeholder siano informati.
 
 Se cambiano design, piano o evidenze, completare le verifiche precedenti e usare `dfd pre-release <id> --refresh`, rivalutando artefatto, soglie e preparazione. Il comando aggiorna il riferimento allo sviluppo preservando i contenuti. Eseguire `dfd review-release <id>`, correggere le lacune e proseguire con `dfd-review-release`. Non dichiarare il rilascio effettuato.
+
+Prima di avviare la preparazione verificare che il dominio sia in release-preparation (default legacy in assenza di lifecycle.json). In development-only fermarsi allo sviluppo verificato; per distribuire aggiornare esplicitamente la policy, rivalutare rischio/CI e riconfermare gli artefatti invalidati.
+
+Quando team.json richiede verifiche integrate, collegare collaboration.json alla revisione integrata e registrare snapshot/files/checks reali. I test dei branch isolati non bastano. La review PR deve corrispondere alla revisione/file esaminati. Questi obblighi non vengono imposti automaticamente al singolo dev; un record rapido va prima promosso a feature per la distribuzione.

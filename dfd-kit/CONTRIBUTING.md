@@ -13,9 +13,9 @@ Il progetto adottato è questa directory (`dfd-kit/`), con dominio `dfd-kit`, mo
 ./dist/dfd-macos-arm64 status
 ```
 
-Prima di lavorare al cambiamento, riprendere gli artefatti e verificare il setup del dominio. Se manca, completare la Fase 0. Aprire o riprendere la feature, classificare il rischio e definire la specifica iterativamente; il percorso light/full mantiene il lavoro proporzionato senza saltare i prerequisiti.
+Prima di lavorare al cambiamento, riprendere gli artefatti e verificare il setup del dominio. Se manca, completare la Fase 0. Classificare il rischio e scegliere rapido/light/full. Il rapido usa un solo record; light/full richiedono una feature con specifica iterativa.
 
-Dopo la review di design approvata e attuale, derivare il piano, sviluppare con TDD e raccogliere evidenze reali, inclusi i mutation test pertinenti. Preparare pre-release e review di release per i cambiamenti destinati al rilascio. Le decisioni umane già espresse e ancora pertinenti si riusano; i controlli strutturali non conferiscono approvazioni.
+Per light/full, dopo la review di design attuale derivare il piano. Raccogliere evidenze reali: regressione red/green per fix comportamentali, verifica pertinente per modifiche editoriali e mutation test sugli invarianti importanti. Preparare pre-release e review di release per i cambiamenti destinati al rilascio. Le decisioni umane già espresse e ancora pertinenti si riusano; i controlli strutturali non conferiscono approvazioni.
 
 Usare le skill del toolkit e la CLI secondo il [contratto degli artefatti](templates/contratto_toolkit.md). Conservare setup, specifiche, decisioni e risultati nel repository; aggiornarli quando cambia il lavoro e riconfermare i gate invalidati.
 
@@ -25,6 +25,8 @@ Usare le skill del toolkit e la CLI secondo il [contratto degli artefatti](templ
 - `src/model.rs`: contratti JSON versionati e tipi del dominio.
 - `src/lib.rs`: installazione, adozione, rischio e gate di design.
 - `src/development.rs`: piano TDD, evidenze e gate di sviluppo.
+- `src/quick.rs`: record rapido, verifiche ed escalation a light/full.
+- `src/collaboration.rs`: contesto facoltativo e policy team con prove integrate.
 - `src/release.rs`: preparazione operativa, rollout e review di release.
 - `src/store.rs`: accesso ai file, lock e scritture atomiche.
 - `skills/`: dodici workflow canonici, condivisi dagli adapter.
@@ -58,7 +60,7 @@ La configurazione `ci/github-actions.yml` configura build e test per Linux x86_6
 
 ## Mutation test
 
-Il runner usa Python 3.9+ e Cargo, senza pacchetti Python aggiuntivi o installazione di `cargo-mutants`. I 18 mutanti curati coprono rischio, review umana, validità dei fingerprint, hash delle evidenze, ordine TDD, CI, rollout, preparazione operativa, comunicazioni e versione degli schemi JSON.
+Il runner usa Python 3.9+ e Cargo, senza pacchetti Python aggiuntivi o installazione di `cargo-mutants`. I 31 mutanti curati coprono rischio, review umana, validità dei fingerprint, hash delle evidenze, ordine TDD, CI, rollout, preparazione operativa, comunicazioni e versione degli schemi JSON, oltre a percorso rapido, autonomia individuale, review selettive e snapshot integrati del team.
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_mutation_runner.py'
@@ -84,3 +86,11 @@ Descrivere problema, comportamento risultante e verifiche svolte. Collegare le i
 ## Documenti del framework
 
 Le copie locali di fondamenta, processo, rischio, RACI e adozione sono risorse del bundle. I documenti canonici del framework rimangono nella radice del repository. Aggiornare le copie in modo esplicito quando il toolkit adotta una revisione del framework; le correzioni ai template del toolkit non devono sovrascrivere gli originali della radice.
+
+## Sviluppo prima della CI
+
+Il dominio di questo toolkit usa [lifecycle.json](.dfd/domains/dfd-kit/lifecycle.json) in modalità solo sviluppo. La suite finale locale tracciata consente di chiudere lo sviluppo senza CI simulata. La preparazione al rilascio richiede una transizione esplicita, rivalutazione della scelta CI e riconferma delle review invalidate. Vedere il [contratto](templates/contratto_toolkit.md#policy-di-maturità-del-dominio).
+
+## Fix rapidi, singolo sviluppatore e team
+
+Per un fix circoscritto usare `dfd quick <id> --domain <dominio> --title "..." --owner "..."`: un solo record, rischio motivato e test di regressione pertinenti. Le modifiche editoriali richiedono una verifica utile, senza red artificiale. Il singolo dev non deve aprire PR o ottenere una review indipendente; il [contesto team](templates/collaborazione.md) è facoltativo. Cambiamenti critici o dubbi impongono light/full; `dfd promote <id> --to <feature-id>` conserva l’origine. Per comandi, gate e prove integrate vedere il [contratto](templates/contratto_toolkit.md#percorso-rapido).

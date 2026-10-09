@@ -1,0 +1,43 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-d7ql99ra)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.35s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test development_rejects_incomplete_unknown_failed_or_unordered_evidence ... FAILED
+
+failures:
+
+---- development_rejects_incomplete_unknown_failed_or_unordered_evidence stdout ----
+
+thread 'development_rejects_incomplete_unknown_failed_or_unordered_evidence' (3485509) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["verify", "001-paypal"]
+stdout: {
+  "development": {
+    "design_fingerprint": "e46a98ee9d38fef96c87047baff7f2deeb085967c2a6934d41e2abc1862c8209",
+    "errors": [],
+    "gate": "ready-for-pre-release",
+    "lifecycle": {
+      "ci_required": true,
+      "mode": "release-preparation",
+      "rationale": "Compatibilità legacy: CI richiesta prima della pre-release.",
+      "schema_version": 1
+    },
+    "next": "dfd-pre-release",
+    "plan_hash": "6c3bb5ecb9facc5f49cfbe5ede1eb726086e71964ed6598e83c91dd14fae60c4"
+  },
+  "feature": "001-paypal",
+  "phase": "development-verified"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    development_rejects_incomplete_unknown_failed_or_unordered_evidence
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 55 filtered out; finished in 4.34s
+
+error: test failed, to rerun pass `--test workflow`

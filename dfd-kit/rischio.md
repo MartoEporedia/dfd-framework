@@ -332,3 +332,11 @@ In casi particolari, il **Tech Lead** o l’**Architect** possono decidere di:
 - trattare una feature **High Risk** con un percorso **full rafforzato** (es. più review, più test, rollout più graduale).
 
 Le eccezioni vanno annotate nella specifica di feature e, se rilevanti, condivise con il team.
+
+## Percorsi proporzionati: rapido, light e full
+
+Il rapido ammette solo fix di un contratto noto o modifiche editoriali, con ambito circoscritto, tutte le dimensioni low, nessun contratto/guardrail cambiato e nessun dubbio aperto. Non dipende dal numero di righe. Una sola medium esclude il rapido e richiede almeno light; rischio ignoto blocca la scelta. Almeno una high, due medium o un nuovo servizio richiedono full secondo le regole precedenti. Un comportamento critico richiede full completo, anche per una correzione minuscola.
+
+Per un bug comportamentale serve una regressione red/green pertinente; per una modifica editoriale serve una verifica utile, senza red artificiale. Scegliere suite e mutation test in funzione dei rischi: perdita di dati, autorizzazioni, pagamenti, compatibilità, retry, scritture parziali e rollback. I test devono verificare anche che un fallimento preservi i dati e che retry o duplicati non ripetano gli effetti.
+
+Il singolo dev usa gli stessi percorsi senza PR o secondo reviewer obbligatori. Le policy team sono facoltative e non riducono il rischio del cambiamento. Vedere [percorsi e verifiche](fondamenta.md#percorsi-proporzionati-e-lavoro-individuale-o-in-team) e il [record rapido](templates/cambiamento_rapido.md).

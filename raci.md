@@ -111,3 +111,24 @@ Questo documento definisce **ruoli e responsabilità** per le fasi del processo 
 - Per ogni attività, **c’è un solo Accountable (A)**.  
 - I ruoli possono essere ricoperti dalla stessa persona in team piccoli (es. TL + DEV), ma la responsabilità resta distinta.  
 - Il RACI va adattato al contesto del team, ma senza eliminare le responsabilità chiave (specialmente A su design, release e post-release).
+
+## Maturità del progetto: solo sviluppo e preparazione al rilascio
+
+La maturità del progetto è distinta dal livello di adozione DFD e dal rischio della feature. La Fase 0 dichiara una modalità, la scelta sulla CI e la relativa motivazione:
+
+| Modalità | Verifiche di sviluppo | Uscita |
+|---|---|---|
+| Solo sviluppo (`development-only`) | Light/full: review di design, TDD e suite finale locale; rapido: verifiche pertinenti. CI facoltativa | Sviluppo completato; nessuna pre-release o autorizzazione a distribuire |
+| Preparazione al rilascio (`release-preparation`) | Stessi controlli, con CI richiesta per default; un’alternativa locale richiede motivazione rispetto a rischio e destinazione e review umana | Prontezza alla pre-release, poi review di release distinta |
+
+L’assenza della CI non è una lacuna bloccante in solo sviluppo. Restano obbligatorie le verifiche applicabili e la tracciabilità di comando, data, risultato e log: un test locale non viene dichiarato CI. Quando prevista, la suite finale deve seguire i test green. Una CI dichiarata fallita continua a bloccare anche quando facoltativa.
+
+Prima di distribuire, passare esplicitamente alla preparazione al rilascio: rivalutare rischio, criteri, policy CI e verifiche nell’ambiente di destinazione. Riconfermare review e aggiornare piano ed evidenze invalidati. La modalità solo sviluppo non attenua controlli di sicurezza o rischio; il completamento locale non sostituisce l’approvazione umana del rilascio. Il learning può provenire anche dagli esperimenti locali, prima di disporre di dati di produzione.
+
+## Responsabilità individuali e collaborazione facoltativa
+
+DFD vale anche per il singolo sviluppatore: i ruoli possono coincidere nella stessa persona. Il rapido individuale richiede record ed evidenze pertinenti, senza PR o secondo reviewer obbligatori. Light/full mantengono le decisioni umane previste; non richiedono di creare un team artificiale.
+
+In un team assegnare owner per intervento e reviewer delegati secondo policy; la review ordinaria della PR può soddisfare il gate DFD pertinente senza un secondo giro equivalente. Riferire decisioni a PR, revisione e snapshot esaminato. La policy può richiedere indipendenza dall’owner e prove della versione integrata corrente prima della distribuzione. La CLI controlla dichiarazioni e hash, senza autenticare identità o commit.
+
+Usare ID distinti, Git e gestione esplicita dei conflitti. Il lock locale non coordina cloni diversi; non risolvere conflitti fra decisioni o evidenze scegliendo automaticamente l’ultima scrittura. Chi cambia le regole comuni identifica feature coinvolte e review da riconfermare. Vedere le [convenzioni facoltative](templates/collaborazione.md) e le [review selettive](fondamenta.md#review-selettive-ed-evoluzione-del-setup).

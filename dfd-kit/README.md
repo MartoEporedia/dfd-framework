@@ -4,7 +4,7 @@ DFD usa la Definition of Done come contratto continuo tra specifica, test e vali
 
 ## Sviluppare questo toolkit con DFD
 
-Il dominio `dfd-kit` è configurato in modalità brownfield nella directory `dfd-kit/`, con skill Codex installate. Per ogni sviluppo riprendere il [setup del dominio](.dfd/domains/dfd-kit/process.md), la [DoD](.dfd/domains/dfd-kit/dod.md) e l’[assessment di adozione](.dfd/domains/dfd-kit/assessment.md), seguendo [CONTRIBUTING.md](CONTRIBUTING.md). Il setup è strutturalmente pronto; CI e pilota reale degli harness restano lacune della baseline.
+Il dominio `dfd-kit` è configurato in modalità brownfield nella directory `dfd-kit/`, con skill Codex installate. Per ogni sviluppo riprendere il [setup del dominio](.dfd/domains/dfd-kit/process.md), la [DoD](.dfd/domains/dfd-kit/dod.md) e l’[assessment di adozione](.dfd/domains/dfd-kit/assessment.md), seguendo [CONTRIBUTING.md](CONTRIBUTING.md). Il setup è strutturalmente pronto in solo sviluppo; la CI è rinviata alla valutazione del rilascio e il pilota reale degli harness resta da verificare.
 
 ## Provare il toolkit
 
@@ -39,7 +39,7 @@ Nel brownfield partire da 1–2 domini pilota e 3–5 interventi, come descritto
 
 Per formati JSON, comandi, regole di rischio e limiti del gate, vedere [il contratto del toolkit](templates/contratto_toolkit.md).
 
-La specifica si costruisce in modo iterativo: `dfd specify <id>` crea gli artefatti oppure li riprende senza sovrascriverli, mostrando `open_questions` da `design.json`. Chiarire i dubbi con domande mirate e aggiornare insieme `spec.md` e `design.json`; i dubbi aperti impediscono l'approvazione del design, ma non la revisione della bozza. Il setup evolve allo stesso modo: modifiche alla DoD, ai guardrail, alle convenzioni o ai template locali richiedono di riconfermare le review delle feature del dominio.
+La specifica si costruisce in modo iterativo: `dfd specify <id>` crea gli artefatti oppure li riprende senza sovrascriverli, mostrando `open_questions` da `design.json`. Chiarire i dubbi con domande mirate e aggiornare insieme `spec.md` e `design.json`; i dubbi aperti impediscono l'approvazione del design, ma non la revisione della bozza. Il setup evolve allo stesso modo: modifiche a criteri pertinenti, guardrail o lifecycle richiedono riconferma delle review interessate; template e convenzioni descrittivi non invalidano le nuove review selettive. Le feature legacy mantengono il fingerprint conservativo.
 
 Per domini creati con la versione precedente, rieseguire `init` con lo stesso dominio e modalità: aggiunge gli artefatti mancanti preservando quelli esistenti. I guardrail comuni in `.dfd/guardrails.md` restano disponibili; collegarli nei guardrail del dominio quando pertinenti.
 
@@ -57,7 +57,7 @@ dfd verify 001-paypal
 dfd status 001-paypal
 ```
 
-`dfd-plan` deriva task e test dai criteri DoD applicabili. `dfd-implement` esegue lo sviluppo nell'harness: test rosso, codice, test verde, refactor e strumentazione. `dfd-verify` controlla le evidenze prima della pre-release. La CLI verifica copertura dei criteri, riferimenti al design/piano, esiti e hash dei log e dei file; non esegue comandi del progetto e non certifica l'autenticità dei risultati dichiarati. Una suite CI ancora da eseguire lascia lo sviluppo aperto.
+`dfd-plan` deriva task e test dai criteri DoD applicabili. `dfd-implement` esegue lo sviluppo nell'harness: test rosso, codice, test verde, refactor e strumentazione. `dfd-verify` controlla le evidenze prima della pre-release. La CLI verifica copertura dei criteri, riferimenti al design/piano, esiti e hash dei log e dei file; non esegue comandi del progetto e non certifica l'autenticità dei risultati dichiarati. Una suite CI ancora da eseguire lascia lo sviluppo aperto solo se richiesta dalla policy del dominio; in development-only una suite finale locale tracciata consente development-complete.
 
 `status` espone separatamente gate di design e gate di sviluppo e indica la prossima skill. Quando design, piano, codice o log cambiano, le evidenze interessate devono essere aggiornate dopo nuove verifiche. Dopo una nuova approvazione del design, `dfd plan <id> --refresh` riallinea il piano preservando i task. `ready-for-pre-release` significa che si può preparare il rilascio; non lo approva.
 
@@ -83,3 +83,11 @@ Dopo cambiamenti allo sviluppo, rieseguire le verifiche precedenti e `dfd pre-re
 ## Organizzazione
 
 Il toolkit è contenuto in `dfd-kit/`; nella radice del repository restano i documenti originali del framework. I documenti DFD, i template e gli esempi in questa directory sono le copie usate dal toolkit, con gli adattamenti necessari al workflow. La build li incorpora nel binario.
+
+## Sviluppo prima della CI
+
+Il dominio di questo toolkit usa [lifecycle.json](.dfd/domains/dfd-kit/lifecycle.json) in modalità solo sviluppo. La suite finale locale tracciata consente di chiudere lo sviluppo senza CI simulata. La preparazione al rilascio richiede una transizione esplicita, rivalutazione della scelta CI e riconferma delle review invalidate. Vedere il [contratto](templates/contratto_toolkit.md#policy-di-maturità-del-dominio).
+
+## Fix rapidi, singolo sviluppatore e team
+
+Per un fix circoscritto usare `dfd quick <id> --domain <dominio> --title "..." --owner "..."`: un solo record, rischio motivato e test di regressione pertinenti. Le modifiche editoriali richiedono una verifica utile, senza red artificiale. Il singolo dev non deve aprire PR o ottenere una review indipendente; il [contesto team](templates/collaborazione.md) è facoltativo. Cambiamenti critici o dubbi impongono light/full; `dfd promote <id> --to <feature-id>` conserva l’origine. Per comandi, gate e prove integrate vedere il [contratto](templates/contratto_toolkit.md#percorso-rapido).

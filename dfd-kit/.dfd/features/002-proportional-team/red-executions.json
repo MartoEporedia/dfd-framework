@@ -1,0 +1,20 @@
+[
+  {
+    "command": "cargo test --locked --offline rapid_",
+    "executed_at": "2026-10-09T19:38:58.544273+00:00",
+    "exit_code": 101,
+    "log": "red-rapid_.log"
+  },
+  {
+    "command": "cargo test --locked --offline team_requires_",
+    "executed_at": "2026-10-09T19:39:06.399248+00:00",
+    "exit_code": 101,
+    "log": "red-team_requires_.log"
+  },
+  {
+    "command": "cargo test --locked --offline selective_review_",
+    "executed_at": "2026-10-09T19:39:08.121268+00:00",
+    "exit_code": 101,
+    "log": "red-selective_review_.log"
+  }
+]

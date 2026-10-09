@@ -1,0 +1,17 @@
+{
+  "development": {
+    "design_fingerprint": "303dc0dbc920502df1933411bfb74768d3ba30c4df55dd696218601272f664c0",
+    "errors": [],
+    "gate": "development-complete",
+    "lifecycle": {
+      "ci_required": false,
+      "mode": "development-only",
+      "rationale": "Toolkit in sviluppo locale: CI prematura secondo decisione del manutentore del 2026-10-09. Suite finale locale tracciata obbligatoria; nessuna autorizzazione al rilascio.",
+      "schema_version": 1
+    },
+    "next": "development-complete",
+    "plan_hash": "706c247cf50f7379a2c82af7f97a353c5f7b20620bfec99127e31ccb4e16e432"
+  },
+  "feature": "001-development-lifecycle",
+  "phase": "development-verified"
+}

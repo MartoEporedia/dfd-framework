@@ -26,7 +26,7 @@ Ogni feature seleziona i criteri applicabili e motiva le esclusioni nella DoD es
 
 Queste lacune non sono soddisfatte dal setup e non autorizzano evidenze simulate. Diventano bloccanti quando un cambiamento dipende dalla capacità mancante.
 
-- **SLO-04**: Attivare CI nel repository e raccogliere esiti reali dei controlli e delle build/test sulle piattaforme dichiarate.
+- **SLO-04**: Valutare e attivare CI quando necessaria per rischio e destinazione del rilascio, raccogliendo esiti reali; in solo sviluppo mantenere una suite finale locale tracciata.
 - **UX-03**: Eseguire un pilota reale delle skill nell’harness Codex e verificare gli altri harness prima di dichiararne la validazione operativa.
 
 ## 3. Evidenze e revisione

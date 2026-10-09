@@ -1,0 +1,78 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.19s
+     Running tests/lifecycle_baseline.rs (target/debug/deps/lifecycle_baseline-7fab9125504254fe)
+
+running 5 tests
+test lifecycle_invalid_policy_is_not_ignored ... FAILED
+test lifecycle_development_completes_locally_and_never_enters_release ... FAILED
+test lifecycle_release_ci_policy_and_legacy_default_remain_strict ... FAILED
+test lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology ... FAILED
+test lifecycle_policy_changes_invalidate_reviews_and_existing_release ... FAILED
+
+failures:
+
+---- lifecycle_invalid_policy_is_not_ignored stdout ----
+
+thread 'lifecycle_invalid_policy_is_not_ignored' (3474390) panicked at tests/lifecycle_baseline.rs:36:9:
+assertion `left == right` failed: args: ["setup", "--domain", "checkout"]
+stdout: {
+  "domain": "checkout",
+  "errors": [],
+  "gate": "ready",
+  "next": "dfd-assess",
+  "phase": "domain-setup"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(1)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- lifecycle_development_completes_locally_and_never_enters_release stdout ----
+
+thread 'lifecycle_development_completes_locally_and_never_enters_release' (3474389) panicked at tests/lifecycle_baseline.rs:36:9:
+assertion `left == right` failed: args: ["verify", "001-paypal"]
+stdout: 
+stderr: DFD: JSON non valido in .dfd/features/001-paypal/evidence.json: unknown variant `suite`, expected one of `red`, `green`, `ci`
+
+  left: Some(1)
+ right: Some(0)
+
+---- lifecycle_release_ci_policy_and_legacy_default_remain_strict stdout ----
+
+thread 'lifecycle_release_ci_policy_and_legacy_default_remain_strict' (3474393) panicked at tests/lifecycle_baseline.rs:36:9:
+assertion `left == right` failed: args: ["verify", "001-paypal"]
+stdout: 
+stderr: DFD: JSON non valido in .dfd/features/001-paypal/evidence.json: unknown variant `suite`, expected one of `red`, `green`, `ci`
+
+  left: Some(1)
+ right: Some(2)
+
+---- lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology stdout ----
+
+thread 'lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology' (3474391) panicked at tests/lifecycle_baseline.rs:36:9:
+assertion `left == right` failed: args: ["verify", "001-paypal"]
+stdout: 
+stderr: DFD: JSON non valido in .dfd/features/001-paypal/evidence.json: unknown variant `suite`, expected one of `red`, `green`, `ci`
+
+  left: Some(1)
+ right: Some(2)
+
+---- lifecycle_policy_changes_invalidate_reviews_and_existing_release stdout ----
+
+thread 'lifecycle_policy_changes_invalidate_reviews_and_existing_release' (3474392) panicked at tests/lifecycle_baseline.rs:1635:5:
+assertion `left == right` failed
+  left: String("approved")
+ right: "stale-review"
+
+
+failures:
+    lifecycle_development_completes_locally_and_never_enters_release
+    lifecycle_invalid_policy_is_not_ignored
+    lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology
+    lifecycle_policy_changes_invalidate_reviews_and_existing_release
+    lifecycle_release_ci_policy_and_legacy_default_remain_strict
+
+test result: FAILED. 0 passed; 5 failed; 0 ignored; 0 measured; 51 filtered out; finished in 1.27s
+
+error: test failed, to rerun pass `--test lifecycle_baseline`

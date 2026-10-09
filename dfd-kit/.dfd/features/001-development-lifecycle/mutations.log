@@ -1,0 +1,43 @@
+Baseline: running the complete unmodified suite
+[1/22] killed: risk-medium-boundary
+[2/22] killed: new-service-route
+[3/22] killed: unknown-risk-classification
+[4/22] killed: design-review-freshness
+[5/22] killed: development-human-gate
+[6/22] killed: evidence-file-integrity
+[7/22] killed: tdd-chronology
+[8/22] killed: tdd-ci-required
+[9/22] killed: release-review-freshness
+[10/22] killed: release-development-freshness
+[11/22] killed: planned-resource-approval
+[12/22] killed: rollout-complete-audience
+[13/22] killed: rollout-monotonic-exposure
+[14/22] killed: rollout-positive-duration
+[15/22] killed: resource-ready-proof
+[16/22] killed: stakeholder-communication-required
+[17/22] killed: nonfunctional-test-success
+[18/22] killed: schema-version-required
+[19/22] killed: lifecycle-final-suite
+[20/22] timeout: lifecycle-release-boundary
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/mutation_test.py", line 212, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/mutation_test.py", line 203, in main
+    return execute(args, output)
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/mutation_test.py", line 150, in execute
+    status, result, seconds = run(cargo + ["--test", "workflow", test, "--", "--exact"],
+                              ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                  workspace, env, args.timeout, log)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/mutation_test.py", line 42, in run
+    output, _ = process.communicate(timeout=timeout)
+                ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 1221, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 2153, in _communicate
+    ready = selector.select(timeout)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/selectors.py", line 398, in select
+    fd_event_list = self._selector.poll(timeout)
+KeyboardInterrupt

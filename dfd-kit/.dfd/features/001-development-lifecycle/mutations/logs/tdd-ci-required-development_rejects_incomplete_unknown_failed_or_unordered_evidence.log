@@ -1,0 +1,9 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-d7ql99ra)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.26s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test development_rejects_incomplete_unknown_failed_or_unordered_evidence ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 55 filtered out; finished in 3.64s
+

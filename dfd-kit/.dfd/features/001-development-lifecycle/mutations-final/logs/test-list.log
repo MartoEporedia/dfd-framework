@@ -1,0 +1,10 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-yxt2e22q)
+error: failed to run custom build command for `dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-yxt2e22q)`
+
+Caused by:
+  process didn't exit successfully: `/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/build/dfd-kit-881210512b35906c/build-script-build` (exit status: 101)
+  --- stderr
+
+  thread 'main' (3514412) panicked at build.rs:21:54:
+  called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+  note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

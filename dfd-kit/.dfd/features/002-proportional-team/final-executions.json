@@ -1,0 +1,62 @@
+[
+  {
+    "command": "cargo test --locked --offline selective_review_",
+    "executed_at": "2026-10-09T20:00:48.741543+00:00",
+    "exit_code": 0,
+    "log": "selective-final.log"
+  },
+  {
+    "command": "cargo test --locked --offline",
+    "executed_at": "2026-10-09T20:00:57.796584+00:00",
+    "exit_code": 0,
+    "log": "suite-final.log"
+  },
+  {
+    "command": "cargo clippy --locked --offline --all-targets -- -D warnings",
+    "executed_at": "2026-10-09T20:01:29.937192+00:00",
+    "exit_code": 0,
+    "log": "clippy-final.log"
+  },
+  {
+    "command": "cargo fmt --all --check",
+    "executed_at": "2026-10-09T20:01:35.443425+00:00",
+    "exit_code": 0,
+    "log": "fmt-final.log"
+  },
+  {
+    "command": "python3 -m unittest discover -s tests -p test_mutation_runner.py",
+    "executed_at": "2026-10-09T20:01:35.772235+00:00",
+    "exit_code": 0,
+    "log": "python-final.log"
+  },
+  {
+    "command": "./target/debug/dfd install --harness codex",
+    "executed_at": "2026-10-09T20:01:36.729734+00:00",
+    "exit_code": 0,
+    "log": "install-final.log"
+  },
+  {
+    "command": "./target/debug/dfd init --harness codex --domain dfd-kit --mode brownfield",
+    "executed_at": "2026-10-09T20:01:37.020126+00:00",
+    "exit_code": 0,
+    "log": "init-final.log"
+  },
+  {
+    "command": "./target/debug/dfd setup --domain dfd-kit",
+    "executed_at": "2026-10-09T20:01:37.278253+00:00",
+    "exit_code": 0,
+    "log": "setup-final.log"
+  },
+  {
+    "command": "./target/debug/dfd doctor",
+    "executed_at": "2026-10-09T20:01:37.310811+00:00",
+    "exit_code": 0,
+    "log": "doctor-final.log"
+  },
+  {
+    "command": "python3 /private/tmp/dfd-proportional-doccheck.py",
+    "executed_at": "2026-10-09T20:01:37.341531+00:00",
+    "exit_code": 0,
+    "log": "documentation-final.log"
+  }
+]

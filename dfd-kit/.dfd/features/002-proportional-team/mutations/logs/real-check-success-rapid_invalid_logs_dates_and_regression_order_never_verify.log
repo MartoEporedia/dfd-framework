@@ -1,0 +1,39 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-6yenoi8x)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.02s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test rapid_invalid_logs_dates_and_regression_order_never_verify ... FAILED
+
+failures:
+
+---- rapid_invalid_logs_dates_and_regression_order_never_verify stdout ----
+
+thread 'rapid_invalid_logs_dates_and_regression_order_never_verify' (3855081) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["verify", "fix-message"]
+stdout: {
+  "change": "fix-message",
+  "collaboration": null,
+  "decisions": [],
+  "domain": "checkout",
+  "errors": [],
+  "gate": "change-verified",
+  "independent_review_required": false,
+  "next": "development-complete",
+  "owner": "Alice",
+  "release": "not-approved",
+  "route": "rapid"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    rapid_invalid_logs_dates_and_regression_order_never_verify
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 64 filtered out; finished in 1.74s
+
+error: test failed, to rerun pass `--test workflow`
