@@ -1,4 +1,6 @@
----
+# DFD Framework
+
+Framework DoD-First Driven: dalla specifica iterativa al rilascio, con criteri verificabili e review proporzionate al rischio.
 
 ## Come leggere questo repo (per ruolo)
 
@@ -19,7 +21,7 @@ Focus: obiettivi business, KPI, priorità, impatto su UX e metriche di prodotto.
 2. **[Processo End-to-End](processo-e2e.md)** – per governare le fasi e i gate di review.  
 3. **[Modello RACI](raci.md)** – per chiarire ruoli e responsabilità nel team.  
 4. **[Criteri di Rischio](rischio.md)** – per decidere il livello di rigore (full vs light).  
-5. **[Template DoD Estesa](templates/dod_estesa.md)** + **[Esempio Checkout](examples/checkout_dod.md)** – per definire o affinare la DoD del dominio.  
+5. **[Template DoD Estesa](templates/dod-estesa.md)** + **[Esempio Checkout](examples/checkout_dod.md)** – per definire o affinare la DoD del dominio.  
 6. **[Template Specifica di Feature](templates/specifica_feature.md)** + **[Esempio PayPal](examples/checkout_paypal_spec.md)** – per guidare la progettazione delle feature.
 
 Focus: coerenza architetturale, guardrail, sicurezza, SLO, evoluzione della DoD.
@@ -32,7 +34,7 @@ Focus: coerenza architetturale, guardrail, sicurezza, SLO, evoluzione della DoD.
 2. **[Processo End-to-End](processo-e2e.md)** – per sapere cosa ci si aspetta in ogni fase.  
 3. **[Template Specifica di Feature](templates/specifica_feature.md)** – per leggere/scrivere specifiche allineate a DFD.  
 4. **[Checklist di Review DFD – Design](templates/review_design.md)** (e Light) – per prepararsi alle review.  
-5. **[Template DoD Estesa](templates/dod_estesa.md)** – per capire quali criteri di osservabilità, sicurezza, SLO, costo devi soddisfare.
+5. **[Template DoD Estesa](templates/dod-estesa.md)** – per capire quali criteri di osservabilità, sicurezza, SLO, costo devi soddisfare.
 
 Focus: scrivere codice e test in ottica TDD DFD, strumentare log/metriche/trace, rispettare la DoD.
 
@@ -43,7 +45,7 @@ Focus: scrivere codice e test in ottica TDD DFD, strumentare log/metriche/trace,
 1. **[Fondamenta](fondamenta.md)** – per inquadrare il ruolo dei test in DFD.  
 2. **[Processo End-to-End](processo-e2e.md)** – per vedere dove intervengono i test (sviluppo, pre-release, post-release).  
 3. **[Checklist di Review DFD – Design](templates/review_design.md)** e **[Release](templates/review_release.md)** – per partecipare attivamente alle review.  
-4. **[Template DoD Estesa](templates/dod_estesa.md)** – per derivare test da OBS-xx, SEC-xx, SLO-xx, COST-xx.  
+4. **[Template DoD Estesa](templates/dod-estesa.md)** – per derivare test da OBS-xx, SEC-xx, SLO-xx, COST-xx.  
 5. **[Esempio PayPal](examples/checkout_paypal_spec.md)** – per vedere un caso concreto di test e validazione.
 
 Focus: test funzionali e non funzionali, resilienza, sicurezza, validazione in produzione.
@@ -55,7 +57,7 @@ Focus: test funzionali e non funzionali, resilienza, sicurezza, validazione in p
 1. **[Fondamenta](fondamenta.md)** – per capire il legame tra DoD, allarmi e rilascio.  
 2. **[Processo End-to-End](processo-e2e.md)** – per vedere il tuo ruolo in pre-release e rollout.  
 3. **[Template Configurazione Rollout](templates/configurazione_rollout.md)** – per definire fasi, soglie, rollback.  
-4. **[Template DoD Estesa](templates/dod_estesa.md)** – per allineare allarmi e dashboard ai criteri DoD.  
+4. **[Template DoD Estesa](templates/dod-estesa.md)** – per allineare allarmi e dashboard ai criteri DoD.  
 5. **[Esempio Checkout](examples/checkout_dod.md)** – per vedere un caso concreto di osservabilità e SLO.
 
 Focus: allarmi, dashboard, canary, rollout, gestione incidenti legati a SLO e osservabilità.
@@ -66,7 +68,7 @@ Focus: allarmi, dashboard, canary, rollout, gestione incidenti legati a SLO e os
 
 1. **[Fondamenta](fondamenta.md)** – per inquadrare il ruolo della sicurezza in DFD.  
 2. **[Criteri di Rischio](rischio.md)** – per identificare le feature high risk su sicurezza.  
-3. **[Template DoD Estesa](templates/dod_estesa.md)** – sezione Sicurezza (SEC-xx).  
+3. **[Template DoD Estesa](templates/dod-estesa.md)** – sezione Sicurezza (SEC-xx).  
 4. **[Checklist di Review DFD – Design](templates/review_design.md)** e **[Release](templates/review_release.md)** – per partecipare alle review con focus security.  
 5. **[Esempio PayPal](examples/checkout_paypal_spec.md)** – per vedere un caso concreto di criteri SEC-xx.
 
