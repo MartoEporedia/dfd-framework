@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "id": "fix-template-specifica-scambiato",
+  "domain": "dfd-kit",
+  "title": "Ripristinare il template della specifica e l'esempio PayPal scambiati",
+  "owner": "manutentore del repository",
+  "kind": "behavior-fix",
+  "problem": "Nel commit 777229b il template incorporato templates/specifica_feature.md è stato sostituito con l'esempio DoD del checkout e examples/checkout_paypal_spec.md con il template: dfd init installa nei domini un template di specifica errato e dfd specify genera spec.md con il contenuto della DoD. Gli stessi file erano scambiati anche nella radice del framework fin dal primo commit.",
+  "scope": "Contenuto di templates/specifica_feature.md ed examples/checkout_paypal_spec.md (kit e copie canoniche nella radice) e un test di regressione in tests/workflow.rs. Nessuna modifica a codice Rust, comandi, schemi JSON o skill.",
+  "known_contract": "README e contratto del toolkit: templates/specifica_feature.md è il modello della specifica di feature usato da dfd specify; examples/checkout_paypal_spec.md è l'esempio compilato PayPal. Il contenuto corretto del kit esisteva in 438bb5f.",
+  "scope_bounded": true,
+  "changes_contract": false,
+  "critical": false,
+  "open_questions": [],
+  "risk": {
+    "schema_version": 1,
+    "dimensions": {
+      "architecture": {
+        "level": "low",
+        "rationale": "Solo risorse Markdown incorporate e un test; nessun cambiamento a moduli, comandi o schemi."
+      },
+      "business": {
+        "level": "low",
+        "rationale": "Ripristina il contenuto documentato; i domini già inizializzati conservano i propri template locali (init non sovrascrive)."
+      },
+      "cost": {
+        "level": "low",
+        "rationale": "Nessuna dipendenza o risorsa aggiuntiva."
+      },
+      "reliability": {
+        "level": "low",
+        "rationale": "Nessuna modifica a scritture, lock o gate; cambia solo il testo installato per i nuovi domini."
+      },
+      "security": {
+        "level": "low",
+        "rationale": "Nessun cambiamento a percorsi, permessi, fingerprint o approvazioni."
+      }
+    }
+  },
+  "criteria": [
+    "UX-01",
+    "SLO-02",
+    "SEC-02"
+  ],
+  "files": [
+    {
+      "path": "templates/specifica_feature.md",
+      "sha256": "7209277d16341fe63fe4cf97bc0a20b112eb455de728d372bb34496f94447cd5"
+    },
+    {
+      "path": "examples/checkout_paypal_spec.md",
+      "sha256": "fa1962a311eb499758347445c844cfedba654d4b527db6744d17fa319b6d4e56"
+    },
+    {
+      "path": "tests/workflow.rs",
+      "sha256": "4142e89a39b62221a74e15a5bd49c891e81e0a92912a99f45e25cd097991887e"
+    }
+  ],
+  "checks": [
+    {
+      "task": null,
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow feature_spec_template_and_paypal_example_are_not_swapped",
+      "executed_at": "2026-10-18T22:29:52Z",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/changes/fix-template-specifica-scambiato/red.log",
+        "sha256": "068b1d36262e5dc77ea86fe6f1484845f33aaa8ffd36fd5a82f38a50674c0840"
+      }
+    },
+    {
+      "task": null,
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow feature_spec_template_and_paypal_example_are_not_swapped",
+      "executed_at": "2026-10-18T22:29:56Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/changes/fix-template-specifica-scambiato/green.log",
+        "sha256": "771bccdf3683727e9e6f9a7abe50c9a10c1a48e7f980d6614ed9efda0e63b68d"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor",
+      "executed_at": "2026-10-18T22:30:05Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/changes/fix-template-specifica-scambiato/suite.log",
+        "sha256": "d17fa6af6444cc8de6250b8463eada013462d2b1cd9331f1e34ad532f2b35cef"
+      }
+    }
+  ],
+  "verification_notes": "Red sui file originali (template = DoD checkout), green dopo il ripristino: il template installato inizia con '# Specifica di Feature – [Nome Feature]' e dfd specify lo usa; l'esempio PayPal installato è la specifica compilata. Template kit = versione 438bb5f + sezioni 'Maturità e policy delle verifiche' e 'Proporzionalità e collaborazione' aggiunte in 777229b; esempio = PayPal 438bb5f + sezioni 'Modalità dell’esempio' e 'Applicazione individuale o in team'. Le copie canoniche nella radice (../templates/specifica_feature.md, ../examples/checkout_paypal_spec.md) sono corrette allo stesso modo, conservando il template della radice nella sua forma estesa. Mutation test non eseguiti: il cambiamento non tocca gate né codice Rust. I domini già inizializzati con la CLI precedente mantengono il template errato finché non viene sostituito a mano.",
+  "collaboration": null,
+  "decisions": []
+}

@@ -1,0 +1,9 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.01s
+     Running tests/workflow.rs (target/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test feature_spec_template_and_paypal_example_are_not_swapped ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 65 filtered out; finished in 0.87s
+

@@ -2075,3 +2075,30 @@ fn individual_defaults_need_no_team_context_or_second_reviewer() {
         1
     );
 }
+
+#[test]
+fn feature_spec_template_and_paypal_example_are_not_swapped() {
+    let p = Project::new();
+    p.ready();
+    let template =
+        fs::read_to_string(p.path(".dfd/domains/checkout/templates/specifica_feature.md")).unwrap();
+    assert!(
+        template.starts_with("# Specifica di Feature – [Nome Feature]"),
+        "il template della specifica deve essere il modello da compilare"
+    );
+    assert!(!template.contains("# DoD Estesa"));
+    assert!(template.contains("## Proporzionalità e collaborazione"));
+    let example = fs::read_to_string(p.path(".dfd/kit/examples/checkout_paypal_spec.md")).unwrap();
+    assert!(
+        example.starts_with("# Specifica di Feature – PayPal sul Checkout"),
+        "l'esempio PayPal deve essere la specifica compilata"
+    );
+    assert!(!example.contains("[Nome Feature]"));
+    assert!(example.contains("## Applicazione individuale o in team"));
+
+    p.feature("002-paypal");
+    p.risk("002-paypal");
+    p.run(&["specify", "002-paypal"], 0);
+    let spec = fs::read_to_string(p.path(".dfd/features/002-paypal/spec.md")).unwrap();
+    assert!(spec.starts_with("# Specifica di Feature"));
+}
