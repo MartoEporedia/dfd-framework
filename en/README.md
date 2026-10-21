@@ -1,4 +1,5 @@
-<!-- dfd-language --> [Italiano](../README.md) | [English](README.md)
+<!-- dfd-language -->
+[Italiano](../README.md) | [English](README.md)
 
 <a id="come-leggere-questo-repo-per-ruolo"></a>
 
