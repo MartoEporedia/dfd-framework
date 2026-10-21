@@ -3,6 +3,8 @@ name: dfd-verify
 description: Verificare le evidenze dello sviluppo DFD, la copertura dei task e la validità dei log e dei file prima di passare alla pre-release.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-verify/SKILL.md)
+
 # Verifica dello sviluppo
 
 Leggere `.dfd/kit/templates/contratto_toolkit.md`, specifica, piano ed `evidence.json`. Eseguire `dfd verify <id>`: produce `development-review.md` e aggiorna la fase solo se gli artefatti verificati sono completi e attuali.

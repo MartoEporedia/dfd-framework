@@ -175,6 +175,13 @@ fn all_adapters_install_embedded_skills_and_preserve_instructions() {
         assert_eq!(
             fs::read_to_string(p.path(".dfd/kit/adozione.md")).unwrap(),
             include_str!("../adozione.md")
+                .lines()
+                .filter(|line| !line.starts_with("<!-- dfd-language -->"))
+                .collect::<Vec<_>>()
+                .join("\n")
+                .trim_start()
+                .to_owned()
+                + "\n"
         );
         for file in ["AGENTS.md", "CLAUDE.md", ".github/copilot-instructions.md"] {
             assert_eq!(
@@ -2101,4 +2108,254 @@ fn feature_spec_template_and_paypal_example_are_not_swapped() {
     p.run(&["specify", "002-paypal"], 0);
     let spec = fs::read_to_string(p.path(".dfd/features/002-paypal/spec.md")).unwrap();
     assert!(spec.starts_with("# Specifica di Feature"));
+}
+
+#[test]
+fn bilingual_project_language_resources_and_preservation() {
+    let p = Project::new();
+    let first = p.run(
+        &[
+            "--lang",
+            "en",
+            "init",
+            "--harness",
+            "codex",
+            "--domain",
+            "checkout",
+        ],
+        0,
+    );
+    assert!(first["next"].as_str().unwrap().contains("Phase 0"));
+    assert_eq!(p.read(".dfd/language.json")["language"], "en");
+    let skill = fs::read_to_string(p.path(".agents/skills/dfd-init/SKILL.md")).unwrap();
+    assert!(skill.contains("# Adopting DFD"));
+    let template = fs::read_to_string(p.path(".dfd/domains/checkout/dod.md")).unwrap();
+    assert!(template.contains("Extended Definition of Done"));
+    p.write(
+        ".dfd/domains/checkout/dod.md",
+        "# User document\nOBS-01: unchanged\n",
+    );
+    p.run(&["language", "it"], 0);
+    assert_eq!(p.read(".dfd/language.json")["language"], "it");
+    assert_eq!(
+        fs::read_to_string(p.path(".dfd/domains/checkout/dod.md")).unwrap(),
+        "# User document\nOBS-01: unchanged\n"
+    );
+    assert!(
+        fs::read_to_string(p.path(".agents/skills/dfd-init/SKILL.md"))
+            .unwrap()
+            .contains("# Adozione di DFD")
+    );
+    p.run(&["--lang", "en", "status"], 0);
+    assert_eq!(p.read(".dfd/language.json")["language"], "it");
+    p.run(&["language", "en"], 0);
+    let repeated = p.run(&["init", "--harness", "codex", "--domain", "checkout"], 0);
+    assert!(repeated["next"].as_str().unwrap().contains("Phase 0"));
+    let blocked = p.run(&["setup", "--domain", "checkout"], 2);
+    assert_eq!(blocked["gate"], "blocked");
+    assert!(blocked["errors"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|s| s.as_str().unwrap().starts_with("Phase 0:")));
+}
+
+#[test]
+fn bilingual_conflicts_do_not_change_language_or_files() {
+    let p = Project::new();
+    p.init();
+    p.write(".agents/skills/dfd-init/SKILL.md", "custom skill");
+    let before = fs::read(p.path(".dfd/install.json")).unwrap();
+    p.run(&["language", "en"], 1);
+    assert_eq!(
+        fs::read_to_string(p.path(".agents/skills/dfd-init/SKILL.md")).unwrap(),
+        "custom skill"
+    );
+    assert_eq!(fs::read(p.path(".dfd/install.json")).unwrap(), before);
+    assert!(
+        !p.path(".dfd/language.json").exists() || p.read(".dfd/language.json")["language"] == "it"
+    );
+    p.run(&["--lang", "fr", "status"], 2);
+}
+
+#[test]
+fn bilingual_help_and_diagnostics_preserve_machine_and_user_values() {
+    let p = Project::new();
+    let help = Command::new(env!("CARGO_BIN_EXE_dfd"))
+        .args(["--lang", "en", "--help"])
+        .output()
+        .unwrap();
+    assert!(help.status.success());
+    let help = String::from_utf8(help.stdout).unwrap();
+    assert!(help.contains("adoption, risk and review"));
+    assert!(!help.contains("Inizializza"));
+    p.run(
+        &[
+            "--lang",
+            "en",
+            "init",
+            "--harness",
+            "codex",
+            "--domain",
+            "checkout",
+        ],
+        0,
+    );
+    p.run(
+        &[
+            "feature",
+            "001-example",
+            "--domain",
+            "checkout",
+            "--title",
+            "Soddisfare OBS-01",
+            "--scope",
+            "Testo utente italiano",
+        ],
+        0,
+    );
+    let state = p.read(".dfd/features/001-example/state.json");
+    assert_eq!(state["title"], "Soddisfare OBS-01");
+    assert_eq!(state["scope"], "Testo utente italiano");
+    assert_eq!(state["decisions"], json!([]));
+    let output = p.run(&["assess", "001-example"], 2);
+    assert_eq!(output["risk"], Value::Null);
+    p.run(&["doctor"], 0);
+}
+
+#[test]
+fn bilingual_switch_preserves_approved_design_and_localizes_generated_plan() {
+    let p = Project::new();
+    p.ready();
+    p.approve();
+    let original = fs::read(p.path(".dfd/features/001-paypal/design.json")).unwrap();
+    p.run(&["language", "en"], 0);
+    let status = p.run(&["status", "001-paypal"], 0);
+    assert_eq!(status["gate"], "approved");
+    p.run(&["plan", "001-paypal"], 0);
+    let plan = p.read(".dfd/features/001-paypal/plan.json");
+    assert_eq!(plan["tasks"][0]["description"], "Satisfy OBS-01");
+    assert_eq!(plan["tasks"][0]["implementation"], "Contatore errori");
+    let markdown = fs::read_to_string(p.path(".dfd/features/001-paypal/plan.md")).unwrap();
+    assert!(markdown.contains("# Development plan"));
+    assert!(markdown.contains("Contatore errori"));
+    assert_eq!(
+        fs::read(p.path(".dfd/features/001-paypal/design.json")).unwrap(),
+        original
+    );
+    let blocked = p.run(&["verify", "001-paypal"], 2);
+    assert_eq!(blocked["development"]["gate"], "blocked-evidence");
+    assert!(blocked["development"]["errors"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|value| value.as_str().unwrap().contains("Record the verified")));
+    let before = p.read(".dfd/features/001-paypal/state.json")["decisions"].clone();
+    p.run(&["--lang", "it", "status", "001-paypal"], 0);
+    assert_eq!(
+        p.read(".dfd/features/001-paypal/state.json")["decisions"],
+        before
+    );
+}
+
+#[test]
+fn bilingual_invalid_preferences_and_symlinks_are_rejected_before_install() {
+    let p = Project::new();
+    p.init();
+    for invalid in [
+        json!({"schema_version":1,"language":"fr"}),
+        json!({"schema_version":2,"language":"en"}),
+        json!({"schema_version":1,"language":"en","extra":true}),
+    ] {
+        p.save(".dfd/language.json", &invalid);
+        let before = fs::read(p.path(".dfd/install.json")).unwrap();
+        p.run(&["install", "--harness", "codex"], 1);
+        assert_eq!(fs::read(p.path(".dfd/install.json")).unwrap(), before);
+        assert_eq!(p.read(".dfd/language.json"), invalid);
+    }
+    #[cfg(unix)]
+    {
+        fs::remove_file(p.path(".dfd/language.json")).unwrap();
+        let outside = Project::new();
+        outside.write("language.json", "external document");
+        std::os::unix::fs::symlink(outside.path("language.json"), p.path(".dfd/language.json"))
+            .unwrap();
+        p.run(&["--lang", "en", "install", "--harness", "codex"], 1);
+        assert_eq!(
+            fs::read_to_string(outside.path("language.json")).unwrap(),
+            "external document"
+        );
+    }
+}
+
+#[test]
+fn bilingual_english_resources_work_in_every_adapter_offline() {
+    for (adapter, directory) in [
+        ("codex", ".agents/skills"),
+        ("claude-code", ".claude/skills"),
+        ("opencode", ".opencode/skills"),
+        ("copilot", ".github/skills"),
+    ] {
+        let p = Project::new();
+        p.run(
+            &[
+                "--lang=en",
+                "init",
+                "--domain",
+                "checkout",
+                "--harness",
+                adapter,
+            ],
+            0,
+        );
+        let skill = fs::read_to_string(p.path(&format!("{directory}/dfd-init/SKILL.md"))).unwrap();
+        assert!(skill.starts_with("---\nname: dfd-init\n"));
+        assert!(skill.contains("# Adopting DFD"));
+        assert!(!skill.contains("dfd-language"));
+        let docs = fs::read_to_string(p.path(".dfd/kit/fondamenta.md")).unwrap();
+        assert!(docs.contains("Foundations"));
+        assert!(!docs.contains("dfd-language"));
+        p.run(&["install", "--harness", adapter], 0);
+    }
+}
+
+#[test]
+fn bilingual_release_scaffolding_and_checks_use_english() {
+    let p = Project::new();
+    p.run(
+        &[
+            "--lang",
+            "en",
+            "init",
+            "--domain",
+            "checkout",
+            "--harness",
+            "codex",
+        ],
+        0,
+    );
+    p.developed();
+    p.run(&["verify", "001-paypal"], 0);
+    p.run(&["pre-release", "001-paypal"], 0);
+    let rollout = p.read(".dfd/features/001-paypal/rollout.json");
+    assert_eq!(rollout["alarms"][0]["name"], "Release alarms");
+    assert_eq!(rollout["dashboards"][0]["name"], "Release dashboards");
+    assert_eq!(
+        rollout["feature_flag"]["name"],
+        "Feature flag / exposure control"
+    );
+    let markdown = fs::read_to_string(p.path(".dfd/features/001-paypal/rollout.md")).unwrap();
+    assert!(markdown.contains("# Rollout configuration"));
+    assert!(!markdown.contains("Configurazione Rollout"));
+    let review = p.run(&["review-release", "001-paypal"], 2);
+    let serialized = serde_json::to_string(&review).unwrap();
+    assert!(serialized.contains("Complete rollout.md"));
+    assert!(!serialized.contains("Completare rollout.md"));
+    assert_eq!(
+        p.read(".dfd/features/001-paypal/state.json")["decisions"]
+            .as_array()
+            .unwrap()
+            .len(),
+        1
+    );
 }

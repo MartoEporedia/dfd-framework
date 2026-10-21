@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](adozione.md) | [English](en/adozione.md)
+
 # Guida all’integrazione di DFD su prodotti esistenti
 
 > **Stato**: draft / stabile  

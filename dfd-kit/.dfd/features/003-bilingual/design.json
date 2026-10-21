@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "Rendere framework e toolkit interamente fruibili in italiano e inglese, preservando artefatti esistenti e contratti macchina.",
+  "business_metrics": [
+    "Parità dei documenti e delle risorse IT/EN verificata",
+    "Nuovo progetto EN utilizzabile senza traduzioni manuali; progetti legacy rimangono IT"
+  ],
+  "epic": {
+    "reference": "Proposta bilingue presentata in chat; risposta utente: ok, procedi.",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-10-21T07:35:36.664228+00:00"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "applicable",
+      "implementation": "Localizzare solo diagnostica prodotta dalla CLI, mantenendo chiavi, enum, ID ed exit code.",
+      "verification": "Test CLI bilingui e risorse; controlli documentali e suite locale registrati nel piano."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "applicable",
+      "implementation": "Tracciare log reali red/green, controlli editoriali e suite finale locale.",
+      "verification": "Test CLI bilingui e risorse; controlli documentali e suite locale registrati nel piano."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "applicable",
+      "implementation": "Riusare Store e lock; lingua enum chiusa it/en, nessun percorso derivato da testo libero.",
+      "verification": "Test CLI bilingui e risorse; controlli documentali e suite locale registrati nel piano."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "applicable",
+      "implementation": "Cambio lingua con preflight installazione; documenti di dominio e feature preservati.",
+      "verification": "Test CLI bilingui e risorse; controlli documentali e suite locale registrati nel piano."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Riusare esclusivamente la decisione utente sulla proposta già presentata; gate invariati.",
+      "verification": "Test CLI bilingui e risorse; controlli documentali e suite locale registrati nel piano."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Preferenza separata versionata, assenza equivale a IT; selettore esplicito con override; identificatori invariati.",
+      "verification": "Test CLI bilingui e risorse; controlli documentali e suite locale registrati nel piano."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Test reali per entrambe le lingue, controlli parità risorse, suite esistente e mutation test mirati.",
+      "verification": "Test CLI bilingui e risorse; controlli documentali e suite locale registrati nel piano."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "applicable",
+      "implementation": "Incorporare staticamente entrambe le lingue; nessuna rete o dipendenza runtime.",
+      "verification": "Test CLI bilingui e risorse; controlli documentali e suite locale registrati nel piano."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Percorsi IT/EN, glossario e selettore in cima; CLI e guide coerenti.",
+      "verification": "Test CLI bilingui e risorse; controlli documentali e suite locale registrati nel piano."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "applicable",
+      "implementation": "Dodici skill tradotte con riferimenti coerenti; doctor verifica entrambe le lingue.",
+      "verification": "Test CLI bilingui e risorse; controlli documentali e suite locale registrati nel piano."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Persistenza atomica e lock restano invariati; coperti dalla suite esistente."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "excluded",
+      "justification": "Nessuna soglia di performance modificata; verifiche proporzionate e tempi nei log."
+    }
+  ],
+  "test_plan": "Red/green per lingua persistente, override, preservazione, risorse EN e diagnostica; verifica link, parità e criteri; fmt, Clippy, suite locale e doctor. Mutanti mirati alla lingua predefinita e preservazione.",
+  "guardrails": "Nessuna modifica a gate o identificatori macchina; IT predefinito legacy, niente traduzioni di input utente, nessun servizio remoto, nessun rilascio.",
+  "open_questions": []
+}

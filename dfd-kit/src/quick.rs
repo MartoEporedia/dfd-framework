@@ -134,7 +134,11 @@ fn route(change: &Change) -> Result<(String, Vec<String>)> {
     if !risk.missing.is_empty() {
         return Ok((
             "unknown".into(),
-            vec![format!("Rischio da chiarire: {}.", risk.missing.join(", "))],
+            vec![crate::localized_format!(
+                "Rischio da chiarire: {}.",
+                "Risk needs clarification: {}.",
+                risk.missing.join(", ")
+            )],
         ));
     }
     let low = change
@@ -158,7 +162,7 @@ fn route(change: &Change) -> Result<(String, Vec<String>)> {
             .unwrap_or("light")
             .to_string()
     };
-    Ok((selected,vec!["Intervento non rapido: chiarire i dubbi o promuovere a light/full; nessun override per ridurre il rischio.".into()]))
+    Ok((selected,vec![crate::i18n::text("Intervento non rapido: chiarire i dubbi o promuovere a light/full; nessun override per ridurre il rischio.")]))
 }
 fn fingerprint(store: &Store, change: &Change) -> Result<String> {
     let mut value = serde_json::to_value(change)?;
@@ -189,27 +193,33 @@ fn errors(store: &Store, change: &Change) -> Result<Vec<String>> {
     .iter()
     .any(|s| !nonblank(s))
     {
-        errors.push(
-            "Completare problema, ambito, owner e motivazione delle verifiche pertinenti.".into(),
-        );
+        errors.push(crate::i18n::text(
+            "Completare problema, ambito, owner e motivazione delle verifiche pertinenti.",
+        ));
     }
     let catalog: Catalog = store.json(&format!(".dfd/domains/{}/criteria.json", change.domain))?;
     if change.criteria.is_empty() {
-        errors.push("Collegare almeno un criterio DoD pertinente.".into());
+        errors.push(crate::i18n::text(
+            "Collegare almeno un criterio DoD pertinente.",
+        ));
     }
     let mut seen = BTreeSet::new();
     for id in &change.criteria {
         if !seen.insert(id) || !catalog.criteria.iter().any(|c| &c.id == id) {
-            errors.push(format!("Criterio rapido ignoto o duplicato: {id}."));
+            errors.push(crate::localized_format!(
+                "Criterio rapido ignoto o duplicato: {id}.",
+                "Unknown or duplicate quick change criterion: {id}.",
+                id = id
+            ));
         }
     }
     if change.files.is_empty() {
-        errors.push("Registrare i file verificati con hash.".into());
+        errors.push(crate::i18n::text("Registrare i file verificati con hash."));
     }
     let mut files = BTreeSet::new();
     for file in &change.files {
         if !files.insert(&file.path) {
-            errors.push("File verificato duplicato.".into());
+            errors.push(crate::i18n::text("File verificato duplicato."));
         }
         errors.extend(development::file_errors(store, file)?);
     }
@@ -230,19 +240,23 @@ fn errors(store: &Store, change: &Change) -> Result<Vec<String>> {
         errors.extend(failures);
     }
     if green.is_none() {
-        errors.push("Serve una verifica pertinente green reale.".into());
+        errors.push(crate::i18n::text(
+            "Serve una verifica pertinente green reale.",
+        ));
     }
     if change.kind == ChangeKind::BehaviorFix
         && (red.is_none() || green.is_some_and(|g| red.is_some_and(|r| r > g)))
     {
-        errors.push(
-            "Fix comportamentale: serve regressione red prima del green, sul bug atteso.".into(),
-        );
+        errors.push(crate::i18n::text(
+            "Fix comportamentale: serve regressione red prima del green, sul bug atteso.",
+        ));
     }
     if lifecycle(store, &change.domain)?.ci_required
         && (ci.is_none() || green.is_some_and(|g| ci.is_some_and(|c| c < g)))
     {
-        errors.push("La policy del dominio richiede CI verde successiva al green.".into());
+        errors.push(crate::i18n::text(
+            "La policy del dominio richiede CI verde successiva al green.",
+        ));
     }
     Ok(errors)
 }
@@ -349,9 +363,9 @@ pub(super) fn promote(store: &Store, id: &str, to: &str) -> Result<Value> {
             "reliability".into(),
             RiskDimension {
                 level: Some(Level::High),
-                rationale:
-                    "Escalation conservativa: intervento dichiarato critico nel record rapido."
-                        .into(),
+                rationale: crate::i18n::text(
+                    "Escalation conservativa: intervento dichiarato critico nel record rapido.",
+                ),
             },
         );
     }

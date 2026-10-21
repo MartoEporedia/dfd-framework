@@ -1,0 +1,45 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-_f5lg0w7)
+warning: unused variable: `expected`
+   --> src/lib.rs:252:20
+    |
+252 |     for (relative, expected) in &old.files {
+    |                    ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_expected`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `path`
+   --> src/lib.rs:264:13
+    |
+264 |         let path = store.path(relative)?;
+    |             ^^^^ help: if this is intentional, prefix it with an underscore: `_path`
+
+warning: `dfd-kit` (lib) generated 2 warnings (run `cargo fix --lib -p dfd-kit` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.79s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-0da0f992897ec05a)
+
+running 1 test
+test bilingual_conflicts_do_not_change_language_or_files ... FAILED
+
+failures:
+
+---- bilingual_conflicts_do_not_change_language_or_files stdout ----
+
+thread 'bilingual_conflicts_do_not_change_language_or_files' (22589159) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["language", "en"]
+stdout: {
+  "existing_artifacts": "preserved",
+  "language": "en"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(1)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    bilingual_conflicts_do_not_change_language_or_files
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 72 filtered out; finished in 1.19s
+
+error: test failed, to rerun pass `--test workflow`

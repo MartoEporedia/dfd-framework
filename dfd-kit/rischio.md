@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](rischio.md) | [English](en/rischio.md)
+
 # Criteri di Rischio Feature – DoD-First Driven (DFD)
 
 > **Stato**: draft / stabile  

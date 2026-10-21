@@ -309,5 +309,35 @@
       "selective_review_ignores_unrelated_domain_changes_but_tracks_contracts"
     ],
     "purpose": "Modifiche a criteri estranei non devono invalidare una review selettiva."
+  },
+  {
+    "id": "language-resource-selection",
+    "file": "src/i18n.rs",
+    "before": "Language::En => crate::bundle::FILES_EN,",
+    "after": "Language::En => crate::bundle::FILES,",
+    "tests": [
+      "bilingual_english_resources_work_in_every_adapter_offline"
+    ],
+    "purpose": "La scelta inglese deve installare risorse realmente inglesi per tutti gli adapter."
+  },
+  {
+    "id": "language-persistence",
+    "file": "src/i18n.rs",
+    "before": "Ok(store.json::<Preference>(\".dfd/language.json\")?.language)",
+    "after": "Ok(Language::It)",
+    "tests": [
+      "bilingual_project_language_resources_and_preservation"
+    ],
+    "purpose": "Le invocazioni senza override devono riprendere la lingua del progetto."
+  },
+  {
+    "id": "language-file-preservation",
+    "file": "src/lib.rs",
+    "before": "if path.exists() && (!path.is_file() || store.hash(relative)? != *expected) {",
+    "after": "if false {",
+    "tests": [
+      "bilingual_conflicts_do_not_change_language_or_files"
+    ],
+    "purpose": "Un cambio lingua non deve sovrascrivere skill modificate né cambiare la preferenza su conflitto."
   }
 ]

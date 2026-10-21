@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](harness-proposta.md) | [English](en/harness-proposta.md)
+
 # DFD Kit – Integrazione negli harness di coding
 
 > **Stato**: MVP 0.1 implementato; da validare con un progetto pilota  

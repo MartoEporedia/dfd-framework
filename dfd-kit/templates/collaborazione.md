@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](collaborazione.md) | [English](../en/templates/collaborazione.md)
+
 # Convenzioni facoltative per la collaborazione
 
 - Owner delle regole comuni:

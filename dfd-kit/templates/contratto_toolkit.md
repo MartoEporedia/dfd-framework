@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](contratto_toolkit.md) | [English](../en/templates/contratto_toolkit.md)
+
 # Contratto degli artefatti – DFD Kit 0.1
 
 ## Comandi locali
@@ -312,3 +314,9 @@ La CLI non interroga Git/GitHub, non autentica le revisioni dichiarate e non cer
 Le nuove feature usano selective_review true. Specifica, design, rischio, criteri presenti nel design, guardrail del dominio/comuni, lifecycle e contesto di adozione greenfield/brownfield restano dipendenze del design. Testi di processo, template, adozione dettagliata, criteri baseline non citati e registrazione di altri domini non invalidano automaticamente quel design. Ogni prescrizione normativa deve stare nel catalogo o nei guardrail/policy fingerprintati, non solo nella documentazione descrittiva. L’aggiunta di un criterio changes non valutato blocca comunque il design.
 
 Le feature preesistenti senza campo selective_review mantengono false e i vecchi fingerprint. Per creare una nuova feature con compatibilità conservativa usare --legacy-review; non migrare manualmente decisioni esistenti. I file di review, codice e integrazione rimangono vincolati ai rispettivi snapshot: selettività non significa accettare evidenze obsolete. I nuovi comandi e formati richiedono la CLI aggiornata.
+
+## Lingua del progetto
+
+`dfd --lang en init ...` seleziona e memorizza l’inglese; le lingue sono `it` e `en`. `dfd --lang en install --harness codex` memorizza la scelta durante l’aggiornamento delle risorse gestite. `dfd language it` o `dfd language en` cambia preferenza e risorse con l’adapter già installato. Il file `.dfd/language.json` contiene `{"schema_version":1,"language":"en"}`; l’assenza mantiene l’italiano. Preferenze non valide causano un errore esplicito.
+
+Negli altri comandi `--lang` è un override per la sola invocazione. Help, messaggi della CLI e nuovi artefatti usano la lingua scelta; comandi, chiavi, enum, ID, exit code e testo utente restano invariati. Il cambio lingua preserva documenti di dominio/feature e template locali già presenti, anche nella lingua originale. Per cambiare i template di un dominio esistente rivederli esplicitamente; i nuovi domini usano la nuova lingua. I conflitti sono verificati prima di aggiornare risorse/preferenza. L’atomicità resta per singolo file.

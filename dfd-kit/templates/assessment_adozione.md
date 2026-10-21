@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](assessment_adozione.md) | [English](../en/templates/assessment_adozione.md)
+
 # Assessment di adozione DFD – [Dominio]
 
 > **Stato**: draft  

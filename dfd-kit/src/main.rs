@@ -1,8 +1,7 @@
-use clap::Parser;
 use dfd_kit::{cli::Cli, execute};
 
 fn main() {
-    match execute(Cli::parse()) {
+    match execute(Cli::parse_localized()) {
         Ok((output, code)) => {
             println!("{}", serde_json::to_string_pretty(&output).unwrap());
             std::process::exit(code);

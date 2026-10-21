@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](review_release_light.md) | [English](../en/templates/review_release_light.md)
+
 # Checklist di Review DFD – Release (Light)
 
 > **Tipo di review**: release (feature piccola / basso rischio)  

@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "documents": {
+    "README.md": {
+      "english": "en/README.md",
+      "it_sha256": "1ad2ea92e4ead8bbdc37bf3b50ce528b0eec020a11a4cd1bfaa7caf7a38e3ce3",
+      "en_sha256": "c43dccde4ddc8c8a8167678f9ffaf741c0f0506ca179a4e8eeb2c1d80e8c4be4"
+    },
+    "adozione.md": {
+      "english": "en/adozione.md",
+      "it_sha256": "3a684789248edf1935da134f91bfaef68622d88c107cf53e0600347029eb5df6",
+      "en_sha256": "39f7d48308000944c481f15d1bf833cce8334c60dd246c783b8fee461eb1f06f"
+    },
+    "examples/checkout_dod.md": {
+      "english": "en/examples/checkout_dod.md",
+      "it_sha256": "0ffde22f9733676f26e97c29972a5d0f29d65ac98639c4def10201d5ce9b9caf",
+      "en_sha256": "9862fa8b16094534eaa6babe6eb5757a587b74d8b5968c5ebefb3c3b7d3c90b1"
+    },
+    "examples/checkout_paypal_spec.md": {
+      "english": "en/examples/checkout_paypal_spec.md",
+      "it_sha256": "8cd7b68810544ab960b005d2f2be6bda97508237250f348b490c18dd18f26e5a",
+      "en_sha256": "f3ee5c11bbc67efa359f59f8b908fc5e25cf2b2d4080c7ce682370da779cc064"
+    },
+    "fondamenta.md": {
+      "english": "en/fondamenta.md",
+      "it_sha256": "0221c153e66b2d43ae4b04da98a5a73581589bf461b2ed4d0c1a498be78e352f",
+      "en_sha256": "35ec9fdf490a97fd96b890988f5977d7e705333f1144477593e5de77f94664b8"
+    },
+    "glossario.md": {
+      "english": "en/glossario.md",
+      "it_sha256": "d62fdd2eeea7d73a19e4cda81dc743a5bb581794d300737725af64da11da119d",
+      "en_sha256": "0a0d8bad3c86b9da2492f0c62d06eae7a41e6908c6bed05bea4abc2282e3987d"
+    },
+    "processo-e2e.md": {
+      "english": "en/processo-e2e.md",
+      "it_sha256": "1a335c1bb3de78b15c6f400a3bf2d602481c77bc5dcee06f00b16154871f0b4c",
+      "en_sha256": "6d433a3af9d98ea018de18290a3c0a6e0d261f0740d45b85270401874cc1488d"
+    },
+    "raci.md": {
+      "english": "en/raci.md",
+      "it_sha256": "1611bd82f80fb756c49d5680a9e23a27fa4ec0a44ac7d5e2d1de1bab25f68c74",
+      "en_sha256": "5bc220e577f3eb376725834643ca36cc281c8c6dbce3ef803321c1d54eeab09b"
+    },
+    "rischio.md": {
+      "english": "en/rischio.md",
+      "it_sha256": "1ea0b746e8ccc5462a77bcfe275450d146a5dbc9a6847b53f9e3906db06aaa6d",
+      "en_sha256": "d5108c49f625f17b69786e8b232f35be9640591444e436e47867216f9ea14ff9"
+    },
+    "templates/cambiamento_rapido.md": {
+      "english": "en/templates/cambiamento_rapido.md",
+      "it_sha256": "fcaa55f7ae4023507ae72db19749937266abbe533d5930041ea925aa49c0ea87",
+      "en_sha256": "3b2bbf3e42dc69b1cbee0291137a98b6ed5700a77165463f3bd5cc70146b2f53"
+    },
+    "templates/collaborazione.md": {
+      "english": "en/templates/collaborazione.md",
+      "it_sha256": "1254edde1b35563723eb0c27ed732d71da0312db5c1807f207cf0ef94aed56c3",
+      "en_sha256": "76d098fcdfe7280dbc46628b13b12d8ac780c39d6f6e98c72aa241d6a1fc349e"
+    },
+    "templates/configurazione_rollout.md": {
+      "english": "en/templates/configurazione_rollout.md",
+      "it_sha256": "f61a2f389dac33f5a7cc36f7bc7867acd4c83b693c9cc253e729f7f3d0568b92",
+      "en_sha256": "ca13c90dab8d4b1d17ee59721a29b21ea714132d2d3981f413d531f1fd335b80"
+    },
+    "templates/dod-estesa.md": {
+      "english": "en/templates/dod-estesa.md",
+      "it_sha256": "b2474be6b73634c18d214fb4d914ddd702347bacacaba30640d2736aad75179b",
+      "en_sha256": "dbe27f6bdcb660857af47f28d8be245a0cf5d35003df3369426096f8e267698f"
+    },
+    "templates/review_design.md": {
+      "english": "en/templates/review_design.md",
+      "it_sha256": "a269cfb1876e96596c59a53cab6e33e5f0b8340666a7e6adbd9df16951c843dd",
+      "en_sha256": "315a3e4b0fd8bf4089ac17f2ed840899d67daba494bcb5e01f5738e6b5095b7b"
+    },
+    "templates/review_design_light.md": {
+      "english": "en/templates/review_design_light.md",
+      "it_sha256": "ffd86af009eff8992b0ea9b5a7a31388c89723b59d16719ede6937413e2c273a",
+      "en_sha256": "f9d67b1462fb294e8d63facd738733dba2db87ecc06c9f7493404cff283e2798"
+    },
+    "templates/review_indice.md": {
+      "english": "en/templates/review_indice.md",
+      "it_sha256": "64c3fb565622cbf2ec8b3c594da36d74964cc65d9fd226bd1bd11913065b6499",
+      "en_sha256": "ece3f581cd7b6f86d4d59b72045d8896a1491436a24e282c8b9622ac50a854e5"
+    },
+    "templates/review_release.md": {
+      "english": "en/templates/review_release.md",
+      "it_sha256": "4babf65bbb5c74b34a5d62ae8d01648982b8a8fab1328b9009df4377471642f4",
+      "en_sha256": "5498b0f0fcf12478e70843749cd2d65ac86c9ee3c63ad6fc5a361488322ab3fd"
+    },
+    "templates/review_release_light.md": {
+      "english": "en/templates/review_release_light.md",
+      "it_sha256": "cbb67cdcb31e73dcf04e8ee0078820c65277f9fa5a24b494327e821a7431a11c",
+      "en_sha256": "16fad42b878677ffe4071cc5132971a02ffad3a61f53ddc1f156018eb609deb9"
+    },
+    "templates/specifica_feature.md": {
+      "english": "en/templates/specifica_feature.md",
+      "it_sha256": "c702732ebf8b35b5194d1801e9a226b919820f857d60fd57b9d8b5606b05a90d",
+      "en_sha256": "2f84f4e51d7a054938405b0e9bf02a9a109243eee589543ca854ce4a3608c859"
+    },
+    "dfd-kit/CONTRIBUTING.md": {
+      "english": "dfd-kit/en/CONTRIBUTING.md",
+      "it_sha256": "459efe0aa4f8a56493019a3d477535b7b8a8b65625d9481ee611916dcecba44b",
+      "en_sha256": "de146d5b6642e4ae951a9acec221ccdadb1230f5d6d7a6ebbc01e5976a390507"
+    },
+    "dfd-kit/README.md": {
+      "english": "dfd-kit/en/README.md",
+      "it_sha256": "2be80c840f40f001a7722a971f55f6ff753ad17dfaf804cee920b0dc11e9302d",
+      "en_sha256": "a7dd1cf3c5159a751a4cd72205576a7e6de3c2d4422e32941e62653940055ecc"
+    },
+    "dfd-kit/adozione.md": {
+      "english": "dfd-kit/en/adozione.md",
+      "it_sha256": "3a684789248edf1935da134f91bfaef68622d88c107cf53e0600347029eb5df6",
+      "en_sha256": "39f7d48308000944c481f15d1bf833cce8334c60dd246c783b8fee461eb1f06f"
+    },
+    "dfd-kit/examples/checkout_dod.md": {
+      "english": "dfd-kit/en/examples/checkout_dod.md",
+      "it_sha256": "0ffde22f9733676f26e97c29972a5d0f29d65ac98639c4def10201d5ce9b9caf",
+      "en_sha256": "9862fa8b16094534eaa6babe6eb5757a587b74d8b5968c5ebefb3c3b7d3c90b1"
+    },
+    "dfd-kit/examples/checkout_paypal_spec.md": {
+      "english": "dfd-kit/en/examples/checkout_paypal_spec.md",
+      "it_sha256": "8cd7b68810544ab960b005d2f2be6bda97508237250f348b490c18dd18f26e5a",
+      "en_sha256": "f3ee5c11bbc67efa359f59f8b908fc5e25cf2b2d4080c7ce682370da779cc064"
+    },
+    "dfd-kit/fondamenta.md": {
+      "english": "dfd-kit/en/fondamenta.md",
+      "it_sha256": "0221c153e66b2d43ae4b04da98a5a73581589bf461b2ed4d0c1a498be78e352f",
+      "en_sha256": "35ec9fdf490a97fd96b890988f5977d7e705333f1144477593e5de77f94664b8"
+    },
+    "dfd-kit/harness-proposta.md": {
+      "english": "dfd-kit/en/harness-proposta.md",
+      "it_sha256": "29e4551c0fa437987fe5e4d79b2d1759f5815a96469ca250d9ee4a236fb9136c",
+      "en_sha256": "4d7743d9aed03313f468fe59504374f2bb9b6c6bc656549abd12199188112f1f"
+    },
+    "dfd-kit/processo-e2e.md": {
+      "english": "dfd-kit/en/processo-e2e.md",
+      "it_sha256": "1a335c1bb3de78b15c6f400a3bf2d602481c77bc5dcee06f00b16154871f0b4c",
+      "en_sha256": "6d433a3af9d98ea018de18290a3c0a6e0d261f0740d45b85270401874cc1488d"
+    },
+    "dfd-kit/raci.md": {
+      "english": "dfd-kit/en/raci.md",
+      "it_sha256": "1611bd82f80fb756c49d5680a9e23a27fa4ec0a44ac7d5e2d1de1bab25f68c74",
+      "en_sha256": "5bc220e577f3eb376725834643ca36cc281c8c6dbce3ef803321c1d54eeab09b"
+    },
+    "dfd-kit/rischio.md": {
+      "english": "dfd-kit/en/rischio.md",
+      "it_sha256": "1ea0b746e8ccc5462a77bcfe275450d146a5dbc9a6847b53f9e3906db06aaa6d",
+      "en_sha256": "d5108c49f625f17b69786e8b232f35be9640591444e436e47867216f9ea14ff9"
+    },
+    "dfd-kit/skills/dfd-assess/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-assess/SKILL.md",
+      "it_sha256": "4958b30d229048c71ca2ae6cd14645b259892759a1d7bda29a27397bc7515987",
+      "en_sha256": "c3dcbd7926e18d548a422574877c52db0847a237568df2b2739da128294c4e60"
+    },
+    "dfd-kit/skills/dfd-feature/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-feature/SKILL.md",
+      "it_sha256": "9790edefcbf16f3c26252189e95229b05ae210801f0dcf3e0b726496a00728ee",
+      "en_sha256": "726ceb6450fb9d870d7ea5c9bb2ccb1251417b9cd2ee40b7bbf390de9bfcac09"
+    },
+    "dfd-kit/skills/dfd-implement/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-implement/SKILL.md",
+      "it_sha256": "4f5bdc4b0760e72ad4e68c134eead0d8851d7d1e9b9bb0f17cfbb505323869b6",
+      "en_sha256": "a9b222dcd961400bea14440bc701a86747e661e2648083fa82285e568d3f141e"
+    },
+    "dfd-kit/skills/dfd-init/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-init/SKILL.md",
+      "it_sha256": "1d7d71d4d1662931189d2916d27ff5300afbb022bc139a9e07ef7f9ddbb470a4",
+      "en_sha256": "0f8a7027ba1ba8122d5b088009d36f1fd412c41cf8d1056e1f8a26cf3e2e523d"
+    },
+    "dfd-kit/skills/dfd-plan/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-plan/SKILL.md",
+      "it_sha256": "9b5554359f7da5506dadcdfb49482ad7b1709b50f854e70775af133e280484a3",
+      "en_sha256": "b8893d2f55fd002c0f1f6e4de3a27c08e299311dd86425602debfba9e02e95ca"
+    },
+    "dfd-kit/skills/dfd-pre-release/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-pre-release/SKILL.md",
+      "it_sha256": "fa2662c27b743fed13490fcd7da9cf471e34324d0b7170b916a997d2fd1583d5",
+      "en_sha256": "c2e52527519e7583e40a310d0429283ed259ba6550622dc25c26a0cdcc6eb14b"
+    },
+    "dfd-kit/skills/dfd-review-design/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-review-design/SKILL.md",
+      "it_sha256": "4d1d0e395aa546e71b8eab000ef21a73c66df16eb4b373ae1bae42ccfe2ff2fb",
+      "en_sha256": "f04b1d563500e001df375fa61a92701a830fb0ceac9c51b13bf307967b5b88f6"
+    },
+    "dfd-kit/skills/dfd-review-release/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-review-release/SKILL.md",
+      "it_sha256": "7f75bc5c2b61aae1d46f0c955f6899ddccea572fbf3b3d987043f7686f8e9abf",
+      "en_sha256": "1b5fcf40237c9e63357fe203947666089327209dbe9ede5513d8bbd0ab43765c"
+    },
+    "dfd-kit/skills/dfd-setup/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-setup/SKILL.md",
+      "it_sha256": "ff5fa3971300a0e9af7dc8ae737aea077649b333df023d58284932943a0b9d08",
+      "en_sha256": "e5a9da6d5fccbe78bde4767a8c839ea4fe5e4f91081e994022d697604eedee6a"
+    },
+    "dfd-kit/skills/dfd-specify/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-specify/SKILL.md",
+      "it_sha256": "0ecc3554c84bb7c9713601fa02452b408d6eeb370b4211096bafd70521f71c47",
+      "en_sha256": "a4364c980c5a0d47e30641647f69889cd474f8e3719e5675523a76066e4c63b8"
+    },
+    "dfd-kit/skills/dfd-status/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-status/SKILL.md",
+      "it_sha256": "abdf277bdf5da6c6dab643c8be06f9695d606b9ec235bf1b7a39a37134f015b8",
+      "en_sha256": "0b93069a10e7c4b090b11f409dc1dd44da6d66a621bb630a0b1bbde0a57935f1"
+    },
+    "dfd-kit/skills/dfd-verify/SKILL.md": {
+      "english": "dfd-kit/en/skills/dfd-verify/SKILL.md",
+      "it_sha256": "302361218f85e806152c460c038e8eaf4f948bcee8fff2d6af5d31e9e86f486b",
+      "en_sha256": "04239bac587fcee1132d5d286c05441d1154a3107e7ea163ee5172b6778b24de"
+    },
+    "dfd-kit/templates/assessment_adozione.md": {
+      "english": "dfd-kit/en/templates/assessment_adozione.md",
+      "it_sha256": "b44684371f7b4ca30686a49acfd6f52a39fd9d138b9b0e4552a4cf8c7d8cab67",
+      "en_sha256": "ff81d59a12fa9ef06a1df6851db5a582c61f3f50d6b29ea3c57ee717546169d5"
+    },
+    "dfd-kit/templates/cambiamento_rapido.md": {
+      "english": "dfd-kit/en/templates/cambiamento_rapido.md",
+      "it_sha256": "fcaa55f7ae4023507ae72db19749937266abbe533d5930041ea925aa49c0ea87",
+      "en_sha256": "3b2bbf3e42dc69b1cbee0291137a98b6ed5700a77165463f3bd5cc70146b2f53"
+    },
+    "dfd-kit/templates/collaborazione.md": {
+      "english": "dfd-kit/en/templates/collaborazione.md",
+      "it_sha256": "1254edde1b35563723eb0c27ed732d71da0312db5c1807f207cf0ef94aed56c3",
+      "en_sha256": "76d098fcdfe7280dbc46628b13b12d8ac780c39d6f6e98c72aa241d6a1fc349e"
+    },
+    "dfd-kit/templates/configurazione_rollout.md": {
+      "english": "dfd-kit/en/templates/configurazione_rollout.md",
+      "it_sha256": "f61a2f389dac33f5a7cc36f7bc7867acd4c83b693c9cc253e729f7f3d0568b92",
+      "en_sha256": "ca13c90dab8d4b1d17ee59721a29b21ea714132d2d3981f413d531f1fd335b80"
+    },
+    "dfd-kit/templates/contratto_toolkit.md": {
+      "english": "dfd-kit/en/templates/contratto_toolkit.md",
+      "it_sha256": "a19b8c8a16aad7f45cdbba41db8ed38f4921825d38a2b58abd315696507bf4c8",
+      "en_sha256": "ab14e892c4f43fd49e628b6112e99c39ab6a21135649780c2b77156463a35cbf"
+    },
+    "dfd-kit/templates/dod-estesa.md": {
+      "english": "dfd-kit/en/templates/dod-estesa.md",
+      "it_sha256": "b2474be6b73634c18d214fb4d914ddd702347bacacaba30640d2736aad75179b",
+      "en_sha256": "dbe27f6bdcb660857af47f28d8be245a0cf5d35003df3369426096f8e267698f"
+    },
+    "dfd-kit/templates/guardrail_dominio.md": {
+      "english": "dfd-kit/en/templates/guardrail_dominio.md",
+      "it_sha256": "414c141eecde7d21d206dfbdc235b4eaa9e8eab74d26b2e68609da094b79d20d",
+      "en_sha256": "ed79f9d26291e2a8e27bdaa5391dc0a3815b8039ff4611255bf68cf958c486ed"
+    },
+    "dfd-kit/templates/processo_dominio.md": {
+      "english": "dfd-kit/en/templates/processo_dominio.md",
+      "it_sha256": "b9fbd212a425f7a45042689e70be9a18f03d6041b5b9f754b3b02d6d8bf65982",
+      "en_sha256": "747f2951548e5dd62a3fbdfc09519dbf8eb9ce74919f4b7d56523f164d25cbb7"
+    },
+    "dfd-kit/templates/review_design.md": {
+      "english": "dfd-kit/en/templates/review_design.md",
+      "it_sha256": "a269cfb1876e96596c59a53cab6e33e5f0b8340666a7e6adbd9df16951c843dd",
+      "en_sha256": "315a3e4b0fd8bf4089ac17f2ed840899d67daba494bcb5e01f5738e6b5095b7b"
+    },
+    "dfd-kit/templates/review_design_light.md": {
+      "english": "dfd-kit/en/templates/review_design_light.md",
+      "it_sha256": "ffd86af009eff8992b0ea9b5a7a31388c89723b59d16719ede6937413e2c273a",
+      "en_sha256": "f9d67b1462fb294e8d63facd738733dba2db87ecc06c9f7493404cff283e2798"
+    },
+    "dfd-kit/templates/review_indice.md": {
+      "english": "dfd-kit/en/templates/review_indice.md",
+      "it_sha256": "64c3fb565622cbf2ec8b3c594da36d74964cc65d9fd226bd1bd11913065b6499",
+      "en_sha256": "ece3f581cd7b6f86d4d59b72045d8896a1491436a24e282c8b9622ac50a854e5"
+    },
+    "dfd-kit/templates/review_release.md": {
+      "english": "dfd-kit/en/templates/review_release.md",
+      "it_sha256": "4babf65bbb5c74b34a5d62ae8d01648982b8a8fab1328b9009df4377471642f4",
+      "en_sha256": "5498b0f0fcf12478e70843749cd2d65ac86c9ee3c63ad6fc5a361488322ab3fd"
+    },
+    "dfd-kit/templates/review_release_light.md": {
+      "english": "dfd-kit/en/templates/review_release_light.md",
+      "it_sha256": "cbb67cdcb31e73dcf04e8ee0078820c65277f9fa5a24b494327e821a7431a11c",
+      "en_sha256": "16fad42b878677ffe4071cc5132971a02ffad3a61f53ddc1f156018eb609deb9"
+    },
+    "dfd-kit/templates/specifica_feature.md": {
+      "english": "dfd-kit/en/templates/specifica_feature.md",
+      "it_sha256": "b52bf47193c230790a2c03906c004524bfbcbff7682eb686e0f00192f6512a94",
+      "en_sha256": "a3aa3443bec30ac42705ad91c151d6605e89cffac500ce27eb662bd9edb49a2a"
+    }
+  }
+}

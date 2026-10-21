@@ -3,6 +3,8 @@ name: dfd-feature
 description: Aprire o riprendere una feature DFD da un'idea, definendo dominio, titolo, ambito e tipo di intervento prima dell'assessment e della specifica.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-feature/SKILL.md)
+
 # Apertura di una feature
 
 Valutare prima il percorso rapido: per fix di contratto noto o editoriali circoscritti usare `quick`, evitando di creare una feature con documenti separati. Per gli altri casi seguire il flusso qui sotto.

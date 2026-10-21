@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](cambiamento_rapido.md) | [English](../en/templates/cambiamento_rapido.md)
+
 # Record di cambiamento rapido
 
 - ID / owner:

@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](CONTRIBUTING.md) | [English](en/CONTRIBUTING.md)
+
 # Sviluppare DFD Kit
 
 La CLI è scritta in Rust; gli utilizzatori eseguono un binario e non devono installare Rust, interpreti o pacchetti aggiuntivi. Lo sviluppo richiede la toolchain Rust stable con Cargo, rustfmt e Clippy.
@@ -22,6 +24,7 @@ Usare le skill del toolkit e la CLI secondo il [contratto degli artefatti](templ
 ## Struttura
 
 - `src/cli.rs`: comandi e opzioni.
+- `src/i18n.rs` e `i18n/en.json`: localizzazione offline, con enum it/en e preferenza separata.
 - `src/model.rs`: contratti JSON versionati e tipi del dominio.
 - `src/lib.rs`: installazione, adozione, rischio e gate di design.
 - `src/development.rs`: piano TDD, evidenze e gate di sviluppo.
@@ -46,13 +49,14 @@ cargo clippy --locked --all-targets -- -D warnings
 cargo test --locked
 cargo build --locked --release
 ./target/release/dfd doctor
+python3 scripts/check_translations.py
 ```
 
 Se tutte le dipendenze sono già in cache, aggiungere `--offline` ai comandi Cargo. Conservare `Cargo.lock`: la CLI deve avere build riproducibili rispetto alle versioni delle dipendenze.
 
 ## Convenzioni e verifiche
 
-Usare rustfmt e nomi `snake_case`; le skill usano nomi `dfd-<azione>` in kebab-case. Mantenere in italiano la documentazione di DFD e i workflow. Quando cambia un contratto JSON, aggiornare modelli, guida e test; la prima versione accetta solo `schema_version: 1` e rifiuta campi sconosciuti.
+Usare rustfmt e nomi `snake_case`; le skill usano nomi `dfd-<azione>` in kebab-case. Mantenere documentazione e workflow completi in italiano e inglese, nei percorsi originali e in `en/`; seguire il [glossario e le regole di sincronizzazione](../glossario.md). Quando cambia un contratto JSON, aggiornare modelli, guida e test; la prima versione accetta solo `schema_version: 1` e rifiuta campi sconosciuti.
 
 Verificare comportamenti osservabili: preservazione dei file, idempotenza, gestione dei dati mancanti, isolamento delle feature, invalidazione delle decisioni e adozione proporzionata. I test eseguono il binario senza programmi nel PATH. `doctor` verifica le skill incorporate; non sostituisce una prova reale nell'harness.
 
@@ -60,7 +64,7 @@ La configurazione `ci/github-actions.yml` configura build e test per Linux x86_6
 
 ## Mutation test
 
-Il runner usa Python 3.9+ e Cargo, senza pacchetti Python aggiuntivi o installazione di `cargo-mutants`. I 31 mutanti curati coprono rischio, review umana, validità dei fingerprint, hash delle evidenze, ordine TDD, CI, rollout, preparazione operativa, comunicazioni e versione degli schemi JSON, oltre a percorso rapido, autonomia individuale, review selettive e snapshot integrati del team.
+Il runner usa Python 3.9+ e Cargo, senza pacchetti Python aggiuntivi o installazione di `cargo-mutants`. I mutanti curati coprono rischio, review umana, validità dei fingerprint, hash delle evidenze, ordine TDD, CI, rollout, preparazione operativa, comunicazioni e versione degli schemi JSON, oltre a percorso rapido, autonomia individuale, review selettive e snapshot integrati del team.
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_mutation_runner.py'

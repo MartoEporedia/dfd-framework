@@ -75,17 +75,21 @@ pub(super) fn check_errors(store: &Store, check: &TestEvidence) -> Result<Vec<St
         || !store.path(&check.log.path)?.is_file()
         || !nonblank(&store.read(&check.log.path)?)
     {
-        errors.push("Comando e log reale non vuoto richiesti.".into());
+        errors.push(crate::i18n::text(
+            "Comando e log reale non vuoto richiesti.",
+        ));
     }
     if !DateTime::parse_from_rfc3339(&check.executed_at).is_ok_and(|date| date <= Utc::now()) {
-        errors.push("Data esecuzione non valida o futura.".into());
+        errors.push(crate::i18n::text("Data esecuzione non valida o futura."));
     }
     if check.kind == CheckKind::Red {
         if check.exit_code <= 0 {
-            errors.push("Il red deve fallire per il requisito atteso.".into());
+            errors.push(crate::i18n::text(
+                "Il red deve fallire per il requisito atteso.",
+            ));
         }
     } else if check.exit_code != 0 {
-        errors.push("Verifica dichiarata non verde.".into());
+        errors.push(crate::i18n::text("Verifica dichiarata non verde."));
     }
     Ok(errors)
 }
@@ -121,7 +125,9 @@ pub(super) fn bind(
 }
 pub(super) fn reviewer_errors(policy: &Policy, owner: &str, decision: &Decision) -> Vec<String> {
     if policy.independent_review && owner.trim().eq_ignore_ascii_case(decision.reviewer.trim()) {
-        vec!["La policy team richiede un reviewer diverso dall'owner.".into()]
+        vec![crate::i18n::text(
+            "La policy team richiede un reviewer diverso dall'owner.",
+        )]
     } else {
         vec![]
     }
@@ -132,9 +138,9 @@ pub(super) fn release_errors(store: &Store, state: &State) -> Result<Vec<String>
         return Ok(vec![]);
     }
     let Some(context) = context(store, &state.id)? else {
-        return Ok(vec![
-            "Policy team: registrare owner, branch, PR e revisione con context.".into(),
-        ]);
+        return Ok(vec![crate::i18n::text(
+            "Policy team: registrare owner, branch, PR e revisione con context.",
+        )]);
     };
     let mut errors = vec![];
     if [
@@ -146,7 +152,9 @@ pub(super) fn release_errors(store: &Store, state: &State) -> Result<Vec<String>
     .iter()
     .any(|s| !nonblank(s))
     {
-        errors.push("Contesto team incompleto: owner, branch, PR e revisione richiesti.".into());
+        errors.push(crate::i18n::text(
+            "Contesto team incompleto: owner, branch, PR e revisione richiesti.",
+        ));
     }
     let evidence: Evidence = store.json(&format!(".dfd/features/{}/evidence.json", state.id))?;
     if policy.independent_review {
@@ -156,7 +164,7 @@ pub(super) fn release_errors(store: &Store, state: &State) -> Result<Vec<String>
                 || decision.reference.as_ref().is_none_or(|r| !nonblank(r))
                 || decision.files.is_empty()
             {
-                errors.push("Review PR non riferita alla revisione e ai file correnti: registrare decide con --file e riferimento alla PR.".into());
+                errors.push(crate::i18n::text("Review PR non riferita alla revisione e ai file correnti: registrare decide con --file e riferimento alla PR."));
             }
             for file in &decision.files {
                 errors.extend(development::file_errors(store, file)?);
@@ -167,22 +175,23 @@ pub(super) fn release_errors(store: &Store, state: &State) -> Result<Vec<String>
                     .iter()
                     .any(|reviewed| reviewed.path == file.path && reviewed.sha256 == file.sha256)
                 {
-                    errors.push(format!(
+                    errors.push(crate::localized_format!(
                         "File verificato non incluso nella review corrente: {}.",
+                        "Verified file is not included in current review: {}.",
                         file.path
                     ));
                 }
             }
         } else {
-            errors.push("Serve una review umana corrente.".into());
+            errors.push(crate::i18n::text("Serve una review umana corrente."));
         }
     }
     if policy.integrated_checks_required {
         if let Some(integration) = &context.integration {
             if integration.revision != context.revision || integration.files.is_empty() {
-                errors.push(
-                    "Prove integrate riferite a una revisione diversa o senza snapshot.".into(),
-                );
+                errors.push(crate::i18n::text(
+                    "Prove integrate riferite a una revisione diversa o senza snapshot.",
+                ));
             }
             for file in &integration.files {
                 errors.extend(development::file_errors(store, file)?);
@@ -191,8 +200,9 @@ pub(super) fn release_errors(store: &Store, state: &State) -> Result<Vec<String>
                 if !integration.files.iter().any(|integrated| {
                     integrated.path == file.path && integrated.sha256 == file.sha256
                 }) {
-                    errors.push(format!(
+                    errors.push(crate::localized_format!(
                         "File non incluso nella verifica integrata: {}.",
+                        "File not included in integrated verification: {}.",
                         file.path
                     ));
                 }
@@ -206,17 +216,18 @@ pub(super) fn release_errors(store: &Store, state: &State) -> Result<Vec<String>
                         green = true;
                     }
                 } else {
-                    errors.push("La verifica integrata richiede una suite finale, non un singolo red/green.".into());
+                    errors.push(crate::i18n::text("La verifica integrata richiede una suite finale, non un singolo red/green."));
                 }
             }
             if !green {
-                errors.push("Manca la suite integrata finale prevista dalla policy CI.".into());
+                errors.push(crate::i18n::text(
+                    "Manca la suite integrata finale prevista dalla policy CI.",
+                ));
             }
         } else {
-            errors.push(
-                "Mancano prove della versione integrata: i test del branch isolato non bastano."
-                    .into(),
-            );
+            errors.push(crate::i18n::text(
+                "Mancano prove della versione integrata: i test del branch isolato non bastano.",
+            ));
         }
     }
     Ok(errors)

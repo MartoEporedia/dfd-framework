@@ -1,0 +1,13 @@
+{
+  "command": "git diff --check",
+  "exit_code": 2,
+  "intentional_markdown_hard_breaks": [
+    "dfd-kit/.dfd/kit/examples/checkout_paypal_spec.md:3: trailing whitespace.",
+    "dfd-kit/.dfd/kit/examples/checkout_paypal_spec.md:4: trailing whitespace.",
+    "dfd-kit/.dfd/kit/examples/checkout_paypal_spec.md:5: trailing whitespace.",
+    "dfd-kit/.dfd/kit/templates/specifica_feature.md:4: trailing whitespace.",
+    "dfd-kit/.dfd/kit/templates/specifica_feature.md:5: trailing whitespace.",
+    "dfd-kit/.dfd/kit/templates/specifica_feature.md:6: trailing whitespace."
+  ],
+  "other_findings": []
+}

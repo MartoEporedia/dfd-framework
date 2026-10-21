@@ -3,6 +3,8 @@ name: dfd-specify
 description: Scrivere o aggiornare una specifica di feature DFD dopo l'assessment del rischio, collegando obiettivi, criteri DoD, test e guardrail.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-specify/SKILL.md)
+
 # Specifica guidata dalla DoD
 
 Leggere stato e rischio della feature, `.dfd/domains/<dominio>/dod.md`, `criteria.json`, `guardrails.md`, `process.md` e `templates/` dello stesso dominio. Usare `.dfd/kit/templates/contratto_toolkit.md` per il formato strutturato. Leggere `.dfd/kit/processo-e2e.md` solo per chiarire i prerequisiti del design.

@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](configurazione_rollout.md) | [English](../en/templates/configurazione_rollout.md)
+
 # Configurazione Rollout – [Nome Feature]
 
 > **Stato**: draft / in review / attiva / completata  

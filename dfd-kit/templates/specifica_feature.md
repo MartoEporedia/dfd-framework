@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](specifica_feature.md) | [English](../en/templates/specifica_feature.md)
+
 # Specifica di Feature – [Nome Feature]
 
 > **Stato**: draft  

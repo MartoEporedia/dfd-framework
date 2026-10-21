@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](checkout_paypal_spec.md) | [English](../en/examples/checkout_paypal_spec.md)
+
 # Specifica di Feature – PayPal sul Checkout
 
 > **Stato**: esempio illustrativo, non approvato  

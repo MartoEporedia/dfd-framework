@@ -3,6 +3,8 @@ name: dfd-review-design
 description: Revisionare una specifica DFD con la checklist light o full, controllare i prerequisiti e preparare la decisione del responsabile umano, anche sviluppatore singolo o reviewer delegato.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-review-design/SKILL.md)
+
 # Review di design
 
 Leggere gli artefatti della feature e il setup del dominio: DoD, guardrail, convenzioni e template locali. In base a `state.json.route` usare `.dfd/domains/<dominio>/templates/review_design_light.md` oppure `review_design.md`. Per le responsabilità leggere `.dfd/kit/raci.md`; per i formati `.dfd/kit/templates/contratto_toolkit.md`.

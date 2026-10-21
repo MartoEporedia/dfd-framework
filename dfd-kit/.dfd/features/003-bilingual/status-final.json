@@ -1,0 +1,126 @@
+{
+  "adoption": {
+    "areas": {
+      "cost": {
+        "evidence": [],
+        "notes": "Tempi nel report disponibili, ma nessuna baseline quantitativa di risorse o budget di dominio.",
+        "status": "unknown"
+      },
+      "culture": {
+        "evidence": [
+          "../../../../AGENTS.md",
+          "../../../CONTRIBUTING.md"
+        ],
+        "notes": "Mandato esplicito a usare DFD; efficacia e continuità da osservare nel pilota.",
+        "status": "observed"
+      },
+      "observability": {
+        "evidence": [
+          "evidence/mutation-baseline/report.json",
+          "evidence/mutation-baseline/provenance.json"
+        ],
+        "notes": "Report locale con esiti, tempi, hash e log; non osservabilità di un servizio remoto.",
+        "status": "observed"
+      },
+      "process": {
+        "evidence": [
+          "process.md",
+          "../../../../AGENTS.md"
+        ],
+        "notes": "Policy obbligatoria e setup presenti; nessuna feature completa adottata dimostrata.",
+        "status": "gap"
+      },
+      "reliability": {
+        "evidence": [
+          "evidence/mutation-baseline/report.json",
+          "evidence/mutation-baseline/logs/baseline.log"
+        ],
+        "notes": "Baseline locale passata e 18/18 mutanti curati killed; copertura limitata alle mutazioni dichiarate.",
+        "status": "observed"
+      },
+      "security": {
+        "evidence": [
+          "guardrails.md",
+          "../../../tests/workflow.rs"
+        ],
+        "notes": "Guardrail e test di preservazione disponibili; non equivalgono a un audit o pilota operativo.",
+        "status": "gap"
+      }
+    },
+    "baseline_gaps": [
+      "CI rinviata in development-only; valutarne la necessità e raccogliere prove multipiattaforma prima di dichiarare una distribuzione supportata.",
+      "Pilota reale delle skill negli harness ancora da eseguire.",
+      "Implementazione preesistente senza cicli feature DFD tracciati; nessuna approvazione retroattiva.",
+      "Baseline quantitativa dei tempi e delle risorse da raccogliere."
+    ],
+    "current_level": 0,
+    "next_steps": [
+      "Prima feature pilota: verificare la modalità solo sviluppo con suite locale e gate distinti; CI da valutare alla transizione al rilascio.",
+      "Seconda proposta: esecuzione del rollout e relativo tracciamento, da specificare e classificare.",
+      "Terza proposta: learning post-release e aggiornamento della DoD, da specificare e classificare.",
+      "Verificare il pilota nell’harness Codex e poi gli altri harness; retrospettiva dopo tre cicli o prima in caso di blocchi."
+    ],
+    "pilot": true,
+    "schema_version": 1,
+    "target_level": 1
+  },
+  "assessment_hash": "0a5dbc25b23716803da56ecd0dd980c965a0bbd99c50860590aae0c2c42065e4",
+  "collaboration": null,
+  "created_at": "2026-10-21T07:34:18.238697Z",
+  "decisions": [
+    {
+      "conditions": [],
+      "decision": "approved",
+      "fingerprint": "3d32a9d76b1144688224bc5feb940334c38f98855e3ebe9fdab0381b45364df2",
+      "note": "Riuso della decisione espressa dall’utente: «ok, procedi», sulla proposta presentata di due percorsi completi IT/EN, lingua di progetto per toolkit e identificatori invariati. Nessun rilascio autorizzato.",
+      "recorded_at": "2026-10-21T07:35:36.706404Z",
+      "reviewer": "manutentore del repository",
+      "role": "tech-lead"
+    }
+  ],
+  "development": {
+    "design_fingerprint": "3d32a9d76b1144688224bc5feb940334c38f98855e3ebe9fdab0381b45364df2",
+    "errors": [],
+    "gate": "development-complete",
+    "lifecycle": {
+      "ci_required": false,
+      "mode": "development-only",
+      "rationale": "Toolkit in sviluppo locale: CI prematura secondo decisione del manutentore del 2026-10-09. Suite finale locale tracciata obbligatoria; nessuna autorizzazione al rilascio.",
+      "schema_version": 1
+    },
+    "next": "development-complete",
+    "plan_hash": "a22606ecb512efffddc958d5cbaca345f94238b779fa0848c4954fcbd2185bd3"
+  },
+  "domain": "dfd-kit",
+  "errors": [],
+  "gate": "approved",
+  "id": "003-bilingual",
+  "kind": "feature",
+  "next": "development-complete",
+  "phase": "development-verified",
+  "release": {
+    "decisions": [],
+    "errors": [],
+    "gate": "not-applicable",
+    "next": "development-complete"
+  },
+  "risk": "medium",
+  "route": "full-proportional",
+  "schema_version": 1,
+  "scope": "Percorsi documentali separati IT/EN, glossario, lingua di progetto, skill e risorse incorporate localizzate; contratti macchina invariati",
+  "selective_review": true,
+  "setup": {
+    "domain": "dfd-kit",
+    "errors": [],
+    "gate": "ready",
+    "lifecycle": {
+      "ci_required": false,
+      "mode": "development-only",
+      "rationale": "Toolkit in sviluppo locale: CI prematura secondo decisione del manutentore del 2026-10-09. Suite finale locale tracciata obbligatoria; nessuna autorizzazione al rilascio.",
+      "schema_version": 1
+    },
+    "next": "dfd-assess",
+    "phase": "domain-setup"
+  },
+  "title": "Framework e toolkit bilingui italiano e inglese"
+}

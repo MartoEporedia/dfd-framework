@@ -1,0 +1,61 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.73s
+     Running unittests src/lib.rs (target/debug/deps/dfd_kit-35254a93fa68183c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dfd-afc7614dccc6bcdd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/workflow.rs (target/debug/deps/workflow-b4feff8855944554)
+
+running 3 tests
+
+thread 'bilingual_help_and_diagnostics_preserve_machine_and_user_values' (22511129) panicked at tests/workflow.rs:2148:5:
+assertion failed: help.status.success()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test bilingual_help_and_diagnostics_preserve_machine_and_user_values ... FAILED
+
+thread 'bilingual_project_language_resources_and_preservation' (22511130) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["--lang", "en", "init", "--harness", "codex", "--domain", "checkout"]
+stdout: 
+stderr: error: unexpected argument '--lang' found
+
+Usage: dfd --project <PROJECT> <COMMAND>
+
+For more information, try '--help'.
+
+  left: Some(2)
+ right: Some(0)
+test bilingual_project_language_resources_and_preservation ... FAILED
+
+thread 'bilingual_conflicts_do_not_change_language_or_files' (22511128) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["language", "en"]
+stdout: 
+stderr: error: unrecognized subcommand 'language'
+
+  tip: a similar subcommand exists: 'plan'
+
+Usage: dfd [OPTIONS] <COMMAND>
+
+For more information, try '--help'.
+
+  left: Some(2)
+ right: Some(1)
+test bilingual_conflicts_do_not_change_language_or_files ... FAILED
+
+failures:
+
+failures:
+    bilingual_conflicts_do_not_change_language_or_files
+    bilingual_help_and_diagnostics_preserve_machine_and_user_values
+    bilingual_project_language_resources_and_preservation
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 66 filtered out; finished in 0.78s
+
+error: test failed, to rerun pass `--test workflow`

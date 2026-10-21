@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](checkout_dod.md) | [English](../en/examples/checkout_dod.md)
+
 # DoD Estesa – Servizio Checkout (AWS ECS)
 
 > **Stato**: draft  

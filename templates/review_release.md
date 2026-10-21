@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](review_release.md) | [English](../en/templates/review_release.md)
+
 # Checklist di Review DFD – Release
 
 > **Tipo di review**: release  

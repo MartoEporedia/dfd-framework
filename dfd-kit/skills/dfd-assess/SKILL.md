@@ -3,6 +3,8 @@ name: dfd-assess
 description: Classificare il rischio di una feature, refactor, intervento post-incidente o nuovo servizio con le cinque dimensioni DFD e scegliere il percorso rapido, light o full.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-assess/SKILL.md)
+
 # Rischio di una feature
 
 Leggere `.dfd/config.json`, l'assessment e la DoD del dominio interessato. Le risorse si trovano nel repository adottante: `.dfd/kit/rischio.md`, `.dfd/kit/adozione.md` per il brownfield, `.dfd/kit/templates/contratto_toolkit.md` per i formati.
