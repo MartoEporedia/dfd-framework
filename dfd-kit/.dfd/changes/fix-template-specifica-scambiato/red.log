@@ -1,0 +1,22 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.13s
+     Running tests/workflow.rs (target/debug/deps/workflow-b4feff8855944554)
+
+running 1 test
+test feature_spec_template_and_paypal_example_are_not_swapped ... FAILED
+
+failures:
+
+---- feature_spec_template_and_paypal_example_are_not_swapped stdout ----
+
+thread 'feature_spec_template_and_paypal_example_are_not_swapped' (17619217) panicked at tests/workflow.rs:2085:5:
+il template della specifica deve essere il modello da compilare
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    feature_spec_template_and_paypal_example_are_not_swapped
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 65 filtered out; finished in 0.86s
+
+error: test failed, to rerun pass `--test workflow`

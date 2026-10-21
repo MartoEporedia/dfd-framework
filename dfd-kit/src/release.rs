@@ -33,13 +33,15 @@ fn development_fingerprint(store: &Store, state: &State) -> Result<String> {
 
 fn entry_errors(store: &Store, state: &State) -> Result<Vec<String>> {
     if lifecycle(store, &state.domain)?.mode == LifecycleMode::DevelopmentOnly {
-        return Ok(vec!["Pre-release non prevista in development-only: passare esplicitamente a release-preparation e riconfermare design, piano ed evidenze.".into()]);
+        return Ok(vec![crate::i18n::text("Pre-release non prevista in development-only: passare esplicitamente a release-preparation e riconfermare design, piano ed evidenze.")]);
     }
     let development = development::status(store, state)?;
     if development["gate"] == "ready-for-pre-release" {
         return collaboration::release_errors(store, state);
     }
-    let mut errors = vec!["Pre-release: completare e verificare lo sviluppo attuale.".into()];
+    let mut errors = vec![crate::i18n::text(
+        "Pre-release: completare e verificare lo sviluppo attuale.",
+    )];
     errors.extend(
         development["errors"]
             .as_array()
@@ -121,9 +123,11 @@ pub(super) fn prepare(store: &Store, id: &str, refresh: bool) -> Result<(Value, 
                 verification: item.verification.clone(),
             })
             .collect(),
-        alarms: vec![resource("Allarmi del rilascio")],
-        dashboards: vec![resource("Dashboard del rilascio")],
-        feature_flag: resource("Feature flag / controllo dell'esposizione"),
+        alarms: vec![resource(&crate::i18n::text("Allarmi del rilascio"))],
+        dashboards: vec![resource(&crate::i18n::text("Dashboard del rilascio"))],
+        feature_flag: resource(&crate::i18n::text(
+            "Feature flag / controllo dell'esposizione",
+        )),
         rollback_trigger: String::new(),
         rollback_procedure: String::new(),
         rollback_verification: String::new(),
@@ -167,7 +171,7 @@ fn resource_errors(
 ) -> Result<Vec<String>> {
     let mut errors = vec![];
     if !complete(&resource.name) {
-        errors.push("Risorsa operativa senza nome.".into());
+        errors.push(crate::i18n::text("Risorsa operativa senza nome."));
     }
     match resource.status {
         Preparation::Excluded => {
@@ -175,22 +179,32 @@ fn resource_errors(
                 || !complete(&resource.justification)
                 || !resource.evidence.is_empty()
             {
-                errors.push(format!(
+                errors.push(crate::localized_format!(
                     "Esclusione non ammessa o non motivata: {}.",
+                    "Exclusion is not allowed or lacks justification: {}.",
                     resource.name
                 ));
             }
         }
         Preparation::Planned | Preparation::Ready => {
             if !complete(&resource.owner) || !complete(&resource.reference) {
-                errors.push(format!("Owner e riferimento richiesti: {}.", resource.name));
+                errors.push(crate::localized_format!(
+                    "Owner e riferimento richiesti: {}.",
+                    "Owner and reference required: {}.",
+                    resource.name
+                ));
             }
             if resource.status == Preparation::Planned && !complete(&resource.activation_plan) {
-                errors.push(format!("Piano di attivazione mancante: {}.", resource.name));
+                errors.push(crate::localized_format!(
+                    "Piano di attivazione mancante: {}.",
+                    "Missing activation plan: {}.",
+                    resource.name
+                ));
             }
             if resource.status == Preparation::Ready && resource.evidence.is_empty() {
-                errors.push(format!(
+                errors.push(crate::localized_format!(
                     "Risorsa dichiarata pronta senza evidenze: {}.",
+                    "Resource declared ready without evidence: {}.",
                     resource.name
                 ));
             }
@@ -207,7 +221,11 @@ fn validate(store: &Store, state: &State) -> Result<Vec<String>> {
     let root = format!(".dfd/features/{}", state.id);
     for name in ["rollout.md", "rollout.json"] {
         if !store.path(&format!("{root}/{name}"))?.is_file() {
-            errors.push(format!("Pre-release: manca {name}; eseguire pre-release."));
+            errors.push(crate::localized_format!(
+                "Pre-release: manca {name}; eseguire pre-release.",
+                "Pre-release: missing {name}; run pre-release.",
+                name = name
+            ));
         }
     }
     if !errors.is_empty() {
@@ -215,11 +233,16 @@ fn validate(store: &Store, state: &State) -> Result<Vec<String>> {
     }
     let rollout: Rollout = store.json(&format!("{root}/rollout.json"))?;
     if rollout.development_fingerprint != development_fingerprint(store, state)? {
-        errors.push("Rollout riferito a uno sviluppo precedente: verificare le evidenze e usare pre-release --refresh.".into());
+        errors.push(crate::i18n::text("Rollout riferito a uno sviluppo precedente: verificare le evidenze e usare pre-release --refresh."));
     }
     let markdown = store.read(&format!("{root}/rollout.md"))?;
-    if !complete(&markdown) || markdown.contains("[Nome Feature]") {
-        errors.push("Completare rollout.md e rimuovere i placeholder.".into());
+    if !complete(&markdown)
+        || markdown.contains("[Nome Feature]")
+        || markdown.contains("[Feature Name]")
+    {
+        errors.push(crate::i18n::text(
+            "Completare rollout.md e rimuovere i placeholder.",
+        ));
     }
     for (name, value) in [
         ("owner", &rollout.owner),
@@ -233,14 +256,18 @@ fn validate(store: &Store, state: &State) -> Result<Vec<String>> {
         ("on_call", &rollout.on_call),
     ] {
         if !complete(value) {
-            errors.push(format!("rollout.json: completare {name}."));
+            errors.push(crate::localized_format!(
+                "rollout.json: completare {name}.",
+                "rollout.json: complete {name}.",
+                name = name
+            ));
         }
     }
     if !rollout.open_questions.is_empty() {
-        errors.push("Dubbi di pre-release ancora aperti.".into());
+        errors.push(crate::i18n::text("Dubbi di pre-release ancora aperti."));
     }
     if rollout.steps.is_empty() {
-        errors.push("Definire almeno una fase di rollout.".into());
+        errors.push(crate::i18n::text("Definire almeno una fase di rollout."));
     }
     let mut ids = BTreeSet::new();
     let mut previous = 0;
@@ -255,17 +282,23 @@ fn validate(store: &Store, state: &State) -> Result<Vec<String>> {
             || step.percentage < previous
             || step.duration_minutes == 0
         {
-            errors.push(format!("Fase di rollout non valida: {}.", step.id));
+            errors.push(crate::localized_format!(
+                "Fase di rollout non valida: {}.",
+                "Invalid rollout stage: {}.",
+                step.id
+            ));
         }
         previous = step.percentage;
     }
     if previous != 100 {
-        errors.push("Il rollout deve terminare al 100% dell'audience prevista.".into());
+        errors.push(crate::i18n::text(
+            "Il rollout deve terminare al 100% dell'audience prevista.",
+        ));
     }
     match rollout.strategy {
-        RolloutStrategy::Direct if rollout.steps.len() != 1 => {
-            errors.push("Rollout diretto: usare una sola fase al 100%.".into())
-        }
+        RolloutStrategy::Direct if rollout.steps.len() != 1 => errors.push(crate::i18n::text(
+            "Rollout diretto: usare una sola fase al 100%.",
+        )),
         RolloutStrategy::Canary | RolloutStrategy::Combined
             if rollout.steps.len() < 2
                 || rollout
@@ -273,9 +306,9 @@ fn validate(store: &Store, state: &State) -> Result<Vec<String>> {
                     .first()
                     .is_none_or(|step| step.percentage >= 100) =>
         {
-            errors.push(
-                "Canary: prevedere esposizione iniziale parziale e successiva promozione.".into(),
-            )
+            errors.push(crate::i18n::text(
+                "Canary: prevedere esposizione iniziale parziale e successiva promozione.",
+            ))
         }
         _ => {}
     }
@@ -299,30 +332,38 @@ fn validate(store: &Store, state: &State) -> Result<Vec<String>> {
             .iter()
             .any(|value| !complete(value))
         {
-            errors.push(format!(
+            errors.push(crate::localized_format!(
                 "Criterio di rilascio sconosciuto, duplicato o incompleto: {}.",
+                "Unknown, duplicate or incomplete release criterion: {}.",
                 criterion.id
             ));
         }
         if !markdown_ids.contains(&criterion.id) {
-            errors.push(format!("rollout.md: manca {}.", criterion.id));
+            errors.push(crate::localized_format!(
+                "rollout.md: manca {}.",
+                "rollout.md: missing {}.",
+                criterion.id
+            ));
         }
     }
     for id in applicable.difference(&covered) {
-        errors.push(format!(
-            "Criterio applicabile senza validazione in produzione: {id}."
+        errors.push(crate::localized_format!(
+            "Criterio applicabile senza validazione in produzione: {id}.",
+            "Applicable criterion lacks production validation: {id}.",
+            id = id
         ));
     }
     for id in markdown_ids.difference(&applicable.iter().map(|id| id.to_string()).collect()) {
-        errors.push(format!(
-            "rollout.md: criterio non applicabile o sconosciuto: {id}."
+        errors.push(crate::localized_format!(
+            "rollout.md: criterio non applicabile o sconosciuto: {id}.",
+            "rollout.md: excluded or unknown criterion: {id}.",
+            id = id
         ));
     }
     if rollout.alarms.is_empty() || rollout.dashboards.is_empty() {
-        errors.push(
-            "Dichiarare allarmi e dashboard, anche come esclusioni motivate nel percorso light."
-                .into(),
-        );
+        errors.push(crate::i18n::text(
+            "Dichiarare allarmi e dashboard, anche come esclusioni motivate nel percorso light.",
+        ));
     }
     let light = state.route == Some(Route::Light);
     for resource in rollout.alarms.iter().chain(&rollout.dashboards) {
@@ -334,47 +375,62 @@ fn validate(store: &Store, state: &State) -> Result<Vec<String>> {
         if !["load", "resilience", "security"].contains(&test.area.as_str())
             || !areas.insert(test.area.as_str())
         {
-            errors.push(format!(
+            errors.push(crate::localized_format!(
                 "Area di test non funzionale sconosciuta o duplicata: {}.",
+                "Unknown or duplicate nonfunctional test area: {}.",
                 test.area
             ));
         }
         match test.applicability {
             Applicability::Excluded => {
                 if !complete(&test.justification) || test.execution.is_some() {
-                    errors.push(format!(
+                    errors.push(crate::localized_format!(
                         "Esclusione test non motivata o incoerente: {}.",
+                        "Unjustified or inconsistent test exclusion: {}.",
                         test.area
                     ));
                 }
             }
             Applicability::Applicable => match &test.execution {
-                None => errors.push(format!("Test non funzionale da eseguire: {}.", test.area)),
+                None => errors.push(crate::localized_format!(
+                    "Test non funzionale da eseguire: {}.",
+                    "Nonfunctional test still to run: {}.",
+                    test.area
+                )),
                 Some(execution) => {
                     if !complete(&execution.command)
                         || !date_valid(&execution.executed_at)
                         || execution.exit_code != 0
                     {
-                        errors.push(format!("Esecuzione test non valida: {}.", test.area));
+                        errors.push(crate::localized_format!(
+                            "Esecuzione test non valida: {}.",
+                            "Invalid test execution: {}.",
+                            test.area
+                        ));
                     }
                     errors.extend(development::file_errors(store, &execution.log)?);
                     if store.path(&execution.log.path)?.is_file()
                         && !nonblank(&store.read(&execution.log.path)?)
                     {
-                        errors.push(format!("Log test vuoto: {}.", test.area));
+                        errors.push(crate::localized_format!(
+                            "Log test vuoto: {}.",
+                            "Empty test log: {}.",
+                            test.area
+                        ));
                     }
                 }
             },
         }
     }
     if areas != ["load", "resilience", "security"].into_iter().collect() {
-        errors.push(
-            "Valutare carico, resilienza e sicurezza, eseguiti oppure esclusi con motivazione."
-                .into(),
-        );
+        errors.push(crate::i18n::text(
+            "Valutare carico, resilienza e sicurezza, eseguiti oppure esclusi con motivazione.",
+        ));
     }
     if rollout.communications.is_empty() {
-        errors.push("Registrare la comunicazione a Supporto / stakeholder.".into());
+        errors.push(crate::i18n::text(
+            "Registrare la comunicazione a Supporto / stakeholder.",
+        ));
     }
     for communication in &rollout.communications {
         if [
@@ -386,13 +442,15 @@ fn validate(store: &Store, state: &State) -> Result<Vec<String>> {
         .any(|value| !complete(value))
             || !date_valid(&communication.informed_at)
         {
-            errors.push("Comunicazione incompleta o con data non valida.".into());
+            errors.push(crate::i18n::text(
+                "Comunicazione incompleta o con data non valida.",
+            ));
         }
     }
     if let Some(decision) = state.decisions.last() {
         for condition in &decision.conditions {
             if !matches!(condition.due_phase.as_str(), "rollout" | "post-release") {
-                errors.push(format!("Condizione di design da risolvere prima della release: {}. Registrare la nuova decisione umana.", condition.text));
+                errors.push(crate::localized_format!("Condizione di design da risolvere prima della release: {}. Registrare la nuova decisione umana.", "Design condition to resolve before release: {}. Record the new human decision.", condition.text));
             }
         }
     }
@@ -489,7 +547,11 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
 pub(super) fn review(store: &Store, id: &str) -> Result<(Value, i32)> {
     let state = state(store, id)?;
     let output = status(store, &state)?;
-    let mut report = format!("# Review di release DFD\n\nGate: {}\n\n", output["gate"]);
+    let mut report = crate::localized_format!(
+        "# Review di release DFD\n\nGate: {}\n\n",
+        "# DFD release review\n\nGate: {}\n\n",
+        output["gate"]
+    );
     for error in output["errors"].as_array().unwrap() {
         report.push_str(&format!("- {}\n", error.as_str().unwrap()));
     }
@@ -498,12 +560,13 @@ pub(super) fn review(store: &Store, id: &str) -> Result<(Value, i32)> {
         .into_iter()
         .flatten()
     {
-        report.push_str(&format!(
+        report.push_str(&crate::localized_format!(
             "- Attivazione pianificata: {}\n",
+            "- Planned activation: {}\n",
             pending.as_str().unwrap()
         ));
     }
-    report.push_str("\nControlli strutturali: serve la review semantica del responsabile. La CLI non comunica agli stakeholder, configura risorse o esegue il rollout.\n");
+    report.push_str(&crate::i18n::text("\nControlli strutturali: serve la review semantica del responsabile. La CLI non comunica agli stakeholder, configura risorse o esegue il rollout.\n"));
     store.write(
         &format!(".dfd/features/{id}/release-review.md"),
         report.as_bytes(),
@@ -521,8 +584,9 @@ pub(super) fn decide(store: &Store, id: &str, input: HumanDecision) -> Result<(V
     let mut state = state(store, id)?;
     let errors = validate(store, &state)?;
     if input.verdict != Verdict::ChangesRequested && !errors.is_empty() {
-        return Err(Error::message(format!(
+        return Err(Error::message(crate::localized_format!(
             "Release non approvabile: {}",
+            "Release cannot be approved: {}",
             errors.join("; ")
         )));
     }

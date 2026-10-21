@@ -6,7 +6,7 @@
     ".agents/skills/dfd-assess/SKILL.md": "750bce6567c94fbe492760ce2c7a4cb79d6c84e02ac5fff3907694045a6a0e40",
     ".agents/skills/dfd-feature/SKILL.md": "0cacfddf3ef89ec717ef1df5c2c91df8adcecf74444e7e9d9cdf6740f7fd2b7a",
     ".agents/skills/dfd-implement/SKILL.md": "23906e1d393c1f677e713110860b48dee0b4be68f65bb00c5c592272f5010f31",
-    ".agents/skills/dfd-init/SKILL.md": "07b03c0b3d3c7f3d3e66e15d232302e019eeab59d3fdf3231a3ccf5cfbce16a6",
+    ".agents/skills/dfd-init/SKILL.md": "3cbe44d7d848f0eb096edc1ddc5a107a0cc7d8cfc82a97570fc82e821fdc202f",
     ".agents/skills/dfd-plan/SKILL.md": "d9309e3a5c16ac69ec0501ec935c2498d3e3b434643d286466434fdaaca59d1b",
     ".agents/skills/dfd-pre-release/SKILL.md": "443a76939b38ce782b8210e3083fede1e05a75da3fac4538e215ea280bba40e3",
     ".agents/skills/dfd-review-design/SKILL.md": "3dc4403a64b8dac2078ae19018dd8614923bd55f88254566ca7bfe0a0697d132",
@@ -17,7 +17,7 @@
     ".agents/skills/dfd-verify/SKILL.md": "99bba09a722302a16ea6ada0cb60fa78689d1da73bdaf9f2b0e0265137b48c9e",
     ".dfd/kit/adozione.md": "81d9c7ed037e14b1a82dc039f12975e1badb9ca45050acef4548bcc7544b9922",
     ".dfd/kit/examples/checkout_dod.md": "bd35853f412173d8e8dba26ef0771619ba6a74d7e60159901b254f1954c100c8",
-    ".dfd/kit/examples/checkout_paypal_spec.md": "474373cfe2dacff0b381cbc38a49591ad465cdd1c5efa9558d49985d5acc0c84",
+    ".dfd/kit/examples/checkout_paypal_spec.md": "fa1962a311eb499758347445c844cfedba654d4b527db6744d17fa319b6d4e56",
     ".dfd/kit/fondamenta.md": "e5a38579dbe0763c23e0a50b4e7a32fc4a58ad11c591541132b144c15bc767c4",
     ".dfd/kit/processo-e2e.md": "43e3cc18cb14bfe6f3444bc2bc1308da257a7b2c334ca7101e614737e4e79197",
     ".dfd/kit/raci.md": "3472383c2cf242b8ec8bdea1ee4b6f99794c03398f575e35a562dab4483e8b5e",
@@ -25,7 +25,7 @@
     ".dfd/kit/skills/dfd-assess/SKILL.md": "750bce6567c94fbe492760ce2c7a4cb79d6c84e02ac5fff3907694045a6a0e40",
     ".dfd/kit/skills/dfd-feature/SKILL.md": "0cacfddf3ef89ec717ef1df5c2c91df8adcecf74444e7e9d9cdf6740f7fd2b7a",
     ".dfd/kit/skills/dfd-implement/SKILL.md": "23906e1d393c1f677e713110860b48dee0b4be68f65bb00c5c592272f5010f31",
-    ".dfd/kit/skills/dfd-init/SKILL.md": "07b03c0b3d3c7f3d3e66e15d232302e019eeab59d3fdf3231a3ccf5cfbce16a6",
+    ".dfd/kit/skills/dfd-init/SKILL.md": "3cbe44d7d848f0eb096edc1ddc5a107a0cc7d8cfc82a97570fc82e821fdc202f",
     ".dfd/kit/skills/dfd-plan/SKILL.md": "d9309e3a5c16ac69ec0501ec935c2498d3e3b434643d286466434fdaaca59d1b",
     ".dfd/kit/skills/dfd-pre-release/SKILL.md": "443a76939b38ce782b8210e3083fede1e05a75da3fac4538e215ea280bba40e3",
     ".dfd/kit/skills/dfd-review-design/SKILL.md": "3dc4403a64b8dac2078ae19018dd8614923bd55f88254566ca7bfe0a0697d132",
@@ -38,7 +38,7 @@
     ".dfd/kit/templates/cambiamento_rapido.md": "bafc723ba0a7cc39f9f4180b9f6c4330c539b5907169ad057959045d2ac4d650",
     ".dfd/kit/templates/collaborazione.md": "2a177838cc6e815333702c3394423d26b337c5f2e4e396370f5a973578fcd1a6",
     ".dfd/kit/templates/configurazione_rollout.md": "69be0199cb8be4120515b19e6c8c2b756ceee90af278a70a7a0c28df7c18781d",
-    ".dfd/kit/templates/contratto_toolkit.md": "13984bef3c413b0ce8419e3b9e96b6c44dc34da4d8a837e605f8f85f587aa582",
+    ".dfd/kit/templates/contratto_toolkit.md": "d97a81129d100c82aaec416e8a7d8baa75f805d5bd582ffc781ec09c510abc5c",
     ".dfd/kit/templates/dod-estesa.md": "ef75f9dc90f79a2884b7d9317234c72151257d63dd63bfa416fbe9a0497aaa53",
     ".dfd/kit/templates/guardrail_dominio.md": "f55d1f87c7e75e3159dbfe57559aea22585dc4a4cf7bebcfcc752e9d8cae397d",
     ".dfd/kit/templates/processo_dominio.md": "594e68b1c6671a00383fd489176bd62cb760688cb5ebeed7fe8539cca0713fd2",
@@ -47,6 +47,6 @@
     ".dfd/kit/templates/review_indice.md": "02367218453b325686483e8f09fb367631104d36c1f0b8a85c382343c2577c50",
     ".dfd/kit/templates/review_release.md": "b66c658fbec1335757ab1831ebddbf7c6f67e93ea59df0a419371b25886bdd60",
     ".dfd/kit/templates/review_release_light.md": "e5824fea7a789825cbee53b094abb0da1646e243f18ff4c5ee106d7f4884587a",
-    ".dfd/kit/templates/specifica_feature.md": "12f7f2e8a239a7e080c88d8bd89727fc732cf482c871d8c195980083c6ce2576"
+    ".dfd/kit/templates/specifica_feature.md": "7209277d16341fe63fe4cf97bc0a20b112eb455de728d372bb34496f94447cd5"
   }
 }

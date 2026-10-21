@@ -1,0 +1,22 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-_f5lg0w7)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.89s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-0da0f992897ec05a)
+
+running 1 test
+test bilingual_project_language_resources_and_preservation ... FAILED
+
+failures:
+
+---- bilingual_project_language_resources_and_preservation stdout ----
+
+thread 'bilingual_project_language_resources_and_preservation' (22588316) panicked at tests/workflow.rs:2153:5:
+assertion failed: repeated["next"].as_str().unwrap().contains("Phase 0")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    bilingual_project_language_resources_and_preservation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 72 filtered out; finished in 1.60s
+
+error: test failed, to rerun pass `--test workflow`

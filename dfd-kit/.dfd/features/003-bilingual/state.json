@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "id": "003-bilingual",
+  "title": "Framework e toolkit bilingui italiano e inglese",
+  "domain": "dfd-kit",
+  "kind": "feature",
+  "scope": "Percorsi documentali separati IT/EN, glossario, lingua di progetto, skill e risorse incorporate localizzate; contratti macchina invariati",
+  "phase": "development-verified",
+  "created_at": "2026-10-21T07:34:18.238697Z",
+  "risk": "medium",
+  "route": "full-proportional",
+  "assessment_hash": "0a5dbc25b23716803da56ecd0dd980c965a0bbd99c50860590aae0c2c42065e4",
+  "decisions": [
+    {
+      "decision": "approved",
+      "reviewer": "manutentore del repository",
+      "role": "tech-lead",
+      "note": "Riuso della decisione espressa dall’utente: «ok, procedi», sulla proposta presentata di due percorsi completi IT/EN, lingua di progetto per toolkit e identificatori invariati. Nessun rilascio autorizzato.",
+      "conditions": [],
+      "recorded_at": "2026-10-21T07:35:36.706404Z",
+      "fingerprint": "3d32a9d76b1144688224bc5feb940334c38f98855e3ebe9fdab0381b45364df2"
+    }
+  ],
+  "selective_review": true
+}

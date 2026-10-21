@@ -3,6 +3,8 @@ name: dfd-setup
 description: Definire o aggiornare la Fase 0 DFD di un dominio: DoD, guardrail, template locali e convenzioni di processo, prima del design delle feature.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-setup/SKILL.md)
+
 # Setup DFD di dominio
 
 Leggere `.dfd/kit/fondamenta.md`, `.dfd/kit/processo-e2e.md` e `.dfd/kit/templates/contratto_toolkit.md`. La Fase 0 costituisce il riferimento condiviso del dominio, paragonabile alla constitution di SDD, ed evolve con i learning di produzione.

@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](review_design_light.md) | [English](../en/templates/review_design_light.md)
+
 # Checklist di Review DFD – Design (Light)
 
 > **Tipo di review**: design (feature piccola / basso rischio)  

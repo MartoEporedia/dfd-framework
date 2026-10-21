@@ -1,0 +1,31 @@
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/dfd-mutants-_f5lg0w7)
+warning: constant `FILES_EN` is never used
+  --> /Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/build/dfd-kit-d534de0c2e03cfcb/out/bundle.rs:36:11
+   |
+36 | pub const FILES_EN: &[(&str, &str)] = &[
+   |           ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dfd-kit` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.84s
+     Running tests/workflow.rs (/Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-build/debug/deps/workflow-0da0f992897ec05a)
+
+running 1 test
+test bilingual_english_resources_work_in_every_adapter_offline ... FAILED
+
+failures:
+
+---- bilingual_english_resources_work_in_every_adapter_offline stdout ----
+
+thread 'bilingual_english_resources_work_in_every_adapter_offline' (22587719) panicked at tests/workflow.rs:2313:9:
+assertion failed: skill.contains("# Adopting DFD")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    bilingual_english_resources_work_in_every_adapter_offline
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 72 filtered out; finished in 0.98s
+
+error: test failed, to rerun pass `--test workflow`

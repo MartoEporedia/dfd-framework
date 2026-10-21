@@ -3,6 +3,8 @@ name: dfd-status
 description: Riprendere il lavoro DFD da un altro harness o sessione, leggere fase, rischio, decisioni e blocchi e individuare la prossima azione.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-status/SKILL.md)
+
 # Riprendere il workflow DFD
 
 Eseguire `dfd status [<id>]` nella radice del repository adottante. Senza identificatore elenca setup dei domini e feature; con identificatore verifica anche il gate di design. Usare `.dfd/kit/templates/contratto_toolkit.md` per interpretare i campi.

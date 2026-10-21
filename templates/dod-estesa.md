@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](dod-estesa.md) | [English](../en/templates/dod-estesa.md)
+
 # DoD Estesa – [Prodotto / Dominio / Servizio]
 
 > **Stato**: draft / stabile / in revisione  

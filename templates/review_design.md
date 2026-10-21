@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](review_design.md) | [English](../en/templates/review_design.md)
+
 # Checklist di Review DFD – Design
 
 > **Tipo di review**: design  

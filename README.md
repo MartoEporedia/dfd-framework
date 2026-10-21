@@ -1,4 +1,10 @@
+<!-- dfd-language --> [Italiano](README.md) | [English](en/README.md)
+
 # DFD Framework
+
+**Italiano:** framework, template ed esempi nei percorsi qui sotto. **English:** [complete reading paths](en/README.md).
+
+DFD Kit: [Italiano](dfd-kit/README.md) | [English](dfd-kit/en/README.md). [Glossario e manutenzione](glossario.md) / [Glossary and maintenance](en/glossario.md).
 
 Framework DoD-First Driven: dalla specifica iterativa al rilascio, con criteri verificabili e review proporzionate al rischio.
 

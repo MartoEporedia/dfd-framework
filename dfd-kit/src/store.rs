@@ -28,8 +28,10 @@ impl Store {
             || relative.contains('\\')
             || rel.components().any(|c| !matches!(c, Component::Normal(_)))
         {
-            return Err(Error::message(format!(
-                "Percorso non consentito: {relative}"
+            return Err(Error::message(crate::localized_format!(
+                "Percorso non consentito: {relative}",
+                "Path not allowed: {relative}",
+                relative = relative
             )));
         }
         let mut current = self.root.clone();
@@ -37,8 +39,9 @@ impl Store {
             current.push(part.as_os_str());
             match fs::symlink_metadata(&current) {
                 Ok(meta) if meta.file_type().is_symlink() => {
-                    return Err(Error::message(format!(
+                    return Err(Error::message(crate::localized_format!(
                         "Symlink non consentito: {}",
+                        "Symlink not allowed: {}",
                         current.display()
                     )))
                 }
@@ -52,16 +55,32 @@ impl Store {
 
     pub fn read(&self, relative: &str) -> Result<String> {
         let path = self.path(relative)?;
-        fs::read_to_string(path)
-            .map_err(|error| Error::message(format!("Lettura {relative}: {error}")))
+        fs::read_to_string(path).map_err(|error| {
+            Error::message(crate::localized_format!(
+                "Lettura {relative}: {error}",
+                "Reading {relative}: {error}",
+                relative = relative,
+                error = error
+            ))
+        })
     }
     pub fn json<T: DeserializeOwned>(&self, relative: &str) -> Result<T> {
         let value: serde_json::Value = serde_json::from_str(&self.read(relative)?)?;
         if value["schema_version"] != 1 {
-            return Err(Error::message(format!("Schema non supportato: {relative}")));
+            return Err(Error::message(crate::localized_format!(
+                "Schema non supportato: {relative}",
+                "Unsupported schema: {relative}",
+                relative = relative
+            )));
         }
-        serde_json::from_value(value)
-            .map_err(|error| Error::message(format!("JSON non valido in {relative}: {error}")))
+        serde_json::from_value(value).map_err(|error| {
+            Error::message(crate::localized_format!(
+                "JSON non valido in {relative}: {error}",
+                "Invalid JSON in {relative}: {error}",
+                relative = relative,
+                error = error
+            ))
+        })
     }
     pub fn write(&self, relative: &str, content: &[u8], exclusive: bool) -> Result<()> {
         let path = self.path(relative)?;
@@ -76,14 +95,22 @@ impl Store {
         temporary.as_file().sync_all()?;
         if exclusive {
             temporary.persist_noclobber(&path).map_err(|error| {
-                Error::message(format!(
-                    "File esistente o scrittura fallita, preservato {relative}: {error}"
+                Error::message(crate::localized_format!(
+                    "File esistente o scrittura fallita, preservato {relative}: {error}",
+                    "Existing file or failed write, preserved {relative}: {error}",
+                    relative = relative,
+                    error = error
                 ))
             })?;
         } else {
-            temporary
-                .persist(&path)
-                .map_err(|error| Error::message(format!("Scrittura {relative}: {error}")))?;
+            temporary.persist(&path).map_err(|error| {
+                Error::message(crate::localized_format!(
+                    "Scrittura {relative}: {error}",
+                    "Writing {relative}: {error}",
+                    relative = relative,
+                    error = error
+                ))
+            })?;
         }
         Ok(())
     }
@@ -99,7 +126,7 @@ impl Store {
         let path = self.path(".dfd/lock")?;
         fs::create_dir_all(path.parent().unwrap())?;
         let mut file = OpenOptions::new().write(true).create_new(true).open(&path)
-            .map_err(|error| Error::message(format!("Impossibile acquisire .dfd/lock: {error}. Verificare che non ci siano altri comandi DFD attivi.")))?;
+            .map_err(|error| Error::message(crate::localized_format!("Impossibile acquisire .dfd/lock: {error}. Verificare che non ci siano altri comandi DFD attivi.", "Cannot acquire .dfd/lock: {error}. Check that no other DFD commands are running.", error = error)))?;
         writeln!(file, "{}", std::process::id())?;
         Ok(Lock(path))
     }

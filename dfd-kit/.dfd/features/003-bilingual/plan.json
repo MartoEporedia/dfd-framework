@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "3d32a9d76b1144688224bc5feb940334c38f98855e3ebe9fdab0381b45364df2",
+  "tasks": [
+    {
+      "id": "bilingual",
+      "owner": "manutentore del repository",
+      "description": "Rendere completi i percorsi IT/EN e il workflow locale del toolkit",
+      "criteria": [
+        "OBS-01",
+        "OBS-02",
+        "SEC-01",
+        "SEC-02",
+        "SEC-03",
+        "SLO-01",
+        "SLO-02",
+        "COST-01",
+        "UX-01",
+        "UX-02"
+      ],
+      "implementation": "Aggiungere lingua enum it/en, preferenza separata, override e cambio con preflight; incorporare due bundle, localizzare messaggi prima dei valori utente; tradurre guide, template, esempi e dodici skill, con glossario e manifest di sincronizzazione.",
+      "verification": "Regressione CLI cargo test --locked --offline bilingual: red su opzioni/comando mancanti, green su risorse, persistenza, conflitti, preservazione, gate, preferenze e quattro adapter. Verifica editoriale check_translations.py, fmt, Clippy, test Python e suite completa locale; tre mutanti mirati lingua/preservazione."
+    }
+  ],
+  "open_questions": []
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "medium",
+      "rationale": "Selezione trasversale della lingua, risorse incorporate e compatibilità dei progetti esistenti."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Estensione additiva IT/EN con italiano predefinito per i progetti esistenti."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Risorse statiche incorporate; nessun runtime o servizio di traduzione richiesto."
+    },
+    "reliability": {
+      "level": "medium",
+      "rationale": "Parità delle istruzioni normative, preservazione degli artefatti e diagnostica dei gate nelle due lingue."
+    },
+    "security": {
+      "level": "low",
+      "rationale": "Nessun nuovo accesso esterno o dato personale; riuso di Store, lock e preflight conflitti."
+    }
+  }
+}

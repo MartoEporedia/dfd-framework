@@ -1,6 +1,7 @@
 pub mod cli;
 mod collaboration;
 mod development;
+pub mod i18n;
 pub mod model;
 mod quick;
 mod release;
@@ -41,7 +42,7 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 pub struct Error(String);
 impl Error {
     pub fn message(value: impl Into<String>) -> Self {
-        Self(value.into())
+        Self(i18n::text(&value.into()))
     }
 }
 impl fmt::Display for Error {
@@ -79,11 +80,17 @@ fn nonblank(value: &str) -> bool {
     !value.trim().is_empty()
 }
 fn resource(name: &str) -> Result<&'static str> {
-    bundle::FILES
+    i18n::files()
         .iter()
         .find(|(path, _)| *path == name)
         .map(|(_, body)| *body)
-        .ok_or_else(|| Error::message(format!("Risorsa incorporata assente: {name}")))
+        .ok_or_else(|| {
+            Error::message(crate::localized_format!(
+                "Risorsa incorporata assente: {name}",
+                "Missing embedded resource: {name}",
+                name = name
+            ))
+        })
 }
 fn config(store: &Store) -> Result<Config> {
     let config: Config = store.json(".dfd/config.json")?;
@@ -116,8 +123,10 @@ fn adoption(store: &Store, domain: &str) -> Result<Adoption> {
         if matches!(area.status, AdoptionStatus::Observed)
             && (area.evidence.is_empty() || area.evidence.iter().any(|source| !nonblank(source)))
         {
-            return Err(Error::message(format!(
-                "Area osservata senza evidenze: {name}"
+            return Err(Error::message(crate::localized_format!(
+                "Area osservata senza evidenze: {name}",
+                "Observed area without evidence: {name}",
+                name = name
             )));
         }
     }
@@ -233,7 +242,7 @@ fn install(store: &Store, harness: Harness) -> Result<Value> {
         }
     };
     let mut payload = BTreeMap::new();
-    for (relative, body) in bundle::FILES {
+    for (relative, body) in i18n::files() {
         payload.insert(format!(".dfd/kit/{relative}"), *body);
         if let Some(skill) = relative.strip_prefix("skills/") {
             payload.insert(format!("{}/{skill}", harness.directory()), *body);
@@ -246,21 +255,27 @@ fn install(store: &Store, harness: Harness) -> Result<Value> {
                 && relative.ends_with("/SKILL.md")
         });
         if !relative.starts_with(".dfd/kit/") && !is_skill {
-            return Err(Error::message(format!(
-                "Voce non gestibile nel manifest: {relative}"
+            return Err(Error::message(crate::localized_format!(
+                "Voce non gestibile nel manifest: {relative}",
+                "Unmanaged manifest entry: {relative}",
+                relative = relative
             )));
         }
         let path = store.path(relative)?;
         if path.exists() && (!path.is_file() || store.hash(relative)? != *expected) {
-            return Err(Error::message(format!(
-                "Installazione annullata; file modificato preservato: {relative}"
+            return Err(Error::message(crate::localized_format!(
+                "Installazione annullata; file modificato preservato: {relative}",
+                "Installation cancelled; modified file preserved: {relative}",
+                relative = relative
             )));
         }
     }
     for relative in payload.keys() {
         if store.path(relative)?.exists() && !old.files.contains_key(relative) {
-            return Err(Error::message(format!(
-                "Installazione annullata; file non gestito preservato: {relative}"
+            return Err(Error::message(crate::localized_format!(
+                "Installazione annullata; file non gestito preservato: {relative}",
+                "Installation cancelled; unmanaged file preserved: {relative}",
+                relative = relative
             )));
         }
     }
@@ -278,8 +293,10 @@ fn install(store: &Store, harness: Harness) -> Result<Value> {
             let relative = format!("{}/{name}/SKILL.md", adapter.directory());
             let path = store.path(&relative)?;
             if path.exists() && !old.files.contains_key(&relative) {
-                return Err(Error::message(format!(
-                    "Skill DFD non gestita nel percorso di compatibilità: {relative}"
+                return Err(Error::message(crate::localized_format!(
+                    "Skill DFD non gestita nel percorso di compatibilità: {relative}",
+                    "Unmanaged DFD skill in compatibility path: {relative}",
+                    relative = relative
                 )));
             }
         }
@@ -346,7 +363,9 @@ fn lifecycle(store: &Store, domain: &str) -> Result<Lifecycle> {
             schema_version: 1,
             mode: LifecycleMode::ReleasePreparation,
             ci_required: true,
-            rationale: "Compatibilità legacy: CI richiesta prima della pre-release.".into(),
+            rationale: crate::i18n::text(
+                "Compatibilità legacy: CI richiesta prima della pre-release.",
+            ),
         });
     }
     let policy: Lifecycle = store.json(&relative)?;
@@ -370,36 +389,53 @@ fn setup_errors(store: &Store, domain: &str) -> Result<Vec<String>> {
     for file in ["dod.md", "guardrails.md", "process.md"] {
         let relative = format!("{root}/{file}");
         if !store.path(&relative)?.is_file() {
-            errors.push(format!(
-                "Fase 0: manca {relative}; eseguire init e completare il setup."
+            errors.push(crate::localized_format!(
+                "Fase 0: manca {relative}; eseguire init e completare il setup.",
+                "Phase 0: missing {relative}; run init and complete setup.",
+                relative = relative
             ));
             continue;
         }
         let body = store.read(&relative)?;
         if !nonblank(&body)
-            || ["TODO", "YYYY-MM-DD", "[Prodotto / Dominio / Servizio]"]
-                .iter()
-                .any(|marker| body.contains(marker))
+            || [
+                "TODO",
+                "YYYY-MM-DD",
+                "[Prodotto / Dominio / Servizio]",
+                "[Product / Domain / Service]",
+            ]
+            .iter()
+            .any(|marker| body.contains(marker))
         {
-            errors.push(format!("Fase 0: completare {relative}."));
+            errors.push(crate::localized_format!(
+                "Fase 0: completare {relative}.",
+                "Phase 0: complete {relative}.",
+                relative = relative
+            ));
         }
     }
     for name in DOMAIN_TEMPLATES {
         let relative = format!("{root}/templates/{name}");
         if !store.path(&relative)?.is_file() || !nonblank(&store.read(&relative)?) {
-            errors.push(format!(
-                "Fase 0: template locale assente o vuoto: {relative}."
+            errors.push(crate::localized_format!(
+                "Fase 0: template locale assente o vuoto: {relative}.",
+                "Phase 0: local template missing or empty: {relative}.",
+                relative = relative
             ));
         }
     }
     let relative = format!("{root}/criteria.json");
     if !store.path(&relative)?.is_file() {
-        errors.push(format!("Fase 0: manca {relative}."));
+        errors.push(crate::localized_format!(
+            "Fase 0: manca {relative}.",
+            "Phase 0: missing {relative}.",
+            relative = relative
+        ));
         return Ok(errors);
     }
     let catalog: Catalog = store.json(&relative)?;
     if catalog.criteria.is_empty() {
-        errors.push("Fase 0: catalogo DoD vuoto.".into());
+        errors.push(crate::i18n::text("Fase 0: catalogo DoD vuoto."));
     }
     let dod = format!("{root}/dod.md");
     let dod_ids = if store.path(&dod)?.is_file() {
@@ -413,17 +449,33 @@ fn setup_errors(store: &Store, domain: &str) -> Result<Vec<String>> {
             || !nonblank(&item.statement)
             || item.statement.contains("TODO")
         {
-            errors.push(format!("Fase 0: criterio non valido: {}.", item.id));
+            errors.push(crate::localized_format!(
+                "Fase 0: criterio non valido: {}.",
+                "Phase 0: invalid criterion: {}.",
+                item.id
+            ));
         }
         if !ids.insert(item.id.clone()) {
-            errors.push(format!("Fase 0: criterio duplicato: {}.", item.id));
+            errors.push(crate::localized_format!(
+                "Fase 0: criterio duplicato: {}.",
+                "Phase 0: duplicate criterion: {}.",
+                item.id
+            ));
         }
         if !dod_ids.contains(&item.id) {
-            errors.push(format!("Fase 0: criterio {} assente in dod.md.", item.id));
+            errors.push(crate::localized_format!(
+                "Fase 0: criterio {} assente in dod.md.",
+                "Phase 0: criterion {} missing in dod.md.",
+                item.id
+            ));
         }
     }
     for id in dod_ids.difference(&ids) {
-        errors.push(format!("Fase 0: criterio {id} assente nel catalogo."));
+        errors.push(crate::localized_format!(
+            "Fase 0: criterio {id} assente nel catalogo.",
+            "Phase 0: criterion {id} missing from catalog.",
+            id = id
+        ));
     }
     Ok(errors)
 }
@@ -527,7 +579,7 @@ fn init(store: &Store, harness: Harness, domain: &str, mode: Mode) -> Result<Val
         config.domains.push(domain.to_string());
     }
     if !store.path(".dfd/guardrails.md")?.exists() {
-        store.write(".dfd/guardrails.md", b"# Guardrail del progetto\n\nTODO: collegare policy, architettura e vincoli esistenti.\n", true)?;
+        store.write(".dfd/guardrails.md", crate::i18n::text("# Guardrail del progetto\n\nTODO: collegare policy, architettura e vincoli esistenti.\n").as_bytes(), true)?;
     }
     for (file, source) in [
         ("guardrails.md", "guardrail_dominio.md"),
@@ -557,7 +609,7 @@ fn init(store: &Store, harness: Harness, domain: &str, mode: Mode) -> Result<Val
     }
     store.save(".dfd/config.json", &config, false)?;
     Ok(
-        json!({"domain": domain, "mode": mode, "harness": harness.name(), "next": "Completare la Fase 0 e verificare con dfd setup --domain <dominio>."}),
+        json!({"domain": domain, "mode": mode, "harness": harness.name(), "next": crate::i18n::text("Completare la Fase 0 e verificare con dfd setup --domain <dominio>.")}),
     )
 }
 
@@ -629,7 +681,9 @@ fn new_feature(
         },
         true,
     )?;
-    Ok(json!({"feature": id, "next": "Compilare risk.json, poi eseguire assess."}))
+    Ok(
+        json!({"feature": id, "next": crate::i18n::text("Compilare risk.json, poi eseguire assess.")}),
+    )
 }
 
 fn assess(store: &Store, id: &str) -> Result<(Value, i32)> {
@@ -649,8 +703,9 @@ fn assess(store: &Store, id: &str) -> Result<(Value, i32)> {
     } else {
         None
     };
-    let mut report = format!(
+    let mut report = crate::localized_format!(
         "# Assessment del rischio DFD\n\nRischio: {}\nPercorso: {}\n\n",
+        "# DFD risk assessment\n\nRisk: {}\nRoute: {}\n\n",
         serde_json::to_string(&result.risk)?,
         serde_json::to_string(&result.route)?
     );
@@ -662,9 +717,9 @@ fn assess(store: &Store, id: &str) -> Result<(Value, i32)> {
             dimension.rationale
         ));
     }
-    report.push_str(
+    report.push_str(&crate::i18n::text(
         "\nUna sola dimensione Medium segue light; nuovi servizi seguono full completo.\n",
-    );
+    ));
     store.save(&format!(".dfd/features/{id}/state.json"), &state, false)?;
     store.write(
         &format!(".dfd/features/{id}/risk.md"),
@@ -679,8 +734,9 @@ fn specify(store: &Store, id: &str) -> Result<Value> {
     let mut state = state(store, id)?;
     let errors = setup_errors(store, &state.domain)?;
     if !errors.is_empty() {
-        return Err(Error::message(format!(
+        return Err(Error::message(crate::localized_format!(
             "Setup del dominio incompleto: {}",
+            "Incomplete domain setup: {}",
             errors.join("; ")
         )));
     }
@@ -693,7 +749,7 @@ fn specify(store: &Store, id: &str) -> Result<Value> {
         let design: Design = store.json(&format!(".dfd/features/{id}/design.json"))?;
         return Ok(
             json!({"feature":id,"resumed":true,"open_questions":design.open_questions,
-            "next":"Riprendere spec.md e design.json: chiarire i dubbi e aggiornare entrambi iterativamente, poi review-design."}),
+            "next":crate::i18n::text("Riprendere spec.md e design.json: chiarire i dubbi e aggiornare entrambi iterativamente, poi review-design.")}),
         );
     }
     if spec_exists || design_exists {
@@ -727,7 +783,9 @@ fn specify(store: &Store, id: &str) -> Result<Value> {
     )?;
     state.phase = "design".into();
     store.save(&format!(".dfd/features/{id}/state.json"), &state, false)?;
-    Ok(json!({"feature": id, "next": "Completare spec.md e design.json, poi review-design."}))
+    Ok(
+        json!({"feature": id, "next": crate::i18n::text("Completare spec.md e design.json, poi review-design.")}),
+    )
 }
 
 fn criterion_ids(markdown: &str) -> BTreeSet<String> {
@@ -751,14 +809,16 @@ fn validate_design(store: &Store, state: &State) -> Result<Vec<String>> {
     if !store.path(&format!("{root}/spec.md"))?.is_file()
         || !store.path(&format!("{root}/design.json"))?.is_file()
     {
-        errors.push("Specifica assente: eseguire specify.".into());
+        errors.push(crate::i18n::text("Specifica assente: eseguire specify."));
         return Ok(errors);
     }
     let design: Design = store.json(&format!("{root}/design.json"))?;
     let spec = store.read(&format!("{root}/spec.md"))?;
-    for placeholder in ["TODO", "[Nome Feature]", "YYYY-MM-DD"] {
+    for placeholder in ["TODO", "[Nome Feature]", "[Feature Name]", "YYYY-MM-DD"] {
         if spec.contains(placeholder) {
-            errors.push("Specifica con placeholder da completare.".into());
+            errors.push(crate::i18n::text(
+                "Specifica con placeholder da completare.",
+            ));
             break;
         }
     }
@@ -769,31 +829,41 @@ fn validate_design(store: &Store, state: &State) -> Result<Vec<String>> {
         ("guardrails", &design.guardrails),
     ] {
         if !nonblank(value) {
-            errors.push(format!("design.json: manca {name}."));
+            errors.push(crate::localized_format!(
+                "design.json: manca {name}.",
+                "design.json: missing {name}.",
+                name = name
+            ));
         }
     }
     if design.business_metrics.is_empty()
         || design.business_metrics.iter().any(|value| !nonblank(value))
     {
-        errors.push("Definire almeno una metrica di successo.".into());
+        errors.push(crate::i18n::text(
+            "Definire almeno una metrica di successo.",
+        ));
     }
     if !nonblank(&design.epic.reference) || !nonblank(&design.epic.approved_by) {
-        errors.push("Riferimento e approvazione dell'epic mancanti.".into());
+        errors.push(crate::i18n::text(
+            "Riferimento e approvazione dell'epic mancanti.",
+        ));
     }
     match DateTime::parse_from_rfc3339(&design.epic.approved_at) {
         Ok(date) if date <= Utc::now() => {}
-        _ => errors.push(
-            "Data approvazione epic non valida: usare ISO 8601 con timezone, non futura.".into(),
-        ),
+        _ => errors.push(crate::i18n::text(
+            "Data approvazione epic non valida: usare ISO 8601 con timezone, non futura.",
+        )),
     }
     if !design.open_questions.is_empty() {
-        errors.push("Domande di design ancora aperte.".into());
+        errors.push(crate::i18n::text("Domande di design ancora aperte."));
     }
     let domain_root = format!(".dfd/domains/{}", state.domain);
     adoption(store, &state.domain)?;
     let catalog: Catalog = store.json(&format!("{domain_root}/criteria.json"))?;
     if catalog.criteria.is_empty() {
-        errors.push("Catalogo DoD vuoto: adattare la DoD del dominio.".into());
+        errors.push(crate::i18n::text(
+            "Catalogo DoD vuoto: adattare la DoD del dominio.",
+        ));
         return Ok(errors);
     }
     let dod_ids = criterion_ids(&store.read(&format!("{domain_root}/dod.md"))?);
@@ -801,39 +871,68 @@ fn validate_design(store: &Store, state: &State) -> Result<Vec<String>> {
     let mut ids = BTreeSet::new();
     for item in &catalog.criteria {
         if !valid_criterion(&item.id) || !nonblank(&item.statement) {
-            errors.push(format!("Criterio DoD non valido: {}.", item.id));
+            errors.push(crate::localized_format!(
+                "Criterio DoD non valido: {}.",
+                "Invalid DoD criterion: {}.",
+                item.id
+            ));
         }
         if !ids.insert(item.id.clone()) {
-            errors.push(format!("Criterio DoD duplicato: {}.", item.id));
+            errors.push(crate::localized_format!(
+                "Criterio DoD duplicato: {}.",
+                "Duplicate DoD criterion: {}.",
+                item.id
+            ));
         }
         if !dod_ids.contains(&item.id) {
-            errors.push(format!("Criterio {} non presente in dod.md.", item.id));
+            errors.push(crate::localized_format!(
+                "Criterio {} non presente in dod.md.",
+                "Criterion {} not present in dod.md.",
+                item.id
+            ));
         }
     }
     let mut covered = BTreeSet::new();
     let mut applicable = 0;
     for item in &design.criteria {
         if !ids.contains(&item.id) {
-            errors.push(format!("Criterio sconosciuto: {}.", item.id));
+            errors.push(crate::localized_format!(
+                "Criterio sconosciuto: {}.",
+                "Unknown criterion: {}.",
+                item.id
+            ));
         }
         if !covered.insert(item.id.clone()) {
-            errors.push(format!("Criterio duplicato nella specifica: {}.", item.id));
+            errors.push(crate::localized_format!(
+                "Criterio duplicato nella specifica: {}.",
+                "Duplicate criterion in specification: {}.",
+                item.id
+            ));
         }
         match item.applicability {
             Applicability::Applicable => {
                 applicable += 1;
                 if !nonblank(&item.implementation) || !nonblank(&item.verification) {
-                    errors.push(format!(
+                    errors.push(crate::localized_format!(
                         "Criterio {}: implementazione/verifica mancanti.",
+                        "Criterion {}: missing implementation/verification.",
                         item.id
                     ));
                 }
                 if !spec_ids.contains(&item.id) {
-                    errors.push(format!("Criterio {} non citato in spec.md.", item.id));
+                    errors.push(crate::localized_format!(
+                        "Criterio {} non citato in spec.md.",
+                        "Criterion {} not referenced in spec.md.",
+                        item.id
+                    ));
                 }
             }
             Applicability::Excluded if !nonblank(&item.justification) => {
-                errors.push(format!("Esclusione {} senza motivazione.", item.id))
+                errors.push(crate::localized_format!(
+                    "Esclusione {} senza motivazione.",
+                    "Exclusion {} has no justification.",
+                    item.id
+                ))
             }
             Applicability::Excluded => {}
         }
@@ -843,16 +942,23 @@ fn validate_design(store: &Store, state: &State) -> Result<Vec<String>> {
         .iter()
         .filter(|item| item.scope == CriterionScope::Changes && !covered.contains(&item.id))
     {
-        errors.push(format!(
+        errors.push(crate::localized_format!(
             "Criterio per il nuovo lavoro non valutato: {}.",
+            "Criterion for new work has not been assessed: {}.",
             item.id
         ));
     }
     if applicable == 0 {
-        errors.push("Collegare almeno un criterio DoD applicabile.".into());
+        errors.push(crate::i18n::text(
+            "Collegare almeno un criterio DoD applicabile.",
+        ));
     }
     for id in spec_ids.difference(&ids) {
-        errors.push(format!("Riferimento DoD sconosciuto in spec.md: {id}."));
+        errors.push(crate::localized_format!(
+            "Riferimento DoD sconosciuto in spec.md: {id}.",
+            "Unknown DoD reference in spec.md: {id}.",
+            id = id
+        ));
     }
     Ok(errors)
 }
@@ -951,19 +1057,22 @@ fn review_design(store: &Store, id: &str) -> Result<(Value, i32)> {
     let state = state(store, id)?;
     let errors = validate_design(store, &state)?;
     let gate = gate(store, &state, &errors)?;
-    let mut report =
-        format!("# Review di design DFD\n\nGate: {gate}\n\n## Controlli strutturali\n\n");
+    let mut report = crate::localized_format!(
+        "# Review di design DFD\n\nGate: {gate}\n\n## Controlli strutturali\n\n",
+        "# DFD design review\n\nGate: {gate}\n\n## Structural checks\n\n",
+        gate = gate
+    );
     if errors.is_empty() {
-        report.push_str(
+        report.push_str(&crate::i18n::text(
             "Nessuna lacuna strutturale rilevata. Serve la review semantica del responsabile.\n",
-        );
+        ));
     }
     for error in &errors {
         report.push_str(&format!("- {error}\n"));
     }
-    report.push_str(
+    report.push_str(&crate::i18n::text(
         "\nI controlli non provano la qualità del design e non attribuiscono approvazioni umane.\n",
-    );
+    ));
     store.write(
         &format!(".dfd/features/{id}/design-review.md"),
         report.as_bytes(),
@@ -1031,8 +1140,9 @@ fn decide(store: &Store, id: &str, input: HumanDecision) -> Result<(Value, i32)>
     let mut state = state(store, id)?;
     let errors = validate_design(store, &state)?;
     if input.verdict != Verdict::ChangesRequested && !errors.is_empty() {
-        return Err(Error::message(format!(
+        return Err(Error::message(crate::localized_format!(
             "Gate non approvabile: {}",
+            "Gate cannot be approved: {}",
             errors.join("; ")
         )));
     }
@@ -1117,10 +1227,10 @@ fn status(store: &Store, id: Option<&str>) -> Result<Value> {
     )
 }
 
-fn doctor() -> Result<Value> {
+fn doctor_language() -> Result<Value> {
     let mut names = vec![];
     let reference = Regex::new(r"`\.dfd/kit/([^`<> ]+\.md)`").unwrap();
-    for (path, body) in bundle::FILES
+    for (path, body) in i18n::files()
         .iter()
         .filter(|(path, _)| path.starts_with("skills/"))
     {
@@ -1135,8 +1245,10 @@ fn doctor() -> Result<Value> {
             || lines[2].len() > 1037
             || lines[2] == "description: "
         {
-            return Err(Error::message(format!(
-                "Frontmatter skill non valido: {path}"
+            return Err(Error::message(crate::localized_format!(
+                "Frontmatter skill non valido: {path}",
+                "Invalid skill frontmatter: {path}",
+                path = path
             )));
         }
         for capture in reference.captures_iter(body) {
@@ -1148,11 +1260,29 @@ fn doctor() -> Result<Value> {
         return Err(Error::message("Skill del workflow mancanti o inattese."));
     }
     Ok(
-        json!({"version":VERSION,"skills":names,"resources":bundle::FILES.len(),"runtime_dependencies":[]}),
+        json!({"version":VERSION,"skills":names,"resources":i18n::files().len(),"runtime_dependencies":[]}),
     )
 }
 
+fn doctor() -> Result<Value> {
+    let selected = i18n::current();
+    for language in [i18n::Language::It, i18n::Language::En] {
+        let _scope = i18n::Scope::enter(language);
+        doctor_language()?;
+    }
+    let _scope = i18n::Scope::enter(selected);
+    doctor_language()
+}
+
 pub fn execute(cli: Cli) -> Result<(Value, i32)> {
+    let _explicit_scope = i18n::Scope::enter(cli.lang.unwrap_or_default());
+    if matches!(cli.command, Command::Doctor) {
+        return Ok((doctor()?, 0));
+    }
+    execute_inner(cli)
+}
+
+fn execute_inner(cli: Cli) -> Result<(Value, i32)> {
     // Doctor does not depend on a working repository or external resources.
     if matches!(cli.command, Command::Doctor) {
         return Ok((doctor()?, 0));
@@ -1163,13 +1293,45 @@ pub fn execute(cli: Cli) -> Result<(Value, i32)> {
     } else {
         Some(store.lock()?)
     };
+    let language = cli.lang.unwrap_or(i18n::project_language(&store)?);
+    let _scope = i18n::Scope::enter(language);
     match cli.command {
-        Command::Install { harness } => Ok((install(&store, harness)?, 0)),
+        Command::Language { language } => {
+            config(&store)?;
+            store.path(".dfd/language.json")?;
+            let manifest: Manifest = store.json(".dfd/install.json")?;
+            let harness = Harness::ALL
+                .into_iter()
+                .find(|h| h.name() == manifest.harness)
+                .ok_or_else(|| Error::message("Harness installato sconosciuto."))?;
+            let _scope = i18n::Scope::enter(language);
+            install(&store, harness)?;
+            i18n::save(&store, language)?;
+            Ok((
+                json!({"language": language, "existing_artifacts": "preserved"}),
+                0,
+            ))
+        }
+        Command::Install { harness } => {
+            store.path(".dfd/language.json")?;
+            let output = install(&store, harness)?;
+            if cli.lang.is_some() {
+                i18n::save(&store, i18n::current())?;
+            }
+            Ok((output, 0))
+        }
         Command::Init {
             harness,
             domain,
             mode,
-        } => Ok((init(&store, harness, &domain, mode)?, 0)),
+        } => {
+            store.path(".dfd/language.json")?;
+            let output = init(&store, harness, &domain, mode)?;
+            if cli.lang.is_some() {
+                i18n::save(&store, i18n::current())?;
+            }
+            Ok((output, 0))
+        }
         Command::Feature {
             id,
             domain,

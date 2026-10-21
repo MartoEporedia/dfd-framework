@@ -3,6 +3,8 @@ name: dfd-review-release
 description: Revisionare la preparazione di una release DFD con checklist light o full e registrare la decisione umana su rollout, evidenze, soglie e condizioni.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-review-release/SKILL.md)
+
 # Review di release
 
 Leggere `.dfd/kit/templates/contratto_toolkit.md`, `.dfd/kit/raci.md` e gli artefatti della feature. Usare la checklist locale `.dfd/domains/<dominio>/templates/review_release_light.md` per light oppure `review_release.md` per full.

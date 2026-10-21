@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](review_indice.md) | [English](../en/templates/review_indice.md)
+
 # Checklist di Review DFD – [Nome Feature / Servizio]
 
 > **Tipo di review**: design / pre-release / post-release  

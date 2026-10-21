@@ -3,6 +3,8 @@ name: dfd-pre-release
 description: Preparare il rilascio di una feature DFD verificata, definendo rollout, soglie, rollback, allarmi, dashboard, test non funzionali e comunicazioni prima della review di release.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-pre-release/SKILL.md)
+
 # Preparazione del rilascio
 
 Leggere `.dfd/kit/processo-e2e.md` (Pre-release e DoR Rilascio), `.dfd/kit/templates/contratto_toolkit.md`, gli artefatti della feature e il setup del dominio. Eseguire `dfd status <id>`: lo sviluppo deve essere verificato e attuale.

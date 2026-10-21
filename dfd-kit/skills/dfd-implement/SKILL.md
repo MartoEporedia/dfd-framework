@@ -3,6 +3,8 @@ name: dfd-implement
 description: Implementare una feature DFD con TDD dopo la review di design, eseguendo test, codice, refactor e strumentazione e raccogliendo evidenze verificabili.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-implement/SKILL.md)
+
 # Sviluppo TDD DFD
 
 Leggere `.dfd/kit/processo-e2e.md` (Sviluppo), `.dfd/kit/templates/contratto_toolkit.md`, specifica, piano e guardrail del dominio. Rispettare le istruzioni e gli strumenti del repository adottante. La CLI non implementa codice e non lancia test: è l'agente dell'harness a svolgere queste attività con i propri strumenti.

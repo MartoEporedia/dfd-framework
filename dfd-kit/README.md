@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](README.md) | [English](en/README.md)
+
 # DFD Kit
 
 DFD usa la Definition of Done come contratto continuo tra specifica, test e validazione in produzione. **DFD Kit** porta il percorso dentro Claude Code, OpenCode, GitHub Copilot e Codex tramite skill condivise e artefatti nel repository.
@@ -91,3 +93,9 @@ Il dominio di questo toolkit usa [lifecycle.json](.dfd/domains/dfd-kit/lifecycle
 ## Fix rapidi, singolo sviluppatore e team
 
 Per un fix circoscritto usare `dfd quick <id> --domain <dominio> --title "..." --owner "..."`: un solo record, rischio motivato e test di regressione pertinenti. Le modifiche editoriali richiedono una verifica utile, senza red artificiale. Il singolo dev non deve aprire PR o ottenere una review indipendente; il [contesto team](templates/collaborazione.md) è facoltativo. Cambiamenti critici o dubbi impongono light/full; `dfd promote <id> --to <feature-id>` conserva l’origine. Per comandi, gate e prove integrate vedere il [contratto](templates/contratto_toolkit.md#percorso-rapido).
+
+## Scegliere la lingua
+
+Usare `dfd --lang en init ...` per un nuovo progetto inglese; l’italiano resta il default dei progetti esistenti. `dfd language it` o `dfd language en` cambia preferenza e risorse gestite con l’adapter attuale. Anche `install --lang` salva la scelta; negli altri comandi `--lang` è un override temporaneo. La preferenza è in `.dfd/language.json`.
+
+Documenti e template locali già presenti rimangono preservati, anche nella lingua originale; i nuovi domini usano quella selezionata. Per cambiare la lingua di un dominio esistente rivedere esplicitamente i suoi template. Comandi, chiavi JSON, enum, ID, exit code e testo utente restano invariati. Vedere [glossario e manutenzione](../glossario.md).

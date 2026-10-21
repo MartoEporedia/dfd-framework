@@ -4,8 +4,10 @@ fn entry_errors(store: &Store, state: &State) -> Result<Vec<String>> {
     let mut errors = validate_design(store, state)?;
     let gate = gate(store, state, &errors)?;
     if !matches!(gate, "approved" | "approved-with-conditions") {
-        errors.push(format!(
-            "Sviluppo: serve una review di design approvata e attuale (gate: {gate})."
+        errors.push(crate::localized_format!(
+            "Sviluppo: serve una review di design approvata e attuale (gate: {gate}).",
+            "Development requires a current approved design review (gate: {gate}).",
+            gate = gate
         ));
     }
     Ok(errors)
@@ -69,19 +71,23 @@ pub(super) fn plan(store: &Store, id: &str, refresh: bool) -> Result<(Value, i32
         .map(|(index, criterion)| Task {
             id: format!("task-{}", index + 1),
             owner: design.owner.clone(),
-            description: format!("Soddisfare {}", criterion.id),
+            description: crate::localized_format!("Soddisfare {}", "Satisfy {}", criterion.id),
             criteria: vec![criterion.id.clone()],
             implementation: criterion.implementation.clone(),
             verification: criterion.verification.clone(),
         })
         .collect();
-    let mut markdown = format!(
+    let mut markdown = crate::localized_format!(
         "# Piano di sviluppo – {}\n\n## Ambito e test\n\n{}\n\n{}\n\n## Task TDD\n\n",
-        state.title, state.scope, design.test_plan
+        "# Development plan – {}\n\n## Scope and tests\n\n{}\n\n{}\n\n## TDD tasks\n\n",
+        state.title,
+        state.scope,
+        design.test_plan
     );
     for task in &tasks {
-        markdown.push_str(&format!(
+        markdown.push_str(&crate::localized_format!(
             "### {} – {}\n\nOwner: {}\nCriteri: {}\n\nImplementazione: {}\n\nVerifica: {}\n\n",
+            "### {} – {}\n\nOwner: {}\nCriteria: {}\n\nImplementation: {}\n\nVerification: {}\n\n",
             task.id,
             task.description,
             task.owner,
@@ -90,7 +96,7 @@ pub(super) fn plan(store: &Store, id: &str, refresh: bool) -> Result<(Value, i32
             task.verification
         ));
     }
-    markdown.push_str("## Ciclo di sviluppo\n\nPer ogni task: test rosso sul comportamento atteso, implementazione minima, test verde, refactor e riesecuzione dei test. Conservare le evidenze e verificare la suite finale secondo lifecycle.json: locale (suite) o CI quando richiesta.\n");
+    markdown.push_str(&crate::i18n::text("## Ciclo di sviluppo\n\nPer ogni task: test rosso sul comportamento atteso, implementazione minima, test verde, refactor e riesecuzione dei test. Conservare le evidenze e verificare la suite finale secondo lifecycle.json: locale (suite) o CI quando richiesta.\n"));
     store.save(
         &format!("{root}/plan.json"),
         &Plan {
@@ -125,11 +131,13 @@ pub(super) fn plan(store: &Store, id: &str, refresh: bool) -> Result<(Value, i32
 fn plan_errors(store: &Store, state: &State, plan: &Plan) -> Result<Vec<String>> {
     let mut errors = vec![];
     if plan.design_fingerprint != design_fingerprint(store, state)? {
-        errors.push("Piano derivato da un design precedente: riconfermare la review e usare plan --refresh.".into());
+        errors.push(crate::i18n::text("Piano derivato da un design precedente: riconfermare la review e usare plan --refresh."));
     }
     let markdown = store.read(&format!(".dfd/features/{}/plan.md", state.id))?;
     if !nonblank(&markdown) || markdown.contains("TODO") || !plan.open_questions.is_empty() {
-        errors.push("Piano incompleto o dubbi aperti: chiarire prima dello sviluppo.".into());
+        errors.push(crate::i18n::text(
+            "Piano incompleto o dubbi aperti: chiarire prima dello sviluppo.",
+        ));
     }
     let design: Design = store.json(&format!(".dfd/features/{}/design.json", state.id))?;
     let applicable: BTreeSet<_> = design
@@ -141,12 +149,16 @@ fn plan_errors(store: &Store, state: &State, plan: &Plan) -> Result<Vec<String>>
     let mut covered = BTreeSet::new();
     let mut ids = BTreeSet::new();
     if plan.tasks.is_empty() {
-        errors.push("Piano senza task.".into());
+        errors.push(crate::i18n::text("Piano senza task."));
     }
     for task in &plan.tasks {
         slug(&task.id)?;
         if !ids.insert(&task.id) {
-            errors.push(format!("Task duplicato: {}.", task.id));
+            errors.push(crate::localized_format!(
+                "Task duplicato: {}.",
+                "Duplicate task: {}.",
+                task.id
+            ));
         }
         if [
             &task.owner,
@@ -158,24 +170,38 @@ fn plan_errors(store: &Store, state: &State, plan: &Plan) -> Result<Vec<String>>
         .any(|value| !nonblank(value) || value.contains("TODO"))
             || task.criteria.is_empty()
         {
-            errors.push(format!("Task incompleto: {}.", task.id));
+            errors.push(crate::localized_format!(
+                "Task incompleto: {}.",
+                "Incomplete task: {}.",
+                task.id
+            ));
         }
         let mut task_ids = BTreeSet::new();
         for criterion in &task.criteria {
             if !task_ids.insert(criterion) || !applicable.contains(criterion.as_str()) {
-                errors.push(format!(
+                errors.push(crate::localized_format!(
                     "Task {}: criterio sconosciuto, escluso o duplicato: {criterion}.",
-                    task.id
+                    "Task {}: unknown, excluded or duplicate criterion: {criterion}.",
+                    task.id,
+                    criterion = criterion
                 ));
             }
             covered.insert(criterion.as_str());
             if !criterion_ids(&markdown).contains(criterion) {
-                errors.push(format!("Piano Markdown: manca {criterion}."));
+                errors.push(crate::localized_format!(
+                    "Piano Markdown: manca {criterion}.",
+                    "Markdown plan: missing {criterion}.",
+                    criterion = criterion
+                ));
             }
         }
     }
     for id in applicable.difference(&covered) {
-        errors.push(format!("Criterio applicabile senza task: {id}."));
+        errors.push(crate::localized_format!(
+            "Criterio applicabile senza task: {id}.",
+            "Applicable criterion has no task: {id}.",
+            id = id
+        ));
     }
     Ok(errors)
 }
@@ -183,11 +209,16 @@ fn plan_errors(store: &Store, state: &State, plan: &Plan) -> Result<Vec<String>>
 pub(super) fn file_errors(store: &Store, file: &FileEvidence) -> Result<Vec<String>> {
     let path = store.path(&file.path)?;
     if !path.is_file() {
-        return Ok(vec![format!("Evidenza assente: {}.", file.path)]);
+        return Ok(vec![crate::localized_format!(
+            "Evidenza assente: {}.",
+            "Missing evidence: {}.",
+            file.path
+        )]);
     }
     if file.sha256 != store.hash(&file.path)? {
-        return Ok(vec![format!(
+        return Ok(vec![crate::localized_format!(
             "Evidenza modificata: {}; rieseguire le verifiche.",
+            "Modified evidence: {}; rerun verification.",
             file.path
         )]);
     }
@@ -209,10 +240,9 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
     }
     let mut errors = entry_errors(store, state)?;
     if !present.iter().all(|exists| *exists) {
-        errors.push(
-            "Artefatti di sviluppo parziali: ripristinare plan.json, plan.md ed evidence.json."
-                .into(),
-        );
+        errors.push(crate::i18n::text(
+            "Artefatti di sviluppo parziali: ripristinare plan.json, plan.md ed evidence.json.",
+        ));
     }
     if !errors.is_empty() {
         return Ok(json!({"gate":"blocked-plan","errors":errors,"next":"dfd-plan"}));
@@ -227,22 +257,28 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
     if evidence.design_fingerprint != fingerprint
         || evidence.plan_hash != plan_hash(store, &state.id)?
     {
-        errors.push(
-            "Evidenze riferite a un design o piano precedente: rieseguire le verifiche.".into(),
-        );
+        errors.push(crate::i18n::text(
+            "Evidenze riferite a un design o piano precedente: rieseguire le verifiche.",
+        ));
     }
     if evidence.files.is_empty() {
-        errors.push("Registrare i file di codice, test e strumentazione verificati.".into());
+        errors.push(crate::i18n::text(
+            "Registrare i file di codice, test e strumentazione verificati.",
+        ));
     }
     let mut seen = BTreeSet::new();
     for file in &evidence.files {
         if !seen.insert(&file.path) {
-            errors.push(format!("File verificato duplicato: {}.", file.path));
+            errors.push(crate::localized_format!(
+                "File verificato duplicato: {}.",
+                "Duplicate verified file: {}.",
+                file.path
+            ));
         }
         errors.extend(file_errors(store, file)?);
     }
     if !nonblank(&evidence.refactor_notes) {
-        errors.push("Documentare refactor e strumentazione osservabilità, oppure motivare perché non necessari.".into());
+        errors.push(crate::i18n::text("Documentare refactor e strumentazione osservabilità, oppure motivare perché non necessari."));
     }
     let task_ids: BTreeSet<_> = plan.tasks.iter().map(|task| task.id.as_str()).collect();
     let mut red = BTreeMap::new();
@@ -253,14 +289,16 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
     for check in &evidence.checks {
         let mut valid = true;
         if !nonblank(&check.command) {
-            errors.push("Comando di test mancante.".into());
+            errors.push(crate::i18n::text("Comando di test mancante."));
             valid = false;
         }
         let executed_at = DateTime::parse_from_rfc3339(&check.executed_at).ok();
         match executed_at {
             Some(date) if date <= Utc::now() => {}
             _ => {
-                errors.push("Data esecuzione test non valida o futura.".into());
+                errors.push(crate::i18n::text(
+                    "Data esecuzione test non valida o futura.",
+                ));
                 valid = false;
             }
         }
@@ -270,12 +308,16 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
         }
         errors.extend(log_errors);
         if store.path(&check.log.path)?.is_file() && !nonblank(&store.read(&check.log.path)?) {
-            errors.push("Log di test vuoto.".into());
+            errors.push(crate::i18n::text("Log di test vuoto."));
             valid = false;
         }
         if let Some(task) = &check.task {
             if !task_ids.contains(task.as_str()) {
-                errors.push(format!("Evidenza per task sconosciuto: {task}."));
+                errors.push(crate::localized_format!(
+                    "Evidenza per task sconosciuto: {task}.",
+                    "Evidence for unknown task: {task}.",
+                    task = task
+                ));
                 valid = false;
             }
         }
@@ -298,34 +340,44 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
                     } else if valid && check.kind == CheckKind::Green && check.exit_code == 0 {
                         green.insert(task.as_str(), executed_at.unwrap());
                     } else {
-                        errors.push(format!("Esito TDD non valido per {task}."));
+                        errors.push(crate::localized_format!(
+                            "Esito TDD non valido per {task}.",
+                            "Invalid TDD result for {task}.",
+                            task = task
+                        ));
                     }
                 } else {
-                    errors.push("Test red/green senza task.".into());
+                    errors.push(crate::i18n::text("Test red/green senza task."));
                 }
             }
-            CheckKind::Suite | CheckKind::Ci => {
-                errors.push("Suite finale locale/CI non verde o non valida.".into())
-            }
+            CheckKind::Suite | CheckKind::Ci => errors.push(crate::i18n::text(
+                "Suite finale locale/CI non verde o non valida.",
+            )),
         }
     }
     for task in &task_ids {
         if !red.contains_key(task) || !green.contains_key(task) {
-            errors.push(format!("Task {task}: servono evidenze red e green."));
+            errors.push(crate::localized_format!(
+                "Task {task}: servono evidenze red e green.",
+                "Task {task}: red and green evidence required.",
+                task = task
+            ));
         } else if red[task] > green[task]
             || suite.is_some_and(|date| date < green[task])
             || (policy.ci_required && ci.is_some_and(|date| date < green[task]))
         {
-            errors.push(format!(
-                "Task {task}: rispettare l'ordine red → green → suite finale (CI quando richiesta)."
-            ));
+            errors.push(crate::localized_format!("Task {task}: rispettare l'ordine red → green → suite finale (CI quando richiesta).", "Task {task}: follow the order red → green → final suite (CI when required).", task = task));
         }
     }
     if suite.is_none() {
-        errors.push("Serve evidenza della suite finale verde, locale o CI secondo policy.".into());
+        errors.push(crate::i18n::text(
+            "Serve evidenza della suite finale verde, locale o CI secondo policy.",
+        ));
     }
     if policy.ci_required && ci.is_none() {
-        errors.push("Serve evidenza della suite completa verde in CI.".into());
+        errors.push(crate::i18n::text(
+            "Serve evidenza della suite completa verde in CI.",
+        ));
     }
     if let Some(decision) = state.decisions.last() {
         for condition in &decision.conditions {
@@ -333,7 +385,7 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
                 condition.due_phase.as_str(),
                 "pre-release" | "release" | "rollout" | "post-release"
             ) {
-                errors.push(format!("Condizione da risolvere prima della pre-release: {} ({}). Registrare la nuova decisione umana con decide.", condition.text, condition.owner));
+                errors.push(crate::localized_format!("Condizione da risolvere prima della pre-release: {} ({}). Registrare la nuova decisione umana con decide.", "Condition to resolve before pre-release: {} ({}). Record the new human decision with decide.", condition.text, condition.owner));
             }
         }
     }
@@ -351,11 +403,15 @@ pub(super) fn verify(store: &Store, id: &str) -> Result<(Value, i32)> {
         output["gate"].as_str(),
         Some("ready-for-pre-release" | "development-complete")
     );
-    let mut report = format!("# Verifica sviluppo DFD\n\nGate: {}\n\n", output["gate"]);
+    let mut report = crate::localized_format!(
+        "# Verifica sviluppo DFD\n\nGate: {}\n\n",
+        "# DFD development verification\n\nGate: {}\n\n",
+        output["gate"]
+    );
     for error in output["errors"].as_array().unwrap() {
         report.push_str(&format!("- {}\n", error.as_str().unwrap()));
     }
-    report.push_str("\nControlli strutturali su evidenze dichiarate e hash locali; non certificano autenticità dei log, qualità del codice o approvazione del rilascio.\n");
+    report.push_str(&crate::i18n::text("\nControlli strutturali su evidenze dichiarate e hash locali; non certificano autenticità dei log, qualità del codice o approvazione del rilascio.\n"));
     store.write(
         &format!(".dfd/features/{id}/development-review.md"),
         report.as_bytes(),

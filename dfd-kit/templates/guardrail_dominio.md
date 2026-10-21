@@ -1,3 +1,5 @@
+<!-- dfd-language --> [Italiano](guardrail_dominio.md) | [English](../en/templates/guardrail_dominio.md)
+
 # Guardrail globali di dominio
 
 ## Principi architetturali e contratti

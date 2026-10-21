@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand, ValueEnum};
+use clap::{CommandFactory, FromArgMatches, Parser, Subcommand, ValueEnum};
 use std::path::PathBuf;
 
 #[derive(Debug, Parser)]
@@ -11,6 +11,9 @@ pub struct Cli {
     /// Repository adottante (default: directory corrente).
     #[arg(long, global = true, default_value = ".")]
     pub project: PathBuf,
+    /// Lingua dei nuovi artefatti e dei messaggi; override per questa invocazione.
+    #[arg(long, global = true, value_enum)]
+    pub lang: Option<crate::i18n::Language>,
     #[command(subcommand)]
     pub command: Command,
 }
@@ -45,6 +48,8 @@ impl Harness {
 
 #[derive(Debug, Subcommand)]
 pub enum Command {
+    /// Imposta la lingua del progetto preservando gli artefatti compilati.
+    Language { language: crate::i18n::Language },
     /// Installa le skill o cambia l'adapter attivo, preservando lo stato.
     Install {
         #[arg(long, value_enum)]
@@ -165,4 +170,39 @@ pub enum Command {
     Status { id: Option<String> },
     /// Controlla le skill incorporate e le loro risorse.
     Doctor,
+}
+
+impl Cli {
+    pub fn parse_localized() -> Self {
+        let args: Vec<_> = std::env::args_os().collect();
+        let language = crate::i18n::from_args(&args).unwrap_or_default();
+        let _scope = crate::i18n::Scope::enter(language);
+        let mut command = Self::command();
+        if language == crate::i18n::Language::En {
+            command = command.about("DFD Kit: adoption, risk and review in existing harnesses");
+            fn localize(command: &mut clap::Command) {
+                for subcommand in command.get_subcommands_mut() {
+                    if let Some(about) = subcommand.get_about() {
+                        let translated = crate::i18n::text(&about.to_string());
+                        *subcommand = subcommand.clone().about(translated);
+                    }
+                    localize(subcommand);
+                }
+                let args: Vec<_> = command
+                    .get_arguments()
+                    .filter_map(|arg| {
+                        arg.get_help().map(|help| {
+                            (arg.get_id().clone(), crate::i18n::text(&help.to_string()))
+                        })
+                    })
+                    .collect();
+                for (id, help) in args {
+                    *command = command.clone().mut_arg(id, |arg| arg.help(help));
+                }
+            }
+            localize(&mut command);
+        }
+        let matches = command.get_matches_from(args);
+        Self::from_arg_matches(&matches).unwrap_or_else(|error| error.exit())
+    }
 }

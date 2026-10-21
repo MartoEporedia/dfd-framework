@@ -3,6 +3,8 @@ name: dfd-plan
 description: Derivare un piano di sviluppo TDD dalla specifica DFD approvata, mappando task, criteri DoD, test e strumentazione prima dell'implementazione.
 ---
 
+<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-plan/SKILL.md)
+
 # Piano di sviluppo DFD
 
 Leggere `.dfd/kit/templates/contratto_toolkit.md`, il setup del dominio e gli artefatti della feature. Eseguire `dfd status <id>`: serve una review di design approvata o approvata con condizioni, ancora attuale. Chiarire eventuali condizioni che impediscono l'avvio; non autoapprovare il design.
