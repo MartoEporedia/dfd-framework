@@ -1,4 +1,5 @@
-<!-- dfd-language --> [Italiano](README.md) | [English](en/README.md)
+<!-- dfd-language -->
+[Italiano](README.md) | [English](en/README.md)
 
 # DFD Framework
 
