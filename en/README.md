@@ -11,6 +11,66 @@
 
 DoD-First Driven connects iterative specifications, tests and production validation through verifiable Definition of Done criteria and risk-proportionate reviews.
 
+<a id="installare-dfd-con-un-agente-qualsiasi-harness"></a>
+
+## Installing DFD with an agent (any harness)
+
+Paste the following prompt into your coding agent (Claude Code, Codex, OpenCode, GitHub Copilot, Cursor, Gemini CLI, Windsurf, Cline or others), opened in the repository adopting DFD. The agent obtains the `dfd` CLI, installs the skills in the harness format and stops before Phase 0, which is completed with `dfd-init`.
+
+```text
+Install the DFD (DoD-First Driven) framework in this repository.
+Source: https://github.com/MartoEporedia/dfd-framework (toolkit in dfd-kit/).
+
+Rules: do not overwrite existing files (AGENTS.md, CLAUDE.md, Copilot instructions,
+harness rules); do not modify managed files in .dfd/ or in the installed skill
+directories; ask me before installing system-wide software; do not invent DoD,
+SLOs or thresholds.
+
+1. Context. Identify the harness you are running in, the operating system and
+   architecture. Ask me only what you cannot infer:
+   - pilot domain (e.g. checkout);
+   - mode: brownfield if code or processes already exist, otherwise greenfield;
+   - language: en or it (Italian is the CLI default).
+
+2. dfd CLI. Use `dfd` if it is already on PATH. Otherwise clone the repository
+   into a temporary directory, outside this project:
+   - macOS arm64: use dfd-kit/dist/dfd-macos-arm64, verify its checksum against
+     dfd-kit/dist/SHA256SUMS and make it executable (chmod +x);
+   - other systems: build with `cargo build --locked --release` in dfd-kit/
+     (requires Rust; the binary is target/release/dfd, dfd.exe on Windows).
+   Copy the binary to a PATH directory as `dfd`, or note its absolute path and
+   use it in the following commands. Run `dfd doctor`.
+
+3. Adapter. Choose the native adapter if the harness is supported:
+   claude-code (.claude/skills/), opencode (.opencode/skills/),
+   copilot (.github/skills/), codex (.agents/skills/).
+   For any other harness use codex: it installs the skills in .agents/skills/,
+   the most portable format.
+
+4. Init. Run:
+   dfd --lang <language> --project <repo root> init --harness <adapter> --domain <domain> --mode <mode>
+   If a managed file conflicts, stop and show me the conflict.
+
+5. Non-native harnesses. If you used codex as a fallback, make the twelve skills
+   (dfd-init, dfd-setup, dfd-feature, dfd-assess, dfd-specify, dfd-review-design,
+   dfd-plan, dfd-implement, dfd-verify, dfd-pre-release, dfd-review-release,
+   dfd-status) discoverable through your harness's native mechanism (rules,
+   commands, workflows or instruction files): prefer references to
+   .agents/skills/<skill>/SKILL.md over copies; if the harness requires copies,
+   state that .agents/skills/ is the source and that they must be regenerated
+   after `dfd install`. Append instructions to existing files without rewriting
+   them.
+
+6. Verify and report. Check that .dfd/ and the skills exist and that your harness
+   sees them. Report: binary and version used, adapter, files created or
+   modified, any limitations. Tell me how to invoke the first skill in your
+   harness (e.g. /dfd-init, $dfd-init) to complete Phase 0: assessment, DoD,
+   guardrails and domain conventions, verified with `dfd setup --domain <domain>`.
+   Do not start Phase 0 without my confirmation.
+```
+
+See [DFD Kit](../dfd-kit/en/README.md) for adapters, language and switching harness (`dfd install --harness <adapter>`).
+
 ## Reading paths by role
 
 ### Product Manager / Product Owner
