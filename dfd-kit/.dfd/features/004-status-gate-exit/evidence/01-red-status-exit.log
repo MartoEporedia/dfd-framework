@@ -1,0 +1,27 @@
+$ cargo test --locked --offline --test workflow status_exit
+# executed_at: 2026-10-31T08:45:40+00:00
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.47s
+     Running tests/workflow.rs (target/debug/deps/workflow-0da0f992897ec05a)
+
+running 1 test
+test status_exit_reports_blocked_gates_for_features_changes_and_all ... FAILED
+
+failures:
+
+---- status_exit_reports_blocked_gates_for_features_changes_and_all stdout ----
+
+thread 'status_exit_reports_blocked_gates_for_features_changes_and_all' (40075479) panicked at tests/workflow.rs:2369:5:
+assertion `left == right` failed
+  left: Null
+ right: Array []
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    status_exit_reports_blocked_gates_for_features_changes_and_all
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 74 filtered out; finished in 0.98s
+
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101

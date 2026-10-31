@@ -1,0 +1,140 @@
+$ cargo test --locked --offline --test workflow effective_phase
+# executed_at: 2026-10-31T08:45:41+00:00
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/workflow.rs (target/debug/deps/workflow-0da0f992897ec05a)
+
+running 1 test
+test effective_phase_follows_gates_and_verify_does_not_regress_phase ... FAILED
+
+failures:
+
+---- effective_phase_follows_gates_and_verify_does_not_regress_phase stdout ----
+
+thread 'effective_phase_follows_gates_and_verify_does_not_regress_phase' (40075745) panicked at tests/workflow.rs:36:9:
+assertion `left == right` failed: args: ["status", "001-paypal"]
+stdout: {
+  "adoption": {
+    "areas": {
+      "cost": {
+        "evidence": [],
+        "notes": "",
+        "status": "unknown"
+      },
+      "culture": {
+        "evidence": [],
+        "notes": "",
+        "status": "unknown"
+      },
+      "observability": {
+        "evidence": [],
+        "notes": "",
+        "status": "unknown"
+      },
+      "process": {
+        "evidence": [],
+        "notes": "",
+        "status": "unknown"
+      },
+      "reliability": {
+        "evidence": [],
+        "notes": "",
+        "status": "unknown"
+      },
+      "security": {
+        "evidence": [],
+        "notes": "",
+        "status": "unknown"
+      }
+    },
+    "baseline_gaps": [],
+    "current_level": 0,
+    "next_steps": [],
+    "pilot": true,
+    "schema_version": 1,
+    "target_level": 1
+  },
+  "assessment_hash": null,
+  "collaboration": null,
+  "created_at": "2026-10-31T08:45:41.415032Z",
+  "decisions": [],
+  "development": {
+    "errors": [],
+    "gate": "not-started",
+    "next": "dfd-plan"
+  },
+  "domain": "checkout",
+  "errors": [
+    "Fase 0: completare .dfd/domains/checkout/dod.md.",
+    "Fase 0: completare .dfd/domains/checkout/guardrails.md.",
+    "Fase 0: completare .dfd/domains/checkout/process.md.",
+    "Fase 0: catalogo DoD vuoto.",
+    "Fase 0: criterio COST-01 assente nel catalogo.",
+    "Fase 0: criterio COST-02 assente nel catalogo.",
+    "Fase 0: criterio OBS-01 assente nel catalogo.",
+    "Fase 0: criterio OBS-02 assente nel catalogo.",
+    "Fase 0: criterio SEC-01 assente nel catalogo.",
+    "Fase 0: criterio SEC-02 assente nel catalogo.",
+    "Fase 0: criterio SLO-01 assente nel catalogo.",
+    "Fase 0: criterio SLO-02 assente nel catalogo.",
+    "Fase 0: criterio UX-01 assente nel catalogo.",
+    "Assessment assente o modificato: completare risk.json ed eseguire assess.",
+    "Specifica assente: eseguire specify."
+  ],
+  "gate": "blocked",
+  "id": "001-paypal",
+  "kind": "feature",
+  "next": "dfd-setup",
+  "phase": "idea",
+  "release": {
+    "decisions": [],
+    "errors": [],
+    "gate": "not-started",
+    "next": "dfd-pre-release"
+  },
+  "risk": null,
+  "route": null,
+  "schema_version": 1,
+  "scope": "Nuovo pagamento",
+  "setup": {
+    "domain": "checkout",
+    "errors": [
+      "Fase 0: completare .dfd/domains/checkout/dod.md.",
+      "Fase 0: completare .dfd/domains/checkout/guardrails.md.",
+      "Fase 0: completare .dfd/domains/checkout/process.md.",
+      "Fase 0: catalogo DoD vuoto.",
+      "Fase 0: criterio COST-01 assente nel catalogo.",
+      "Fase 0: criterio COST-02 assente nel catalogo.",
+      "Fase 0: criterio OBS-01 assente nel catalogo.",
+      "Fase 0: criterio OBS-02 assente nel catalogo.",
+      "Fase 0: criterio SEC-01 assente nel catalogo.",
+      "Fase 0: criterio SEC-02 assente nel catalogo.",
+      "Fase 0: criterio SLO-01 assente nel catalogo.",
+      "Fase 0: criterio SLO-02 assente nel catalogo.",
+      "Fase 0: criterio UX-01 assente nel catalogo."
+    ],
+    "gate": "blocked",
+    "lifecycle": {
+      "ci_required": true,
+      "mode": "release-preparation",
+      "rationale": "Compatibilità legacy: CI richiesta prima della pre-release.",
+      "schema_version": 1
+    },
+    "next": "dfd-setup",
+    "phase": "domain-setup"
+  },
+  "title": "PayPal"
+}
+
+stderr: 
+  left: Some(0)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    effective_phase_follows_gates_and_verify_does_not_regress_phase
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 74 filtered out; finished in 0.71s
+
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101

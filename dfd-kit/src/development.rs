@@ -417,13 +417,18 @@ pub(super) fn verify(store: &Store, id: &str) -> Result<(Value, i32)> {
         report.as_bytes(),
         false,
     )?;
-    if ready || state.phase == "development-verified" {
-        state.phase = if ready {
-            "development-verified"
-        } else {
-            "development"
-        }
-        .into();
+    // Later phases are not moved back by a successful verify; a failed verify returns
+    // any verified or later phase to development (issue #7).
+    let later = matches!(state.phase.as_str(), "pre-release" | "release-reviewed");
+    let phase = if ready && !later {
+        Some("development-verified")
+    } else if !ready && (later || state.phase == "development-verified") {
+        Some("development")
+    } else {
+        None
+    };
+    if let Some(phase) = phase {
+        state.phase = phase.into();
         store.save(&format!(".dfd/features/{id}/state.json"), &state, false)?;
     }
     Ok((

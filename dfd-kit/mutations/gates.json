@@ -339,5 +339,45 @@
       "bilingual_conflicts_do_not_change_language_or_files"
     ],
     "purpose": "Un cambio lingua non deve sovrascrivere skill modificate né cambiare la preferenza su conflitto."
+  },
+  {
+    "id": "status-blocked-exit",
+    "file": "src/lib.rs",
+    "before": "let exit = if output[\"blocking\"].as_array().is_some_and(|b| !b.is_empty()) {",
+    "after": "let exit = if false {",
+    "tests": [
+      "status_exit_reports_blocked_gates_for_features_changes_and_all"
+    ],
+    "purpose": "status deve uscire 2 quando un gate mostrato è bloccato (issue #7)."
+  },
+  {
+    "id": "status-blocked-evidence",
+    "file": "src/lib.rs",
+    "before": "Some(\"blocked-plan\" | \"blocked-evidence\")\n    ) {\n        blocking.push(\"development\");",
+    "after": "Some(\"blocked-plan\")\n    ) {\n        blocking.push(\"development\");",
+    "tests": [
+      "status_exit_reports_blocked_gates_for_features_changes_and_all"
+    ],
+    "purpose": "Evidenze assenti o modificate dopo la release devono rendere bloccante lo sviluppo in status (fault F06)."
+  },
+  {
+    "id": "verify-phase-no-regress",
+    "file": "src/development.rs",
+    "before": "let later = matches!(state.phase.as_str(), \"pre-release\" | \"release-reviewed\");",
+    "after": "let later = false;",
+    "tests": [
+      "effective_phase_follows_gates_and_verify_does_not_regress_phase"
+    ],
+    "purpose": "verify riuscito non riporta indietro una fase di pre-release o release; fallito la riporta a development."
+  },
+  {
+    "id": "effective-phase-design-approval",
+    "file": "src/lib.rs",
+    "before": "    } else if !matches!(gate, \"approved\" | \"approved-with-conditions\") {\n        \"design\"",
+    "after": "    } else if gate == \"blocked\" {\n        \"design\"",
+    "tests": [
+      "effective_phase_follows_gates_and_verify_does_not_regress_phase"
+    ],
+    "purpose": "Un design da riconfermare non deve mai produrre una fase effettiva successiva al design."
   }
 ]

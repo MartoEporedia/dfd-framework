@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "9406e4556b0379e8f31ec27704b3950a4a1156e0c5cbeb95d520b7ea725037ef",
+  "tasks": [
+    {
+      "id": "status-exit",
+      "owner": "manutentore del repository",
+      "description": "status esce 2 con un gate bloccante e lo elenca in blocking (feature, record rapido, status globale)",
+      "criteria": [
+        "OBS-01",
+        "SLO-01",
+        "SLO-02",
+        "UX-01",
+        "UX-02"
+      ],
+      "implementation": "Calcolare in status i gate bloccanti (setup blocked, design blocked, sviluppo blocked-plan/blocked-evidence, release blocked; record rapido blocked), esporli in blocking e restituire exit 2; aggiornare contratto, guide e skill IT/EN che chiamano status.",
+      "verification": "Regressione cargo test --locked --offline --test workflow status_exit: red su F06 riprodotto (evidenze rimosse dopo release approvata, status exit 0), green con exit 2 e blocking; test esistenti aggiornati; mutante sul calcolo dei gate bloccanti; check_translations e doctor."
+    },
+    {
+      "id": "effective-phase",
+      "owner": "manutentore del repository",
+      "description": "status espone effective_phase derivata dai gate; verify non regredisce le fasi successive",
+      "criteria": [
+        "OBS-01",
+        "SEC-03",
+        "SLO-01",
+        "SLO-02",
+        "UX-01"
+      ],
+      "implementation": "Derivare effective_phase dai gate correnti senza scrivere state.json; in verify non riportare pre-release/release-reviewed a development-verified e riportare a development da ogni fase successiva quando fallisce; documentare nel contratto IT/EN.",
+      "verification": "Regressione cargo test --locked --offline --test workflow effective_phase: red su verify dopo release approvata (phase regredisce) ed effective_phase assente, green dopo la correzione; mutante sulla transizione di fase."
+    }
+  ],
+  "open_questions": []
+}

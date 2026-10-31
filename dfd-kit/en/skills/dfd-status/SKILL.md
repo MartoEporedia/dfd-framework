@@ -11,6 +11,8 @@ description: Resume DFD work across harnesses or sessions, inspecting phase, ris
 
 Run `dfd status [<id>]` at the adopting root. Without ID it lists domains/setups/features/quick changes; with ID it checks design and related gates. Use `.dfd/kit/templates/contratto_toolkit.md` to interpret fields.
 
+Exit `2` means at least one displayed gate is blocked: it is not a command error. Read blocking to see which gate, and effective_phase for the actual phase; phase is only the last recorded step and may be ahead of the real state.
+
 - State lives in .dfd, not chat history. Read relevant domain/feature artifacts only.
 - Incomplete Phase 0 → dfd-setup, displaying concrete gaps.
 - Missing risk → dfd-assess; missing specification → dfd-specify; review-ready design → dfd-review-design.
