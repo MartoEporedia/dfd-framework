@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "id": "006-stale-review-changes",
+  "title": "Cosa è cambiato dopo l'ultima decisione",
+  "domain": "dfd-kit",
+  "kind": "feature",
+  "scope": "Le decisioni registrano lo snapshot dei componenti del fingerprint; con stale-review status e i report elencano componenti e file cambiati, aggiunti o rimossi dopo la decisione (issue #6)",
+  "phase": "development-verified",
+  "created_at": "2026-10-31T10:10:13.483549Z",
+  "risk": "low",
+  "route": "light",
+  "assessment_hash": "b116c745aadb6a1aa691c4655c459fae24218416bf2adcdff98bf6064b7a51e2",
+  "decisions": [
+    {
+      "decision": "approved",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead",
+      "note": "Design #6 approvato: snapshot facoltativo nelle decisioni e changes {changed, added, removed} con stale-review. Registrata dall'agente su richiesta esplicita del manutentore in chat il 2026-10-31 («Sì, registra tu»), dopo il merge di #10.",
+      "conditions": [],
+      "recorded_at": "2026-10-31T15:04:34.118991Z",
+      "fingerprint": "bef5661baf69baa8fca49b106799568da6441b06d785a5d0740ecdc70c77d9d2"
+    }
+  ],
+  "selective_review": true
+}

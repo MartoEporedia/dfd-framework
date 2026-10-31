@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "bef5661baf69baa8fca49b106799568da6441b06d785a5d0740ecdc70c77d9d2",
+  "tasks": [
+    {
+      "id": "stale-review-changes",
+      "owner": "manutentore del repository",
+      "description": "Snapshot nelle decisioni e changes con stale-review (design, release, record rapido)",
+      "criteria": [
+        "OBS-01",
+        "SEC-03",
+        "SLO-01",
+        "SLO-02",
+        "UX-01"
+      ],
+      "implementation": "Campo facoltativo snapshot (componente → sha256) in Decision; snapshot calcolato in decide per design, release e record rapido senza cambiare le formule dei fingerprint; con stale-review l'output e i report aggiungono changes {changed, added, removed}, oppure changes null per decisioni senza snapshot; contratto e skill di review IT/EN.",
+      "verification": "Regressione cargo test --locked --offline --test workflow stale_review_lists: red su design (spec.md), release (file di codice ed evidence.json), record rapido, decisione legacy e gate non stale; green dopo; mutanti sul confronto e sulla raccolta dei file delle evidenze."
+    }
+  ],
+  "open_questions": []
+}

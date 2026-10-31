@@ -164,6 +164,50 @@ fn route(change: &Change) -> Result<(String, Vec<String>)> {
     };
     Ok((selected,vec![crate::i18n::text("Intervento non rapido: chiarire i dubbi o promuovere a light/full; nessun override per ridurre il rischio.")]))
 }
+/// Rapid record snapshot (issue #6): each record field, each declared file and log
+/// with its current hash, and the policies and criteria of the fingerprint.
+fn snapshot(store: &Store, change: &Change) -> Result<BTreeMap<String, String>> {
+    let mut items = BTreeMap::new();
+    if let Value::Object(fields) = serde_json::to_value(change)? {
+        for (key, value) in fields.iter().filter(|(key, _)| *key != "decisions") {
+            items.insert(format!("record#{key}"), hash(&serde_json::to_vec(value)?));
+        }
+    }
+    for path in change
+        .files
+        .iter()
+        .map(|file| &file.path)
+        .chain(change.checks.iter().map(|check| &check.log.path))
+    {
+        let current = if store.path(path)?.is_file() {
+            store.hash(path)?
+        } else {
+            "absent".into()
+        };
+        items.insert(path.clone(), current);
+    }
+    let catalog: Catalog = store.json(&format!(".dfd/domains/{}/criteria.json", change.domain))?;
+    let criteria: Vec<_> = catalog
+        .criteria
+        .iter()
+        .filter(|c| change.criteria.contains(&c.id))
+        .collect();
+    items.insert("criteria".into(), hash(&serde_json::to_vec(&criteria)?));
+    items.insert(
+        "policies".into(),
+        hash(&serde_json::to_vec(&json!({
+            "lifecycle": lifecycle(store, &change.domain)?,
+            "team": collaboration::policy(store, &change.domain)?,
+        }))?),
+    );
+    let guardrails = format!(".dfd/domains/{}/guardrails.md", change.domain);
+    items.insert(guardrails.clone(), store.hash(&guardrails)?);
+    items.insert(
+        ".dfd/guardrails.md".into(),
+        store.hash(".dfd/guardrails.md")?,
+    );
+    Ok(items)
+}
 fn fingerprint(store: &Store, change: &Change) -> Result<String> {
     let mut value = serde_json::to_value(change)?;
     value.as_object_mut().unwrap().remove("decisions");
@@ -281,10 +325,13 @@ pub(super) fn status(store: &Store, id: &str) -> Result<Value> {
     } else {
         "change-verified"
     };
-    Ok(
-        json!({"change":id,"domain":change.domain,"route":route,"gate":gate,"errors":errors,"owner":change.owner,"independent_review_required":policy.independent_review,"collaboration":change.collaboration,"decisions":change.decisions,
-        "blocking":if gate=="blocked" {vec!["change"]} else {vec![]},"next":if route=="unknown" {"dfd-assess"} else if route!="rapid" {"dfd-feature"} else if gate=="change-verified" {"development-complete"} else if gate=="awaiting-human-review" || gate=="stale-review" {"dfd-review-design"} else {"dfd-implement"},"release":"not-approved"}),
-    )
+    let mut output = json!({"change":id,"domain":change.domain,"route":route,"gate":gate,"errors":errors,"owner":change.owner,"independent_review_required":policy.independent_review,"collaboration":change.collaboration,"decisions":change.decisions,
+        "blocking":if gate=="blocked" {vec!["change"]} else {vec![]},"next":if route=="unknown" {"dfd-assess"} else if route!="rapid" {"dfd-feature"} else if gate=="change-verified" {"development-complete"} else if gate=="awaiting-human-review" || gate=="stale-review" {"dfd-review-design"} else {"dfd-implement"},"release":"not-approved"});
+    if gate == "stale-review" {
+        let latest = change.decisions.last().unwrap();
+        output["changes"] = snapshot_changes(latest, &snapshot(store, &change)?);
+    }
+    Ok(output)
 }
 pub(super) fn verify(store: &Store, id: &str) -> Result<(Value, i32)> {
     let output = status(store, id)?;
@@ -307,6 +354,7 @@ pub(super) fn decide(store: &Store, id: &str, input: HumanDecision) -> Result<(V
         return Err(Error::message(errors.join("; ")));
     }
     let mut decision = decision_record(input, fingerprint(store, &change)?)?;
+    decision.snapshot = snapshot(store, &change)?;
     let files: Vec<_> = change.files.iter().map(|f| f.path.clone()).collect();
     collaboration::bind(store, change.collaboration.as_ref(), &files, &mut decision)?;
     let policy = collaboration::policy(store, &change.domain)?;

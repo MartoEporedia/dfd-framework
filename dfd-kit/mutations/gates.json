@@ -489,5 +489,45 @@
       "selective_review_dod_obfuscated_ids_fail_closed"
     ],
     "purpose": "Caratteri invisibili o trattini Unicode attaccati a un prefisso di ID legano l'intero dod.md."
+  },
+  {
+    "id": "stale-changes-compare",
+    "file": "src/lib.rs",
+    "before": ".filter(|(key, value)| recorded.get(*key).is_some_and(|old| old != *value))",
+    "after": ".filter(|_| false)",
+    "tests": [
+      "stale_review_lists_what_changed_after_the_decision"
+    ],
+    "purpose": "stale-review deve elencare i componenti cambiati dopo la decisione (issue #6)."
+  },
+  {
+    "id": "release-snapshot-evidence-files",
+    "file": "src/release.rs",
+    "before": "items.insert(path.clone(), current_hash(store, path)?);",
+    "after": "let _ = path;",
+    "tests": [
+      "stale_review_lists_what_changed_after_the_decision"
+    ],
+    "purpose": "Un file di codice cambiato dopo la decisione di release deve comparire per nome anche se evidence.json è stato aggiornato."
+  },
+  {
+    "id": "design-decision-snapshot",
+    "file": "src/lib.rs",
+    "before": "    decision.snapshot = design_snapshot(store, &state)?;\n",
+    "after": "",
+    "tests": [
+      "stale_review_lists_what_changed_after_the_decision"
+    ],
+    "purpose": "La decisione di design registra lo snapshot dei componenti."
+  },
+  {
+    "id": "quick-decision-snapshot",
+    "file": "src/quick.rs",
+    "before": "    decision.snapshot = snapshot(store, &change)?;\n",
+    "after": "",
+    "tests": [
+      "stale_review_lists_what_changed_after_the_decision"
+    ],
+    "purpose": "La decisione sul record rapido registra lo snapshot dei componenti."
   }
 ]

@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "bef5661baf69baa8fca49b106799568da6441b06d785a5d0740ecdc70c77d9d2",
+  "plan_hash": "11755535ab3c1a15fe312db5207352dd0adf45d4d1b8fecb35e90079860435c9",
+  "files": [
+    {
+      "path": "src/model.rs",
+      "sha256": "d7674c920e943973fcb902fc1df1a90b806306caa9de54a7b72bd81de2c9d1cd"
+    },
+    {
+      "path": "src/lib.rs",
+      "sha256": "b9d26e3ecd1df4c149d41fd762524df3306a5abe93967e7419de4eb68f4ec098"
+    },
+    {
+      "path": "src/release.rs",
+      "sha256": "152496ca39da217ccb6ad42f2e65b164cf28d962a97d5797942c39b69e5b8d14"
+    },
+    {
+      "path": "src/quick.rs",
+      "sha256": "9ca39d375748b8aea788801bbb71d520752d6a5eed3aa6f22e58f97bf896ebac"
+    },
+    {
+      "path": "tests/workflow.rs",
+      "sha256": "e78ddb0a0855021e41f66bb56f4c52f114262f102f8cc1d57b3fc0f017a8281f"
+    },
+    {
+      "path": "mutations/gates.json",
+      "sha256": "55852257aa7ad8ff206afd382fc4a5e564dd73855a1033c2f49c5150b91a4f41"
+    },
+    {
+      "path": "i18n/en.json",
+      "sha256": "e9ff0f1b96903615e99dbb02cbb49eb333c361128a6ec8a40d64665c434113c0"
+    },
+    {
+      "path": "templates/contratto_toolkit.md",
+      "sha256": "2573a02bf26b8d7b9192ba51afb9fdbe3d1cb5c1c668dfa29d46b35e41d3971d"
+    },
+    {
+      "path": "en/templates/contratto_toolkit.md",
+      "sha256": "c529a50447bf3a537b7dc0dd0611c640e38a312b95595a8d9f44ff5dd18b67a8"
+    },
+    {
+      "path": "skills/dfd-review-design/SKILL.md",
+      "sha256": "2f04f92a2f62f266fa13852b0e4eaa0eb61e0560f0faf5c80a5cc483dcd9903b"
+    },
+    {
+      "path": "en/skills/dfd-review-design/SKILL.md",
+      "sha256": "81348cc1a6eaa088f3aeffe9de6fd8f328a1d9917b09b300514f07ca7926b49b"
+    },
+    {
+      "path": "skills/dfd-review-release/SKILL.md",
+      "sha256": "5c948d82cf224246862d89817441ae06358eb7686eb7a8d52fd69fcb85c40751"
+    },
+    {
+      "path": "en/skills/dfd-review-release/SKILL.md",
+      "sha256": "99fb2fd576513c8d3641914e0f810378d7cff9a58643aac3f1ac491dcec3d52a"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "48a939e59e4cab1120e55a2f102355249fdd9455ead7a9fe162719ec91a1fea6"
+    },
+    {
+      "path": ".agents/skills/dfd-review-design/SKILL.md",
+      "sha256": "aa9e3d04ba952ed1cac635a4a27ab31117767ef4b57d90e4c395dcd756966d11"
+    },
+    {
+      "path": ".agents/skills/dfd-review-release/SKILL.md",
+      "sha256": "3a55312c6c4a643f16700cfa10849627f491528159a3bb7e0c419dedaea9d157"
+    },
+    {
+      "path": ".dfd/kit/templates/contratto_toolkit.md",
+      "sha256": "23a2f0208c3b9311df480eae41394826818c6434fc14001de049b4954df14a10"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-review-design/SKILL.md",
+      "sha256": "aa9e3d04ba952ed1cac635a4a27ab31117767ef4b57d90e4c395dcd756966d11"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-review-release/SKILL.md",
+      "sha256": "3a55312c6c4a643f16700cfa10849627f491528159a3bb7e0c419dedaea9d157"
+    }
+  ],
+  "checks": [
+    {
+      "task": "stale-review-changes",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow stale_review_lists",
+      "executed_at": "2026-10-31T15:05:22+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/006-stale-review-changes/evidence/01-red-stale-changes.log",
+        "sha256": "18c32b0cc8ef610df2d00d60bb25582396be6fc2d8db2b0951a392d580800931"
+      }
+    },
+    {
+      "task": "stale-review-changes",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow stale_review_lists",
+      "executed_at": "2026-10-31T15:08:42+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/006-stale-review-changes/evidence/02-green-stale-changes.log",
+        "sha256": "7775b9aaf3d6b237edd8bc8e74b1e4b66bb993ec4562977ffb663519af53cc26"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor; python3 scripts/check_translations.py; python3 scripts/mutation_test.py",
+      "executed_at": "2026-10-31T15:17:01+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/006-stale-review-changes/evidence/03-suite.log",
+        "sha256": "4380b20afba21c4f5dd6437d0f53d9b25b62202e2792158bc228b131469b4b88"
+      }
+    }
+  ],
+  "refactor_notes": "Refactor: design_fingerprint diviso in design_inputs (componenti, contesto, dettaglio per criterio) e design_fingerprint con formula invariata; nuove funzioni design_snapshot, snapshot_changes, changes_report in lib.rs, snapshot in release.rs e quick.rs. Osservabilità: campo changes {changed, added, removed} in status, review-design, review-release e nei report quando il gate è stale-review; null con nota per decisioni senza snapshot. Red reale (changes assente); nel test di release aggiunto pre-release --refresh dopo il red perché il contratto blocca la release con evidenze aggiornate senza refresh. Quattro mutanti nuovi, 53/53 intercettati. Due messaggi aggiunti al catalogo i18n/en.json. Laboratorio v3: baseline rimigrata v3-i6-baseline per avere decisioni con snapshot; ogni fault stale-review elenca i componenti cambiati (F01b mensa/ciclo.py anche dopo il ricalcolo degli hash, F05 ci.sh, F07b dod.md#UX-02); F09 e F12 restano invisibili (file non dichiarati, #3); F00 e baseline da zero verdi. Decisione di design registrata dall'agente su richiesta esplicita del manutentore."
+}
