@@ -2547,3 +2547,46 @@ fn selective_review_tracks_dod_sections_and_bare_references() {
     );
     assert_eq!(gate(&p), "stale-review", "criterio citato solo come ID");
 }
+
+#[test]
+fn selective_review_dod_parsing_fails_closed() {
+    // Security review on a8539d1: checkbox/link-only references, indented headings,
+    // and fenced code inside a criterion section.
+    let gate = |p: &Project| p.run(&["status", "001-paypal"], 0)["gate"].clone();
+    let selective = |p: &Project| {
+        let path = ".dfd/features/001-paypal/state.json";
+        let mut state = p.read(path);
+        state["selective_review"] = json!(true);
+        p.save(path, &state);
+        p.approve();
+    };
+    for (before, after, case) in [
+        (
+            "# DoD\n\n- [x] OBS-01\n- [ ] SLO-01\n\nContare gli errori del nuovo flusso.\n",
+            "# DoD\n\n- [x] OBS-01\n- [ ] SLO-01\n\nContare gli errori del vecchio flusso.\n",
+            "casella senza testo",
+        ),
+        (
+            "# DoD\n\nCriteri: [OBS-01](#obs-01), [SLO-01](#slo-01).\n\nContare gli errori del nuovo flusso.\n",
+            "# DoD\n\nCriteri: [OBS-01](#obs-01), [SLO-01](#slo-01).\n\nContare gli errori del vecchio flusso.\n",
+            "solo link",
+        ),
+        (
+            "# DoD\n\n- Criteri del flusso di pagamento: OBS-01, SLO-01\n\n  ### OBS-01\n\nContare gli errori del nuovo flusso.\n\n### SLO-01\n\nBaseline legacy.\n",
+            "# DoD\n\n- Criteri del flusso di pagamento: OBS-01, SLO-01\n\n  ### OBS-01\n\nContare gli errori del vecchio flusso.\n\n### SLO-01\n\nBaseline legacy.\n",
+            "titolo indentato",
+        ),
+        (
+            "# DoD\n\n- Criteri del flusso di pagamento: OBS-01, SLO-01\n\n### OBS-01\n\nContare gli errori.\n\n```sh\n# esempio\n```\n\nIncluso il nuovo flusso.\n\n### SLO-01\n\nBaseline legacy.\n",
+            "# DoD\n\n- Criteri del flusso di pagamento: OBS-01, SLO-01\n\n### OBS-01\n\nContare gli errori.\n\n```sh\n# esempio\n```\n\nIncluso il vecchio flusso.\n\n### SLO-01\n\nBaseline legacy.\n",
+            "codice recintato nella sezione",
+        ),
+    ] {
+        let p = Project::new();
+        p.ready();
+        p.write(".dfd/domains/checkout/dod.md", before);
+        selective(&p);
+        p.write(".dfd/domains/checkout/dod.md", after);
+        assert_eq!(gate(&p), "stale-review", "{case}");
+    }
+}

@@ -795,20 +795,56 @@ fn criterion_ids(markdown: &str) -> BTreeSet<String> {
         .map(|item| item.as_str().to_string())
         .collect()
 }
+/// CommonMark ATX heading level, 0 if the line is not a heading: up to three leading
+/// spaces, then 1-6 '#' followed by a space, a tab or the end of the line.
+fn atx_level(line: &str) -> usize {
+    static RE: OnceLock<Regex> = OnceLock::new();
+    RE.get_or_init(|| Regex::new(r"^ {0,3}(#{1,6})(?:[ \t]|$)").unwrap())
+        .captures(line)
+        .map_or(0, |c| c[1].len())
+}
+/// For each line, whether it belongs to a fenced code block (delimiters included).
+fn code_lines(lines: &[&str]) -> Vec<bool> {
+    static RE: OnceLock<Regex> = OnceLock::new();
+    let fence = RE.get_or_init(|| Regex::new(r"^ {0,3}(`{3,}|~{3,})").unwrap());
+    let mut open: Option<char> = None;
+    lines
+        .iter()
+        .map(|line| {
+            let delimiter = fence.captures(line).map(|c| c[1].chars().next().unwrap());
+            match (open, delimiter) {
+                (None, Some(kind)) => open = Some(kind),
+                (Some(kind), Some(found)) if kind == found => open = None,
+                (None, None) => return false,
+                _ => {}
+            }
+            true
+        })
+        .collect()
+}
 /// Markdown units of dod.md: a list item with its continuation lines and deeper
-/// sub-items, a table row, a heading or a paragraph. A line whose content starts with
-/// a criterion ID always opens a new unit. Whitespace is normalized.
+/// sub-items, a table row, a heading or a paragraph; fenced code stays with the unit
+/// around it. A line whose content starts with a criterion ID always opens a new unit.
+/// A heading citing a criterion also yields its whole section. Whitespace is normalized.
 fn dod_blocks(markdown: &str) -> Vec<String> {
     static ITEM: OnceLock<Regex> = OnceLock::new();
     static LEAD: OnceLock<Regex> = OnceLock::new();
     let item = ITEM.get_or_init(|| Regex::new(r"^(\s*)(?:[-*+]|[0-9]+[.)])\s+").unwrap());
     let lead = LEAD
         .get_or_init(|| Regex::new(r"^[\s>*_`\[]*(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b").unwrap());
+    let lines: Vec<_> = markdown.lines().collect();
+    let code = code_lines(&lines);
     let mut blocks = vec![];
     // Current unit and, for a list item, the indentation of its marker.
     let mut current: Option<(String, Option<usize>)> = None;
-    for line in markdown.lines() {
+    for (index, line) in lines.iter().enumerate() {
         let trimmed = line.trim();
+        if code[index] {
+            let (text, _) = current.get_or_insert_with(|| (String::new(), None));
+            text.push(' ');
+            text.push_str(trimmed);
+            continue;
+        }
         if trimmed.is_empty() {
             blocks.extend(current.take().map(|(text, _)| text));
             continue;
@@ -816,12 +852,12 @@ fn dod_blocks(markdown: &str) -> Vec<String> {
         let marker = item
             .captures(line)
             .map(|c| (c[1].len(), c.get(0).unwrap().end()));
-        let content = marker.map_or(line, |(_, end)| &line[end..]);
+        let content = marker.map_or(*line, |(_, end)| &line[end..]);
         let nested = matches!(
             (&current, marker),
             (Some((_, Some(parent))), Some((indent, _))) if indent > *parent
         );
-        let single = trimmed.starts_with('#') || trimmed.starts_with('|');
+        let single = atx_level(line) > 0 || trimmed.starts_with('|');
         if single || lead.is_match(content) || (marker.is_some() && !nested) || current.is_none() {
             blocks.extend(current.take().map(|(text, _)| text));
             current = Some((String::new(), marker.map(|(indent, _)| indent)));
@@ -836,16 +872,15 @@ fn dod_blocks(markdown: &str) -> Vec<String> {
     blocks.extend(current.map(|(text, _)| text));
     // A heading citing a criterion also binds its whole section, down to the next
     // heading of the same or a higher level (DoD written as "### OBS-01" + text).
-    let lines: Vec<_> = markdown.lines().collect();
     for (start, line) in lines.iter().enumerate() {
-        let level = line.chars().take_while(|c| *c == '#').count();
-        if level == 0 || criterion_ids(line).is_empty() {
+        let level = atx_level(line);
+        if code[start] || level == 0 || criterion_ids(line).is_empty() {
             continue;
         }
         let mut section = String::new();
         for (index, next) in lines.iter().enumerate().skip(start) {
-            let next_level = next.chars().take_while(|c| *c == '#').count();
-            if index > start && next_level > 0 && next_level <= level {
+            let next_level = atx_level(next);
+            if index > start && !code[index] && next_level > 0 && next_level <= level {
                 break;
             }
             section.push(' ');
@@ -858,13 +893,16 @@ fn dod_blocks(markdown: &str) -> Vec<String> {
         .map(|block| block.split_whitespace().collect::<Vec<_>>().join(" "))
         .collect()
 }
-/// True when a block holds only criterion IDs, numbers and markup.
+/// Fail closed: a block is a bare reference unless, without criterion IDs, link
+/// destinations and checkboxes, it still has at least four words of three letters.
 fn bare_reference(block: &str) -> bool {
-    static RE: OnceLock<Regex> = OnceLock::new();
-    !RE.get_or_init(|| Regex::new(r"\b(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b").unwrap())
-        .replace_all(block, "")
-        .chars()
-        .any(char::is_alphabetic)
+    static NOISE: OnceLock<Regex> = OnceLock::new();
+    static WORD: OnceLock<Regex> = OnceLock::new();
+    let noise = NOISE.get_or_init(|| {
+        Regex::new(r"\b(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b|\]\([^)]*\)|\[[ xX]\]").unwrap()
+    });
+    let word = WORD.get_or_init(|| Regex::new(r"\p{Alphabetic}{3,}").unwrap());
+    word.find_iter(&noise.replace_all(block, "")).count() < 4
 }
 fn valid_criterion(value: &str) -> bool {
     static RE: OnceLock<Regex> = OnceLock::new();

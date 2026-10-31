@@ -37,6 +37,15 @@
       "conditions": [],
       "recorded_at": "2026-10-31T13:31:50.063890Z",
       "fingerprint": "f356edf375661cf247b2c99722c8caaba3a6743426d9e74e785f05d98764cf43"
+    },
+    {
+      "decision": "approved",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead",
+      "note": "Riconferma #5: titoli CommonMark, codice recintato, soglia fail-closed. Registrata dall'agente su richiesta esplicita del manutentore in chat il 2026-10-31 («Registra la conferma»).",
+      "conditions": [],
+      "recorded_at": "2026-10-31T13:50:22.873095Z",
+      "fingerprint": "951ee42337d87523df5176b2bad93def1bbd63b5cad1ab3e95d527d588b07d0e"
     }
   ],
   "selective_review": true
