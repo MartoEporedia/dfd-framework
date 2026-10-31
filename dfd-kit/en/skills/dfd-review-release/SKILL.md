@@ -21,6 +21,6 @@ dfd decide <id> --stage release --decision approved --reviewer "..." --role tech
 
 Use approved-with-conditions and repeated `--condition "text|owner|stage"` for conditions. Planned resources require conditional approval with assigned activation; ready resources need evidence. Resolve design conditions due by release and record the updated human decision first. Release history is separate from design.
 
-Rerun status. Changed rollout/notes/design/design decision/evidence invalidate review; structural gaps block it. Conditions do not close automatically: obtain the updated human decision after resolution. Report outcome, conditions and next action. The CLI records review, never executes rollout.
+Rerun status. Changed rollout/notes/design/design decision/evidence invalidate review; structural gaps block it. With stale-review use release.changes to see which files and documents changed since the decision, including code files declared in the evidence. Conditions do not close automatically: obtain the updated human decision after resolution. Report outcome, conditions and next action. The CLI records review, never executes rollout.
 
 Assess lifecycle CI policy against risk/target, including justified local alternatives when ci_required false. development-only cannot approve release. Evaluate origin/completeness of required integrated evidence, current snapshots and PR review. The CLI authenticates neither identities nor Git revisions. Serious escaped bugs need effective regression tests and systemic DoD updates; raw test counts do not prove release safety.

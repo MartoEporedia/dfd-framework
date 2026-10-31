@@ -190,6 +190,9 @@ pub struct Decision {
     pub revision: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub files: Vec<FileEvidence>,
+    /// Component → sha256 at decision time (issue #6); absent in older decisions.
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub snapshot: BTreeMap<String, String>,
 }
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]

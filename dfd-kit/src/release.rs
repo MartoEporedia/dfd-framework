@@ -1,5 +1,63 @@
 use super::*;
 
+/// Current hash of a project file, or "absent".
+fn current_hash(store: &Store, path: &str) -> Result<String> {
+    Ok(if store.path(path)?.is_file() {
+        store.hash(path)?
+    } else {
+        "absent".into()
+    })
+}
+
+/// Release snapshot (issue #6): the release and development fingerprint components,
+/// plus every verified file and log declared in evidence.json with its current hash, so
+/// a file changed after the decision is named even when evidence.json was updated.
+fn snapshot(store: &Store, state: &State) -> Result<BTreeMap<String, String>> {
+    let root = format!(".dfd/features/{}", state.id);
+    let mut items = BTreeMap::new();
+    for name in [
+        "rollout.md",
+        "rollout.json",
+        "release-notes.md",
+        "plan.md",
+        "plan.json",
+        "evidence.json",
+    ] {
+        let path = format!("{root}/{name}");
+        items.insert(path.clone(), current_hash(store, &path)?);
+    }
+    items.insert("design".into(), design_fingerprint(store, state)?);
+    items.insert(
+        "design-decision".into(),
+        hash(&serde_json::to_vec(&state.decisions.last())?),
+    );
+    let context = collaboration::context(store, &state.id)?;
+    if context.is_some()
+        || store
+            .path(&format!(".dfd/domains/{}/team.json", state.domain))?
+            .exists()
+    {
+        items.insert(
+            "team".into(),
+            hash(&serde_json::to_vec(&json!({
+                "policy": collaboration::policy(store, &state.domain)?,
+                "collaboration": context,
+            }))?),
+        );
+    }
+    if let Ok(evidence) = store.json::<Evidence>(&format!("{root}/evidence.json")) {
+        for path in evidence
+            .files
+            .iter()
+            .map(|file| &file.path)
+            .chain(evidence.checks.iter().map(|check| &check.log.path))
+        {
+            items.insert(path.clone(), current_hash(store, path)?);
+        }
+    }
+    Ok(items)
+}
+
 fn history(store: &Store, id: &str) -> Result<ReleaseHistory> {
     let file = format!(".dfd/features/{id}/release-decisions.json");
     if store.path(&file)?.exists() {
@@ -538,10 +596,13 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
             _ => "dfd-review-release",
         };
     }
-    Ok(
-        json!({"gate":gate,"errors":errors,"next":next,"decisions":history.decisions,"pending_activation":pending,
-        "checklist":if state.route == Some(Route::Light) {"review_release_light.md"} else {"review_release.md"}}),
-    )
+    let mut output = json!({"gate":gate,"errors":errors,"next":next,"decisions":history.decisions,"pending_activation":pending,
+        "checklist":if state.route == Some(Route::Light) {"review_release_light.md"} else {"review_release.md"}});
+    if gate == "stale-review" {
+        let latest = history.decisions.last().unwrap();
+        output["changes"] = snapshot_changes(latest, &snapshot(store, state)?);
+    }
+    Ok(output)
 }
 
 pub(super) fn review(store: &Store, id: &str) -> Result<(Value, i32)> {
@@ -554,6 +615,9 @@ pub(super) fn review(store: &Store, id: &str) -> Result<(Value, i32)> {
     );
     for error in output["errors"].as_array().unwrap() {
         report.push_str(&format!("- {}\n", error.as_str().unwrap()));
+    }
+    if let Some(changes) = output.get("changes") {
+        report.push_str(&changes_report(changes));
     }
     for pending in output["pending_activation"]
         .as_array()
@@ -596,7 +660,8 @@ pub(super) fn decide(store: &Store, id: &str, input: HumanDecision) -> Result<(V
             return Err(Error::message("Risorse ancora da attivare: registrare approved-with-conditions con owner e fase, oppure completare l'attivazione."));
         }
     }
-    let decision = decision_record(input, fingerprint(store, &state)?)?;
+    let mut decision = decision_record(input, fingerprint(store, &state)?)?;
+    decision.snapshot = snapshot(store, &state)?;
     let mut history = history(store, id)?;
     history.decisions.push(decision);
     store.path(&format!(".dfd/features/{id}/release-review.md"))?;

@@ -2722,3 +2722,100 @@ fn selective_review_dod_obfuscated_ids_fail_closed() {
         assert_eq!(gate(&p), "stale-review", "{case}");
     }
 }
+
+#[test]
+fn stale_review_lists_what_changed_after_the_decision() {
+    // Issue #6: stale-review must say what changed after the last decision.
+    let has = |list: &Value, item: &str| {
+        list.as_array()
+            .unwrap()
+            .iter()
+            .any(|value| value.as_str() == Some(item))
+    };
+    // Design: approved, then spec.md changed.
+    let p = Project::new();
+    p.ready();
+    p.approve();
+    assert!(p.run(&["status", "001-paypal"], 0).get("changes").is_none());
+    p.write(
+        ".dfd/features/001-paypal/spec.md",
+        "# PayPal\nOBS-01: specifica cambiata dopo la decisione\n",
+    );
+    let status = p.run(&["status", "001-paypal"], 0);
+    assert_eq!(status["gate"], "stale-review");
+    assert!(has(
+        &status["changes"]["changed"],
+        ".dfd/features/001-paypal/spec.md"
+    ));
+    assert_eq!(status["changes"]["changed"].as_array().unwrap().len(), 1);
+    let review = p.run(&["review-design", "001-paypal"], 0);
+    assert!(has(
+        &review["changes"]["changed"],
+        ".dfd/features/001-paypal/spec.md"
+    ));
+    assert!(
+        fs::read_to_string(p.path(".dfd/features/001-paypal/design-review.md"))
+            .unwrap()
+            .contains(".dfd/features/001-paypal/spec.md")
+    );
+
+    // Decision recorded by an earlier CLI: no snapshot, list not available.
+    let path = ".dfd/features/001-paypal/state.json";
+    let mut state = p.read(path);
+    for decision in state["decisions"].as_array_mut().unwrap() {
+        decision.as_object_mut().unwrap().remove("snapshot");
+    }
+    p.save(path, &state);
+    assert_eq!(p.run(&["status", "001-paypal"], 0)["changes"], Value::Null);
+    assert!(p.run(&["status", "001-paypal"], 0).get("changes").is_some());
+
+    // Release: approved, then code and evidence.json updated, release notes added.
+    let p = Project::new();
+    p.pre_release_ready();
+    p.approve_release();
+    assert!(p.run(&["status", "001-paypal"], 0)["release"]
+        .get("changes")
+        .is_none());
+    p.write("src/checkout.rs", "// Modifica dopo la review di release\n");
+    let mut evidence = p.read(".dfd/features/001-paypal/evidence.json");
+    evidence["files"][0] = p.file_evidence("src/checkout.rs");
+    p.save(".dfd/features/001-paypal/evidence.json", &evidence);
+    p.write(
+        ".dfd/features/001-paypal/release-notes.md",
+        "# Note\nAggiunte dopo.\n",
+    );
+    p.run(&["pre-release", "001-paypal", "--refresh"], 0);
+    let release = p.run(&["review-release", "001-paypal"], 0)["release"].clone();
+    assert_eq!(release["gate"], "stale-review");
+    for item in [
+        "src/checkout.rs",
+        ".dfd/features/001-paypal/evidence.json",
+        ".dfd/features/001-paypal/release-notes.md",
+    ] {
+        assert!(
+            has(&release["changes"]["changed"], item),
+            "{item}: {release}"
+        );
+    }
+    assert!(!has(&release["changes"]["changed"], "tests/checkout.rs"));
+    assert!(
+        fs::read_to_string(p.path(".dfd/features/001-paypal/release-review.md"))
+            .unwrap()
+            .contains("src/checkout.rs")
+    );
+
+    // Rapid record: approved, then the verification notes changed.
+    let q = Project::new();
+    q.quick_ready("behavior-fix");
+    q.quick_approve("Bob", 0);
+    let record = ".dfd/changes/fix-message.json";
+    let mut change = q.read(record);
+    change["verification_notes"] = json!("Note riscritte dopo la review");
+    q.save(record, &change);
+    let status = q.run(&["status", "fix-message"], 0);
+    assert_eq!(status["gate"], "stale-review");
+    assert_eq!(
+        status["changes"]["changed"],
+        json!(["record#verification_notes"])
+    );
+}

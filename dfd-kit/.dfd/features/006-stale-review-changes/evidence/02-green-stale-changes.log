@@ -1,0 +1,11 @@
+$ cargo test --locked --offline --test workflow stale_review_lists
+# executed_at: 2026-10-31T15:08:42+00:00
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running tests/workflow.rs (target/debug/deps/workflow-a3ad0388a73b3989)
+
+running 1 test
+test stale_review_lists_what_changed_after_the_decision ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 81 filtered out; finished in 1.56s
+
+# exit_code: 0

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "medium",
+      "rationale": "Nuovo campo facoltativo nelle decisioni (state.json, release-decisions.json, record rapidi) e calcolo dello snapshot accanto ai tre fingerprint esistenti in lib.rs, release.rs e quick.rs."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Toolkit in solo sviluppo, unico utilizzatore il manutentore; il cambiamento aggiunge informazione al revisore."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Hash di file già letti dai fingerprint; nessuna dipendenza."
+    },
+    "reliability": {
+      "level": "low",
+      "rationale": "Additivo: il fingerprint e i gate restano calcolati come oggi; decisioni senza snapshot restano valide e leggibili."
+    },
+    "security": {
+      "level": "low",
+      "rationale": "Lo snapshot è solo informativo e non decide alcun gate; nessun nuovo percorso letto oltre ai file già fingerprintati e alle evidenze dichiarate."
+    }
+  }
+}

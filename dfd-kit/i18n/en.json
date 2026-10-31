@@ -252,5 +252,7 @@
   "Controlla le skill incorporate e le loro risorse.": "Check embedded skills and their resources.",
   "Controlla le skill incorporate e le loro risorse": "Check embedded skills and their resources",
   "Harness installato sconosciuto.": "Unknown installed harness.",
-  "Lingua non supportata; usare it o en.": "Unsupported language; use it or en."
+  "Lingua non supportata; usare it o en.": "Unsupported language; use it or en.",
+  "\n## Cambiato dopo l'ultima decisione\n\nElenco non disponibile: decisione registrata con una CLI precedente.\n": "\n## Changed since the last decision\n\nList not available: decision recorded by an earlier CLI.\n",
+  "\n## Cambiato dopo l'ultima decisione\n\n": "\n## Changed since the last decision\n\n"
 }

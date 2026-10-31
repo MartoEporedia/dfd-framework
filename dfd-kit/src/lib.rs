@@ -1148,7 +1148,11 @@ fn validate_design(store: &Store, state: &State) -> Result<Vec<String>> {
     Ok(errors)
 }
 
-fn design_fingerprint(store: &Store, state: &State) -> Result<String> {
+/// Components → sha256 of a design, the context, and per-criterion detail of the
+/// aggregated selective components (used only by snapshots, issue #6).
+type Snapshot = BTreeMap<String, String>;
+fn design_inputs(store: &Store, state: &State) -> Result<(Snapshot, Value, Snapshot)> {
+    let mut detail = Snapshot::new();
     let mut hashes = BTreeMap::new();
     for file in ["spec.md", "design.json", "risk.json"] {
         let relative = format!(".dfd/features/{}/{file}", state.id);
@@ -1169,11 +1173,26 @@ fn design_fingerprint(store: &Store, state: &State) -> Result<String> {
             "selected-criteria".into(),
             hash(&serde_json::to_vec(&criteria)?),
         );
+        for criterion in &criteria {
+            detail.insert(
+                format!(
+                    ".dfd/domains/{}/criteria.json#{}",
+                    state.domain, criterion.id
+                ),
+                hash(&serde_json::to_vec(criterion)?),
+            );
+        }
         // The DoD text people read is a dependency too (issue #5): for each selected
         // criterion, the dod.md blocks citing it, with whitespace normalized.
         let dod = store.read(&format!(".dfd/domains/{}/dod.md", state.domain))?;
         let selected = selected_dod(&dod, &ids);
         hashes.insert("selected-dod".into(), hash(&serde_json::to_vec(&selected)?));
+        for (id, blocks) in &selected {
+            detail.insert(
+                format!(".dfd/domains/{}/dod.md#{id}", state.domain),
+                hash(&serde_json::to_vec(blocks)?),
+            );
+        }
         let guardrails = format!(".dfd/domains/{}/guardrails.md", state.domain);
         hashes.insert(guardrails.clone(), store.hash(&guardrails)?);
     } else {
@@ -1221,11 +1240,78 @@ fn design_fingerprint(store: &Store, state: &State) -> Result<String> {
             "absent".into()
         },
     );
+    let context = json!({
+        "id":state.id,"domain":state.domain,"title":state.title,"scope":state.scope,"kind":state.kind,"risk":state.risk,"route":state.route,
+    });
+    Ok((hashes, context, detail))
+}
+fn design_fingerprint(store: &Store, state: &State) -> Result<String> {
+    let (hashes, context, _) = design_inputs(store, state)?;
     Ok(hash(&serde_json::to_vec(
-        &json!({"files":hashes,"context":{
-            "id":state.id,"domain":state.domain,"title":state.title,"scope":state.scope,"kind":state.kind,"risk":state.risk,"route":state.route,
-        }}),
+        &json!({"files":hashes,"context":context}),
     )?))
+}
+/// Snapshot of the design inputs: same components as the fingerprint, with the
+/// selective aggregates broken down per criterion.
+fn design_snapshot(store: &Store, state: &State) -> Result<Snapshot> {
+    let (mut hashes, context, detail) = design_inputs(store, state)?;
+    hashes.remove("selected-criteria");
+    hashes.remove("selected-dod");
+    hashes.extend(detail);
+    hashes.insert("context".into(), hash(&serde_json::to_vec(&context)?));
+    Ok(hashes)
+}
+/// What changed since a decision: null when the decision has no snapshot.
+pub(crate) fn snapshot_changes(decision: &Decision, current: &Snapshot) -> Value {
+    if decision.snapshot.is_empty() {
+        return Value::Null;
+    }
+    let recorded = &decision.snapshot;
+    let changed: Vec<_> = current
+        .iter()
+        .filter(|(key, value)| recorded.get(*key).is_some_and(|old| old != *value))
+        .map(|(key, _)| key)
+        .collect();
+    let added: Vec<_> = current
+        .keys()
+        .filter(|key| !recorded.contains_key(*key))
+        .collect();
+    let removed: Vec<_> = recorded
+        .keys()
+        .filter(|key| !current.contains_key(*key))
+        .collect();
+    json!({"changed":changed,"added":added,"removed":removed})
+}
+/// Report lines for `changes` (issue #6).
+pub(crate) fn changes_report(changes: &Value) -> String {
+    if changes.is_null() {
+        return crate::localized_format!(
+            "\n## Cambiato dopo l'ultima decisione\n\nElenco non disponibile: decisione registrata con una CLI precedente.\n",
+            "\n## Changed since the last decision\n\nList not available: decision recorded by an earlier CLI.\n"
+        );
+    }
+    let mut report = crate::localized_format!(
+        "\n## Cambiato dopo l'ultima decisione\n\n",
+        "\n## Changed since the last decision\n\n"
+    );
+    for (key, it, en) in [
+        ("changed", "modificato", "changed"),
+        ("added", "aggiunto", "added"),
+        ("removed", "rimosso", "removed"),
+    ] {
+        for item in changes[key].as_array().into_iter().flatten() {
+            let label = if crate::i18n::current() == crate::i18n::Language::En {
+                en
+            } else {
+                it
+            };
+            report.push_str(&format!(
+                "- {label}: {}\n",
+                item.as_str().unwrap_or_default()
+            ));
+        }
+    }
+    report
 }
 fn gate(store: &Store, state: &State, errors: &[String]) -> Result<&'static str> {
     if !errors.is_empty() {
@@ -1260,6 +1346,10 @@ fn review_design(store: &Store, id: &str) -> Result<(Value, i32)> {
     for error in &errors {
         report.push_str(&format!("- {error}\n"));
     }
+    let changes = design_changes(store, &state, gate)?;
+    if let Some(changes) = &changes {
+        report.push_str(&changes_report(changes));
+    }
     report.push_str(&crate::i18n::text(
         "\nI controlli non provano la qualità del design e non attribuiscono approvazioni umane.\n",
     ));
@@ -1269,10 +1359,20 @@ fn review_design(store: &Store, id: &str) -> Result<(Value, i32)> {
         false,
     )?;
     let exit = if errors.is_empty() { 0 } else { 2 };
-    Ok((
-        json!({"feature":id,"gate":gate,"errors":errors,"route":state.route,"decisions":state.decisions}),
-        exit,
-    ))
+    let mut output = json!({"feature":id,"gate":gate,"errors":errors,"route":state.route,"decisions":state.decisions});
+    if let Some(changes) = changes {
+        output["changes"] = changes;
+    }
+    Ok((output, exit))
+}
+/// `changes` for a stale design review, None otherwise.
+fn design_changes(store: &Store, state: &State, gate: &str) -> Result<Option<Value>> {
+    Ok(match state.decisions.last() {
+        Some(latest) if gate == "stale-review" => {
+            Some(snapshot_changes(latest, &design_snapshot(store, state)?))
+        }
+        _ => None,
+    })
 }
 
 struct HumanDecision {
@@ -1324,6 +1424,7 @@ fn decision_record(input: HumanDecision, fingerprint: String) -> Result<Decision
         reference: input.reference,
         revision: None,
         files: vec![],
+        snapshot: BTreeMap::new(),
     })
 }
 fn decide(store: &Store, id: &str, input: HumanDecision) -> Result<(Value, i32)> {
@@ -1339,6 +1440,7 @@ fn decide(store: &Store, id: &str, input: HumanDecision) -> Result<(Value, i32)>
     let fingerprint = design_fingerprint(store, &state)?;
     let files = input.files.clone();
     let mut decision = decision_record(input, fingerprint)?;
+    decision.snapshot = design_snapshot(store, &state)?;
     let context = collaboration::context(store, id)?;
     collaboration::bind(store, context.as_ref(), &files, &mut decision)?;
     state.decisions.push(decision);
@@ -1354,6 +1456,9 @@ fn status_feature(store: &Store, id: &str) -> Result<Value> {
     let mut output = serde_json::to_value(&state)?;
     output["gate"] = json!(gate);
     output["errors"] = json!(errors);
+    if let Some(changes) = design_changes(store, &state, gate)? {
+        output["changes"] = changes;
+    }
     output["collaboration"] = serde_json::to_value(collaboration::context(store, id)?)?;
     output["adoption"] = serde_json::to_value(adoption(store, &state.domain)?)?;
     let setup = setup_status(store, &state.domain)?;

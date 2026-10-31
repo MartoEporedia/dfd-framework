@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "Con stale-review dire quali componenti e file sono cambiati dopo l'ultima decisione (issue #6).",
+  "business_metrics": [
+    "Laboratorio v3: ogni fault stale-review elenca le voci cambiate",
+    "F00 senza changes"
+  ],
+  "epic": {
+    "reference": "https://github.com/MartoEporedia/dfd-framework/issues/6 aperta dal manutentore; richiesta di risolverla espressa in chat il 2026-10-31",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-10-31T08:01:18Z"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "applicable",
+      "implementation": "Campo changes {changed, added, removed} in output e report quando il gate è stale-review.",
+      "verification": "Test workflow red/green su design, release, record rapido e decisione legacy; suite locale; mutanti."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Snapshot solo informativo: fingerprint e gate invariati, nessuna approvazione derivata.",
+      "verification": "Test workflow red/green su design, release, record rapido e decisione legacy; suite locale; mutanti."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Campo snapshot facoltativo nelle decisioni; decisioni precedenti leggibili con changes null.",
+      "verification": "Test workflow red/green su design, release, record rapido e decisione legacy; suite locale; mutanti."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Red/green, suite, fmt, Clippy, doctor, mutanti.",
+      "verification": "Test workflow red/green su design, release, record rapido e decisione legacy; suite locale; mutanti."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Contratto e skill di review IT/EN descrivono snapshot e changes.",
+      "verification": "Test workflow red/green su design, release, record rapido e decisione legacy; suite locale; mutanti."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "excluded",
+      "justification": "Formato delle evidenze invariato."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "excluded",
+      "justification": "Nessun percorso nuovo oltre a quelli già letti dai gate."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "excluded",
+      "justification": "Nessuna scrittura nuova oltre al campo nella decisione."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Scritture e lock invariati."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "excluded",
+      "justification": "Nessuna dipendenza."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "excluded",
+      "justification": "Nessuna soglia di prestazioni."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "excluded",
+      "justification": "Nessun comando delle skill cambia."
+    }
+  ],
+  "test_plan": "Red/green: design con spec.md modificata elenca spec.md; release con codice ed evidence.json aggiornati elenca il file di codice; release-notes.md creato dopo; decisione senza snapshot con changes null; record rapido; gate non stale senza changes. fmt, Clippy, suite, doctor, check_translations, mutanti.",
+  "guardrails": "Lo snapshot non entra nel fingerprint e non decide gate; decisioni esistenti non riscritte; deny_unknown_fields mantenuto.",
+  "open_questions": []
+}
