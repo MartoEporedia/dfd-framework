@@ -834,10 +834,37 @@ fn dod_blocks(markdown: &str) -> Vec<String> {
         }
     }
     blocks.extend(current.map(|(text, _)| text));
+    // A heading citing a criterion also binds its whole section, down to the next
+    // heading of the same or a higher level (DoD written as "### OBS-01" + text).
+    let lines: Vec<_> = markdown.lines().collect();
+    for (start, line) in lines.iter().enumerate() {
+        let level = line.chars().take_while(|c| *c == '#').count();
+        if level == 0 || criterion_ids(line).is_empty() {
+            continue;
+        }
+        let mut section = String::new();
+        for (index, next) in lines.iter().enumerate().skip(start) {
+            let next_level = next.chars().take_while(|c| *c == '#').count();
+            if index > start && next_level > 0 && next_level <= level {
+                break;
+            }
+            section.push(' ');
+            section.push_str(next.trim());
+        }
+        blocks.push(section);
+    }
     blocks
         .iter()
         .map(|block| block.split_whitespace().collect::<Vec<_>>().join(" "))
         .collect()
+}
+/// True when a block holds only criterion IDs, numbers and markup.
+fn bare_reference(block: &str) -> bool {
+    static RE: OnceLock<Regex> = OnceLock::new();
+    !RE.get_or_init(|| Regex::new(r"\b(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b").unwrap())
+        .replace_all(block, "")
+        .chars()
+        .any(char::is_alphabetic)
 }
 fn valid_criterion(value: &str) -> bool {
     static RE: OnceLock<Regex> = OnceLock::new();
@@ -1030,17 +1057,23 @@ fn design_fingerprint(store: &Store, state: &State) -> Result<String> {
         );
         // The DoD text people read is a dependency too (issue #5): for each selected
         // criterion, the dod.md blocks citing it, with whitespace normalized.
-        let blocks = dod_blocks(&store.read(&format!(".dfd/domains/{}/dod.md", state.domain))?);
+        let dod = store.read(&format!(".dfd/domains/{}/dod.md", state.domain))?;
+        let blocks = dod_blocks(&dod);
         let selected: BTreeMap<_, Vec<_>> = ids
             .iter()
             .map(|id| {
-                (
-                    *id,
-                    blocks
-                        .iter()
-                        .filter(|block| criterion_ids(block).contains(*id))
-                        .collect(),
-                )
+                let citing: Vec<_> = blocks
+                    .iter()
+                    .filter(|block| criterion_ids(block).contains(*id))
+                    .cloned()
+                    .collect();
+                // Cited only as a bare ID: the descriptive text is elsewhere, so the
+                // whole dod.md stays a dependency.
+                if citing.iter().all(|block| bare_reference(block)) {
+                    (*id, vec![dod.clone()])
+                } else {
+                    (*id, citing)
+                }
             })
             .collect();
         hashes.insert("selected-dod".into(), hash(&serde_json::to_vec(&selected)?));

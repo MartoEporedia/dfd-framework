@@ -1,0 +1,20 @@
+$ cargo test --locked --offline --test workflow selective_review_tracks_dod && cargo test --locked --offline --lib dod_block
+# executed_at: 2026-10-31T12:12:53+00:00
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s
+     Running tests/workflow.rs (target/debug/deps/workflow-0da0f992897ec05a)
+
+running 2 tests
+test selective_review_tracks_dod_sections_and_bare_references ... ok
+test selective_review_tracks_dod_text_of_selected_criteria ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 75 filtered out; finished in 1.45s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running unittests src/lib.rs (target/debug/deps/dfd_kit-11ff44ccf47a12de)
+
+running 1 test
+test dod_block_tests::dod_blocks_split_grouped_criteria_and_keep_details ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+# exit_code: 0

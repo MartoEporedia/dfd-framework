@@ -2504,3 +2504,46 @@ fn selective_review_tracks_dod_text_of_selected_criteria() {
         "riga di tabella del criterio selezionato"
     );
 }
+
+#[test]
+fn selective_review_tracks_dod_sections_and_bare_references() {
+    // Security review on PR #9: DoD written as "### OBS-01" followed by text without the ID.
+    let gate = |p: &Project| p.run(&["status", "001-paypal"], 0)["gate"].clone();
+    let selective = |p: &Project| {
+        let path = ".dfd/features/001-paypal/state.json";
+        let mut state = p.read(path);
+        state["selective_review"] = json!(true);
+        p.save(path, &state);
+        p.approve();
+    };
+    let p = Project::new();
+    p.ready();
+    p.write(".dfd/domains/checkout/dod.md", "# DoD Checkout\n\n## Criteri\n\n### OBS-01\n\nContare gli errori del nuovo flusso.\n\n- inclusi i timeout\n\n### SLO-01\n\nBaseline legacy da migliorare.\n");
+    selective(&p);
+    p.write(".dfd/domains/checkout/dod.md", "# DoD Checkout\n\n## Criteri\n\n### OBS-01\n\nContare gli errori del nuovo flusso.\n\n- inclusi i timeout\n\n### SLO-01\n\nBaseline legacy da migliorare entro il trimestre.\n");
+    assert_eq!(
+        gate(&p),
+        "approved",
+        "sezione di un criterio non selezionato"
+    );
+    p.write(".dfd/domains/checkout/dod.md", "# DoD Checkout\n\n## Criteri\n\n### OBS-01\n\nContare gli errori del nuovo flusso.\n\n- esclusi i timeout\n\n### SLO-01\n\nBaseline legacy da migliorare entro il trimestre.\n");
+    assert_eq!(
+        gate(&p),
+        "stale-review",
+        "testo nella sezione del criterio selezionato"
+    );
+
+    // Selected criterion cited only as a bare ID: the whole dod.md is a dependency.
+    let p = Project::new();
+    p.ready();
+    p.write(
+        ".dfd/domains/checkout/dod.md",
+        "# DoD Checkout\n\n| OBS-01 | SLO-01 |\n\nContare gli errori del nuovo flusso.\n",
+    );
+    selective(&p);
+    p.write(
+        ".dfd/domains/checkout/dod.md",
+        "# DoD Checkout\n\n| OBS-01 | SLO-01 |\n\nContare gli errori del vecchio flusso.\n",
+    );
+    assert_eq!(gate(&p), "stale-review", "criterio citato solo come ID");
+}

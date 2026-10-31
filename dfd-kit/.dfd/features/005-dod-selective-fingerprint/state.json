@@ -28,6 +28,15 @@
       "conditions": [],
       "recorded_at": "2026-10-31T10:05:26.019953Z",
       "fingerprint": "e224e000e7945984a758dc4ca395e728fc9fdfe57be945d0f355067e1fdc228b"
+    },
+    {
+      "decision": "approved",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead",
+      "note": "Riconferma #5: blocchi di sezione e ripiego su dod.md per criteri citati solo come ID",
+      "conditions": [],
+      "recorded_at": "2026-10-31T13:31:50.063890Z",
+      "fingerprint": "f356edf375661cf247b2c99722c8caaba3a6743426d9e74e785f05d98764cf43"
     }
   ],
   "selective_review": true

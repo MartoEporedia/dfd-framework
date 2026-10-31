@@ -1,0 +1,27 @@
+$ cargo test --locked --offline --test workflow selective_review_tracks_dod_sections
+# executed_at: 2026-10-31T12:11:50+00:00
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.92s
+     Running tests/workflow.rs (target/debug/deps/workflow-0da0f992897ec05a)
+
+running 1 test
+test selective_review_tracks_dod_sections_and_bare_references ... FAILED
+
+failures:
+
+---- selective_review_tracks_dod_sections_and_bare_references stdout ----
+
+thread 'selective_review_tracks_dod_sections_and_bare_references' (40590565) panicked at tests/workflow.rs:2526:5:
+assertion `left == right` failed: testo nella sezione del criterio selezionato
+  left: String("approved")
+ right: "stale-review"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    selective_review_tracks_dod_sections_and_bare_references
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 76 filtered out; finished in 0.91s
+
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101

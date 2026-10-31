@@ -24,7 +24,7 @@
 
 - Scenari principali e criteri di accettazione:
   1. Per una feature con `selective_review: true`, il design fingerprint include, per ogni criterio presente in `design.json`, i blocchi di `dod.md` che citano quell'ID (`selected-dod`).
-  2. Un blocco è un'unità Markdown: una voce di elenco (`-`, `*`, `+`, `1.`) con le righe che la continuano o sono più indentate (sotto-voci comprese), fino a una riga vuota, un titolo o una voce allo stesso livello o meno indentata; una riga di tabella (`|…`); un titolo; un paragrafo di righe consecutive fino a una riga vuota. Un blocco cita un criterio se contiene l'ID secondo la stessa regola di `criterion_ids`.
+  2. Un blocco è un'unità Markdown: una voce di elenco (`-`, `*`, `+`, `1.`) con le righe che la continuano o sono più indentate (sotto-voci comprese), fino a una riga vuota, un titolo o una voce allo stesso livello o meno indentata; una riga di tabella (`|…`); un titolo; un paragrafo di righe consecutive fino a una riga vuota. Un blocco cita un criterio se contiene l'ID secondo la stessa regola di `criterion_ids`. Un titolo che cita un criterio forma anche un blocco di sezione: il titolo con tutto il contenuto fino al titolo successivo di livello pari o superiore (DoD scritte come `### OBS-01` seguito dal testo). Se un criterio selezionato compare solo in blocchi senza testo descrittivo (soli ID, numeri e markup), si usa in modo conservativo l'intero `dod.md`.
   3. Il testo dei blocchi viene normalizzato comprimendo gli spazi: un a capo o un'indentazione diversa non invalidano la review; ogni cambiamento di parole, punteggiatura o markup sì.
   4. Modificare in `dod.md` il testo di un criterio selezionato rende il design `stale-review`; modificare un criterio non selezionato, un titolo o un paragrafo che non cita criteri selezionati lascia il design `approved`. Un blocco che cita più criteri (per esempio un indice) li lega tutti: in modo conservativo, modificarlo invalida le feature che ne selezionano almeno uno.
   5. Il contratto non dice più che `dod.md` è solo descrittivo per le review selettive: il testo dei criteri selezionati in `dod.md` diventa una dipendenza del design, come lo statement nel catalogo.
@@ -71,3 +71,4 @@
 ## 8. Revisioni
 
 - 2026-10-31: prima bozza.
+- 2026-10-31: blocchi di sezione per i titoli che citano un criterio e ripiego sull'intero `dod.md` per criteri citati solo come ID (rilievo della review di sicurezza automatica sulla PR #9).

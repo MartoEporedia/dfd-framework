@@ -1,27 +1,27 @@
 {
   "schema_version": 1,
-  "design_fingerprint": "e224e000e7945984a758dc4ca395e728fc9fdfe57be945d0f355067e1fdc228b",
-  "plan_hash": "0eb4d091a4e82f99d70502a62f91cff7b86367ee3b9829ee7fc94d63387fc83d",
+  "design_fingerprint": "f356edf375661cf247b2c99722c8caaba3a6743426d9e74e785f05d98764cf43",
+  "plan_hash": "dd8be88f3c45ebd6cd9d01f33028a7dfedae19c62a01a0c9f5e899c49043248f",
   "files": [
     {
       "path": "src/lib.rs",
-      "sha256": "349b0832c3c14c93e6f9015d2b2175d1b7fe3452b9339a5fdbef358dd900826e"
+      "sha256": "74aefcfc32670ef23cd61a14818864a203542d97dae258e612d595db2bdba57b"
     },
     {
       "path": "tests/workflow.rs",
-      "sha256": "d05c586afc5ef5d64293a6b8f550b69a4bf050d6b1bc7b06477d880a4c45220d"
+      "sha256": "9c83d81bc88329c682864f54449c098b67f34848791fe0846a579379ce40f319"
     },
     {
       "path": "mutations/gates.json",
-      "sha256": "21c53d21ff2663dd01052c4df7df2518538f7837699525fabbc5e182c1809e28"
+      "sha256": "beae7fddc743b62fe9099f0966b8b09152010ca3a06a35e514cac6f13aa37adc"
     },
     {
       "path": "templates/contratto_toolkit.md",
-      "sha256": "304c8df7264a41aefdcac60e3c52ddfc94c1b2e6dc7539fb961137af5cf073c4"
+      "sha256": "87efdaf1cd8b7cb5083155bd20ea16a9f7a649eb78ef057a636daefdff3b69f8"
     },
     {
       "path": "en/templates/contratto_toolkit.md",
-      "sha256": "32c81bc10a2a653ebc5eb2b6b93ed0dc7a05840461db5c3523d45633bda83a17"
+      "sha256": "1b20811cff1927ebe0439bc29690d3197510484de44d9a0be80ff36b4d8e6511"
     },
     {
       "path": "skills/dfd-review-design/SKILL.md",
@@ -33,7 +33,7 @@
     },
     {
       "path": "i18n/documents.json",
-      "sha256": "77e8d82526727bdb99c9630a3a9fe18240af15b93bc82a652d265d6b9e0d50dc"
+      "sha256": "50347873cfa0ff77dc3e36baadd3e59e028e4319eda261c71afce7a230e19b85"
     },
     {
       "path": ".agents/skills/dfd-review-design/SKILL.md",
@@ -41,7 +41,7 @@
     },
     {
       "path": ".dfd/kit/templates/contratto_toolkit.md",
-      "sha256": "63bb9b8514c97e2bf6c91ef3336a2ca9f29d5bd0d79828efd2d21c8fb1f1167d"
+      "sha256": "096562fe19158c8e9b37b128a84e2650362230c5f4ab767edfa9ca69a932f474"
     },
     {
       "path": ".dfd/kit/skills/dfd-review-design/SKILL.md",
@@ -92,7 +92,51 @@
         "path": ".dfd/features/005-dod-selective-fingerprint/evidence/04-suite.log",
         "sha256": "e9b7281f533f9a66b7531b1435647713302e13102f0efe9c7aaa51484bcdd285"
       }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow selective_review_tracks_dod_sections",
+      "executed_at": "2026-10-31T12:11:50+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/05-red-dod-sections.log",
+        "sha256": "58c44cb9b28a1dab11ba05606d640dbcf80b4351724ad17c9867f11657693f62"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review_tracks_dod && cargo test --locked --offline --lib dod_block",
+      "executed_at": "2026-10-31T12:12:53+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/06-green-dod-sections.log",
+        "sha256": "f15d8b111145b7bc7bf1a1018a070c994dc6f0ed4d9e08af7c3ab08d0e8a3a90"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review_tracks_dod && cargo test --locked --offline --lib dod_block",
+      "executed_at": "2026-10-31T13:32:04+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/07-green-riconferma-sezioni.log",
+        "sha256": "f5aa4c0be2b9c76fc0f8c0ce03093b5e6bb75fe9357df21a20bfc5e6b2f16cec"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor; python3 scripts/check_translations.py; python3 scripts/mutation_test.py",
+      "executed_at": "2026-10-31T13:35:22+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/08-suite.log",
+        "sha256": "b467105aad0d19b2835f62855abcee1082125dc824f5315af86e58cd12aa85c6"
+      }
     }
   ],
-  "refactor_notes": "Nessun refactor oltre alla nuova funzione pura dod_blocks in lib.rs; nessuna strumentazione nuova: l'osservabilità è il gate stale-review già esistente. Red reale su F07b riprodotto; green iniziale e green rieseguito dopo la riconferma del design da parte del manutentore, necessaria perché la nuova formula rende stale anche la review di 005. Tre mutanti nuovi, 41/41 intercettati. Laboratorio v3: partendo da v2-baseline tutti i fault sono stale-review (migrazione una tantum); dalla baseline migrata v3-i5-baseline F07b passa a BLOCCATO, F00 resta verde; baseline ricostruita da zero verde. Copie installate rigenerate con dfd install; manifest traduzioni aggiornato dopo revisione delle coppie."
+  "refactor_notes": "Nessun refactor oltre alle funzioni pure dod_blocks e bare_reference in lib.rs; l'osservabilità è il gate stale-review esistente. Red reale su F07b riprodotto; dopo la prima PR una review di sicurezza automatica ha segnalato le DoD scritte per sezioni (### OBS-01 + paragrafo senza ID): red reale anche su quel caso, poi blocchi di sezione e ripiego sull'intero dod.md per criteri citati solo come ID. Specifica aggiornata e design riconfermato due volte dal manutentore (nuova formula, poi correzione); green rieseguito dopo ogni riconferma. Cinque mutanti nuovi, 43/43 intercettati. Laboratorio v3: da v2-baseline tutti i fault stale-review (migrazione una tantum); dalla baseline migrata v3-i5-baseline F07b BLOCCATO e F00 verde, invariato con il binario corretto; baseline ricostruita da zero verde."
 }

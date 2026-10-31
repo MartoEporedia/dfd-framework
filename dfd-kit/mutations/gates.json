@@ -409,5 +409,25 @@
       "selective_review_tracks_dod_text_of_selected_criteria"
     ],
     "purpose": "Una riga che inizia con un altro criterio apre un nuovo blocco: modificare un criterio non selezionato non invalida la review."
+  },
+  {
+    "id": "dod-heading-section",
+    "file": "src/lib.rs",
+    "before": "if level == 0 || criterion_ids(line).is_empty() {",
+    "after": "if true {",
+    "tests": [
+      "selective_review_tracks_dod_sections_and_bare_references"
+    ],
+    "purpose": "Il testo sotto un titolo che cita un criterio selezionato deve invalidare la review (DoD per sezioni)."
+  },
+  {
+    "id": "dod-bare-reference-fallback",
+    "file": "src/lib.rs",
+    "before": "if citing.iter().all(|block| bare_reference(block)) {",
+    "after": "if false {",
+    "tests": [
+      "selective_review_tracks_dod_sections_and_bare_references"
+    ],
+    "purpose": "Un criterio citato solo come ID deve legare l'intero dod.md."
   }
 ]

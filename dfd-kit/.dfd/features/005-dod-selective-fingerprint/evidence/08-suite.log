@@ -1,0 +1,176 @@
+$ set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor; python3 scripts/check_translations.py; python3 scripts/mutation_test.py
+# executed_at: 2026-10-31T13:35:22+00:00
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.55s
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.24s
+     Running unittests src/lib.rs (target/debug/deps/dfd_kit-11ff44ccf47a12de)
+
+running 2 tests
+test i18n::tests::formatting_preserves_user_values_and_restores_language_scope ... ok
+test dod_block_tests::dod_blocks_split_grouped_criteria_and_keep_details ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dfd-b0311fea15a9a507)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/workflow.rs (target/debug/deps/workflow-0da0f992897ec05a)
+
+running 77 tests
+test bilingual_conflicts_do_not_change_language_or_files ... ok
+test adoption_observation_requires_sources_and_domain_must_be_in_scope ... ok
+test bilingual_invalid_preferences_and_symlinks_are_rejected_before_install ... ok
+test bilingual_help_and_diagnostics_preserve_machine_and_user_values ... ok
+test approval_requires_explicit_human_confirmation ... ok
+test baseline_gaps_outside_scope_do_not_block_pilot_design ... ok
+test changed_risk_requires_new_assessment_and_invalidates_review ... ok
+test classification_is_proportional_and_new_service_uses_full ... ok
+test concurrent_mutation_lock_is_preserved ... ok
+test changes_criteria_require_coverage_or_justified_exclusion ... ok
+test changed_source_blocks_release_and_updated_evidence_requires_rollout_refresh ... ok
+test bilingual_switch_preserves_approved_design_and_localizes_generated_plan ... ok
+test bilingual_release_scaffolding_and_checks_use_english ... ok
+test conditional_decision_records_owner_and_due_phase ... ok
+test date_with_offset_is_accepted_and_future_date_is_rejected ... ok
+test all_adapters_install_embedded_skills_and_preserve_instructions ... ok
+test doctor_works_without_project_or_external_tools ... ok
+test bilingual_project_language_resources_and_preservation ... ok
+test design_conditions_due_before_release_must_be_reconfirmed ... ok
+test development_requires_current_human_design_approval ... ok
+test development_verifies_and_can_be_resumed_without_changing_work ... ok
+test development_conditions_are_not_silently_resolved ... ok
+test feature_spec_template_and_paypal_example_are_not_swapped ... ok
+test bilingual_english_resources_work_in_every_adapter_offline ... ok
+test independent_features_keep_state_separate ... ok
+test full_release_uses_full_checklist_and_requires_operational_resources ... ok
+test individual_defaults_need_no_team_context_or_second_reviewer ... ok
+test document_changes_require_review_reconfirmation_and_keep_history ... ok
+test iterative_specification_preserves_work_and_exposes_questions ... ok
+test init_adds_missing_setup_files_and_preserves_local_changes ... ok
+test lifecycle_development_completes_locally_and_never_enters_release ... ok
+test lifecycle_invalid_policy_is_not_ignored ... ok
+test lifecycle_local_suite_requires_success_fresh_logs_and_final_chronology ... ok
+test lifecycle_policy_changes_invalidate_reviews_and_existing_release ... ok
+test malformed_risk_does_not_modify_state ... ok
+test modified_managed_file_stops_installation_before_any_changes ... ok
+test effective_phase_follows_gates_and_verify_does_not_regress_phase ... ok
+test domain_changes_invalidate_its_reviews_and_local_templates_are_used ... ok
+test partial_specification_is_preserved ... ok
+test placeholder_design_blocks_approval ... ok
+test nonfunctional_execution_requires_success_and_unchanged_log ... ok
+test plan_refresh_preserves_tasks_and_requires_new_evidence ... ok
+test planned_resources_need_conditional_decision_and_activation_evidence ... ok
+test rapid_editorial_uses_pertinent_check_without_artificial_red ... ok
+test rapid_behavior_fix_requires_real_regression_without_extra_solo_gate ... ok
+test lifecycle_release_ci_policy_and_legacy_default_remain_strict ... ok
+test development_rejects_incomplete_unknown_failed_or_unordered_evidence ... ok
+test rapid_escalates_unknown_critical_contract_and_medium_risks ... ok
+test pre_release_requires_current_development_and_preserves_partial_files ... ok
+test rapid_invalid_logs_dates_and_regression_order_never_verify ... ok
+test rapid_preserves_record_rejects_collisions_and_promotes_with_origin ... ok
+test rapid_reviews_and_logs_are_bound_to_files_and_revision ... ok
+test plan_questions_missing_coverage_and_partial_artifacts_block_development ... ok
+test release_changes_requested_preserves_human_history_on_incomplete_preparation ... ok
+test ready_resource_requires_proof_even_with_complete_owner_and_reference ... ok
+test release_requires_a_real_communication_record ... ok
+test selective_review_ignores_unrelated_domain_changes_but_tracks_contracts ... ok
+test repeated_init_preserves_domain_work_and_is_fingerprint_stable ... ok
+test rollout_resume_preserves_content_phase_and_review ... ok
+test release_checks_rollout_progression_and_observation_duration_independently ... ok
+test release_review_requires_completion_and_human_decision_separate_from_design ... ok
+test setup_blocks_design_and_is_visible_without_features ... ok
+test semantic_notes_and_adoption_changes_invalidate_review ... ok
+test rollout_and_notes_changes_invalidate_release_review_without_losing_history ... ok
+test selective_review_tracks_dod_sections_and_bare_references ... ok
+test specification_cannot_be_overwritten ... ok
+test selective_review_tracks_dod_text_of_selected_criteria ... ok
+test symlinks_cannot_redirect_managed_writes_or_artifact_reads ... ok
+test unmanaged_compatible_skill_is_preserved_and_blocks_installation ... ok
+test switch_adapter_keeps_feature_and_review_without_duplicate_entrypoints ... ok
+test traversal_and_unowned_manifest_paths_are_rejected ... ok
+test unknown_risk_does_not_become_low_or_allow_specification ... ok
+test unsupported_json_schema_preserves_assessed_state ... ok
+test team_requires_independent_review_and_integrated_current_evidence ... ok
+test source_logs_and_plan_changes_invalidate_development ... ok
+test status_exit_reports_blocked_gates_for_features_changes_and_all ... ok
+test release_rejects_invalid_coverage_steps_tests_communications_and_questions ... ok
+
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 24.94s
+
+   Doc-tests dfd_kit
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `release` profile [optimized] target(s) in 0.05s
+{
+  "resources": 33,
+  "runtime_dependencies": [],
+  "skills": [
+    "dfd-assess",
+    "dfd-feature",
+    "dfd-implement",
+    "dfd-init",
+    "dfd-plan",
+    "dfd-pre-release",
+    "dfd-review-design",
+    "dfd-review-release",
+    "dfd-setup",
+    "dfd-specify",
+    "dfd-status",
+    "dfd-verify"
+  ],
+  "version": "0.1.0"
+}
+55 document pairs; 254 messages; 0 errors
+Baseline: running the complete unmodified suite
+[1/43] killed: risk-medium-boundary
+[2/43] killed: new-service-route
+[3/43] killed: unknown-risk-classification
+[4/43] killed: design-review-freshness
+[5/43] killed: development-human-gate
+[6/43] killed: evidence-file-integrity
+[7/43] killed: tdd-chronology
+[8/43] killed: tdd-ci-required
+[9/43] killed: release-review-freshness
+[10/43] killed: release-development-freshness
+[11/43] killed: planned-resource-approval
+[12/43] killed: rollout-complete-audience
+[13/43] killed: rollout-monotonic-exposure
+[14/43] killed: rollout-positive-duration
+[15/43] killed: resource-ready-proof
+[16/43] killed: stakeholder-communication-required
+[17/43] killed: nonfunctional-test-success
+[18/43] killed: schema-version-required
+[19/43] killed: lifecycle-final-suite
+[20/43] killed: lifecycle-legacy-ci
+[21/43] killed: lifecycle-fingerprint
+[22/43] killed: lifecycle-local-chronology
+[23/43] killed: rapid-critical-escalation
+[24/43] killed: rapid-real-regression
+[25/43] killed: rapid-review-snapshot
+[26/43] killed: solo-no-extra-review
+[27/43] killed: team-independent-reviewer
+[28/43] killed: team-integrated-checks
+[29/43] killed: team-reviewed-revision
+[30/43] killed: real-check-success
+[31/43] killed: selective-review-boundary
+[32/43] killed: language-resource-selection
+[33/43] killed: language-persistence
+[34/43] killed: language-file-preservation
+[35/43] killed: status-blocked-exit
+[36/43] killed: status-blocked-evidence
+[37/43] killed: verify-phase-no-regress
+[38/43] killed: effective-phase-design-approval
+[39/43] killed: selected-dod-fingerprint
+[40/43] killed: dod-block-nesting
+[41/43] killed: dod-block-criterion-lead
+[42/43] killed: dod-heading-section
+[43/43] killed: dod-bare-reference-fallback
+Results: {'killed': 43}; report: /Users/martoeporedia/lavori/dfd-framework/dfd-kit/target/mutation-results/report.json
+# exit_code: 0
