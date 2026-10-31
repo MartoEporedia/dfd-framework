@@ -367,6 +367,8 @@ fn lifecycle(store: &Store, domain: &str) -> Result<Lifecycle> {
             rationale: crate::i18n::text(
                 "Compatibilità legacy: CI richiesta prima della pre-release.",
             ),
+            log_markers: None,
+            suite_entrypoints: vec![],
         });
     }
     let policy: Lifecycle = store.json(&relative)?;
@@ -385,7 +387,18 @@ fn setup_errors(store: &Store, domain: &str) -> Result<Vec<String>> {
     }
     let root = format!(".dfd/domains/{domain}");
     let mut errors = vec![];
-    lifecycle(store, domain)?;
+    let policy = lifecycle(store, domain)?;
+    let mut entrypoints = BTreeSet::new();
+    for path in &policy.suite_entrypoints {
+        let file = store.path(path).ok().is_some_and(|file| file.is_file());
+        if !entrypoints.insert(path) || !file {
+            errors.push(crate::localized_format!(
+                "Fase 0: entrypoint della suite assente, duplicato o fuori dal progetto: {path}.",
+                "Phase 0: suite entrypoint missing, duplicated or outside the project: {path}.",
+                path = path
+            ));
+        }
+    }
     collaboration::policy(store, domain)?;
     for file in ["dod.md", "guardrails.md", "process.md"] {
         let relative = format!("{root}/{file}");
@@ -1216,6 +1229,14 @@ fn design_inputs(store: &Store, state: &State) -> Result<(Snapshot, Value, Snaps
     let policy = format!(".dfd/domains/{}/lifecycle.json", state.domain);
     if store.path(&policy)?.exists() {
         hashes.insert(policy.clone(), store.hash(&policy)?);
+        // Suite scripts are design dependencies (issue #4).
+        for path in &lifecycle(store, &state.domain)?.suite_entrypoints {
+            let current = match store.path(path) {
+                Ok(file) if file.is_file() => store.hash(path)?,
+                _ => "absent".into(),
+            };
+            hashes.insert(path.clone(), current);
+        }
     }
     hashes.insert(
         ".dfd/guardrails.md".into(),

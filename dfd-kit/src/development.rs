@@ -1,5 +1,15 @@
 use super::*;
 
+/// Default markers for passing logs: unittest, pytest and cargo failures or skips.
+const DEFAULT_LOG_MARKERS: [&str; 6] = [
+    "FAILED",
+    "skipped",
+    "Traceback",
+    "xfail",
+    "XFAIL",
+    "panicked",
+];
+
 fn entry_errors(store: &Store, state: &State) -> Result<Vec<String>> {
     let mut errors = validate_design(store, state)?;
     let gate = gate(store, state, &errors)?;
@@ -389,10 +399,49 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
             }
         }
     }
+    // Suspicious markers in passing logs: warnings only, the gate is unchanged (issue #4).
+    let markers: Vec<String> = policy.log_markers.clone().unwrap_or_else(|| {
+        DEFAULT_LOG_MARKERS
+            .iter()
+            .map(|marker| marker.to_string())
+            .collect()
+    });
+    let mut warnings = vec![];
+    for check in &evidence.checks {
+        // Only passing green/suite/ci logs are suspicious: a red log is expected to fail.
+        let passing = check.exit_code == 0
+            && matches!(
+                check.kind,
+                CheckKind::Green | CheckKind::Suite | CheckKind::Ci
+            );
+        if !passing {
+            continue;
+        }
+        let Some(body) = store
+            .path(&check.log.path)
+            .ok()
+            .filter(|file| file.is_file())
+            .and_then(|_| store.read(&check.log.path).ok())
+        else {
+            continue;
+        };
+        let kind = serde_json::to_value(check.kind)?;
+        for marker in markers.iter().filter(|marker| !marker.is_empty()) {
+            if body.contains(marker.as_str()) {
+                warnings.push(crate::localized_format!(
+                    "Log {} ({}, exit 0) contiene il marcatore «{}».",
+                    "Log {} ({}, exit 0) contains the marker “{}”.",
+                    check.log.path,
+                    kind.as_str().unwrap_or_default(),
+                    marker
+                ));
+            }
+        }
+    }
     let ready = errors.is_empty();
     Ok(
         json!({"gate":if !ready {"blocked-evidence"} else if policy.mode == LifecycleMode::DevelopmentOnly {"development-complete"} else {"ready-for-pre-release"}, "errors":errors,"lifecycle":policy,
-        "design_fingerprint":fingerprint,"plan_hash":plan_hash(store, &state.id)?,"next":if !ready {"dfd-implement"} else if policy.mode == LifecycleMode::DevelopmentOnly {"development-complete"} else {"dfd-pre-release"}}),
+        "design_fingerprint":fingerprint,"plan_hash":plan_hash(store, &state.id)?,"warnings":warnings,"next":if !ready {"dfd-implement"} else if policy.mode == LifecycleMode::DevelopmentOnly {"development-complete"} else {"dfd-pre-release"}}),
     )
 }
 
@@ -410,6 +459,16 @@ pub(super) fn verify(store: &Store, id: &str) -> Result<(Value, i32)> {
     );
     for error in output["errors"].as_array().unwrap() {
         report.push_str(&format!("- {}\n", error.as_str().unwrap()));
+    }
+    let warnings = output["warnings"].as_array().cloned().unwrap_or_default();
+    if !warnings.is_empty() {
+        report.push_str(&crate::localized_format!(
+            "\n## Avvisi\n\n",
+            "\n## Warnings\n\n"
+        ));
+        for warning in &warnings {
+            report.push_str(&format!("- {}\n", warning.as_str().unwrap_or_default()));
+        }
     }
     report.push_str(&crate::i18n::text("\nControlli strutturali su evidenze dichiarate e hash locali; non certificano autenticità dei log, qualità del codice o approvazione del rilascio.\n"));
     store.write(

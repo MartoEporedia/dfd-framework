@@ -265,7 +265,12 @@ File opzionale `.dfd/domains/<dominio>/lifecycle.json`:
 }
 ```
 
-Campi obbligatori e nessun campo ignoto. `mode` ammette `development-only` e `release-preparation`. Motivazione non vuota; solo sviluppo richiede `ci_required: false`. In preparazione al rilascio valutare la scelta con rischio e destinazione: `true` richiede evidenze `ci`; `false` accetta la suite locale come alternativa motivata da valutare nella review umana. Una policy assente mantiene il comportamento precedente: preparazione al rilascio con CI richiesta. Policy malformate sono errori, senza fallback. La CLI non certifica l’adeguatezza della motivazione.
+I quattro campi dell’esempio sono obbligatori; nessun campo ignoto. `mode` ammette `development-only` e `release-preparation`. Motivazione non vuota; solo sviluppo richiede `ci_required: false`. In preparazione al rilascio valutare la scelta con rischio e destinazione: `true` richiede evidenze `ci`; `false` accetta la suite locale come alternativa motivata da valutare nella review umana. Una policy assente mantiene il comportamento precedente: preparazione al rilascio con CI richiesta. Policy malformate sono errori, senza fallback. La CLI non certifica l’adeguatezza della motivazione.
+
+Due campi facoltativi leggono le evidenze senza eseguire nulla:
+
+- `log_markers`: lista di stringhe cercate, in modo esatto e sensibile alle maiuscole, nei log dei check `green`, `suite` e `ci` con `exit_code: 0`. Senza il campo vale la lista integrata `FAILED`, `skipped`, `Traceback`, `xfail`, `XFAIL`, `panicked`; una lista vuota disattiva il controllo. I log `red` sono esclusi. Ogni marcatore trovato produce un avviso in `development.warnings` (`status`, `verify`, sezione “Avvisi” di `development-review.md`) e in `release.warnings` di `review-release`. Gli avvisi non cambiano gate né exit code: le euristiche sbagliano e vanno valutate nella review.
+- `suite_entrypoints`: percorsi, relativi alla radice, degli script che eseguono la suite (per esempio `["ci.sh"]`). Ogni file deve esistere dentro il progetto, senza duplicati, altrimenti la Fase 0 è bloccata. L’hash di ciascun file entra nel fingerprint di design: modificare lo script dopo l’approvazione rende la review `stale-review` e il percorso compare in `changes`.
 
 Il fingerprint include il file quando presente; aggiunta, rimozione o modifica invalidano le review, il piano e le evidenze. Per i domini senza file i fingerprint restano compatibili. Aggiornare prima la policy, rivalutare la specifica e registrare la decisione umana pertinente; usare plan --refresh e rieseguire le verifiche coinvolte.
 

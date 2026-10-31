@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "061deba7fea0a0689be841216c25cfdfd385e649fec5ae547b72e88999a68cb1",
+  "plan_hash": "f2eaf41507918bb9afdc3dc8f5265a4d70b96adbf4f510ebe36106bb5e167e7c",
+  "files": [
+    {
+      "path": "src/model.rs",
+      "sha256": "3fee23692019cf854eccbf5982c8885bdf613fa62bd0382fd9587b843da2f055"
+    },
+    {
+      "path": "src/lib.rs",
+      "sha256": "d611198af20b93ecbb98cb7c46378e554a128c2f5251b4034a38a6c5d3b7db6d"
+    },
+    {
+      "path": "src/development.rs",
+      "sha256": "2bf3505c7b0ecfd3db302ba926523d2466e9d674845f55a344b447ccfc497409"
+    },
+    {
+      "path": "src/release.rs",
+      "sha256": "4dde5aeac299496472c1855c744d300a5b292b240ff0a96423f90b385a35e172"
+    },
+    {
+      "path": "tests/workflow.rs",
+      "sha256": "3b59bba0e3653b696c65da32d88f839db4f1546b01eb8a911db31fdfbc5550fc"
+    },
+    {
+      "path": "mutations/gates.json",
+      "sha256": "3f318475f4b106cc64fe20d50c96556ba9cbc47635a04786c7aa5c25b07d0ee0"
+    },
+    {
+      "path": "i18n/en.json",
+      "sha256": "3bf4e4c49ade4d2f600aa17caa529e212dd9dd055678900a11acb1e01dc054bb"
+    },
+    {
+      "path": "templates/contratto_toolkit.md",
+      "sha256": "2e8a2aa5233278e920f4e0e18f25b044836f1360245fdf56b62c93120d5417ca"
+    },
+    {
+      "path": "en/templates/contratto_toolkit.md",
+      "sha256": "69670a7b118ed6647a56f8e8da420926b515020b01c36ad60f5d977ad200b9e2"
+    },
+    {
+      "path": "skills/dfd-setup/SKILL.md",
+      "sha256": "31a0ba05a33c885b4fd43fd5f5c83fb54d33a7ed30cbbee75db17d4d44ce205c"
+    },
+    {
+      "path": "en/skills/dfd-setup/SKILL.md",
+      "sha256": "a03306abf31c3db5acf3d3ad0b7696a1ce77356250fb3f4daccb380e46d3f269"
+    },
+    {
+      "path": "skills/dfd-verify/SKILL.md",
+      "sha256": "f4aa2b00db2e4225456aefa048876547a0d2eaadcba666776ee239db82115b2c"
+    },
+    {
+      "path": "en/skills/dfd-verify/SKILL.md",
+      "sha256": "af78a1f82edf17ac5df167453ed4801178507ed344caf23032b231b3c13c505d"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "3710d0baabe6f6d79ef4af6884648c6de9b74cb8fdb282b39a4e09a171977e31"
+    },
+    {
+      "path": ".agents/skills/dfd-setup/SKILL.md",
+      "sha256": "1b65ab4fd2a2539fdf67b93449973a0b007d8dd0a36bb08642406c5fc0374284"
+    },
+    {
+      "path": ".agents/skills/dfd-verify/SKILL.md",
+      "sha256": "727bc7244a313ae9dc3db1e5787e3fcf392cf69aa349c8d2fb8b372c2a76e0da"
+    },
+    {
+      "path": ".dfd/kit/templates/contratto_toolkit.md",
+      "sha256": "f1f896d218304e16dcb46af0f7da36f59277f76b5389c9815d39109a07a907b2"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-setup/SKILL.md",
+      "sha256": "1b65ab4fd2a2539fdf67b93449973a0b007d8dd0a36bb08642406c5fc0374284"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-verify/SKILL.md",
+      "sha256": "727bc7244a313ae9dc3db1e5787e3fcf392cf69aa349c8d2fb8b372c2a76e0da"
+    }
+  ],
+  "checks": [
+    {
+      "task": "log-markers",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow log_markers",
+      "executed_at": "2026-10-31T15:40:23+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/008-log-markers-entrypoints/evidence/01-red-log-markers.log",
+        "sha256": "d2b959c70a3805839b9caa2e33cfce2631f093b2ebc9a50bf971fed62d9590f9"
+      }
+    },
+    {
+      "task": "suite-entrypoints",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow suite_entrypoints",
+      "executed_at": "2026-10-31T15:40:24+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/008-log-markers-entrypoints/evidence/02-red-suite-entrypoints.log",
+        "sha256": "8bd0b1ae491f7d67418e399efc33a14ef0327c1c1c3f50c126244f07dc0c016a"
+      }
+    },
+    {
+      "task": "log-markers",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow log_markers",
+      "executed_at": "2026-10-31T15:41:58+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/008-log-markers-entrypoints/evidence/03-green-log-markers.log",
+        "sha256": "6089c1ac2c8597a5eafa21573fe6ca0bb594bb2a146fa37924507e0c8f07f36c"
+      }
+    },
+    {
+      "task": "suite-entrypoints",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow suite_entrypoints",
+      "executed_at": "2026-10-31T15:41:59+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/008-log-markers-entrypoints/evidence/04-green-suite-entrypoints.log",
+        "sha256": "48d93e58ec4b52b0b63d9d4702e302674e35de707fe2b70ce4695a8c7c70fd2a"
+      }
+    },
+    {
+      "task": "log-markers",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow log_markers",
+      "executed_at": "2026-10-31T15:45:57+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/008-log-markers-entrypoints/evidence/05-green-log-markers-filtro.log",
+        "sha256": "1d946803cb018b7c382fceb238b3975be03a70cc305de96119772ad696645382"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor; python3 scripts/check_translations.py; python3 scripts/mutation_test.py",
+      "executed_at": "2026-10-31T15:53:10+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/008-log-markers-entrypoints/evidence/06-suite.log",
+        "sha256": "ec1d87401354d6a7663b07f0e3ae6b23f5f98733add0ce2dfcf9e9c77bbc9f3b"
+      }
+    }
+  ],
+  "refactor_notes": "Refactor: filtro dei log passanti scritto come unica condizione passing dopo che il mutante su exit_code risultava equivalente (un red valido ha sempre exit > 0 ed è escluso anche dal tipo); costante DEFAULT_LOG_MARKERS in development.rs, unico uso, anche per renderla raggiungibile dal runner dei mutanti. Osservabilità: development.warnings e release.warnings, sezione Avvisi nei report; gate ed exit code invariati. Red reali per entrambi i task (nessun avviso; suite_entrypoints rifiutato come campo sconosciuto); green rieseguito dopo il refactor del filtro. Quattro mutanti nuovi, 57/57 intercettati (mutante di setup riscritto con && perché la prima versione non compilava). Quattro messaggi aggiunti al catalogo. Laboratorio v3: baseline v3-i4-baseline con suite_entrypoints [ci.sh] e review riconfermate; F03 avvisi skipped, F05 BLOCCATO (design stale-review, changes ci.sh) e, dalla baseline senza entrypoint, avvisi FAILED/Traceback; F00 e baseline da zero verdi senza avvisi. Decisione di design registrata dall'agente su richiesta esplicita del manutentore."
+}

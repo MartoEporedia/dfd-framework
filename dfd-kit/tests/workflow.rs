@@ -2819,3 +2819,130 @@ fn stale_review_lists_what_changed_after_the_decision() {
         json!(["record#verification_notes"])
     );
 }
+
+impl Project {
+    /// Replace a check's log and update its hash in evidence.json.
+    fn rewrite_log(&self, index: usize, body: &str) {
+        let path = ".dfd/features/001-paypal/evidence.json";
+        let mut evidence = self.read(path);
+        let log = evidence["checks"][index]["log"]["path"]
+            .as_str()
+            .unwrap()
+            .to_string();
+        self.write(&log, body);
+        evidence["checks"][index]["log"] = self.file_evidence(&log);
+        self.save(path, &evidence);
+    }
+    /// Set lifecycle.json, then reconfirm design and plan as the contract requires.
+    fn relifecycle(&self, policy: Value) {
+        self.save(".dfd/domains/checkout/lifecycle.json", &policy);
+        self.approve();
+        self.run(&["plan", "001-paypal", "--refresh"], 0);
+        let status = self.run(&["status", "001-paypal"], 2);
+        let mut evidence = self.read(".dfd/features/001-paypal/evidence.json");
+        evidence["design_fingerprint"] = status["development"]["design_fingerprint"].clone();
+        evidence["plan_hash"] = status["development"]["plan_hash"].clone();
+        self.save(".dfd/features/001-paypal/evidence.json", &evidence);
+    }
+}
+
+#[test]
+fn log_markers_warn_on_passing_logs_without_changing_the_gate() {
+    // Issue #4, faults F03 (skipped test) and F05 (FAILED with exit 0).
+    let warnings = |output: &Value| {
+        output["development"]["warnings"]
+            .as_array()
+            .unwrap()
+            .clone()
+    };
+    let p = Project::new();
+    p.developed();
+    assert!(warnings(&p.run(&["verify", "001-paypal"], 0)).is_empty());
+    p.rewrite_log(
+        1,
+        "test_calendario ... skipped 'instabile'\nOK (skipped=1)\n",
+    );
+    let output = p.run(&["verify", "001-paypal"], 0);
+    assert_eq!(output["development"]["gate"], "ready-for-pre-release");
+    let found = warnings(&output);
+    assert_eq!(found.len(), 1, "{found:?}");
+    assert!(found[0].as_str().unwrap().contains("green.log"));
+    assert!(found[0].as_str().unwrap().contains("skipped"));
+    p.rewrite_log(2, "FAILED (failures=7)\n");
+    assert_eq!(warnings(&p.run(&["verify", "001-paypal"], 0)).len(), 2);
+    // A red log is expected to fail: no warning.
+    p.rewrite_log(
+        0,
+        "FAILED (failures=1)\nTraceback (most recent call last):\n",
+    );
+    assert_eq!(warnings(&p.run(&["status", "001-paypal"], 0)).len(), 2);
+    assert!(
+        fs::read_to_string(p.path(".dfd/features/001-paypal/development-review.md"))
+            .unwrap()
+            .contains("skipped")
+    );
+
+    // Empty list disables the check; a custom list replaces the default.
+    let base = json!({"schema_version":1,"mode":"release-preparation","ci_required":true,
+        "rationale":"Pilota con CI richiesta prima della pre-release"});
+    let mut policy = base.clone();
+    policy["log_markers"] = json!([]);
+    p.relifecycle(policy);
+    assert!(warnings(&p.run(&["verify", "001-paypal"], 0)).is_empty());
+    let mut policy = base.clone();
+    policy["log_markers"] = json!(["instabile"]);
+    p.relifecycle(policy);
+    let found = warnings(&p.run(&["verify", "001-paypal"], 0));
+    assert_eq!(found.len(), 1, "{found:?}");
+    assert!(found[0].as_str().unwrap().contains("instabile"));
+
+    // Release review shows the development warnings.
+    let r = Project::new();
+    r.pre_release_ready();
+    r.rewrite_log(1, "OK (skipped=1)\n");
+    r.run(&["pre-release", "001-paypal", "--refresh"], 0);
+    let release = r.run(&["review-release", "001-paypal"], 0)["release"].clone();
+    assert_eq!(
+        release["warnings"].as_array().unwrap().len(),
+        1,
+        "{release}"
+    );
+    assert!(
+        fs::read_to_string(r.path(".dfd/features/001-paypal/release-review.md"))
+            .unwrap()
+            .contains("skipped")
+    );
+}
+
+#[test]
+fn suite_entrypoints_bind_the_suite_script_to_the_design() {
+    // Issue #4, fault F05: "|| true" appended to ci.sh after the approval.
+    let policy = |entrypoints: Value| {
+        json!({"schema_version":1,"mode":"release-preparation","ci_required":true,
+            "rationale":"Pilota con CI richiesta prima della pre-release","suite_entrypoints":entrypoints})
+    };
+    let p = Project::new();
+    p.ready();
+    p.write("ci.sh", "#!/bin/sh\ncargo test\n");
+    p.save(
+        ".dfd/domains/checkout/lifecycle.json",
+        &policy(json!(["ci.sh"])),
+    );
+    p.run(&["setup", "--domain", "checkout"], 0);
+    p.approve();
+    assert_eq!(p.run(&["status", "001-paypal"], 0)["gate"], "approved");
+    p.write("ci.sh", "#!/bin/sh\ncargo test || true\n");
+    let status = p.run(&["status", "001-paypal"], 0);
+    assert_eq!(status["gate"], "stale-review");
+    assert_eq!(status["changes"]["changed"], json!(["ci.sh"]));
+
+    for (entrypoints, case) in [
+        (json!(["missing.sh"]), "assente"),
+        (json!(["../outside.sh"]), "fuori radice"),
+        (json!(["ci.sh", "ci.sh"]), "duplicato"),
+    ] {
+        p.save(".dfd/domains/checkout/lifecycle.json", &policy(entrypoints));
+        let setup = p.run(&["setup", "--domain", "checkout"], 2);
+        assert_eq!(setup["gate"], "blocked", "{case}");
+    }
+}

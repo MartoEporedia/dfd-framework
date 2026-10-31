@@ -95,6 +95,13 @@ pub struct Lifecycle {
     pub mode: LifecycleMode,
     pub ci_required: bool,
     pub rationale: String,
+    /// Substrings that raise a warning in passing evidence logs (issue #4);
+    /// None means the built-in list, an empty list disables the check.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub log_markers: Option<Vec<String>>,
+    /// Suite scripts whose hashes are design dependencies (issue #4).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub suite_entrypoints: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

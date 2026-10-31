@@ -529,5 +529,45 @@
       "stale_review_lists_what_changed_after_the_decision"
     ],
     "purpose": "La decisione sul record rapido registra lo snapshot dei componenti."
+  },
+  {
+    "id": "log-markers-passing-only",
+    "file": "src/development.rs",
+    "before": "if !passing {",
+    "after": "if false {",
+    "tests": [
+      "log_markers_warn_on_passing_logs_without_changing_the_gate"
+    ],
+    "purpose": "I log red (fallimento atteso) non producono avvisi; solo i log con exit 0 sono sospetti."
+  },
+  {
+    "id": "log-markers-default-list",
+    "file": "src/development.rs",
+    "before": "    \"FAILED\",\n    \"skipped\",\n    \"Traceback\",",
+    "after": "    \"\",\n    \"\",\n    \"\",",
+    "tests": [
+      "log_markers_warn_on_passing_logs_without_changing_the_gate"
+    ],
+    "purpose": "Senza log_markers vale la lista integrata: F03 (skipped) e F05 (FAILED con exit 0) producono un avviso."
+  },
+  {
+    "id": "suite-entrypoint-fingerprint",
+    "file": "src/lib.rs",
+    "before": "hashes.insert(path.clone(), current);",
+    "after": "let _ = current;",
+    "tests": [
+      "suite_entrypoints_bind_the_suite_script_to_the_design"
+    ],
+    "purpose": "Modificare uno script della suite dopo l'approvazione rende il design stale-review (F05)."
+  },
+  {
+    "id": "suite-entrypoint-setup",
+    "file": "src/lib.rs",
+    "before": "if !entrypoints.insert(path) || !file {",
+    "after": "if !entrypoints.insert(path) && !file {",
+    "tests": [
+      "suite_entrypoints_bind_the_suite_script_to_the_design"
+    ],
+    "purpose": "Entrypoint assenti, duplicati o fuori dal progetto sono errori di Fase 0."
   }
 ]

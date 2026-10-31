@@ -197,7 +197,12 @@ Optional `.dfd/domains/<domain>/lifecycle.json`:
 {"schema_version":1,"mode":"development-only","ci_required":false,"rationale":"Local prototype: CI premature; traced final local suite required"}
 ```
 
-All fields required; unknown fields rejected. Modes: development-only/release-preparation. Nonblank rationale required; development-only requires ci_required false. In release preparation justify CI against risk/target: true requires ci evidence; false accepts local suite as a justified human-reviewed alternative. Missing policy retains legacy release-preparation with required CI. Malformed policy errors never silently fall back. Maturity is separate from adoption mode/level and risk route.
+The four example fields are required; unknown fields rejected. Modes: development-only/release-preparation. Nonblank rationale required; development-only requires ci_required false. In release preparation justify CI against risk/target: true requires ci evidence; false accepts local suite as a justified human-reviewed alternative. Missing policy retains legacy release-preparation with required CI. Malformed policy errors never silently fall back. Maturity is separate from adoption mode/level and risk route.
+
+Two optional fields read the evidence without executing anything:
+
+- log_markers: strings searched exactly and case-sensitively in the logs of green, suite and ci checks with exit_code 0. Without the field the built-in list applies: FAILED, skipped, Traceback, xfail, XFAIL, panicked; an empty list disables the check. red logs are excluded. Each marker found yields a warning in development.warnings (status, verify, “Warnings” section of development-review.md) and in release.warnings of review-release. Warnings never change gate or exit code: heuristics can be wrong and belong to the review.
+- suite_entrypoints: paths, relative to the root, of the scripts that run the suite (for example ["ci.sh"]). Each file must exist inside the project without duplicates, otherwise Phase 0 is blocked. Each file's hash is part of the design fingerprint: changing the script after approval makes the review stale-review and the path appears in changes.
 
 Adding/removing/changing lifecycle invalidates relevant review/plan/evidence; absent-file fingerprints remain compatible. Reassess policy/specification, record actual human decision, refresh plan and rerun affected checks. suite means actual final local execution, ci means actual CI; both require exit 0, valid nonfuture timestamp and nonempty current hashed log. Any invalid declared check blocks even if optional. Final suite and required CI follow all greens.
 

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "medium",
+      "rationale": "Due campi facoltativi nuovi nel contratto condiviso lifecycle.json (log_markers, suite_entrypoints) e un campo warnings nell'output di sviluppo e release."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Toolkit in solo sviluppo, unico utilizzatore il manutentore."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Lettura di log già hashati; nessuna dipendenza."
+    },
+    "reliability": {
+      "level": "medium",
+      "rationale": "Le euristiche sui log possono dare falsi positivi (per questo solo avvisi); dichiarare gli entrypoint cambia il fingerprint di design dei domini che li adottano."
+    },
+    "security": {
+      "level": "low",
+      "rationale": "Gli avvisi non concedono né tolgono approvazioni; i percorsi degli entrypoint passano dalla validazione di Store (niente escape dalla radice)."
+    }
+  }
+}
