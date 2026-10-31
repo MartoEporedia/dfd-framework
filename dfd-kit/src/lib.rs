@@ -795,6 +795,50 @@ fn criterion_ids(markdown: &str) -> BTreeSet<String> {
         .map(|item| item.as_str().to_string())
         .collect()
 }
+/// Markdown units of dod.md: a list item with its continuation lines and deeper
+/// sub-items, a table row, a heading or a paragraph. A line whose content starts with
+/// a criterion ID always opens a new unit. Whitespace is normalized.
+fn dod_blocks(markdown: &str) -> Vec<String> {
+    static ITEM: OnceLock<Regex> = OnceLock::new();
+    static LEAD: OnceLock<Regex> = OnceLock::new();
+    let item = ITEM.get_or_init(|| Regex::new(r"^(\s*)(?:[-*+]|[0-9]+[.)])\s+").unwrap());
+    let lead = LEAD
+        .get_or_init(|| Regex::new(r"^[\s>*_`\[]*(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b").unwrap());
+    let mut blocks = vec![];
+    // Current unit and, for a list item, the indentation of its marker.
+    let mut current: Option<(String, Option<usize>)> = None;
+    for line in markdown.lines() {
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            blocks.extend(current.take().map(|(text, _)| text));
+            continue;
+        }
+        let marker = item
+            .captures(line)
+            .map(|c| (c[1].len(), c.get(0).unwrap().end()));
+        let content = marker.map_or(line, |(_, end)| &line[end..]);
+        let nested = matches!(
+            (&current, marker),
+            (Some((_, Some(parent))), Some((indent, _))) if indent > *parent
+        );
+        let single = trimmed.starts_with('#') || trimmed.starts_with('|');
+        if single || lead.is_match(content) || (marker.is_some() && !nested) || current.is_none() {
+            blocks.extend(current.take().map(|(text, _)| text));
+            current = Some((String::new(), marker.map(|(indent, _)| indent)));
+        }
+        let (text, _) = current.as_mut().unwrap();
+        text.push(' ');
+        text.push_str(trimmed);
+        if single {
+            blocks.extend(current.take().map(|(text, _)| text));
+        }
+    }
+    blocks.extend(current.map(|(text, _)| text));
+    blocks
+        .iter()
+        .map(|block| block.split_whitespace().collect::<Vec<_>>().join(" "))
+        .collect()
+}
 fn valid_criterion(value: &str) -> bool {
     static RE: OnceLock<Regex> = OnceLock::new();
     RE.get_or_init(|| Regex::new(r"^(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}$").unwrap())
@@ -984,6 +1028,22 @@ fn design_fingerprint(store: &Store, state: &State) -> Result<String> {
             "selected-criteria".into(),
             hash(&serde_json::to_vec(&criteria)?),
         );
+        // The DoD text people read is a dependency too (issue #5): for each selected
+        // criterion, the dod.md blocks citing it, with whitespace normalized.
+        let blocks = dod_blocks(&store.read(&format!(".dfd/domains/{}/dod.md", state.domain))?);
+        let selected: BTreeMap<_, Vec<_>> = ids
+            .iter()
+            .map(|id| {
+                (
+                    *id,
+                    blocks
+                        .iter()
+                        .filter(|block| criterion_ids(block).contains(*id))
+                        .collect(),
+                )
+            })
+            .collect();
+        hashes.insert("selected-dod".into(), hash(&serde_json::to_vec(&selected)?));
         let guardrails = format!(".dfd/domains/{}/guardrails.md", state.domain);
         hashes.insert(guardrails.clone(), store.hash(&guardrails)?);
     } else {
@@ -1546,5 +1606,29 @@ fn execute_inner(cli: Cli) -> Result<(Value, i32)> {
             Ok((output, exit))
         }
         Command::Doctor => unreachable!(),
+    }
+}
+
+#[cfg(test)]
+mod dod_block_tests {
+    use super::dod_blocks;
+
+    #[test]
+    fn dod_blocks_split_grouped_criteria_and_keep_details() {
+        let blocks = dod_blocks(
+            "# DoD\n\n- **Osservabilità**: OBS-01, OBS-02\n- Osservabilità\n  - OBS-01: contare\n    gli errori\n    - inclusi i timeout\n  - OBS-02: tracciare\n\nSLO-01: soglia\nSLO-02: altra soglia\n",
+        );
+        assert_eq!(
+            blocks,
+            [
+                "# DoD",
+                "- **Osservabilità**: OBS-01, OBS-02",
+                "- Osservabilità",
+                "- OBS-01: contare gli errori - inclusi i timeout",
+                "- OBS-02: tracciare",
+                "SLO-01: soglia",
+                "SLO-02: altra soglia",
+            ]
+        );
     }
 }

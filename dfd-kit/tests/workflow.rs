@@ -2460,3 +2460,47 @@ fn effective_phase_follows_gates_and_verify_does_not_regress_phase() {
     assert_eq!(status["gate"], "stale-review");
     assert_eq!(status["effective_phase"], "design");
 }
+
+#[test]
+fn selective_review_tracks_dod_text_of_selected_criteria() {
+    // Issue #5, fault F07b: the DoD text changed only in dod.md after the design approval.
+    let gate = |p: &Project| p.run(&["status", "001-paypal"], 0)["gate"].clone();
+    let selective = |p: &Project| {
+        let path = ".dfd/features/001-paypal/state.json";
+        let mut state = p.read(path);
+        state["selective_review"] = json!(true);
+        p.save(path, &state);
+        p.approve();
+    };
+    let p = Project::new();
+    p.ready();
+    selective(&p);
+    p.write(".dfd/domains/checkout/dod.md", "# DoD Checkout\nOBS-01: contare gli errori del nuovo flusso.\nSLO-01: baseline legacy da migliorare entro il trimestre.\n");
+    assert_eq!(gate(&p), "approved", "criterio non selezionato");
+    p.write(".dfd/domains/checkout/dod.md", "# DoD del checkout\nOBS-01:  contare gli\n   errori del nuovo flusso.\nSLO-01: baseline legacy da migliorare entro il trimestre.\n");
+    assert_eq!(gate(&p), "approved", "titolo e spazi");
+    p.write(".dfd/domains/checkout/dod.md", "# DoD del checkout\nOBS-01: contare gli errori del vecchio flusso.\nSLO-01: baseline legacy da migliorare entro il trimestre.\n");
+    assert_eq!(
+        gate(&p),
+        "stale-review",
+        "testo DoD del criterio selezionato"
+    );
+
+    let p = Project::new();
+    p.ready();
+    p.write(".dfd/domains/checkout/dod.md", "# DoD Checkout\n\n- **OBS-01**: contare gli errori del nuovo flusso.\n  - inclusi i timeout del provider\n- **SLO-01**: baseline legacy da migliorare.\n\n| ID | Soglia |\n|---|---|\n| OBS-01 | nessun aumento |\n");
+    selective(&p);
+    p.write(".dfd/domains/checkout/dod.md", "# DoD Checkout\n\n- **OBS-01**: contare gli errori del nuovo flusso.\n  - esclusi i timeout del provider\n- **SLO-01**: baseline legacy da migliorare.\n\n| ID | Soglia |\n|---|---|\n| OBS-01 | nessun aumento |\n");
+    assert_eq!(
+        gate(&p),
+        "stale-review",
+        "sotto-voce del criterio selezionato"
+    );
+    p.approve();
+    p.write(".dfd/domains/checkout/dod.md", "# DoD Checkout\n\n- **OBS-01**: contare gli errori del nuovo flusso.\n  - esclusi i timeout del provider\n- **SLO-01**: baseline legacy da migliorare.\n\n| ID | Soglia |\n|---|---|\n| OBS-01 | aumento massimo 1% |\n");
+    assert_eq!(
+        gate(&p),
+        "stale-review",
+        "riga di tabella del criterio selezionato"
+    );
+}

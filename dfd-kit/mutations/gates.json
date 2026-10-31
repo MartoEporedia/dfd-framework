@@ -379,5 +379,35 @@
       "effective_phase_follows_gates_and_verify_does_not_regress_phase"
     ],
     "purpose": "Un design da riconfermare non deve mai produrre una fase effettiva successiva al design."
+  },
+  {
+    "id": "selected-dod-fingerprint",
+    "file": "src/lib.rs",
+    "before": ".filter(|block| criterion_ids(block).contains(*id))",
+    "after": ".filter(|_| false)",
+    "tests": [
+      "selective_review_tracks_dod_text_of_selected_criteria"
+    ],
+    "purpose": "Il testo di dod.md dei criteri selezionati deve invalidare la review selettiva (issue #5, F07b)."
+  },
+  {
+    "id": "dod-block-nesting",
+    "file": "src/lib.rs",
+    "before": "if indent > *parent",
+    "after": "if false",
+    "tests": [
+      "selective_review_tracks_dod_text_of_selected_criteria"
+    ],
+    "purpose": "Le sotto-voci di un criterio appartengono al suo blocco: modificarle invalida la review."
+  },
+  {
+    "id": "dod-block-criterion-lead",
+    "file": "src/lib.rs",
+    "before": "if single || lead.is_match(content) ||",
+    "after": "if single ||",
+    "tests": [
+      "selective_review_tracks_dod_text_of_selected_criteria"
+    ],
+    "purpose": "Una riga che inizia con un altro criterio apre un nuovo blocco: modificare un criterio non selezionato non invalida la review."
   }
 ]

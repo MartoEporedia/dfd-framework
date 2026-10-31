@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "e224e000e7945984a758dc4ca395e728fc9fdfe57be945d0f355067e1fdc228b",
+  "tasks": [
+    {
+      "id": "dod-fingerprint",
+      "owner": "manutentore del repository",
+      "description": "Blocchi di dod.md dei criteri selezionati nel fingerprint selettivo",
+      "criteria": [
+        "SEC-03",
+        "OBS-01",
+        "SLO-01",
+        "SLO-02",
+        "UX-01"
+      ],
+      "implementation": "Estrarre da dod.md i blocchi Markdown (voce di elenco con continuazioni e sotto-voci, riga di tabella, titolo, paragrafo) che citano ciascun criterio selezionato, normalizzarne gli spazi e aggiungerli al fingerprint selettivo come selected-dod; aggiornare contratto e skill dfd-review-design IT/EN.",
+      "verification": "Regressione cargo test --locked --offline --test workflow selective_review_tracks_dod: red su F07b riprodotto (criterio selezionato cambiato solo in dod.md resta approved), green dopo la correzione; casi non invalidanti (criterio non selezionato, spazi) e sotto-voce; mutanti sull'inclusione e sull'estensione dei blocchi."
+    }
+  ],
+  "open_questions": []
+}
