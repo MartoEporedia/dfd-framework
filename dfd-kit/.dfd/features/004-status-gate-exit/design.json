@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "Rendere l'exit code di status e la fase leggibili come stato effettivo dei gate (issue #7).",
+  "business_metrics": [
+    "F06 del laboratorio: status nel clone esce 2",
+    "F00 e baseline ricostruita: status exit 0"
+  ],
+  "epic": {
+    "reference": "https://github.com/MartoEporedia/dfd-framework/issues/7 aperta dal manutentore; richiesta di risolverla espressa in chat il 2026-10-31",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-10-31T08:01:20Z"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "applicable",
+      "implementation": "status esce 2 con un gate bloccante e lo elenca in blocking; effective_phase derivata dai gate.",
+      "verification": "Test workflow red/green (F06 e regressione di fase), suite locale, mutanti mirati."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "effective_phase segue i gate calcolati e non deriva approvazioni.",
+      "verification": "Test workflow red/green (F06 e regressione di fase), suite locale, mutanti mirati."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Cambio di exit code documentato nel contratto IT/EN; output solo additivo.",
+      "verification": "Test workflow red/green (F06 e regressione di fase), suite locale, mutanti mirati."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Regressione red/green, suite, fmt, Clippy, doctor, mutanti su exit code e fase.",
+      "verification": "Test workflow red/green (F06 e regressione di fase), suite locale, mutanti mirati."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Help, contratto e guide descrivono exit 2 e effective_phase.",
+      "verification": "Test workflow red/green (F06 e regressione di fase), suite locale, mutanti mirati."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "applicable",
+      "implementation": "Le skill che chiamano status trattano exit 2 come gate bloccato.",
+      "verification": "Test workflow red/green (F06 e regressione di fase), suite locale, mutanti mirati."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "excluded",
+      "justification": "Nessun cambiamento a evidenze, hash o log."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "excluded",
+      "justification": "Nessun nuovo accesso a percorsi."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "excluded",
+      "justification": "status resta in sola lettura, nessuna scrittura nuova."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Scritture e lock invariati."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "excluded",
+      "justification": "Nessuna dipendenza aggiunta."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "excluded",
+      "justification": "Nessuna soglia di prestazioni coinvolta."
+    }
+  ],
+  "test_plan": "Red/green su F06 riprodotto (evidenze rimosse dopo release approvata: status exit 2, blocking development, effective_phase development) e su verify che non regredisce phase dopo la release. Test per record rapido e status senza ID; test esistenti aggiornati all'exit 2. fmt, Clippy, suite, doctor, check_translations, mutanti.",
+  "guardrails": "status non scrive e non prende lock; valori dei gate invariati; nessuna approvazione derivata; errori di lettura restano exit 1.",
+  "open_questions": []
+}

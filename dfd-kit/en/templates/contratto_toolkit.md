@@ -54,7 +54,7 @@ Use the platform's dfd binary without additional runtime/packages. Run at produc
 | `status [001-paypal]` | Resume work and display gaps |
 | `decide 001-paypal --decision approved --reviewer "TL" --role tech-lead --note "Review completed" --human-confirmed` | Declare an expressed human decision |
 
-Output is JSON. Exit 0 means command success; 1 means input/read error/conflict; 2 means incomplete assessment/setup or failed structural checks. Argument-parser errors also use 2. status returns 0 even with a blocked gate. review-design may succeed while awaiting human review: gate, not exit code alone, determines workflow state.
+Output is JSON. Exit 0 means command success; 1 means input/read error/conflict; 2 means incomplete assessment/setup or failed structural checks. Argument-parser errors also use 2. status returns 2 when a displayed gate is blocked (setup or design blocked, development blocked-plan or blocked-evidence, release blocked, quick record blocked) and lists it in blocking; it returns 0 when no gate is blocked, including while awaiting human review (awaiting-human-review, stale-review, changes-requested). With an ID blocking contains setup, design, development, release or change; without an ID it contains setup:<domain>, feature:<id>/<gate> and change:<id>. Scripts treat 2 as a blocked gate and 1 as a command error. review-design may succeed while awaiting human review: gate, not exit code alone, determines workflow state.
 
 One active adapter avoids duplicate skills. install preserves features. `.dfd/kit/` is managed: updates reject locally modified resources rather than overwriting them. Existing AGENTS.md, CLAUDE.md and Copilot instructions are preserved.
 
@@ -141,7 +141,7 @@ The harness executes tests and records real logs. All paths are project-relative
 
 Record relevant code/test/instrumentation files, exact current hashes, nonempty logs, commands and nonfuture timezone dates. Each task requires a real expected-requirement red failure followed by passing green; final local/CI suite follows all greens. Required CI uses kind ci and actual CI logs, never relabeled local execution. Changes to verified files/logs/design/plan invalidate evidence.
 
-verify regenerates development-review.md; complete/current evidence sets phase development-verified, failed reverification returns phase development. Exit 0 means development complete or pre-release readiness by policy; gaps return 2. Hashes establish local integrity, not authenticity, actual execution, quality or semantic coverage. development-complete stops; ready-for-pre-release allows pre-release/review-release only.
+verify regenerates development-review.md; complete/current evidence sets phase development-verified without moving back a pre-release or release-reviewed phase; failed reverification returns phase development from development-verified or any later phase. Recorded phase is the last step taken, not the gate. status <id> adds effective_phase, derived from current gates and never saved: idea (risk not classified), assessed (no specification), design (design not approved or to reconfirm), design-reviewed (development not started), development (development blocked), development-verified (development complete, pre-release not started), pre-release (release being prepared or to reconfirm), release-reviewed (release approved, also with conditions). Exit 0 means development complete or pre-release readiness by policy; gaps return 2. Hashes establish local integrity, not authenticity, actual execution, quality or semantic coverage. development-complete stops; ready-for-pre-release allows pre-release/review-release only.
 
 ## Pre-release
 
@@ -222,7 +222,7 @@ Rapid requires all Low, bounded scope, unchanged contract, noncritical behavior,
 
 Solo valid evidence gives change-verified without a new human approval or synthetic decision. independent_review requires PR/current revision and an actual reviewer different from owner; until then awaiting-human-review. Recorded reviews bind record/criteria/policy/file fingerprints; changes yield stale-review or blocked evidence. Conditional approvals require light/full promotion. Recording any decision always requires human-confirmed.
 
-status lists changes alongside features. Quick gates: blocked, awaiting-human-review, stale-review, changes-requested, change-verified. verify returns 0 only for change-verified, else 2; invalid input remains 1. Quick completion never approves release. promote creates a distinct feature and origin.json with source/hash, preserving record and copying risk/context. critical conservatively escalates reliability to High for reassessment. Quick decisions never transfer as design/release approval.
+status lists changes alongside features; a blocked quick record makes status blocking (blocking ["change"], exit 2). Quick gates: blocked, awaiting-human-review, stale-review, changes-requested, change-verified. verify returns 0 only for change-verified, else 2; invalid input remains 1. Quick completion never approves release. promote creates a distinct feature and origin.json with source/hash, preserving record and copying risk/context. critical conservatively escalates reliability to High for reassessment. Quick decisions never transfer as design/release approval.
 
 <a id="contesto-individuale-e-team"></a>
 

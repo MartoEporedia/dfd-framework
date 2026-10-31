@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "id": "004-status-gate-exit",
+  "title": "Exit code di status e fase effettiva",
+  "domain": "dfd-kit",
+  "kind": "feature",
+  "scope": "dfd status esce 2 con un gate bloccato; status espone effective_phase derivata dai gate; verify non regredisce fasi successive (issue #7)",
+  "phase": "development-verified",
+  "created_at": "2026-10-31T08:41:19.123917Z",
+  "risk": "low",
+  "route": "light",
+  "assessment_hash": "4e1a3aa8a555ba42380a99abcb3ada876e92526a18e91398efbf76b61e64338a",
+  "decisions": [
+    {
+      "decision": "approved",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead",
+      "note": "Design #7 approvato: exit 2 con gate bloccato, effective_phase derivata",
+      "conditions": [],
+      "recorded_at": "2026-10-31T08:44:29.953268Z",
+      "fingerprint": "9406e4556b0379e8f31ec27704b3950a4a1156e0c5cbeb95d520b7ea725037ef"
+    }
+  ],
+  "selective_review": true
+}

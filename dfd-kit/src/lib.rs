@@ -1191,8 +1191,70 @@ fn status_feature(store: &Store, id: &str) -> Result<Value> {
     } else {
         "dfd-review-design"
     });
+    output["blocking"] = json!(blocking_gates(&output));
+    output["effective_phase"] = json!(effective_phase(
+        store,
+        &state,
+        gate,
+        &development,
+        &release
+    )?);
     Ok(output)
 }
+
+/// Gates shown by `status` that are structurally blocked (issue #7). Waiting for a
+/// human (`awaiting-human-review`, `stale-review`, `changes-requested`) is not blocked.
+fn blocking_gates(output: &Value) -> Vec<&'static str> {
+    let mut blocking = vec![];
+    if output["setup"]["gate"] == "blocked" {
+        blocking.push("setup");
+    }
+    if output["gate"] == "blocked" {
+        blocking.push("design");
+    }
+    if matches!(
+        output["development"]["gate"].as_str(),
+        Some("blocked-plan" | "blocked-evidence")
+    ) {
+        blocking.push("development");
+    }
+    if output["release"]["gate"] == "blocked" {
+        blocking.push("release");
+    }
+    blocking
+}
+
+/// Phase derived from the current gates; `state.phase` keeps the last recorded step.
+fn effective_phase(
+    store: &Store,
+    state: &State,
+    gate: &str,
+    development: &Value,
+    release: &Value,
+) -> Result<&'static str> {
+    Ok(if state.risk.is_none() {
+        "idea"
+    } else if !store
+        .path(&format!(".dfd/features/{}/spec.md", state.id))?
+        .exists()
+    {
+        "assessed"
+    } else if !matches!(gate, "approved" | "approved-with-conditions") {
+        "design"
+    } else {
+        match development["gate"].as_str() {
+            Some("not-started") => "design-reviewed",
+            Some("development-complete") => "development-verified",
+            Some("ready-for-pre-release") => match release["gate"].as_str() {
+                Some("not-started") => "development-verified",
+                Some("approved" | "approved-with-conditions") => "release-reviewed",
+                _ => "pre-release",
+            },
+            _ => "development",
+        }
+    })
+}
+
 fn status(store: &Store, id: Option<&str>) -> Result<Value> {
     let config = config(store)?;
     if let Some(id) = id {
@@ -1222,8 +1284,37 @@ fn status(store: &Store, id: Option<&str>) -> Result<Value> {
         .iter()
         .map(|domain| setup_status(store, domain))
         .collect::<Result<Vec<_>>>()?;
+    let changes = quick::list(store)?;
+    let mut blocking = vec![];
+    for setup in &setups {
+        if setup["gate"] == "blocked" {
+            blocking.push(format!(
+                "setup:{}",
+                setup["domain"].as_str().unwrap_or_default()
+            ));
+        }
+    }
+    for feature in &features {
+        for gate in feature["blocking"].as_array().into_iter().flatten() {
+            if gate != "setup" {
+                blocking.push(format!(
+                    "feature:{}/{}",
+                    feature["id"].as_str().unwrap_or_default(),
+                    gate.as_str().unwrap_or_default()
+                ));
+            }
+        }
+    }
+    for change in &changes {
+        if change["gate"] == "blocked" {
+            blocking.push(format!(
+                "change:{}",
+                change["change"].as_str().unwrap_or_default()
+            ));
+        }
+    }
     Ok(
-        json!({"version":VERSION,"mode":config.mode,"domains":config.domains,"setups":setups,"features":features,"changes":quick::list(store)?}),
+        json!({"version":VERSION,"mode":config.mode,"domains":config.domains,"setups":setups,"features":features,"changes":changes,"blocking":blocking}),
     )
 }
 
@@ -1445,7 +1536,15 @@ fn execute_inner(cli: Cli) -> Result<(Value, i32)> {
                 files: file,
             },
         ),
-        Command::Status { id } => Ok((status(&store, id.as_deref())?, 0)),
+        Command::Status { id } => {
+            let output = status(&store, id.as_deref())?;
+            let exit = if output["blocking"].as_array().is_some_and(|b| !b.is_empty()) {
+                2
+            } else {
+                0
+            };
+            Ok((output, exit))
+        }
         Command::Doctor => unreachable!(),
     }
 }

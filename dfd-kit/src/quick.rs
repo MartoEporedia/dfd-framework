@@ -283,7 +283,7 @@ pub(super) fn status(store: &Store, id: &str) -> Result<Value> {
     };
     Ok(
         json!({"change":id,"domain":change.domain,"route":route,"gate":gate,"errors":errors,"owner":change.owner,"independent_review_required":policy.independent_review,"collaboration":change.collaboration,"decisions":change.decisions,
-        "next":if route=="unknown" {"dfd-assess"} else if route!="rapid" {"dfd-feature"} else if gate=="change-verified" {"development-complete"} else if gate=="awaiting-human-review" || gate=="stale-review" {"dfd-review-design"} else {"dfd-implement"},"release":"not-approved"}),
+        "blocking":if gate=="blocked" {vec!["change"]} else {vec![]},"next":if route=="unknown" {"dfd-assess"} else if route!="rapid" {"dfd-feature"} else if gate=="change-verified" {"development-complete"} else if gate=="awaiting-human-review" || gate=="stale-review" {"dfd-review-design"} else {"dfd-implement"},"release":"not-approved"}),
     )
 }
 pub(super) fn verify(store: &Store, id: &str) -> Result<(Value, i32)> {

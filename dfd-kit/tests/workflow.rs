@@ -23,6 +23,7 @@ impl Project {
     fn read(&self, relative: &str) -> Value {
         serde_json::from_str(&fs::read_to_string(self.path(relative)).unwrap()).unwrap()
     }
+    #[track_caller]
     fn run(&self, args: &[&str], expected: i32) -> Value {
         // No interpreters, jq, harness, or source tree at runtime.
         let output = Command::new(env!("CARGO_BIN_EXE_dfd"))
@@ -483,7 +484,7 @@ fn changed_risk_requires_new_assessment_and_invalidates_review() {
     let mut risk = p.read(".dfd/features/001-paypal/risk.json");
     risk["dimensions"]["security"]["level"] = json!("high");
     p.save(".dfd/features/001-paypal/risk.json", &risk);
-    assert_eq!(p.run(&["status", "001-paypal"], 0)["gate"], "blocked");
+    assert_eq!(p.run(&["status", "001-paypal"], 2)["gate"], "blocked");
     p.run(&["assess", "001-paypal"], 0);
     let result = p.run(&["status", "001-paypal"], 0);
     assert_eq!(result["route"], "full-complete");
@@ -669,10 +670,10 @@ fn setup_blocks_design_and_is_visible_without_features() {
     p.init();
     let setup = p.run(&["setup", "--domain", "checkout"], 2);
     assert_eq!(setup["gate"], "blocked");
-    assert_eq!(p.run(&["status"], 0)["setups"][0], setup);
+    assert_eq!(p.run(&["status"], 2)["setups"][0], setup);
     p.feature("001-paypal");
     p.risk("001-paypal");
-    assert_eq!(p.run(&["status", "001-paypal"], 0)["next"], "dfd-setup");
+    assert_eq!(p.run(&["status", "001-paypal"], 2)["next"], "dfd-setup");
     p.run(&["specify", "001-paypal"], 1);
     assert!(!p.path(".dfd/features/001-paypal/design.json").exists());
     p.run(&["setup", "--domain", "unregistered"], 1);
@@ -871,7 +872,7 @@ fn source_logs_and_plan_changes_invalidate_development() {
         body.push_str("\nModifica successiva\n");
         p.write(path, &body);
         assert_eq!(
-            p.run(&["status", "001-paypal"], 0)["development"]["gate"],
+            p.run(&["status", "001-paypal"], 2)["development"]["gate"],
             "blocked-evidence"
         );
         assert_eq!(p.run(&["verify", "001-paypal"], 2)["phase"], "development");
@@ -1177,7 +1178,7 @@ fn changed_source_blocks_release_and_updated_evidence_requires_rollout_refresh()
     p.approve_release();
     p.write("src/checkout.rs", "// Nuova revisione verificata\n");
     assert_eq!(
-        p.run(&["status", "001-paypal"], 0)["release"]["gate"],
+        p.run(&["status", "001-paypal"], 2)["release"]["gate"],
         "blocked"
     );
     let mut evidence = p.read(".dfd/features/001-paypal/evidence.json");
@@ -1185,7 +1186,7 @@ fn changed_source_blocks_release_and_updated_evidence_requires_rollout_refresh()
     p.save(".dfd/features/001-paypal/evidence.json", &evidence);
     p.run(&["verify", "001-paypal"], 0);
     assert_eq!(
-        p.run(&["status", "001-paypal"], 0)["release"]["gate"],
+        p.run(&["status", "001-paypal"], 2)["release"]["gate"],
         "blocked"
     );
     let before = p.read(".dfd/features/001-paypal/rollout.json");
@@ -1554,7 +1555,7 @@ impl Project {
         self.lifecycle(mode, ci_required);
         self.approve();
         self.run(&["plan", "001-paypal", "--refresh"], 0);
-        let status = self.run(&["status", "001-paypal"], 0);
+        let status = self.run(&["status", "001-paypal"], 2);
         let mut evidence = self.read(".dfd/features/001-paypal/evidence.json");
         evidence["design_fingerprint"] = status["development"]["design_fingerprint"].clone();
         evidence["plan_hash"] = status["development"]["plan_hash"].clone();
@@ -1639,13 +1640,13 @@ fn lifecycle_policy_changes_invalidate_reviews_and_existing_release() {
     r.pre_release_ready();
     r.approve_release();
     r.lifecycle("development-only", false);
-    let status = r.run(&["status", "001-paypal"], 0);
+    let status = r.run(&["status", "001-paypal"], 2);
     assert_eq!(status["gate"], "stale-review");
     assert_ne!(status["release"]["gate"], "approved");
     r.run(&["pre-release", "001-paypal"], 1);
     r.approve();
     assert_eq!(
-        r.run(&["status", "001-paypal"], 0)["development"]["gate"],
+        r.run(&["status", "001-paypal"], 2)["development"]["gate"],
         "blocked-plan"
     );
 }
@@ -1793,7 +1794,7 @@ fn rapid_escalates_unknown_critical_contract_and_medium_risks() {
             _ => q["open_questions"] = json!(["Contratto da chiarire"]),
         }
         p.save(path, &q);
-        let status = p.run(&["status", "fix-message"], 0);
+        let status = p.run(&["status", "fix-message"], 2);
         assert_ne!(status["route"], "rapid", "{change}");
         p.quick_approve("Bob", 1);
         p.run(&["verify", "fix-message"], 2);
@@ -2078,7 +2079,7 @@ fn individual_defaults_need_no_team_context_or_second_reviewer() {
         true
     );
     assert_eq!(
-        p.run(&["status"], 0)["changes"].as_array().unwrap().len(),
+        p.run(&["status"], 2)["changes"].as_array().unwrap().len(),
         1
     );
 }
@@ -2146,7 +2147,7 @@ fn bilingual_project_language_resources_and_preservation() {
             .unwrap()
             .contains("# Adozione di DFD")
     );
-    p.run(&["--lang", "en", "status"], 0);
+    p.run(&["--lang", "en", "status"], 2);
     assert_eq!(p.read(".dfd/language.json")["language"], "it");
     p.run(&["language", "en"], 0);
     let repeated = p.run(&["init", "--harness", "codex", "--domain", "checkout"], 0);
@@ -2251,7 +2252,7 @@ fn bilingual_switch_preserves_approved_design_and_localizes_generated_plan() {
         .iter()
         .any(|value| value.as_str().unwrap().contains("Record the verified")));
     let before = p.read(".dfd/features/001-paypal/state.json")["decisions"].clone();
-    p.run(&["--lang", "it", "status", "001-paypal"], 0);
+    p.run(&["--lang", "it", "status", "001-paypal"], 2);
     assert_eq!(
         p.read(".dfd/features/001-paypal/state.json")["decisions"],
         before
@@ -2358,4 +2359,104 @@ fn bilingual_release_scaffolding_and_checks_use_english() {
             .len(),
         1
     );
+}
+
+#[test]
+fn status_exit_reports_blocked_gates_for_features_changes_and_all() {
+    // Issue #7, fault F06: evidence missing (e.g. in a clone) after the release approval.
+    let p = Project::new();
+    p.pre_release_ready();
+    p.approve_release();
+    assert_eq!(p.run(&["status", "001-paypal"], 0)["blocking"], json!([]));
+    assert_eq!(p.run(&["status"], 0)["blocking"], json!([]));
+    fs::remove_dir_all(p.path(".dfd/features/001-paypal/evidence")).unwrap();
+    let blocked = p.run(&["status", "001-paypal"], 2);
+    assert_eq!(blocked["development"]["gate"], "blocked-evidence");
+    assert_eq!(blocked["blocking"], json!(["development", "release"]));
+    assert_eq!(
+        p.run(&["status"], 2)["blocking"],
+        json!([
+            "feature:001-paypal/development",
+            "feature:001-paypal/release"
+        ])
+    );
+    // Waiting for a human is not a blocked gate.
+    let w = Project::new();
+    w.ready();
+    let waiting = w.run(&["status", "001-paypal"], 0);
+    assert_eq!(waiting["gate"], "awaiting-human-review");
+    assert_eq!(waiting["blocking"], json!([]));
+    w.write(".dfd/features/001-paypal/spec.md", "");
+    assert_eq!(
+        w.run(&["status", "001-paypal"], 2)["blocking"],
+        json!(["design"])
+    );
+    // Rapid record.
+    let q = Project::new();
+    q.quick_ready("behavior-fix");
+    assert_eq!(q.run(&["status", "fix-message"], 0)["blocking"], json!([]));
+    q.write("src/fix.rs", "// Modifica successiva\n");
+    let change = q.run(&["status", "fix-message"], 2);
+    assert_eq!(change["gate"], "blocked");
+    assert_eq!(change["blocking"], json!(["change"]));
+    assert_eq!(
+        q.run(&["status"], 2)["blocking"],
+        json!(["change:fix-message"])
+    );
+}
+
+#[test]
+fn effective_phase_follows_gates_and_verify_does_not_regress_phase() {
+    let p = Project::new();
+    p.init();
+    p.feature("001-paypal");
+    assert_eq!(
+        p.run(&["status", "001-paypal"], 2)["effective_phase"],
+        "idea"
+    );
+    let p = Project::new();
+    p.ready();
+    assert_eq!(
+        p.run(&["status", "001-paypal"], 0)["effective_phase"],
+        "design"
+    );
+    p.approve();
+    assert_eq!(
+        p.run(&["status", "001-paypal"], 0)["effective_phase"],
+        "design-reviewed"
+    );
+
+    let p = Project::new();
+    p.pre_release_ready();
+    assert_eq!(
+        p.run(&["status", "001-paypal"], 0)["effective_phase"],
+        "pre-release"
+    );
+    p.approve_release();
+    assert_eq!(
+        p.run(&["status", "001-paypal"], 0)["effective_phase"],
+        "release-reviewed"
+    );
+    // A successful verify on an approved release does not move the phase back.
+    assert_eq!(
+        p.run(&["verify", "001-paypal"], 0)["phase"],
+        "release-reviewed"
+    );
+    // Development blocked after the release review: the effective phase follows the gate.
+    p.write("src/checkout.rs", "// Modifica successiva\n");
+    let status = p.run(&["status", "001-paypal"], 2);
+    assert_eq!(status["phase"], "release-reviewed");
+    assert_eq!(status["effective_phase"], "development");
+    assert_eq!(p.run(&["verify", "001-paypal"], 2)["phase"], "development");
+    // A design change after the release review never reads as approved.
+    let p = Project::new();
+    p.pre_release_ready();
+    p.approve_release();
+    p.write(
+        ".dfd/features/001-paypal/spec.md",
+        "# PayPal\nOBS-01: specifica cambiata dopo la release\n",
+    );
+    let status = p.run(&["status", "001-paypal"], 2);
+    assert_eq!(status["gate"], "stale-review");
+    assert_eq!(status["effective_phase"], "design");
 }

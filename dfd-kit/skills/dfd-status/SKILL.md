@@ -9,6 +9,8 @@ description: Riprendere il lavoro DFD da un altro harness o sessione, leggere fa
 
 Eseguire `dfd status [<id>]` nella radice del repository adottante. Senza identificatore elenca setup dei domini e feature; con identificatore verifica anche il gate di design. Usare `.dfd/kit/templates/contratto_toolkit.md` per interpretare i campi.
 
+Exit `2` significa che almeno un gate mostrato è bloccato: non è un errore del comando. Leggere `blocking` per sapere quale gate, ed `effective_phase` per la fase effettiva; `phase` è solo l'ultimo passaggio registrato e può essere più avanti dello stato reale.
+
 - Lo stato vive in `.dfd/`, non nella cronologia della conversazione. Leggere solo gli artefatti del dominio e della feature pertinenti.
 - Se la Fase 0 è incompleta, proporre `dfd-setup` e mostrare le lacune del dominio.
 - Se mancano dati di rischio, proporre `dfd-assess`; se manca la specifica, `dfd-specify`; se il design è pronto, `dfd-review-design`.

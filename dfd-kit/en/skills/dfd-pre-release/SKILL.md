@@ -9,7 +9,7 @@ description: Prepare a verified DFD feature for release: rollout, thresholds, ro
 
 # Release preparation
 
-Read `.dfd/kit/processo-e2e.md` (Pre-release/Release DoR), `.dfd/kit/templates/contratto_toolkit.md`, feature/domain artifacts and status. Development must be verified/current. Domain must be release-preparation (legacy default without lifecycle.json). In development-only stop; explicitly update policy/reassess risk/CI and reconfirm invalidated artifacts before distribution.
+Read `.dfd/kit/processo-e2e.md` (Pre-release/Release DoR), `.dfd/kit/templates/contratto_toolkit.md`, feature/domain artifacts and status. Development must be verified/current: development absent from blocking (exit 2 means a blocked gate, not a command error). Domain must be release-preparation (legacy default without lifecycle.json). In development-only stop; explicitly update policy/reassess risk/CI and reconfirm invalidated artifacts before distribution.
 
 Run pre-release to create/resume rollout.md/json without overwriting. Markdown uses the domain template; replace placeholders/examples with real values. Iterate with open_questions.
 

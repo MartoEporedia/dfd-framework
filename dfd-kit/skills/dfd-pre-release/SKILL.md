@@ -7,7 +7,7 @@ description: Preparare il rilascio di una feature DFD verificata, definendo roll
 
 # Preparazione del rilascio
 
-Leggere `.dfd/kit/processo-e2e.md` (Pre-release e DoR Rilascio), `.dfd/kit/templates/contratto_toolkit.md`, gli artefatti della feature e il setup del dominio. Eseguire `dfd status <id>`: lo sviluppo deve essere verificato e attuale.
+Leggere `.dfd/kit/processo-e2e.md` (Pre-release e DoR Rilascio), `.dfd/kit/templates/contratto_toolkit.md`, gli artefatti della feature e il setup del dominio. Eseguire `dfd status <id>`: lo sviluppo deve essere verificato e attuale, cioè `development` assente da `blocking` (exit `2` indica un gate bloccato, non un errore del comando).
 
 Usare `dfd pre-release <id>` per creare o riprendere `rollout.md` e `rollout.json` senza sovrascriverli. Il Markdown proviene dal template locale del dominio; sostituire esempi e placeholder con dati reali. Affinare il piano iterativamente, registrando e chiarendo i dubbi in `open_questions`.
 

@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "9406e4556b0379e8f31ec27704b3950a4a1156e0c5cbeb95d520b7ea725037ef",
+  "plan_hash": "febf43c3e3aed3aa60077a8d2da9686a4f1858a841b482d4274cc5e117412afd",
+  "files": [
+    {
+      "path": "src/lib.rs",
+      "sha256": "a7b9be96ba028d072df14a0963f1ac52389ac708bd5fdb65060458e83dff0645"
+    },
+    {
+      "path": "src/development.rs",
+      "sha256": "3c93024704c4cf53b8da554675e98a7eb567a1f44aa5c227d09ea150b7f28728"
+    },
+    {
+      "path": "src/quick.rs",
+      "sha256": "6984617562534b4c52ab999eccbc990302c17c3f69feabbd67378679ebf76c74"
+    },
+    {
+      "path": "tests/workflow.rs",
+      "sha256": "f287df49ab67e359a962b0a17735fb3a2e340ea4620a717e82a044905c12bc1d"
+    },
+    {
+      "path": "mutations/gates.json",
+      "sha256": "3b2b46c8b3430e9d91f80ad5bcb5c1092b1e86fb7b095dfcf3bd79640c4a8b7a"
+    },
+    {
+      "path": "templates/contratto_toolkit.md",
+      "sha256": "d3ac00b3775a6f2a0f2e2f82c84c9d6cdae1cd9bfd3874d90870f57226225313"
+    },
+    {
+      "path": "en/templates/contratto_toolkit.md",
+      "sha256": "309cf2543d93be343bcbc0f1cc3bd1ae760289cd618fe4882b2003661a3599a3"
+    },
+    {
+      "path": "skills/dfd-status/SKILL.md",
+      "sha256": "386e6ddb2dcab78488b40bf6512c725bab8625b717bbebd74d24183b6fd710ae"
+    },
+    {
+      "path": "en/skills/dfd-status/SKILL.md",
+      "sha256": "ffa666b94fe29a3be9c5aebadafbd635a3497602ae839d2c6e719777792593cf"
+    },
+    {
+      "path": "skills/dfd-implement/SKILL.md",
+      "sha256": "98c89cd90ba8f980c82cc58dfc3a8a342129c9fb96b06ffd32463ef289415cc2"
+    },
+    {
+      "path": "en/skills/dfd-implement/SKILL.md",
+      "sha256": "cbcf737eefba3376fb90e2965c1c6e65b87d38c6a7a6e5c7a517b28bece43204"
+    },
+    {
+      "path": "skills/dfd-pre-release/SKILL.md",
+      "sha256": "feff91b35982bd71fc3caafcfc9b5e6353432009b2f7b3cee0c8598f3bbeb0df"
+    },
+    {
+      "path": "en/skills/dfd-pre-release/SKILL.md",
+      "sha256": "b694934bdf33787d4e6122daec6d4079be239dd15c24fe92fe145d9eead70d2b"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "dff9c9c030539520da1d54ee3c01e743938be395e015bab326ee7ac89b7ccd1a"
+    },
+    {
+      "path": ".agents/skills/dfd-status/SKILL.md",
+      "sha256": "78e7e3cb1a41bd1112440efc7c25102bfe1b11b674835ddd032225566010cc63"
+    },
+    {
+      "path": ".agents/skills/dfd-implement/SKILL.md",
+      "sha256": "5da92c9506c8d6ed31c461e9bd7180783e6f3108007b95238526b03efddde14d"
+    },
+    {
+      "path": ".agents/skills/dfd-pre-release/SKILL.md",
+      "sha256": "dece87cc1851f8dae4d1eff2b6564fd2a693985587ac1dce03ea6d0759a1cd0f"
+    },
+    {
+      "path": ".dfd/kit/templates/contratto_toolkit.md",
+      "sha256": "15a0fb5d75442aebcd79f8d7a8ffc1740004e555ad3b0bb820719d4c9bcfa9db"
+    }
+  ],
+  "checks": [
+    {
+      "task": "status-exit",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow status_exit",
+      "executed_at": "2026-10-31T08:45:40+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/004-status-gate-exit/evidence/01-red-status-exit.log",
+        "sha256": "97604d5899e35c14ac61c5bfa62dda9d5cc05726dc6685b0225df2d59b6b6005"
+      }
+    },
+    {
+      "task": "effective-phase",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow effective_phase",
+      "executed_at": "2026-10-31T08:45:41+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/004-status-gate-exit/evidence/02-red-effective-phase.log",
+        "sha256": "51aa535314bb9b06212140b65a0d92b9962cbd52bdaf160ed96db8594533e885"
+      }
+    },
+    {
+      "task": "status-exit",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow status_exit",
+      "executed_at": "2026-10-31T08:54:00+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/004-status-gate-exit/evidence/03-green-status-exit.log",
+        "sha256": "7053b25cfca1e0b80ebc1edbc92cdc67491f31f1d9ba5cad1fb822fd244c67d5"
+      }
+    },
+    {
+      "task": "effective-phase",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow effective_phase",
+      "executed_at": "2026-10-31T08:54:02+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/004-status-gate-exit/evidence/04-green-effective-phase.log",
+        "sha256": "70a8017248f8abc4de8fa5ef798ad0fe8ced84a4de6fa62250a8f793b89e232d"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor; python3 scripts/check_translations.py; python3 scripts/mutation_test.py",
+      "executed_at": "2026-10-31T08:59:37+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/004-status-gate-exit/evidence/05-suite.log",
+        "sha256": "1bd7f3242a7f5f8787609a2546341c689646f041622fb77956c9a5eb3b73c234"
+      }
+    }
+  ],
+  "refactor_notes": "Nessun refactor oltre a due funzioni pure in lib.rs (blocking_gates, effective_phase) e alla tabella delle transizioni di fase in verify; status resta senza lock e senza scritture. Osservabilità: exit code 2 e campo blocking in status, effective_phase derivata. Red reali: status-exit fallisce per blocking assente; effective-phase fallisce per primo sull'exit code di status sulla feature in fase idea (comportamento dello stesso cambiamento), la regressione di phase è coperta dal mutante verify-phase-no-regress. 13 chiamate status nei test esistenti aggiornate a exit 2 dopo aver verificato che ogni stato fosse realmente bloccato; aggiunto #[track_caller] all'helper run. Quattro mutanti nuovi, 38/38 intercettati. Manifest delle traduzioni aggiornato: falliva già su main per README.md (commit bc66ad3/5bd1e0d) con coppie semanticamente allineate. Copie installate in .agents/skills e .dfd/kit rigenerate con dfd install. Impatto rilevato nel laboratorio v3: tools/evidence.py refs con check=True si interrompe dopo plan --refresh (F08, F13)."
+}

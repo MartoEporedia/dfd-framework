@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "low",
+      "rationale": "Modifica locale a status, verify e all'exit code in lib.rs/development.rs; nessun nuovo modulo, schema JSON o file di stato."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Toolkit in solo sviluppo, nessun rilascio; il cambiamento rende visibile un blocco che oggi passa inosservato."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Nessuna dipendenza, servizio o costo di esecuzione aggiuntivo."
+    },
+    "reliability": {
+      "level": "medium",
+      "rationale": "Cambia il contratto di exit code di status (0 → 2 con gate bloccato): script e skill che chiamano status devono gestire il nuovo codice; la fase registrata non deve regredire né fuorviare."
+    },
+    "security": {
+      "level": "low",
+      "rationale": "Nessun nuovo accesso a file o approvazione; il gate resta calcolato dagli artefatti e nessuna decisione umana viene derivata."
+    }
+  }
+}
