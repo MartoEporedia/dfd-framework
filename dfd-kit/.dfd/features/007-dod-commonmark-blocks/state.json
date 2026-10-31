@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "id": "007-dod-commonmark-blocks",
+  "title": "Blocchi di dod.md da un parser CommonMark",
+  "domain": "dfd-kit",
+  "kind": "feature",
+  "scope": "I blocchi e le sezioni di dod.md del fingerprint selettivo si ricavano da pulldown-cmark; casi ambigui e criteri senza definizione propria legano l'intero dod.md (seguito di #5, rilievi della review di sicurezza su a5a71bb)",
+  "phase": "development-verified",
+  "created_at": "2026-10-31T13:58:37.657708Z",
+  "risk": "medium",
+  "route": "full-proportional",
+  "assessment_hash": "47da781af9095932bb0005a67ddf3bc2f206817ba47a64b19bbf8c322f5c16f3",
+  "decisions": [
+    {
+      "decision": "approved",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead",
+      "note": "Design 007 approvato: unità di dod.md da pulldown-cmark, HTML e criteri senza definizione propria legano l'intero dod.md. Registrata dall'agente su richiesta esplicita del manutentore in chat il 2026-10-31 («Approvo, registra tu»).",
+      "conditions": [],
+      "recorded_at": "2026-10-31T13:59:40.945688Z",
+      "fingerprint": "7b46aff24ca05bd2c1bdedea32016e125d743b38910151b2f4f273b8d769b3f0"
+    }
+  ],
+  "selective_review": true
+}

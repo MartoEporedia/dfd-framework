@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "medium",
+      "rationale": "Nuova dipendenza pulldown-cmark (0.13, senza feature di default: bitflags, memchr, unicase) al posto del parser scritto a mano in lib.rs."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Toolkit in solo sviluppo, unico utilizzatore il manutentore."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Dipendenza compilata nel binario: nessun runtime, rete o servizio per l'utilizzatore."
+    },
+    "reliability": {
+      "level": "medium",
+      "rationale": "Cambia di nuovo la formula del fingerprint selettivo: le review selettive approvate diventano stale-review una volta; un'estrazione errata invaliderebbe troppo o troppo poco."
+    },
+    "security": {
+      "level": "medium",
+      "rationale": "Chiude divergenze tra parser e CommonMark che permettevano di cambiare la DoD di un criterio selezionato senza riconferma (recinti, titoli setext/blockquote/HTML, indice descrittivo)."
+    }
+  }
+}

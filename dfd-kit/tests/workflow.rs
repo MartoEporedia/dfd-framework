@@ -2567,6 +2567,11 @@ fn selective_review_dod_parsing_fails_closed() {
             "casella senza testo",
         ),
         (
+            "# DoD\n\n- OBS-01: soglia\n- SLO-01: baseline legacy da migliorare\n\nContare gli errori del nuovo flusso.\n",
+            "# DoD\n\n- OBS-01: soglia\n- SLO-01: baseline legacy da migliorare\n\nContare gli errori del vecchio flusso.\n",
+            "definizione con meno di quattro parole",
+        ),
+        (
             "# DoD\n\nCriteri: [OBS-01](#obs-01), [SLO-01](#slo-01).\n\nContare gli errori del nuovo flusso.\n",
             "# DoD\n\nCriteri: [OBS-01](#obs-01), [SLO-01](#slo-01).\n\nContare gli errori del vecchio flusso.\n",
             "solo link",
@@ -2587,6 +2592,59 @@ fn selective_review_dod_parsing_fails_closed() {
         p.write(".dfd/domains/checkout/dod.md", before);
         selective(&p);
         p.write(".dfd/domains/checkout/dod.md", after);
+        assert_eq!(gate(&p), "stale-review", "{case}");
+    }
+}
+
+#[test]
+fn selective_review_dod_commonmark_variants_are_tracked() {
+    // Security review on a5a71bb: CommonMark constructs the hand-written parser missed.
+    let gate = |p: &Project| p.run(&["status", "001-paypal"], 0)["gate"].clone();
+    let selective = |p: &Project| {
+        let path = ".dfd/features/001-paypal/state.json";
+        let mut state = p.read(path);
+        state["selective_review"] = json!(true);
+        p.save(path, &state);
+        p.approve();
+    };
+    let index = "- Criteri del flusso di pagamento: OBS-01, SLO-01\n\n";
+    for (before, after, case) in [
+        (
+            format!("# DoD\n\n{index}### OBS-01\n\nContare gli errori.\n\n````\n```\n# esempio\n````\n\nIncluso il nuovo flusso.\n\n### SLO-01\n\nBaseline legacy da migliorare.\n"),
+            format!("# DoD\n\n{index}### OBS-01\n\nContare gli errori.\n\n````\n```\n# esempio\n````\n\nIncluso il vecchio flusso.\n\n### SLO-01\n\nBaseline legacy da migliorare.\n"),
+            "recinto lungo con recinto corto interno",
+        ),
+        (
+            format!("# DoD\n\n{index}OBS-01\n======\n\nContare gli errori del nuovo flusso.\n\nSLO-01\n======\n\nBaseline legacy da migliorare.\n"),
+            format!("# DoD\n\n{index}OBS-01\n======\n\nContare gli errori del vecchio flusso.\n\nSLO-01\n======\n\nBaseline legacy da migliorare.\n"),
+            "titolo setext",
+        ),
+        (
+            format!("# DoD\n\n{index}> ### OBS-01\n>\n> Contare gli errori del nuovo flusso.\n\n### SLO-01\n\nBaseline legacy da migliorare.\n"),
+            format!("# DoD\n\n{index}> ### OBS-01\n>\n> Contare gli errori del vecchio flusso.\n\n### SLO-01\n\nBaseline legacy da migliorare.\n"),
+            "titolo in blockquote",
+        ),
+        (
+            format!("# DoD\n\n{index}<h3>OBS-01</h3>\n\nContare gli errori del nuovo flusso.\n\n### SLO-01\n\nBaseline legacy da migliorare.\n"),
+            format!("# DoD\n\n{index}<h3>OBS-01</h3>\n\nContare gli errori del vecchio flusso.\n\n### SLO-01\n\nBaseline legacy da migliorare.\n"),
+            "titolo HTML",
+        ),
+        (
+            format!("# DoD\n\n{index}Contare gli errori del nuovo flusso.\n\n- SLO-01: baseline legacy da migliorare.\n"),
+            format!("# DoD\n\n{index}Contare gli errori del vecchio flusso.\n\n- SLO-01: baseline legacy da migliorare.\n"),
+            "indice descrittivo senza definizione",
+        ),
+        (
+            "# DoD\n\n- OBS-01: contare gli errori del nuovo flusso.\n\n<div>OBS-01: soglia massima 5%</div>\n\n- SLO-01: baseline legacy da migliorare.\n".to_string(),
+            "# DoD\n\n- OBS-01: contare gli errori del nuovo flusso.\n\n<div>OBS-01: soglia massima 1%</div>\n\n- SLO-01: baseline legacy da migliorare.\n".to_string(),
+            "HTML con testo del criterio",
+        ),
+    ] {
+        let p = Project::new();
+        p.ready();
+        p.write(".dfd/domains/checkout/dod.md", &before);
+        selective(&p);
+        p.write(".dfd/domains/checkout/dod.md", &after);
         assert_eq!(gate(&p), "stale-review", "{case}");
     }
 }

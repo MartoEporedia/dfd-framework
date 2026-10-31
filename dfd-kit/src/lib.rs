@@ -15,6 +15,7 @@ use serde_json::{json, Value};
 use std::{
     collections::{BTreeMap, BTreeSet},
     fmt, fs,
+    ops::Range,
     sync::OnceLock,
 };
 use store::{hash, Store};
@@ -795,114 +796,140 @@ fn criterion_ids(markdown: &str) -> BTreeSet<String> {
         .map(|item| item.as_str().to_string())
         .collect()
 }
-/// CommonMark ATX heading level, 0 if the line is not a heading: up to three leading
-/// spaces, then 1-6 '#' followed by a space, a tab or the end of the line.
-fn atx_level(line: &str) -> usize {
-    static RE: OnceLock<Regex> = OnceLock::new();
-    RE.get_or_init(|| Regex::new(r"^ {0,3}(#{1,6})(?:[ \t]|$)").unwrap())
-        .captures(line)
-        .map_or(0, |c| c[1].len())
-}
-/// For each line, whether it belongs to a fenced code block (delimiters included).
-fn code_lines(lines: &[&str]) -> Vec<bool> {
-    static RE: OnceLock<Regex> = OnceLock::new();
-    let fence = RE.get_or_init(|| Regex::new(r"^ {0,3}(`{3,}|~{3,})").unwrap());
-    let mut open: Option<char> = None;
-    lines
-        .iter()
-        .map(|line| {
-            let delimiter = fence.captures(line).map(|c| c[1].chars().next().unwrap());
-            match (open, delimiter) {
-                (None, Some(kind)) => open = Some(kind),
-                (Some(kind), Some(found)) if kind == found => open = None,
-                (None, None) => return false,
-                _ => {}
-            }
-            true
-        })
-        .collect()
-}
-/// Markdown units of dod.md: a list item with its continuation lines and deeper
-/// sub-items, a table row, a heading or a paragraph; fenced code stays with the unit
-/// around it. A line whose content starts with a criterion ID always opens a new unit.
-/// A heading citing a criterion also yields its whole section. Whitespace is normalized.
-fn dod_blocks(markdown: &str) -> Vec<String> {
-    static ITEM: OnceLock<Regex> = OnceLock::new();
-    static LEAD: OnceLock<Regex> = OnceLock::new();
-    let item = ITEM.get_or_init(|| Regex::new(r"^(\s*)(?:[-*+]|[0-9]+[.)])\s+").unwrap());
-    let lead = LEAD
-        .get_or_init(|| Regex::new(r"^[\s>*_`\[]*(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b").unwrap());
-    let lines: Vec<_> = markdown.lines().collect();
-    let code = code_lines(&lines);
-    let mut blocks = vec![];
-    // Current unit and, for a list item, the indentation of its marker.
-    let mut current: Option<(String, Option<usize>)> = None;
-    for (index, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
-        if code[index] {
-            let (text, _) = current.get_or_insert_with(|| (String::new(), None));
-            text.push(' ');
-            text.push_str(trimmed);
-            continue;
-        }
-        if trimmed.is_empty() {
-            blocks.extend(current.take().map(|(text, _)| text));
-            continue;
-        }
-        let marker = item
-            .captures(line)
-            .map(|c| (c[1].len(), c.get(0).unwrap().end()));
-        let content = marker.map_or(*line, |(_, end)| &line[end..]);
-        let nested = matches!(
-            (&current, marker),
-            (Some((_, Some(parent))), Some((indent, _))) if indent > *parent
-        );
-        let single = atx_level(line) > 0 || trimmed.starts_with('|');
-        if single || lead.is_match(content) || (marker.is_some() && !nested) || current.is_none() {
-            blocks.extend(current.take().map(|(text, _)| text));
-            current = Some((String::new(), marker.map(|(indent, _)| indent)));
-        }
-        let (text, _) = current.as_mut().unwrap();
-        text.push(' ');
-        text.push_str(trimmed);
-        if single {
-            blocks.extend(current.take().map(|(text, _)| text));
-        }
+/// For each selected criterion, the dod.md units citing it (issues #5, feature 007),
+/// read with a CommonMark parser: list items (with their sub-items), paragraphs outside
+/// list items, table rows, headings and the section of each heading, up to the next
+/// heading of the same or a higher level. Whitespace is normalized.
+///
+/// Fail closed: the whole dod.md is the dependency when it contains HTML, or when the
+/// criterion has no defining unit of its own with at least four real words (a list
+/// item or paragraph starting with the ID, a table row with the ID in its first cell,
+/// or the section of a heading citing it).
+fn selected_dod(markdown: &str, ids: &BTreeSet<&str>) -> BTreeMap<String, Vec<String>> {
+    use pulldown_cmark::{Event, Options, Parser, Tag, TagEnd};
+    #[derive(PartialEq)]
+    enum Kind {
+        Item,
+        Paragraph,
+        Row,
+        Heading(usize),
+        Section,
     }
-    blocks.extend(current.map(|(text, _)| text));
-    // A heading citing a criterion also binds its whole section, down to the next
-    // heading of the same or a higher level (DoD written as "### OBS-01" + text).
-    for (start, line) in lines.iter().enumerate() {
-        let level = atx_level(line);
-        if code[start] || level == 0 || criterion_ids(line).is_empty() {
-            continue;
-        }
-        let mut section = String::new();
-        for (index, next) in lines.iter().enumerate().skip(start) {
-            let next_level = atx_level(next);
-            if index > start && !code[index] && next_level > 0 && next_level <= level {
-                break;
-            }
-            section.push(' ');
-            section.push_str(next.trim());
-        }
-        blocks.push(section);
-    }
-    blocks
-        .iter()
-        .map(|block| block.split_whitespace().collect::<Vec<_>>().join(" "))
-        .collect()
-}
-/// Fail closed: a block is a bare reference unless, without criterion IDs, link
-/// destinations and checkboxes, it still has at least four words of three letters.
-fn bare_reference(block: &str) -> bool {
     static NOISE: OnceLock<Regex> = OnceLock::new();
     static WORD: OnceLock<Regex> = OnceLock::new();
-    let noise = NOISE.get_or_init(|| {
-        Regex::new(r"\b(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b|\]\([^)]*\)|\[[ xX]\]").unwrap()
-    });
+    let noise = NOISE
+        .get_or_init(|| Regex::new(r"\b(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b|\[[ xX]\]").unwrap());
     let word = WORD.get_or_init(|| Regex::new(r"\p{Alphabetic}{3,}").unwrap());
-    word.find_iter(&noise.replace_all(block, "")).count() < 4
+    static LEAD: OnceLock<Regex> = OnceLock::new();
+    let lead = LEAD
+        .get_or_init(|| Regex::new(r"^[\s>*_`\[]*(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b").unwrap());
+    let normalize = |text: &str| text.split_whitespace().collect::<Vec<_>>().join(" ");
+    let mut units: Vec<(Kind, Range<usize>)> = vec![];
+    let mut first_cells: Vec<Range<usize>> = vec![];
+    let mut texts: Vec<(usize, String)> = vec![];
+    let mut html = false;
+    let mut items = 0usize;
+    let mut cell = 0usize;
+    for (event, range) in Parser::new_ext(markdown, Options::ENABLE_TABLES).into_offset_iter() {
+        match event {
+            Event::Start(Tag::Item) => {
+                items += 1;
+                units.push((Kind::Item, range));
+            }
+            Event::End(TagEnd::Item) => items -= 1,
+            Event::Start(Tag::Paragraph) if items == 0 => {
+                // Lines starting with a criterion ID ("OBS-01: ..." one per line form a
+                // single CommonMark paragraph) open a unit of their own.
+                let mut start = range.start;
+                let mut offset = range.start;
+                for line in markdown[range.clone()].split_inclusive('\n') {
+                    if offset > start && lead.is_match(line) {
+                        units.push((Kind::Paragraph, start..offset));
+                        start = offset;
+                    }
+                    offset += line.len();
+                }
+                units.push((Kind::Paragraph, start..range.end));
+            }
+            Event::Start(Tag::TableHead | Tag::TableRow) => {
+                cell = 0;
+                units.push((Kind::Row, range));
+            }
+            Event::Start(Tag::TableCell) => {
+                if cell == 0 {
+                    first_cells.push(range);
+                }
+                cell += 1;
+            }
+            Event::Start(Tag::Heading { level, .. }) => {
+                units.push((Kind::Heading(level as usize), range))
+            }
+            Event::Html(_) | Event::InlineHtml(_) => html = true,
+            Event::Text(text) | Event::Code(text) => texts.push((range.start, text.into_string())),
+            _ => {}
+        }
+    }
+    let headings: Vec<_> = units
+        .iter()
+        .filter_map(|(kind, range)| match kind {
+            Kind::Heading(level) => Some((*level, range.clone())),
+            _ => None,
+        })
+        .collect();
+    for (index, (level, heading)) in headings.iter().enumerate() {
+        // Only a heading citing a criterion binds its section.
+        if criterion_ids(&markdown[heading.clone()]).is_empty() {
+            continue;
+        }
+        let start = &heading.start;
+        let end = headings[index + 1..]
+            .iter()
+            .find(|(next, _)| next <= level)
+            .map_or(markdown.len(), |(_, next)| next.start);
+        units.push((Kind::Section, *start..end));
+    }
+    let plain = |range: &Range<usize>| {
+        texts
+            .iter()
+            .filter(|(offset, _)| range.contains(offset))
+            .map(|(_, text)| text.as_str())
+            .collect::<Vec<_>>()
+            .join(" ")
+    };
+    let heading_text = |start: usize| {
+        units
+            .iter()
+            .find(|(kind, range)| matches!(kind, Kind::Heading(_)) && range.start == start)
+            .map(|(_, range)| plain(range))
+            .unwrap_or_default()
+    };
+    let described = |text: &str| word.find_iter(&noise.replace_all(text, "")).count() >= 4;
+    ids.iter()
+        .map(|id| {
+            let defines = |(kind, range): &(Kind, Range<usize>)| {
+                let owns = match kind {
+                    Kind::Item | Kind::Paragraph => plain(range).trim_start().starts_with(id),
+                    Kind::Row => first_cells
+                        .iter()
+                        .any(|cell| range.contains(&cell.start) && plain(cell).contains(id)),
+                    Kind::Section => heading_text(range.start).contains(id),
+                    Kind::Heading(_) => false,
+                };
+                owns && described(&plain(range))
+            };
+            let blocks = if html || !units.iter().any(defines) {
+                vec![normalize(markdown)]
+            } else {
+                units
+                    .iter()
+                    .map(|(_, range)| &markdown[range.clone()])
+                    .filter(|source| criterion_ids(source).contains(*id))
+                    .map(normalize)
+                    .collect()
+            };
+            (id.to_string(), blocks)
+        })
+        .collect()
 }
 fn valid_criterion(value: &str) -> bool {
     static RE: OnceLock<Regex> = OnceLock::new();
@@ -1096,24 +1123,7 @@ fn design_fingerprint(store: &Store, state: &State) -> Result<String> {
         // The DoD text people read is a dependency too (issue #5): for each selected
         // criterion, the dod.md blocks citing it, with whitespace normalized.
         let dod = store.read(&format!(".dfd/domains/{}/dod.md", state.domain))?;
-        let blocks = dod_blocks(&dod);
-        let selected: BTreeMap<_, Vec<_>> = ids
-            .iter()
-            .map(|id| {
-                let citing: Vec<_> = blocks
-                    .iter()
-                    .filter(|block| criterion_ids(block).contains(*id))
-                    .cloned()
-                    .collect();
-                // Cited only as a bare ID: the descriptive text is elsewhere, so the
-                // whole dod.md stays a dependency.
-                if citing.iter().all(|block| bare_reference(block)) {
-                    (*id, vec![dod.clone()])
-                } else {
-                    (*id, citing)
-                }
-            })
-            .collect();
+        let selected = selected_dod(&dod, &ids);
         hashes.insert("selected-dod".into(), hash(&serde_json::to_vec(&selected)?));
         let guardrails = format!(".dfd/domains/{}/guardrails.md", state.domain);
         hashes.insert(guardrails.clone(), store.hash(&guardrails)?);
@@ -1681,25 +1691,34 @@ fn execute_inner(cli: Cli) -> Result<(Value, i32)> {
 }
 
 #[cfg(test)]
-mod dod_block_tests {
-    use super::dod_blocks;
+mod dod_tests {
+    use super::selected_dod;
+    use std::collections::BTreeSet;
 
     #[test]
-    fn dod_blocks_split_grouped_criteria_and_keep_details() {
-        let blocks = dod_blocks(
-            "# DoD\n\n- **Osservabilità**: OBS-01, OBS-02\n- Osservabilità\n  - OBS-01: contare\n    gli errori\n    - inclusi i timeout\n  - OBS-02: tracciare\n\nSLO-01: soglia\nSLO-02: altra soglia\n",
-        );
+    fn dod_units_bind_definitions_and_fail_closed() {
+        let ids: BTreeSet<&str> = ["OBS-01"].into_iter().collect();
+        let dod = "# DoD\n\n- OBS-01: contare gli errori del flusso\n  - inclusi i timeout\n- SLO-01: soglia legacy da migliorare\n";
         assert_eq!(
-            blocks,
-            [
-                "# DoD",
-                "- **Osservabilità**: OBS-01, OBS-02",
-                "- Osservabilità",
-                "- OBS-01: contare gli errori - inclusi i timeout",
-                "- OBS-02: tracciare",
-                "SLO-01: soglia",
-                "SLO-02: altra soglia",
-            ]
+            selected_dod(dod, &ids)["OBS-01"],
+            ["- OBS-01: contare gli errori del flusso - inclusi i timeout"]
         );
+        let whole = |markdown: &str| {
+            selected_dod(markdown, &ids)["OBS-01"]
+                == [markdown.split_whitespace().collect::<Vec<_>>().join(" ")]
+        };
+        assert!(whole(
+            "# DoD\n\n<b>nota</b>\n\n- OBS-01: contare gli errori del flusso\n"
+        ));
+        assert!(whole(
+            "# DoD\n\n- [x] OBS-01\n\nContare gli errori del flusso.\n"
+        ));
+        assert!(whole(
+            "# DoD\n\n- Criteri del flusso di pagamento: OBS-01\n\nContare gli errori.\n"
+        ));
+        assert!(!whole(
+            "| ID | Testo |\n|---|---|\n| OBS-01 | contare gli errori del flusso |\n"
+        ));
+        assert!(!whole("OBS-01\n======\n\nContare gli errori del flusso.\n"));
     }
 }
