@@ -2688,3 +2688,37 @@ fn selective_review_dod_ids_outside_units_and_prefixes_fail_closed() {
         assert_eq!(gate(&p), "stale-review", "{case}");
     }
 }
+
+#[test]
+fn selective_review_dod_obfuscated_ids_fail_closed() {
+    // Security review on d785a0d: IDs rendered as "OBS-01" but not matched in the source.
+    let gate = |p: &Project| p.run(&["status", "001-paypal"], 0)["gate"].clone();
+    let selective = |p: &Project| {
+        let path = ".dfd/features/001-paypal/state.json";
+        let mut state = p.read(path);
+        state["selective_review"] = json!(true);
+        p.save(path, &state);
+        p.approve();
+    };
+    let base = "# DoD\n\n- OBS-01: contare gli errori del nuovo flusso.\n- SLO-01: baseline legacy da migliorare.\n";
+    for (hidden, case) in [
+        ("OBS&#45;01", "entità"),
+        ("OBS\\-01", "escape"),
+        ("OB**S-01**", "enfasi"),
+        ("OBS\u{2011}01", "trattino Unicode"),
+        ("OBS-\u{200b}01", "carattere invisibile"),
+    ] {
+        let p = Project::new();
+        p.ready();
+        p.write(
+            ".dfd/domains/checkout/dod.md",
+            &format!("{base}- {hidden}: soglia massima del cinque per cento.\n"),
+        );
+        selective(&p);
+        p.write(
+            ".dfd/domains/checkout/dod.md",
+            &format!("{base}- {hidden}: soglia massima del dieci per cento.\n"),
+        );
+        assert_eq!(gate(&p), "stale-review", "{case}");
+    }
+}

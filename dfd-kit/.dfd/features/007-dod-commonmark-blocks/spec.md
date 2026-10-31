@@ -42,7 +42,10 @@
      - per tutti i criteri selezionati, se `dod.md` contiene HTML (blocchi o inline);
      - per un criterio selezionato, se il suo ID compare nel sorgente fuori da ogni unità (per esempio in un blocco di codice).
 
-     Gli ID si confrontano in modo esatto: un ID più lungo con lo stesso prefisso non vale come definizione.
+     - per un criterio selezionato, se il numero di occorrenze del suo ID nel sorgente differisce da quello nel testo reso dal parser (entità, escape, enfasi dentro l'ID);
+     - per tutti, se il file contiene caratteri di formato invisibili o trattini Unicode attaccati a un prefisso di ID.
+
+     Gli ID si confrontano in modo esatto: un ID più lungo con lo stesso prefisso non vale come definizione. Gli omoglifi (lettere di altri alfabeti) restano fuori portata: sono falsificazione deliberata.
   5. La formula cambia rispetto a 005: le review selettive approvate diventano `stale-review` una volta.
 - Errori, failure mode e comportamenti degradati: un `dod.md` che il parser legge comunque (CommonMark non ha errori di sintassi) non blocca; i casi non classificabili ricadono sull'intero file.
 - API, eventi, dati e dipendenze coinvolti: dipendenza `pulldown-cmark` senza feature di default; nessuno schema JSON cambia.
@@ -90,3 +93,4 @@
 
 - 2026-10-31: prima bozza.
 - 2026-10-31: ID fuori dalle unità e confronto esatto degli ID (rilievi della review di sicurezza automatica su b3b1ddd).
+- 2026-10-31: ID offuscati (sorgente e testo reso, caratteri invisibili, trattini Unicode) dopo il rilievo su d785a0d.

@@ -453,8 +453,8 @@
   {
     "id": "dod-uncovered-id",
     "file": "src/lib.rs",
-    "before": "let blocks = if html || uncovered ||",
-    "after": "let blocks = if html ||",
+    "before": "|| hidden || uncovered ||",
+    "after": "|| hidden ||",
     "tests": [
       "selective_review_dod_ids_outside_units_and_prefixes_fail_closed"
     ],
@@ -469,5 +469,25 @@
       "selective_review_dod_ids_outside_units_and_prefixes_fail_closed"
     ],
     "purpose": "La definizione di OBS-010 non vale come definizione di OBS-01: confronto esatto dell'ID."
+  },
+  {
+    "id": "dod-hidden-id-count",
+    "file": "src/lib.rs",
+    "before": "let hidden = obfuscated || count(markdown) != count(&rendered);",
+    "after": "let hidden = obfuscated;",
+    "tests": [
+      "selective_review_dod_obfuscated_ids_fail_closed"
+    ],
+    "purpose": "Un ID reso al lettore (entità, escape, enfasi) ma assente nel sorgente lega l'intero dod.md."
+  },
+  {
+    "id": "dod-obfuscated-chars",
+    "file": "src/lib.rs",
+    "before": "        .is_match(markdown);",
+    "after": "        .is_match(\"\");",
+    "tests": [
+      "selective_review_dod_obfuscated_ids_fail_closed"
+    ],
+    "purpose": "Caratteri invisibili o trattini Unicode attaccati a un prefisso di ID legano l'intero dod.md."
   }
 ]

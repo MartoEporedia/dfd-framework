@@ -836,7 +836,24 @@ fn selected_dod(markdown: &str, ids: &BTreeSet<&str>) -> BTreeMap<String, Vec<St
     let mut html = false;
     let mut items = 0usize;
     let mut cell = 0usize;
+    // Text as the reader sees it: escapes and entities decoded, inline markup joined,
+    // blocks and line breaks separated.
+    let mut rendered = String::new();
     for (event, range) in Parser::new_ext(markdown, Options::ENABLE_TABLES).into_offset_iter() {
+        match &event {
+            Event::Text(text) | Event::Code(text) => rendered.push_str(text),
+            Event::End(
+                TagEnd::Emphasis
+                | TagEnd::Strong
+                | TagEnd::Strikethrough
+                | TagEnd::Link
+                | TagEnd::Image,
+            ) => {}
+            Event::End(_) | Event::SoftBreak | Event::HardBreak | Event::Rule => {
+                rendered.push('\n')
+            }
+            _ => {}
+        }
         match event {
             Event::Start(Tag::Item) => {
                 items += 1;
@@ -875,6 +892,13 @@ fn selected_dod(markdown: &str, ids: &BTreeSet<&str>) -> BTreeMap<String, Vec<St
             _ => {}
         }
     }
+    static OBFUSCATED: OnceLock<Regex> = OnceLock::new();
+    let obfuscated = OBFUSCATED
+        .get_or_init(|| {
+            Regex::new(r"\p{Cf}|(?:OBS|SEC|SLO|COST|UX)[\u{2010}-\u{2015}\u{2212}\u{FE58}\u{FE63}\u{FF0D}]")
+                .unwrap()
+        })
+        .is_match(markdown);
     let headings: Vec<_> = units
         .iter()
         .filter_map(|(kind, range)| match kind {
@@ -933,7 +957,16 @@ fn selected_dod(markdown: &str, ids: &BTreeSet<&str>) -> BTreeMap<String, Vec<St
                         .iter()
                         .any(|(_, range)| range.contains(&found.start()))
             });
-            let blocks = if html || uncovered || !units.iter().any(defines) {
+            // An ID shown to the reader but not found in the source (entities, escapes,
+            // emphasis inside the ID, invisible or Unicode-hyphen variants): fail closed.
+            let count = |text: &str| {
+                id_pattern
+                    .find_iter(text)
+                    .filter(|f| f.as_str() == *id)
+                    .count()
+            };
+            let hidden = obfuscated || count(markdown) != count(&rendered);
+            let blocks = if html || hidden || uncovered || !units.iter().any(defines) {
                 vec![normalize(markdown)]
             } else {
                 units

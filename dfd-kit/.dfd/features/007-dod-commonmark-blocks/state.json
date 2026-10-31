@@ -28,6 +28,15 @@
       "conditions": [],
       "recorded_at": "2026-10-31T14:17:28.730285Z",
       "fingerprint": "8aa78810cc311a2d5d4ad00ec9b5f58f22b8e6bc8ed77439aa8db040e1e3efbb"
+    },
+    {
+      "decision": "approved",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead",
+      "note": "Riconferma 007: ID offuscati (sorgente/testo reso, caratteri invisibili, trattini Unicode); omoglifi fuori portata. Registrata dall'agente su richiesta esplicita del manutentore in chat il 2026-10-31 («Riconfermo, registra tu»).",
+      "conditions": [],
+      "recorded_at": "2026-10-31T14:51:48.800150Z",
+      "fingerprint": "254b477c5050f941a302df47f231116fb36022ef74f5de39b80f7a580d393b50"
     }
   ],
   "selective_review": true

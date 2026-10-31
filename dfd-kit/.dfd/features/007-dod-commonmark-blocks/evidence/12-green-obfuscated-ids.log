@@ -1,0 +1,25 @@
+$ cargo test --locked --offline --test workflow selective_review && cargo test --locked --offline --lib dod_
+# executed_at: 2026-10-31T14:28:25+00:00
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running tests/workflow.rs (target/debug/deps/workflow-a3ad0388a73b3989)
+
+running 7 tests
+test selective_review_ignores_unrelated_domain_changes_but_tracks_contracts ... ok
+test selective_review_dod_ids_outside_units_and_prefixes_fail_closed ... ok
+test selective_review_tracks_dod_sections_and_bare_references ... ok
+test selective_review_tracks_dod_text_of_selected_criteria ... ok
+test selective_review_dod_parsing_fails_closed ... ok
+test selective_review_dod_obfuscated_ids_fail_closed ... ok
+test selective_review_dod_commonmark_variants_are_tracked ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 74 filtered out; finished in 5.07s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running unittests src/lib.rs (target/debug/deps/dfd_kit-024fe9a9a58ec46f)
+
+running 1 test
+test dod_tests::dod_units_bind_definitions_and_fail_closed ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.01s
+
+# exit_code: 0
