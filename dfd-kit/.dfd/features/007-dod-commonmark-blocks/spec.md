@@ -38,7 +38,11 @@
      - sezione sotto un titolo che lo cita.
 
      L'unità di definizione deve avere almeno quattro parole di almeno tre lettere, esclusi ID, destinazioni dei link e caselle. Altrimenti diventa dipendenza l'intero `dod.md`. Una riga indice non basta più.
-  4. **Fail-closed sui casi ambigui**: se `dod.md` contiene HTML (blocchi o inline), diventa dipendenza l'intero `dod.md` per tutti i criteri selezionati.
+  4. **Fail-closed sui casi ambigui**: diventa dipendenza l'intero `dod.md`
+     - per tutti i criteri selezionati, se `dod.md` contiene HTML (blocchi o inline);
+     - per un criterio selezionato, se il suo ID compare nel sorgente fuori da ogni unità (per esempio in un blocco di codice).
+
+     Gli ID si confrontano in modo esatto: un ID più lungo con lo stesso prefisso non vale come definizione.
   5. La formula cambia rispetto a 005: le review selettive approvate diventano `stale-review` una volta.
 - Errori, failure mode e comportamenti degradati: un `dod.md` che il parser legge comunque (CommonMark non ha errori di sintassi) non blocca; i casi non classificabili ricadono sull'intero file.
 - API, eventi, dati e dipendenze coinvolti: dipendenza `pulldown-cmark` senza feature di default; nessuno schema JSON cambia.
@@ -85,3 +89,4 @@
 ## 8. Revisioni
 
 - 2026-10-31: prima bozza.
+- 2026-10-31: ID fuori dalle unità e confronto esatto degli ID (rilievi della review di sicurezza automatica su b3b1ddd).

@@ -2648,3 +2648,43 @@ fn selective_review_dod_commonmark_variants_are_tracked() {
         assert_eq!(gate(&p), "stale-review", "{case}");
     }
 }
+
+#[test]
+fn selective_review_dod_ids_outside_units_and_prefixes_fail_closed() {
+    // Security review on b3b1ddd: IDs in code blocks, and prefix matches like OBS-010.
+    let gate = |p: &Project| p.run(&["status", "001-paypal"], 0)["gate"].clone();
+    let selective = |p: &Project| {
+        let path = ".dfd/features/001-paypal/state.json";
+        let mut state = p.read(path);
+        state["selective_review"] = json!(true);
+        p.save(path, &state);
+        p.approve();
+    };
+    let base = "# DoD\n\n- OBS-01: contare gli errori del nuovo flusso.\n- SLO-01: baseline legacy da migliorare.\n";
+    for (before, after, case) in [
+        (
+            format!("{base}\n```text\nOBS-01 soglia massima 5%\n```\n"),
+            format!("{base}\n```text\nOBS-01 soglia massima 1%\n```\n"),
+            "ID in un blocco di codice",
+        ),
+        (
+            "# DoD\n\n- OBS-010: definizione di un altro criterio con testo.\n- Criteri del flusso: OBS-01\n- SLO-01: baseline legacy da migliorare.\n\nContare gli errori del nuovo flusso.\n".to_string(),
+            "# DoD\n\n- OBS-010: definizione di un altro criterio con testo.\n- Criteri del flusso: OBS-01\n- SLO-01: baseline legacy da migliorare.\n\nContare gli errori del vecchio flusso.\n".to_string(),
+            "prefisso OBS-010",
+        ),
+    ] {
+        let p = Project::new();
+        p.ready();
+        let mut catalog = p.read(".dfd/domains/checkout/criteria.json");
+        catalog["criteria"].as_array_mut().unwrap().push(
+            json!({"id":"OBS-010","statement":"Criterio baseline non selezionato","scope":"baseline"}),
+        );
+        p.save(".dfd/domains/checkout/criteria.json", &catalog);
+        let before = before.replace("SLO-01: baseline", "OBS-010: altro criterio. SLO-01: baseline");
+        let after = after.replace("SLO-01: baseline", "OBS-010: altro criterio. SLO-01: baseline");
+        p.write(".dfd/domains/checkout/dod.md", &before);
+        selective(&p);
+        p.write(".dfd/domains/checkout/dod.md", &after);
+        assert_eq!(gate(&p), "stale-review", "{case}");
+    }
+}

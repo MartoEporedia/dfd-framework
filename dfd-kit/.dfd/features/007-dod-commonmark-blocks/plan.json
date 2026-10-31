@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "design_fingerprint": "7b46aff24ca05bd2c1bdedea32016e125d743b38910151b2f4f273b8d769b3f0",
+  "design_fingerprint": "8aa78810cc311a2d5d4ad00ec9b5f58f22b8e6bc8ed77439aa8db040e1e3efbb",
   "tasks": [
     {
       "id": "commonmark-blocks",

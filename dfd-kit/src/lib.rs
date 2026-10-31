@@ -820,6 +820,12 @@ fn selected_dod(markdown: &str, ids: &BTreeSet<&str>) -> BTreeMap<String, Vec<St
     let noise = NOISE
         .get_or_init(|| Regex::new(r"\b(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b|\[[ xX]\]").unwrap());
     let word = WORD.get_or_init(|| Regex::new(r"\p{Alphabetic}{3,}").unwrap());
+    static LEADING_ID: OnceLock<Regex> = OnceLock::new();
+    let leading_id = LEADING_ID
+        .get_or_init(|| Regex::new(r"^\s*((?:OBS|SEC|SLO|COST|UX)-[0-9]{2,})\b").unwrap());
+    static ID: OnceLock<Regex> = OnceLock::new();
+    let id_pattern =
+        ID.get_or_init(|| Regex::new(r"\b(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b").unwrap());
     static LEAD: OnceLock<Regex> = OnceLock::new();
     let lead = LEAD
         .get_or_init(|| Regex::new(r"^[\s>*_`\[]*(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}\b").unwrap());
@@ -908,16 +914,26 @@ fn selected_dod(markdown: &str, ids: &BTreeSet<&str>) -> BTreeMap<String, Vec<St
         .map(|id| {
             let defines = |(kind, range): &(Kind, Range<usize>)| {
                 let owns = match kind {
-                    Kind::Item | Kind::Paragraph => plain(range).trim_start().starts_with(id),
-                    Kind::Row => first_cells
-                        .iter()
-                        .any(|cell| range.contains(&cell.start) && plain(cell).contains(id)),
-                    Kind::Section => heading_text(range.start).contains(id),
+                    Kind::Item | Kind::Paragraph => leading_id
+                        .captures(&plain(range))
+                        .is_some_and(|c| &c[1] == *id),
+                    Kind::Row => first_cells.iter().any(|cell| {
+                        range.contains(&cell.start) && criterion_ids(&plain(cell)).contains(*id)
+                    }),
+                    Kind::Section => criterion_ids(&heading_text(range.start)).contains(*id),
                     Kind::Heading(_) => false,
                 };
                 owns && described(&plain(range))
             };
-            let blocks = if html || !units.iter().any(defines) {
+            // Every occurrence of the ID must lie inside a unit; otherwise (code blocks,
+            // constructs that are not units) its text may escape: fail closed.
+            let uncovered = id_pattern.find_iter(markdown).any(|found| {
+                found.as_str() == *id
+                    && !units
+                        .iter()
+                        .any(|(_, range)| range.contains(&found.start()))
+            });
+            let blocks = if html || uncovered || !units.iter().any(defines) {
                 vec![normalize(markdown)]
             } else {
                 units

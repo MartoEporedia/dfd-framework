@@ -413,8 +413,8 @@
   {
     "id": "dod-bare-reference-fallback",
     "file": "src/lib.rs",
-    "before": "if html || !units.iter().any(defines) {",
-    "after": "if html {",
+    "before": "|| uncovered || !units.iter().any(defines) {",
+    "after": "|| uncovered {",
     "tests": [
       "selective_review_tracks_dod_sections_and_bare_references"
     ],
@@ -443,11 +443,31 @@
   {
     "id": "dod-definition-start",
     "file": "src/lib.rs",
-    "before": "Kind::Item | Kind::Paragraph => plain(range).trim_start().starts_with(id),",
-    "after": "Kind::Item | Kind::Paragraph => true,",
+    "before": "Kind::Item | Kind::Paragraph => leading_id",
+    "after": "Kind::Item | Kind::Paragraph => true || leading_id",
     "tests": [
       "selective_review_dod_commonmark_variants_are_tracked"
     ],
     "purpose": "Una riga indice che cita l'ID non è la definizione del criterio: senza definizione propria si usa l'intero dod.md."
+  },
+  {
+    "id": "dod-uncovered-id",
+    "file": "src/lib.rs",
+    "before": "let blocks = if html || uncovered ||",
+    "after": "let blocks = if html ||",
+    "tests": [
+      "selective_review_dod_ids_outside_units_and_prefixes_fail_closed"
+    ],
+    "purpose": "Un ID selezionato fuori da ogni unità (per esempio in un blocco di codice) lega l'intero dod.md."
+  },
+  {
+    "id": "dod-exact-leading-id",
+    "file": "src/lib.rs",
+    "before": "                        .is_some_and(|c| &c[1] == *id),",
+    "after": "                        .is_some_and(|c| c[1].starts_with(*id)),",
+    "tests": [
+      "selective_review_dod_ids_outside_units_and_prefixes_fail_closed"
+    ],
+    "purpose": "La definizione di OBS-010 non vale come definizione di OBS-01: confronto esatto dell'ID."
   }
 ]

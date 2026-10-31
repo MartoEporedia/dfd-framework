@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "design_fingerprint": "7b46aff24ca05bd2c1bdedea32016e125d743b38910151b2f4f273b8d769b3f0",
-  "plan_hash": "5588fd9d5801d40500d5a4a1bc7b9ca27246a8d71fe78c3b28eab70e1ff6d45b",
+  "design_fingerprint": "8aa78810cc311a2d5d4ad00ec9b5f58f22b8e6bc8ed77439aa8db040e1e3efbb",
+  "plan_hash": "45dcb2f62134df167229c49b52dd92bb7834334b235c44496806476081439af8",
   "files": [
     {
       "path": "Cargo.toml",
@@ -13,31 +13,31 @@
     },
     {
       "path": "src/lib.rs",
-      "sha256": "c6e7482659b1bc35b0dff538429e8f00b1210b1f140ba512183af8ec5ec60888"
+      "sha256": "e010c439d721081bddcb0f70b4197c40e5a222728a8f5d833420904046e2cb00"
     },
     {
       "path": "tests/workflow.rs",
-      "sha256": "6e1d61949e2084b67074435d4cf76866a27c8f58911ab4fd44f1657e9abedfa2"
+      "sha256": "2cd8733499a7b1b96adff83514da4f4788ce07400b2201ad53701baf3c2c510c"
     },
     {
       "path": "mutations/gates.json",
-      "sha256": "201f0904b7d004d3f2cfee751b566d5d2813e41982d1acfd2b74c508d08ba7e1"
+      "sha256": "e3092136fbc1af117d62ad9e1d6c35e315fa59d3c5bcd403fc4fe93cc2f28a97"
     },
     {
       "path": "templates/contratto_toolkit.md",
-      "sha256": "3c06d1751eaef10a4f069a180c2e3add8091220aedefbb4fe4049d504d06ca99"
+      "sha256": "eaf6c862d92cdb7b07459a25c717e344c1f9be9b5afa426bea24300641e8fb22"
     },
     {
       "path": "en/templates/contratto_toolkit.md",
-      "sha256": "3692b7b6faa73be90e4969c41c6fb6f950b328e637e3341862f93a35158d2826"
+      "sha256": "110a6158c7561c78dfc462e4cc5cf52949063bfad91742e564b755558e8d4f50"
     },
     {
       "path": "i18n/documents.json",
-      "sha256": "4594919e1a02a6acd5509ef8b4aa304003ca8e210ff06d4dce3684553d5954a5"
+      "sha256": "78cc967dfe7192a6fee5f5686acd00128fd8148ea464c7740807ac5f159a6612"
     },
     {
       "path": ".dfd/kit/templates/contratto_toolkit.md",
-      "sha256": "7b2f517cee4f3beaff37c2a592a50ec4c91a694da8af516ee64419a27a9bc0e6"
+      "sha256": "956042bd9cc01c435c877865bea17c04f7fd0b0d7318771b032da9a090ded879"
     }
   ],
   "checks": [
@@ -84,7 +84,51 @@
         "path": ".dfd/features/007-dod-commonmark-blocks/evidence/04-suite.log",
         "sha256": "1498a91cbbc87d6a63e5c2be31e0d4dd1eace14257374a6e9b8364f202695989"
       }
+    },
+    {
+      "task": "commonmark-blocks",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow selective_review_dod_ids_outside",
+      "executed_at": "2026-10-31T14:13:06+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/007-dod-commonmark-blocks/evidence/05-red-ids-outside-units.log",
+        "sha256": "d1b5b4b570f8e66c16d6abb7350ae103a18039bd3317d946e9d3ed8e2b8e4f19"
+      }
+    },
+    {
+      "task": "commonmark-blocks",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review && cargo test --locked --offline --lib dod_",
+      "executed_at": "2026-10-31T14:14:28+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/007-dod-commonmark-blocks/evidence/06-green-ids-outside-units.log",
+        "sha256": "cc66dad523d7dca4577ed13ea5f1bdad539f5b47e1fb22915f40f933e63e5fa5"
+      }
+    },
+    {
+      "task": "commonmark-blocks",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review && cargo test --locked --offline --lib dod_",
+      "executed_at": "2026-10-31T14:17:37+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/007-dod-commonmark-blocks/evidence/07-green-riconferma.log",
+        "sha256": "e04eb78e2163eefce73272cd1aa7adefbda0b4506f254b6066170e129f86ef4f"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor; python3 scripts/check_translations.py; python3 scripts/mutation_test.py",
+      "executed_at": "2026-10-31T14:23:54+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/007-dod-commonmark-blocks/evidence/10-suite.log",
+        "sha256": "c376effa40dcd97bc2d323020f8d9e0f6af032bf08812c732f9e5911805c3be1"
+      }
     }
   ],
-  "refactor_notes": "Refactor: il parser a mano (dod_blocks, atx_level, code_lines, bare_reference) sostituito da selected_dod su eventi pulldown-cmark 0.13.6 senza feature di default (bitflags, memchr, unicase); nessuna strumentazione nuova, resta il gate stale-review. Red reale sul primo dei cinque casi segnalati (recinto lungo); dopo il red aggiunti il caso HTML con testo del criterio e il caso definizione con meno di quattro parole, per distinguere i mutanti dod-html-fallback e dod-bare-word-threshold (il secondo sopravviveva). Paragrafi divisi a ogni riga che inizia con un ID per conservare il comportamento dei test di 005 (righe OBS-01/SLO-01 consecutive formano un solo paragrafo CommonMark). Mutanti: rimossi dod-block-nesting, dod-atx-indented-heading e dod-fenced-code-section perché il codice che alteravano non esiste più (nidificazione, titoli e recinti ora dal parser); aggiornati cinque frammenti; aggiunti dod-html-fallback e dod-definition-start; 45/45 intercettati. La review di 007 resta approved con la nuova formula: per DoD a voci di elenco con testo le unità coincidono. Laboratorio v3 dalla baseline migrata identico alla serie precedente; baseline da zero verde."
+  "refactor_notes": "Refactor: il parser a mano (dod_blocks, atx_level, code_lines, bare_reference) sostituito da selected_dod su eventi pulldown-cmark 0.13.6 senza feature di default; nessuna strumentazione nuova, resta il gate stale-review. Due iterazioni con red reali: casi CommonMark segnalati (recinto lungo per primo); poi ID fuori dalle unità e prefissi (seconda review di sicurezza su b3b1ddd), con confronto esatto degli ID e ripiego quando un ID selezionato compare fuori da ogni unità. Casi aggiunti dopo i red (HTML con testo, definizione corta, prefisso isolato) per distinguere i mutanti. Paragrafi divisi alle righe che iniziano con un ID per conservare il comportamento di 005. Mutanti: rimossi i tre del parser eliminato, frammenti aggiornati, aggiunti dod-html-fallback, dod-definition-start, dod-uncovered-id, dod-exact-leading-id; 47/47 intercettati. Una suite (evidence/08-suite.log) è fallita per due frammenti di mutanti non aggiornati: il log resta nella cartella, il check è stato tolto da evidence.json dopo la correzione e sostituito dalla suite 10 verde. Design riconfermato dal manutentore (registrato dall'agente su sua richiesta). Laboratorio v3 invariato: F00 verde, F07/F07b bloccati, baseline da zero verde."
 }
