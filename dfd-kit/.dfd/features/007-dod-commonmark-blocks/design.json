@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "Ricavare blocchi e sezioni di dod.md del fingerprint selettivo da un parser CommonMark, con ripiego sull'intero file nei casi ambigui o senza definizione propria.",
+  "business_metrics": [
+    "Casi segnalati dalla review di sicurezza: stale-review",
+    "Laboratorio: F00 verde, F07b bloccato, baseline verde"
+  ],
+  "epic": {
+    "reference": "Seguito di https://github.com/MartoEporedia/dfd-framework/issues/5 (PR #9); scelta del parser CommonMark espressa dal manutentore in chat il 2026-10-31",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-10-31T08:01:17Z"
+  },
+  "criteria": [
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Unità da eventi pulldown-cmark (voci, paragrafi, righe di tabella, titoli ATX/setext anche in blockquote, sezioni); regola di definizione; HTML → intero dod.md.",
+      "verification": "Test workflow red/green sui casi CommonMark segnalati, test 005 invariati, suite locale, mutanti."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Invalidazione una tantum delle review selettive e dipendenza documentate nel contratto IT/EN.",
+      "verification": "Test workflow red/green sui casi CommonMark segnalati, test 005 invariati, suite locale, mutanti."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Red/green, suite, fmt, Clippy, doctor, mutanti; test di 005 invariati.",
+      "verification": "Test workflow red/green sui casi CommonMark segnalati, test 005 invariati, suite locale, mutanti."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "applicable",
+      "implementation": "pulldown-cmark senza feature di default compilato nel binario; nessun runtime o rete per l'utilizzatore.",
+      "verification": "Test workflow red/green sui casi CommonMark segnalati, test 005 invariati, suite locale, mutanti."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Contratto IT/EN aggiornato.",
+      "verification": "Test workflow red/green sui casi CommonMark segnalati, test 005 invariati, suite locale, mutanti."
+    },
+    {
+      "id": "OBS-01",
+      "applicability": "excluded",
+      "justification": "Nessuna diagnostica nuova: resta stale-review."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "excluded",
+      "justification": "Evidenze invariate."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "excluded",
+      "justification": "Si legge solo dod.md, già letto."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "excluded",
+      "justification": "Nessuna scrittura nuova."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Scritture e lock invariati."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "excluded",
+      "justification": "Nessuna soglia di prestazioni."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "excluded",
+      "justification": "Nessun comando delle skill cambia."
+    }
+  ],
+  "test_plan": "Red/green: recinto lungo con recinto corto interno, titolo setext, titolo in blockquote, HTML, indice descrittivo con testo non citato; test di 005 invariati. fmt, Clippy, suite, doctor, check_translations, mutanti.",
+  "guardrails": "Fingerprint legacy invariato; nessuna approvazione derivata; nel dubbio intero dod.md; dipendenza senza feature di default.",
+  "open_questions": []
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "254b477c5050f941a302df47f231116fb36022ef74f5de39b80f7a580d393b50",
+  "tasks": [
+    {
+      "id": "commonmark-blocks",
+      "owner": "manutentore del repository",
+      "description": "Unità di dod.md da pulldown-cmark con regola di definizione e ripiego su HTML",
+      "criteria": [
+        "SEC-03",
+        "SLO-01",
+        "SLO-02",
+        "COST-01",
+        "UX-01"
+      ],
+      "implementation": "Aggiungere pulldown-cmark 0.13 senza feature di default; ricavare voci, paragrafi, righe di tabella, titoli e sezioni dagli eventi con offset sorgente; regola di definizione e soglia di quattro parole; intero dod.md con HTML o senza definizione; rimuovere il parser a mano; aggiornare contratto IT/EN e mutanti.",
+      "verification": "Regressione cargo test --locked --offline --test workflow selective_review_dod_commonmark: red sui cinque casi segnalati (recinto lungo, setext, blockquote, HTML, indice descrittivo) che restano approved, green dopo; test di 005 invariati; mutanti sulla regola di definizione, sul ripiego HTML e sui confini delle sezioni."
+    }
+  ],
+  "open_questions": []
+}

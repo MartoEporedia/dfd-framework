@@ -1,0 +1,27 @@
+$ cargo test --locked --offline --test workflow selective_review_dod_obfuscated
+# executed_at: 2026-10-31T14:26:36+00:00
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.73s
+     Running tests/workflow.rs (target/debug/deps/workflow-a3ad0388a73b3989)
+
+running 1 test
+test selective_review_dod_obfuscated_ids_fail_closed ... FAILED
+
+failures:
+
+---- selective_review_dod_obfuscated_ids_fail_closed stdout ----
+
+thread 'selective_review_dod_obfuscated_ids_fail_closed' (41051487) panicked at tests/workflow.rs:2722:9:
+assertion `left == right` failed: entità
+  left: String("approved")
+ right: "stale-review"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    selective_review_dod_obfuscated_ids_fail_closed
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 80 filtered out; finished in 0.90s
+
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101
