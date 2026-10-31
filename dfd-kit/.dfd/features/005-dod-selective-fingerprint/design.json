@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "Rendere il testo di dod.md dei criteri selezionati una dipendenza del design fingerprint selettivo (issue #5).",
+  "business_metrics": [
+    "F07b del laboratorio: design stale-review",
+    "F00 e baseline ricostruita verdi"
+  ],
+  "epic": {
+    "reference": "https://github.com/MartoEporedia/dfd-framework/issues/5 aperta dal manutentore; richiesta di risolverla espressa in chat il 2026-10-31",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-10-31T08:01:17Z"
+  },
+  "criteria": [
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Blocchi di dod.md che citano i criteri selezionati inclusi nel fingerprint selettivo, testo normalizzato negli spazi.",
+      "verification": "Test workflow red/green (F07b e casi non pertinenti), suite locale, mutanti mirati."
+    },
+    {
+      "id": "OBS-01",
+      "applicability": "applicable",
+      "implementation": "status e review-design riportano stale-review dopo una modifica della DoD dei criteri selezionati.",
+      "verification": "Test workflow red/green (F07b e casi non pertinenti), suite locale, mutanti mirati."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Invalidazione una tantum delle review selettive e nuova dipendenza documentate nel contratto IT/EN.",
+      "verification": "Test workflow red/green (F07b e casi non pertinenti), suite locale, mutanti mirati."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Red/green, suite, fmt, Clippy, doctor, mutanti mirati.",
+      "verification": "Test workflow red/green (F07b e casi non pertinenti), suite locale, mutanti mirati."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Contratto e skill dfd-review-design IT/EN descrivono la dipendenza da dod.md.",
+      "verification": "Test workflow red/green (F07b e casi non pertinenti), suite locale, mutanti mirati."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "excluded",
+      "justification": "Nessun cambiamento alle evidenze."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "excluded",
+      "justification": "Si legge solo dod.md del dominio, già letto oggi."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "excluded",
+      "justification": "Nessuna scrittura nuova."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Scritture e lock invariati."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "excluded",
+      "justification": "Nessuna dipendenza."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "excluded",
+      "justification": "Nessuna soglia di prestazioni."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "excluded",
+      "justification": "Nessun comando delle skill cambia."
+    }
+  ],
+  "test_plan": "Red/green su F07b riprodotto (criterio selezionato cambiato solo in dod.md: stale-review) e sui casi da non invalidare (criterio non selezionato, spazi) e sulle sotto-voci. Test selettivo esistente invariato. fmt, Clippy, suite, doctor, check_translations, mutanti.",
+  "guardrails": "Fingerprint legacy invariato; nessuna approvazione derivata; modifiche di dod.md non pertinenti non invalidano.",
+  "open_questions": []
+}

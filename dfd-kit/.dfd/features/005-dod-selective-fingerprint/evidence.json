@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "951ee42337d87523df5176b2bad93def1bbd63b5cad1ab3e95d527d588b07d0e",
+  "plan_hash": "edf2164b630c56d99df1f298e24f6cfa1c5b4cd7ad83d40795f7a35d22505fc6",
+  "files": [
+    {
+      "path": "src/lib.rs",
+      "sha256": "2e188006479c559d3725865125ac00af3d1ffc1c3a69b7af4b0a8f88dd628ef1"
+    },
+    {
+      "path": "tests/workflow.rs",
+      "sha256": "33f284ef6b2b0631dd97a43bc8828f87b308c9c167e9ed496fa9a7579d5d0e92"
+    },
+    {
+      "path": "mutations/gates.json",
+      "sha256": "41a5abe18bf645ec3f772c111601f3158e2ce09728b665bb9d8fb1ecb3b86509"
+    },
+    {
+      "path": "templates/contratto_toolkit.md",
+      "sha256": "737402820584f68423d582e2b440ff024207d7fb523a9e767dc5204061fc1ee1"
+    },
+    {
+      "path": "en/templates/contratto_toolkit.md",
+      "sha256": "cda7e111d432a5012ab73f9bd9e76ab92c1b1163083ef897b76925fb5cbc3f81"
+    },
+    {
+      "path": "skills/dfd-review-design/SKILL.md",
+      "sha256": "0bbde106d1224c9946d3865d69bd4d17d003c0bda9e35efb0c3fe645dbbf4be4"
+    },
+    {
+      "path": "en/skills/dfd-review-design/SKILL.md",
+      "sha256": "ee33581f21908d1e6524ce693ba862c16241722fdd9c30398e6edb776934cb3c"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "457e5a85108cfc687241d8ab6f912a4c3695cd0df996b8508b85b29547728935"
+    },
+    {
+      "path": ".agents/skills/dfd-review-design/SKILL.md",
+      "sha256": "7c59a754e8eafc12458103769efbf0d7c1630075c2fd11610c992f38ccf22d8a"
+    },
+    {
+      "path": ".dfd/kit/templates/contratto_toolkit.md",
+      "sha256": "0b8d05cf8e5b0bd700eae8a4f9c55cf14e312b06331f17b4f7eda4adc27d0561"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-review-design/SKILL.md",
+      "sha256": "7c59a754e8eafc12458103769efbf0d7c1630075c2fd11610c992f38ccf22d8a"
+    }
+  ],
+  "checks": [
+    {
+      "task": "dod-fingerprint",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow selective_review_tracks_dod",
+      "executed_at": "2026-10-31T10:00:13+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/01-red-dod-fingerprint.log",
+        "sha256": "5463053cfc9a540f52f4f00b548a24d6dfcdabbd7da627b30a5d1625e265f571"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review_tracks_dod && cargo test --locked --offline --lib dod_block",
+      "executed_at": "2026-10-31T10:01:11+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/02-green-dod-fingerprint.log",
+        "sha256": "1bbcb80f4f6cd60f07c1f9f27ccedf040b3ef526c3f4032a24c21c636149bc41"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review_tracks_dod && cargo test --locked --offline --lib dod_block",
+      "executed_at": "2026-10-31T10:05:43+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/03-green-dod-fingerprint-riconferma.log",
+        "sha256": "592e16b6fb39e3cb5d5af19002f9a7b7d42e902689644022c124c3df33b7d96c"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor; python3 scripts/check_translations.py; python3 scripts/mutation_test.py",
+      "executed_at": "2026-10-31T10:09:14+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/04-suite.log",
+        "sha256": "e9b7281f533f9a66b7531b1435647713302e13102f0efe9c7aaa51484bcdd285"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow selective_review_tracks_dod_sections",
+      "executed_at": "2026-10-31T12:11:50+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/05-red-dod-sections.log",
+        "sha256": "58c44cb9b28a1dab11ba05606d640dbcf80b4351724ad17c9867f11657693f62"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review_tracks_dod && cargo test --locked --offline --lib dod_block",
+      "executed_at": "2026-10-31T12:12:53+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/06-green-dod-sections.log",
+        "sha256": "f15d8b111145b7bc7bf1a1018a070c994dc6f0ed4d9e08af7c3ab08d0e8a3a90"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review_tracks_dod && cargo test --locked --offline --lib dod_block",
+      "executed_at": "2026-10-31T13:32:04+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/07-green-riconferma-sezioni.log",
+        "sha256": "f5aa4c0be2b9c76fc0f8c0ce03093b5e6bb75fe9357df21a20bfc5e6b2f16cec"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor; python3 scripts/check_translations.py; python3 scripts/mutation_test.py",
+      "executed_at": "2026-10-31T13:35:22+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/08-suite.log",
+        "sha256": "b467105aad0d19b2835f62855abcee1082125dc824f5315af86e58cd12aa85c6"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow selective_review_dod_parsing",
+      "executed_at": "2026-10-31T13:37:50+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/09-red-dod-parsing.log",
+        "sha256": "2c47e1e4bff48a51204751def5f60ed8e5cbcbf397b4e5ed29798d2fd288eb01"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review && cargo test --locked --offline --lib dod_block",
+      "executed_at": "2026-10-31T13:39:12+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/10-green-dod-parsing.log",
+        "sha256": "c513060226f99f12ae0dec24b55569e86329c42acf1b2ca19bff53f26a732552"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review && cargo test --locked --offline --lib dod_block",
+      "executed_at": "2026-10-31T13:41:25+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/11-green-dod-parsing-indice.log",
+        "sha256": "d52557dcc311c15c3e52351014e1b7395a7a920abf050085a6def97b935fcf03"
+      }
+    },
+    {
+      "task": "dod-fingerprint",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow selective_review && cargo test --locked --offline --lib dod_block",
+      "executed_at": "2026-10-31T13:50:30+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/12-green-riconferma-parsing.log",
+        "sha256": "8f0aa4d9beaa35c0563315c78ee6500b3ae7aaf90f67779418bd5411ef7fa9be"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor; python3 scripts/check_translations.py; python3 scripts/mutation_test.py",
+      "executed_at": "2026-10-31T13:54:07+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/005-dod-selective-fingerprint/evidence/13-suite.log",
+        "sha256": "222b5d4e63f8e142d76fee26b84e5adb6e1c89e9682255f455499087d7c63ec5"
+      }
+    }
+  ],
+  "refactor_notes": "Nessun refactor oltre alle funzioni pure dod_blocks, atx_level, code_lines e bare_reference in lib.rs; l'osservabilità è il gate stale-review esistente. Tre iterazioni con red reali: F07b riprodotto; DoD per sezioni (prima review di sicurezza automatica); caselle/link senza testo, titoli indentati e codice recintato (seconda review di sicurezza, commit a8539d1). Due mutanti (titolo indentato, codice recintato) sopravvissuti al primo giro perché la regola fail-closed copriva comunque i casi: test rafforzati con una riga indice descrittiva, poi intercettati. Design riconfermato a ogni cambio di specifica; l'ultima riconferma è registrata dall'agente su richiesta esplicita del manutentore in chat. Otto mutanti nuovi, 46/46 intercettati. Laboratorio v3: dalla baseline migrata v3-i5-baseline F07b BLOCCATO e F00 verde con ogni binario della serie; baseline ricostruita da zero verde."
+}

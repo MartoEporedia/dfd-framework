@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "low",
+      "rationale": "Estensione locale di design_fingerprint in lib.rs; nessun nuovo modulo, comando o schema JSON."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Toolkit in solo sviluppo, unico utilizzatore il manutentore; nessun rilascio."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Lettura e hash di dod.md già presenti nel calcolo; nessuna dipendenza."
+    },
+    "reliability": {
+      "level": "medium",
+      "rationale": "Cambia la formula del fingerprint selettivo: le review selettive già approvate diventano stale-review una volta con il nuovo binario; un'estrazione dei paragrafi troppo larga produrrebbe invalidazioni superflue."
+    },
+    "security": {
+      "level": "medium",
+      "rationale": "Tocca l'invalidazione delle approvazioni umane: chiude una via di falsa approvazione (DoD cambiata dopo la review senza riconferma); un errore nell'estrazione lascerebbe aperto il varco o lo sposterebbe."
+    }
+  }
+}

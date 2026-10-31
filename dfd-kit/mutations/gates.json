@@ -379,5 +379,85 @@
       "effective_phase_follows_gates_and_verify_does_not_regress_phase"
     ],
     "purpose": "Un design da riconfermare non deve mai produrre una fase effettiva successiva al design."
+  },
+  {
+    "id": "selected-dod-fingerprint",
+    "file": "src/lib.rs",
+    "before": ".filter(|block| criterion_ids(block).contains(*id))",
+    "after": ".filter(|_| false)",
+    "tests": [
+      "selective_review_tracks_dod_text_of_selected_criteria"
+    ],
+    "purpose": "Il testo di dod.md dei criteri selezionati deve invalidare la review selettiva (issue #5, F07b)."
+  },
+  {
+    "id": "dod-block-nesting",
+    "file": "src/lib.rs",
+    "before": "if indent > *parent",
+    "after": "if false",
+    "tests": [
+      "selective_review_tracks_dod_text_of_selected_criteria"
+    ],
+    "purpose": "Le sotto-voci di un criterio appartengono al suo blocco: modificarle invalida la review."
+  },
+  {
+    "id": "dod-block-criterion-lead",
+    "file": "src/lib.rs",
+    "before": "if single || lead.is_match(content) ||",
+    "after": "if single ||",
+    "tests": [
+      "selective_review_tracks_dod_text_of_selected_criteria"
+    ],
+    "purpose": "Una riga che inizia con un altro criterio apre un nuovo blocco: modificare un criterio non selezionato non invalida la review."
+  },
+  {
+    "id": "dod-heading-section",
+    "file": "src/lib.rs",
+    "before": "if code[start] || level == 0 || criterion_ids(line).is_empty() {",
+    "after": "if true {",
+    "tests": [
+      "selective_review_tracks_dod_sections_and_bare_references"
+    ],
+    "purpose": "Il testo sotto un titolo che cita un criterio selezionato deve invalidare la review (DoD per sezioni)."
+  },
+  {
+    "id": "dod-bare-reference-fallback",
+    "file": "src/lib.rs",
+    "before": "if citing.iter().all(|block| bare_reference(block)) {",
+    "after": "if false {",
+    "tests": [
+      "selective_review_tracks_dod_sections_and_bare_references"
+    ],
+    "purpose": "Un criterio citato solo come ID deve legare l'intero dod.md."
+  },
+  {
+    "id": "dod-bare-word-threshold",
+    "file": "src/lib.rs",
+    "before": ".count() < 4",
+    "after": ".count() < 1",
+    "tests": [
+      "selective_review_dod_parsing_fails_closed"
+    ],
+    "purpose": "Caselle, link o una parola isolata non bastano come testo del criterio: si usa l'intero dod.md (fail-closed)."
+  },
+  {
+    "id": "dod-atx-indented-heading",
+    "file": "src/lib.rs",
+    "before": "r\"^ {0,3}(#{1,6})(?:[ \\t]|$)\"",
+    "after": "r\"^(#{1,6})(?:[ \\t]|$)\"",
+    "tests": [
+      "selective_review_dod_parsing_fails_closed"
+    ],
+    "purpose": "Un titolo CommonMark con fino a tre spazi iniziali deve legare la sua sezione."
+  },
+  {
+    "id": "dod-fenced-code-section",
+    "file": "src/lib.rs",
+    "before": "if index > start && !code[index] && next_level > 0",
+    "after": "if index > start && next_level > 0",
+    "tests": [
+      "selective_review_dod_parsing_fails_closed"
+    ],
+    "purpose": "Un '#' dentro un blocco di codice recintato non chiude la sezione del criterio."
   }
 ]

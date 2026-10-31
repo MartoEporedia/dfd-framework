@@ -1,0 +1,27 @@
+$ cargo test --locked --offline --test workflow selective_review_dod_parsing
+# executed_at: 2026-10-31T13:37:50+00:00
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.74s
+     Running tests/workflow.rs (target/debug/deps/workflow-0da0f992897ec05a)
+
+running 1 test
+test selective_review_dod_parsing_fails_closed ... FAILED
+
+failures:
+
+---- selective_review_dod_parsing_fails_closed stdout ----
+
+thread 'selective_review_dod_parsing_fails_closed' (40743318) panicked at tests/workflow.rs:2590:9:
+assertion `left == right` failed: casella senza testo
+  left: String("approved")
+ right: "stale-review"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    selective_review_dod_parsing_fails_closed
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out; finished in 0.87s
+
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101
