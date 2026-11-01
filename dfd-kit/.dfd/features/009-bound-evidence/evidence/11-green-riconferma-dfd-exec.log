@@ -1,0 +1,11 @@
+$ cargo test --locked --offline --test workflow dfd_exec_runs
+# executed_at: 2026-11-01T13:48:34+00:00
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/workflow.rs (target/debug/deps/workflow-a3ad0388a73b3989)
+
+running 1 test
+test dfd_exec_runs_and_records_red_green_and_suite ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 86 filtered out; finished in 0.91s
+
+# exit_code: 0

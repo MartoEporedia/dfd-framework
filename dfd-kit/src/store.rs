@@ -122,6 +122,38 @@ impl Store {
     pub fn hash(&self, relative: &str) -> Result<String> {
         Ok(hash(&fs::read(self.path(relative)?)?))
     }
+    /// Regular files under a file or directory (path → sha256), skipping hidden
+    /// entries and never following symlinks (issue #3).
+    pub fn tree(
+        &self,
+        relative: &str,
+        excludes: &[String],
+        files: &mut std::collections::BTreeMap<String, String>,
+    ) -> Result<()> {
+        let path = self.path(relative)?;
+        let meta = fs::symlink_metadata(&path)?;
+        if meta.is_file() {
+            files.insert(relative.to_string(), self.hash(relative)?);
+        } else if meta.is_dir() {
+            let mut names: Vec<_> = fs::read_dir(&path)?
+                .map(|entry| entry.map(|entry| entry.file_name().to_string_lossy().into_owned()))
+                .collect::<std::io::Result<_>>()?;
+            names.sort();
+            for name in names
+                .into_iter()
+                .filter(|name| !name.starts_with('.') && !excludes.contains(name))
+            {
+                let child = format!("{}/{name}", relative.trim_end_matches('/'));
+                if !fs::symlink_metadata(path.join(&name))?
+                    .file_type()
+                    .is_symlink()
+                {
+                    self.tree(&child, excludes, files)?;
+                }
+            }
+        }
+        Ok(())
+    }
     pub fn lock(&self) -> Result<Lock> {
         let path = self.path(".dfd/lock")?;
         fs::create_dir_all(path.parent().unwrap())?;

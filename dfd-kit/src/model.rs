@@ -102,6 +102,13 @@ pub struct Lifecycle {
     /// Suite scripts whose hashes are design dependencies (issue #4).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub suite_entrypoints: Vec<String>,
+    /// Source files and directories bound to the final suite (issue #3).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub source_roots: Vec<String>,
+    /// File or directory names skipped at any depth under source_roots; None means
+    /// the built-in list of generated directories (issue #3).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub source_excludes: Option<Vec<String>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -288,6 +295,15 @@ pub struct TestEvidence {
     pub executed_at: String,
     pub exit_code: i32,
     pub log: FileEvidence,
+    /// Files under source_roots (path → sha256) when the check ran (issue #3).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub snapshot: Option<BTreeMap<String, String>>,
+    /// Design fingerprint of each criterion of the task when the check ran (issue #3).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub criteria_fingerprints: Option<BTreeMap<String, String>>,
+    /// "dfd" when recorded by `dfd exec`: a declaration, not authentication.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub recorded_by: Option<String>,
 }
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -298,6 +314,14 @@ pub struct Evidence {
     pub files: Vec<FileEvidence>,
     pub checks: Vec<TestEvidence>,
     pub refactor_notes: String,
+}
+
+/// Checks that `dfd exec` can run locally; CI stays a real CI run.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+pub enum ExecKind {
+    Red,
+    Green,
+    Suite,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, ValueEnum)]

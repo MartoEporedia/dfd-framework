@@ -2946,3 +2946,281 @@ fn suite_entrypoints_bind_the_suite_script_to_the_design() {
         assert_eq!(setup["gate"], "blocked", "{case}");
     }
 }
+
+impl Project {
+    fn sha(&self, path: &str) -> String {
+        self.file_evidence(path)["sha256"]
+            .as_str()
+            .unwrap()
+            .to_string()
+    }
+    /// Declare source_roots and bind the final suite and the green to the current
+    /// files and criteria, as `dfd exec` would.
+    fn bound(&self) {
+        self.developed();
+        self.relifecycle(json!({"schema_version":1,"mode":"release-preparation","ci_required":true,
+            "rationale":"Pilota con CI richiesta prima della pre-release","source_roots":["src","tests"]}));
+        self.rebind();
+    }
+    fn rebind(&self) {
+        let status = self.run(&["status", "001-paypal"], 2);
+        let path = ".dfd/features/001-paypal/evidence.json";
+        let mut evidence = self.read(path);
+        let mut snapshot = serde_json::Map::new();
+        for root in ["src", "tests"] {
+            let mut files: Vec<_> = fs::read_dir(self.path(root))
+                .unwrap()
+                .map(|entry| entry.unwrap().file_name().into_string().unwrap())
+                .filter(|name| !name.starts_with('.'))
+                .collect();
+            files.sort();
+            for name in files {
+                let file = format!("{root}/{name}");
+                if self.path(&file).symlink_metadata().unwrap().is_file() {
+                    snapshot.insert(file.clone(), json!(self.sha(&file)));
+                }
+            }
+        }
+        evidence["checks"][2]["snapshot"] = Value::Object(snapshot);
+        evidence["checks"][1]["criteria_fingerprints"] =
+            status["development"]["criteria_fingerprints"].clone();
+        self.save(path, &evidence);
+    }
+}
+
+#[test]
+fn source_roots_bind_the_final_suite_to_the_current_files() {
+    // Issue #3: F01b, F04, F09, F12 with source_roots declared.
+    let errors = |output: &Value| output["development"]["errors"].to_string();
+    let p = Project::new();
+    p.bound();
+    let ready = p.run(&["verify", "001-paypal"], 0);
+    assert!(ready["development"]["warnings"]
+        .as_array()
+        .unwrap()
+        .is_empty());
+    // F01b: code changed after the suite, hashes recomputed by hand.
+    p.write("src/checkout.rs", "// Regressione dopo la suite\n");
+    let mut evidence = p.read(".dfd/features/001-paypal/evidence.json");
+    evidence["files"][0] = p.file_evidence("src/checkout.rs");
+    p.save(".dfd/features/001-paypal/evidence.json", &evidence);
+    let blocked = p.run(&["verify", "001-paypal"], 2);
+    assert!(errors(&blocked).contains("src/checkout.rs"), "{blocked}");
+    p.write("src/checkout.rs", "// Fixture di implementazione\n");
+    evidence["files"][0] = p.file_evidence("src/checkout.rs");
+    p.save(".dfd/features/001-paypal/evidence.json", &evidence);
+    p.run(&["verify", "001-paypal"], 0);
+    // F09: a new file under the roots after the suite.
+    p.write("src/export.rs", "// Nuovo file\n");
+    assert!(errors(&p.run(&["verify", "001-paypal"], 2)).contains("src/export.rs"));
+    // Hidden files and symlinks under the roots are ignored.
+    fs::remove_file(p.path("src/export.rs")).unwrap();
+    p.write("src/.cache", "ignorato\n");
+    #[cfg(unix)]
+    std::os::unix::fs::symlink(p.path("src/checkout.rs"), p.path("src/link.rs")).unwrap();
+    p.run(&["verify", "001-paypal"], 0);
+    // Generated files (built-in source_excludes) do not count: a clone without them
+    // must not diverge from the suite snapshot.
+    p.write("src/__pycache__/checkout.cpython.pyc", "bytecode\n");
+    p.write("tests/target/debug/out", "build\n");
+    p.run(&["verify", "001-paypal"], 0);
+    // F12: an undeclared file is only a warning, until it changes after the suite.
+    p.write("src/util.rs", "// Utilita esistente\n");
+    p.rebind();
+    let warned = p.run(&["verify", "001-paypal"], 0);
+    assert!(warned["development"]["warnings"]
+        .to_string()
+        .contains("src/util.rs"));
+    p.write("src/util.rs", "// Utilita con regressione\n");
+    assert!(errors(&p.run(&["verify", "001-paypal"], 2)).contains("src/util.rs"));
+    p.write("src/util.rs", "// Utilita esistente\n");
+    p.run(&["verify", "001-paypal"], 0);
+    // F04: final suite written without a snapshot.
+    let mut evidence = p.read(".dfd/features/001-paypal/evidence.json");
+    evidence["checks"][2]
+        .as_object_mut()
+        .unwrap()
+        .remove("snapshot");
+    p.save(".dfd/features/001-paypal/evidence.json", &evidence);
+    assert!(errors(&p.run(&["verify", "001-paypal"], 2)).contains("snapshot"));
+
+    // Invalid roots block Phase 0.
+    for roots in [
+        json!(["../outside"]),
+        json!(["missing"]),
+        json!(["src", "src"]),
+    ] {
+        p.save(".dfd/domains/checkout/lifecycle.json", &json!({"schema_version":1,
+            "mode":"release-preparation","ci_required":true,"rationale":"Pilota","source_roots":roots}));
+        assert_eq!(
+            p.run(&["setup", "--domain", "checkout"], 2)["gate"],
+            "blocked",
+            "{roots}"
+        );
+    }
+}
+
+#[test]
+fn criteria_fingerprints_require_new_green_after_a_criterion_changes() {
+    // Issue #3, fault F13: criterion changed, references copied from status.
+    let p = Project::new();
+    p.bound();
+    p.run(&["verify", "001-paypal"], 0);
+    let refresh = |p: &Project| {
+        p.approve();
+        p.run(&["plan", "001-paypal", "--refresh"], 0);
+        let status = p.run(&["status", "001-paypal"], 2);
+        let mut evidence = p.read(".dfd/features/001-paypal/evidence.json");
+        evidence["design_fingerprint"] = status["development"]["design_fingerprint"].clone();
+        evidence["plan_hash"] = status["development"]["plan_hash"].clone();
+        p.save(".dfd/features/001-paypal/evidence.json", &evidence);
+    };
+    // Specification prose only: design review again, no new red/green.
+    p.write(
+        ".dfd/features/001-paypal/spec.md",
+        "# PayPal\nObiettivo: pagare con PayPal.\nOBS-01: contatore errori verificato con test di integrazione e alert.\n",
+    );
+    refresh(&p);
+    p.run(&["verify", "001-paypal"], 0);
+    // The criterion itself changes: the task needs new red/green.
+    let mut design = p.read(".dfd/features/001-paypal/design.json");
+    design["criteria"][0]["implementation"] = json!("Contatore errori e soglia di allarme");
+    p.save(".dfd/features/001-paypal/design.json", &design);
+    refresh(&p);
+    let blocked = p.run(&["verify", "001-paypal"], 2);
+    let errors = blocked["development"]["errors"].to_string();
+    assert!(
+        errors.contains("OBS-01") && errors.contains("task-1"),
+        "{blocked}"
+    );
+}
+
+#[test]
+fn dfd_exec_runs_and_records_red_green_and_suite() {
+    // Issue #3: the CLI runs the command and records the check with its snapshot.
+    let dfd = env!("CARGO_BIN_EXE_dfd");
+    let p = Project::new();
+    p.ready();
+    p.write("src/checkout.rs", "// Fixture di implementazione\n");
+    p.write("tests/checkout.rs", "// Fixture di test\n");
+    p.save(".dfd/domains/checkout/lifecycle.json", &json!({"schema_version":1,"mode":"release-preparation",
+        "ci_required":false,"rationale":"Suite locale motivata nel pilota","source_roots":["src","tests"]}));
+    p.approve();
+    p.run(&["plan", "001-paypal"], 0);
+    let mut evidence = p.read(".dfd/features/001-paypal/evidence.json");
+    evidence["files"] = json!([
+        p.file_evidence("src/checkout.rs"),
+        p.file_evidence("tests/checkout.rs")
+    ]);
+    evidence["refactor_notes"] = json!("Nessun refactor; contatore errori registrato");
+    p.save(".dfd/features/001-paypal/evidence.json", &evidence);
+
+    let red = p.run(
+        &[
+            "exec",
+            "001-paypal",
+            "--kind",
+            "red",
+            "--task",
+            "task-1",
+            "--",
+            dfd,
+            "no-such-command",
+        ],
+        0,
+    );
+    assert_eq!(red["check"]["exit_code"], 2);
+    let green = p.run(
+        &[
+            "exec",
+            "001-paypal",
+            "--kind",
+            "green",
+            "--task",
+            "task-1",
+            "--",
+            dfd,
+            "--version",
+        ],
+        0,
+    );
+    assert_eq!(green["check"]["exit_code"], 0);
+    p.run(
+        &[
+            "exec",
+            "001-paypal",
+            "--kind",
+            "suite",
+            "--",
+            dfd,
+            "--version",
+        ],
+        0,
+    );
+    let evidence = p.read(".dfd/features/001-paypal/evidence.json");
+    let checks = evidence["checks"].as_array().unwrap();
+    assert_eq!(checks.len(), 3);
+    for check in checks {
+        assert_eq!(check["recorded_by"], "dfd");
+        let log = fs::read_to_string(p.path(check["log"]["path"].as_str().unwrap())).unwrap();
+        assert!(log.contains("# exit_code:"), "{log}");
+    }
+    assert_eq!(
+        checks[2]["snapshot"]["src/checkout.rs"],
+        json!(p.sha("src/checkout.rs"))
+    );
+    assert!(checks[1]["criteria_fingerprints"]["OBS-01"].is_string());
+    assert_eq!(
+        p.run(&["verify", "001-paypal"], 0)["development"]["gate"],
+        "ready-for-pre-release"
+    );
+    // Invalid uses do not record anything.
+    p.run(
+        &[
+            "exec",
+            "001-paypal",
+            "--kind",
+            "green",
+            "--",
+            dfd,
+            "--version",
+        ],
+        1,
+    );
+    p.run(
+        &[
+            "exec",
+            "001-paypal",
+            "--kind",
+            "suite",
+            "--task",
+            "task-1",
+            "--",
+            dfd,
+            "--version",
+        ],
+        1,
+    );
+    p.run(
+        &[
+            "exec",
+            "001-paypal",
+            "--kind",
+            "suite",
+            "--",
+            "/dfd-no-such-program",
+        ],
+        1,
+    );
+    p.run(
+        &["exec", "001-paypal", "--kind", "ci", "--", dfd, "--version"],
+        2,
+    );
+    assert_eq!(
+        p.read(".dfd/features/001-paypal/evidence.json")["checks"]
+            .as_array()
+            .unwrap()
+            .len(),
+        3
+    );
+}

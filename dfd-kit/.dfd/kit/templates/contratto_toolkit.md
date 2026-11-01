@@ -15,6 +15,7 @@ Usare il binario `dfd` per il proprio sistema, senza runtime o pacchetti aggiunt
 | `review-design 001-paypal` | Report dei controlli e gate corrente |
 | `plan 001-paypal [--refresh]` | Piano TDD derivato dal design approvato e attuale |
 | `verify 001-paypal` | Verifica delle evidenze di sviluppo e report pre-release |
+| `exec 001-paypal --kind green --task task-1 -- cargo test` | Esecuzione esplicita di un comando del progetto e registrazione del check con snapshot |
 | `pre-release 001-paypal [--refresh]` | Preparazione o ripresa del rollout dopo lo sviluppo verificato |
 | `review-release 001-paypal` | Controlli strutturali, attivazioni e gate di release |
 | `decide 001-paypal --stage release ... --human-confirmed` | Decisione umana di release, separata dal design |
@@ -101,7 +102,7 @@ Per le nuove feature il fingerprint include specifica, design strutturato, risch
 
 ## Sviluppo (TDD DFD)
 
-Le skill `dfd-feature`, `dfd-plan`, `dfd-implement` e `dfd-verify` coprono apertura della feature, pianificazione, lavoro nell'harness e verifica. La CLI non chiama LLM e non esegue comandi del progetto. Le skill sono condivise dai quattro adapter.
+Le skill `dfd-feature`, `dfd-plan`, `dfd-implement` e `dfd-verify` coprono apertura della feature, pianificazione, lavoro nell'harness e verifica. La CLI non chiama LLM ed esegue un comando del progetto solo con `dfd exec`, richiesto esplicitamente. Le skill sono condivise dai quattro adapter.
 
 `plan <id>` richiede `gate: approved` o `approved-with-conditions` attuale e crea `plan.md`, `plan.json` ed `evidence.json`, portando la fase a `development`. Il piano iniziale deriva un task per criterio applicabile e riusa owner, implementazione e verifica dal design. Raffinarlo iterativamente e mantenere Markdown e JSON coerenti:
 
@@ -162,6 +163,31 @@ L'harness esegue test e implementazione, salva i log reali e compila `evidence.j
 ```
 
 I percorsi sono relativi alla radice del progetto. Registrare file di codice, test e strumentazione coinvolti; log non vuoti, hash SHA-256 esatti, comando e data ISO 8601 con timezone non futura. Per ogni task serve un red con exit code positivo e un green con exit code zero; la suite finale (`kind: suite` locale oppure `kind: ci`) deve essere verde e successiva ai green; quando CI richiesta, serve anche una CI verde successiva ai green. Il fallimento red deve dipendere dal requisito atteso: un errore di ambiente non è una prova TDD. Documentare refactor e osservabilità, oppure motivarne la non necessità. Per la CI scaricare il log reale: un test locale non va dichiarato come CI.
+
+### Evidenze legate allo stato dei file
+
+Ogni check può portare tre campi facoltativi, sempre con `schema_version: 1`:
+
+- `snapshot`: mappa `percorso → sha256` dei file al momento dell’esecuzione;
+- `criteria_fingerprints`: mappa `criterio → fingerprint` per red e green;
+- `recorded_by`: vale `"dfd"` se il check è stato registrato da `dfd exec`; è una dichiarazione, non un’autenticazione.
+
+Il fingerprint di un criterio è lo SHA-256 della sua voce in `design.json`, della voce del catalogo e del suo testo DoD (unità di `dod.md` per le review selettive, intero file per le legacy). `status` lo espone in `development.criteria_fingerprints`. Una modifica alla sola prosa di `spec.md` richiede la review di design ma non nuovi red/green.
+
+Le regole si attivano solo se `lifecycle.json` dichiara `source_roots`:
+
+- la suite finale più recente deve avere `snapshot`;
+- lo snapshot deve coincidere con i file attuali sotto le radici; ogni file modificato, aggiunto o rimosso blocca con “Suite eseguita su una versione diversa dei file”;
+- l’ultimo green di ogni task deve avere i fingerprint attuali di tutti i suoi criteri;
+- i file sotto le radici assenti da `evidence.files` producono un avviso.
+
+`dfd exec <id> --kind red|green|suite [--task <task>] -- <programma> [argomenti…]` è l’unico comando che esegue codice del progetto, e solo su richiesta esplicita:
+
+- esegue il programma senza shell, dalla radice, con l’ambiente ereditato e il lock del progetto;
+- salva stdout, stderr, comando, data UTC ed exit code in un log numerato in `evidence/`;
+- aggiunge il check con `snapshot` (albero sotto `source_roots`, oppure i file di `evidence.files`), `criteria_fingerprints` per red e green, e `recorded_by: "dfd"`.
+
+`--task` è obbligatorio per red e green e vietato per la suite; la CI non si esegue con `exec`. L’exit code è 0 quando il check è registrato, qualunque sia l’esito del programma, che resta nel check; è 1 se il programma non parte. Il comando registrato non deve invocare comandi `dfd` che prendono il lock sullo stesso progetto. I check scritti a mano restano ammessi, con lo snapshot calcolato allo stesso modo. Chi falsifica deliberatamente può scrivere anche lo snapshot: le regole rendono visibili gli errori onesti e le bugie pigre, non autenticano le evidenze.
 
 `status <id>` espone `development.design_fingerprint` e `development.plan_hash` quando il piano è valido. `plan_hash` è SHA-256 della serializzazione JSON compatta dei due hash SHA-256 di `plan.json` e `plan.md` con chiavi `json` e `markdown`. Usare i valori restituiti dalla CLI; dopo cambiamenti al piano o al design aggiornare i riferimenti solo dopo le nuove verifiche. Cambiamenti ai file o ai log invalidano gli hash registrati. La CLI verifica i file elencati, non scopre automaticamente file omessi.
 
@@ -265,9 +291,10 @@ File opzionale `.dfd/domains/<dominio>/lifecycle.json`:
 
 I quattro campi dell’esempio sono obbligatori; nessun campo ignoto. `mode` ammette `development-only` e `release-preparation`. Motivazione non vuota; solo sviluppo richiede `ci_required: false`. In preparazione al rilascio valutare la scelta con rischio e destinazione: `true` richiede evidenze `ci`; `false` accetta la suite locale come alternativa motivata da valutare nella review umana. Una policy assente mantiene il comportamento precedente: preparazione al rilascio con CI richiesta. Policy malformate sono errori, senza fallback. La CLI non certifica l’adeguatezza della motivazione.
 
-Due campi facoltativi leggono le evidenze senza eseguire nulla:
+Quattro campi facoltativi legano le evidenze allo stato del progetto senza eseguire nulla:
 
 - `log_markers`: lista di stringhe cercate, in modo esatto e sensibile alle maiuscole, nei log dei check `green`, `suite` e `ci` con `exit_code: 0`. Senza il campo vale la lista integrata `FAILED`, `skipped`, `Traceback`, `xfail`, `XFAIL`, `panicked`; una lista vuota disattiva il controllo. I log `red` sono esclusi. Ogni marcatore trovato produce un avviso in `development.warnings` (`status`, `verify`, sezione “Avvisi” di `development-review.md`) e in `release.warnings` di `review-release`. Gli avvisi non cambiano gate né exit code: le euristiche sbagliano e vanno valutate nella review.
+- `source_roots`: file o directory del codice, relativi alla radice (per esempio `["src", "tests"]`), legati alla suite finale secondo la sezione sulle evidenze legate allo stato dei file. Ogni radice deve esistere dentro il progetto, senza duplicati, altrimenti la Fase 0 è bloccata. Sono esclusi i file e le directory nascosti, i symlink e i nomi elencati in `source_excludes` a qualunque livello. Senza `source_excludes` vale la lista integrata `__pycache__`, `node_modules`, `target`: i file generati, assenti in un clone, non devono far divergere lo snapshot. Una lista vuota non esclude nulla.
 - `suite_entrypoints`: percorsi, relativi alla radice, degli script che eseguono la suite (per esempio `["ci.sh"]`). Ogni file deve esistere dentro il progetto, senza duplicati, altrimenti la Fase 0 è bloccata. L’hash di ciascun file entra nel fingerprint di design: modificare lo script dopo l’approvazione rende la review `stale-review` e il percorso compare in `changes`.
 
 Il fingerprint include il file quando presente; aggiunta, rimozione o modifica invalidano le review, il piano e le evidenze. Per i domini senza file i fingerprint restano compatibili. Aggiornare prima la policy, rivalutare la specifica e registrare la decisione umana pertinente; usare plan --refresh e rieseguire le verifiche coinvolte.

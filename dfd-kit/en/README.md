@@ -76,7 +76,7 @@ dfd verify 001-paypal
 dfd status 001-paypal
 ```
 
-The CLI checks criteria/task coverage, design/plan references, outcomes and file/log hashes; it neither runs project commands nor authenticates claimed results. development-only closes with a traced final local suite; CI is required only by policy. Design/code/plan/log changes require relevant reverification; after renewed approval plan --refresh preserves tasks while updating references. ready-for-pre-release is structural readiness, not approval. Use the updated binary/install command for updated skills.
+The CLI checks criteria/task coverage, design/plan references, outcomes and file/log hashes; it runs a project command only through an explicitly requested dfd exec and never authenticates claimed results. With source_roots the final suite is bound to the file snapshot and each green to its criteria fingerprints. development-only closes with a traced final local suite; CI is required only by policy. Design/code/plan/log changes require relevant reverification; after renewed approval plan --refresh preserves tasks while updating references. ready-for-pre-release is structural readiness, not approval. Use the updated binary/install command for updated skills.
 
 ## Pre-release and release review
 
