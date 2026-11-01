@@ -607,7 +607,12 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
 
 pub(super) fn review(store: &Store, id: &str) -> Result<(Value, i32)> {
     let state = state(store, id)?;
-    let output = status(store, &state)?;
+    let mut output = status(store, &state)?;
+    // Development log warnings stay visible at the release review (issue #4).
+    output["warnings"] = development::status(store, &state)?
+        .get("warnings")
+        .cloned()
+        .unwrap_or_else(|| json!([]));
     let mut report = crate::localized_format!(
         "# Review di release DFD\n\nGate: {}\n\n",
         "# DFD release review\n\nGate: {}\n\n",
@@ -618,6 +623,13 @@ pub(super) fn review(store: &Store, id: &str) -> Result<(Value, i32)> {
     }
     if let Some(changes) = output.get("changes") {
         report.push_str(&changes_report(changes));
+    }
+    for warning in output["warnings"].as_array().into_iter().flatten() {
+        report.push_str(&crate::localized_format!(
+            "- Avviso: {}\n",
+            "- Warning: {}\n",
+            warning.as_str().unwrap_or_default()
+        ));
     }
     for pending in output["pending_activation"]
         .as_array()

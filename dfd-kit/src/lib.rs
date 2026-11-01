@@ -367,6 +367,10 @@ fn lifecycle(store: &Store, domain: &str) -> Result<Lifecycle> {
             rationale: crate::i18n::text(
                 "Compatibilità legacy: CI richiesta prima della pre-release.",
             ),
+            log_markers: None,
+            suite_entrypoints: vec![],
+            source_roots: vec![],
+            source_excludes: None,
         });
     }
     let policy: Lifecycle = store.json(&relative)?;
@@ -385,7 +389,29 @@ fn setup_errors(store: &Store, domain: &str) -> Result<Vec<String>> {
     }
     let root = format!(".dfd/domains/{domain}");
     let mut errors = vec![];
-    lifecycle(store, domain)?;
+    let policy = lifecycle(store, domain)?;
+    let mut roots = BTreeSet::new();
+    for path in &policy.source_roots {
+        let exists = store.path(path).ok().is_some_and(|file| file.exists());
+        if !roots.insert(path) || !exists {
+            errors.push(crate::localized_format!(
+                "Fase 0: radice del codice assente, duplicata o fuori dal progetto: {path}.",
+                "Phase 0: source root missing, duplicated or outside the project: {path}.",
+                path = path
+            ));
+        }
+    }
+    let mut entrypoints = BTreeSet::new();
+    for path in &policy.suite_entrypoints {
+        let file = store.path(path).ok().is_some_and(|file| file.is_file());
+        if !entrypoints.insert(path) || !file {
+            errors.push(crate::localized_format!(
+                "Fase 0: entrypoint della suite assente, duplicato o fuori dal progetto: {path}.",
+                "Phase 0: suite entrypoint missing, duplicated or outside the project: {path}.",
+                path = path
+            ));
+        }
+    }
     collaboration::policy(store, domain)?;
     for file in ["dod.md", "guardrails.md", "process.md"] {
         let relative = format!("{root}/{file}");
@@ -1216,6 +1242,14 @@ fn design_inputs(store: &Store, state: &State) -> Result<(Snapshot, Value, Snaps
     let policy = format!(".dfd/domains/{}/lifecycle.json", state.domain);
     if store.path(&policy)?.exists() {
         hashes.insert(policy.clone(), store.hash(&policy)?);
+        // Suite scripts are design dependencies (issue #4).
+        for path in &lifecycle(store, &state.domain)?.suite_entrypoints {
+            let current = match store.path(path) {
+                Ok(file) if file.is_file() => store.hash(path)?,
+                _ => "absent".into(),
+            };
+            hashes.insert(path.clone(), current);
+        }
     }
     hashes.insert(
         ".dfd/guardrails.md".into(),
@@ -1244,6 +1278,31 @@ fn design_inputs(store: &Store, state: &State) -> Result<(Snapshot, Value, Snaps
         "id":state.id,"domain":state.domain,"title":state.title,"scope":state.scope,"kind":state.kind,"risk":state.risk,"route":state.route,
     });
     Ok((hashes, context, detail))
+}
+/// Design fingerprint of each criterion in design.json: its design entry, its catalog
+/// entry and its DoD text (issue #3). Prose-only changes to the spec do not alter it.
+fn criteria_fingerprints(store: &Store, state: &State) -> Result<BTreeMap<String, String>> {
+    let design: Design = store.json(&format!(".dfd/features/{}/design.json", state.id))?;
+    let catalog: Catalog = store.json(&format!(".dfd/domains/{}/criteria.json", state.domain))?;
+    let dod = store.read(&format!(".dfd/domains/{}/dod.md", state.domain))?;
+    let ids: BTreeSet<_> = design.criteria.iter().map(|c| c.id.as_str()).collect();
+    let selected = selected_dod(&dod, &ids);
+    let mut result = BTreeMap::new();
+    for criterion in &design.criteria {
+        let text = if state.selective_review {
+            json!(selected.get(&criterion.id))
+        } else {
+            json!(hash(dod.as_bytes()))
+        };
+        let entry = catalog.criteria.iter().find(|c| c.id == criterion.id);
+        result.insert(
+            criterion.id.clone(),
+            hash(&serde_json::to_vec(
+                &json!({"design":criterion,"catalog":entry,"dod":text}),
+            )?),
+        );
+    }
+    Ok(result)
 }
 fn design_fingerprint(store: &Store, state: &State) -> Result<String> {
     let (hashes, context, _) = design_inputs(store, state)?;
@@ -1788,6 +1847,12 @@ fn execute_inner(cli: Cli) -> Result<(Value, i32)> {
             }
         }
         Command::Plan { id, refresh } => development::plan(&store, &id, refresh),
+        Command::Exec {
+            id,
+            kind,
+            task,
+            command,
+        } => development::exec(&store, &id, kind, task, &command),
         Command::Verify { id } => {
             if quick::exists(&store, &id)? {
                 quick::verify(&store, &id)

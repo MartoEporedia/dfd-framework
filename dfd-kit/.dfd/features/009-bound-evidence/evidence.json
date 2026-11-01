@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "d6d8f1bef23f418a999c1fa64dbba874ad3d0b89382cdaba2b088bbf3776c346",
+  "plan_hash": "b8218d97413d5b0ddaabf69755f48ce343eb01eb32a38f8aaffab3ccbc6091d3",
+  "files": [
+    {
+      "path": "src/model.rs",
+      "sha256": "e33a57b80dbb00061f788d7c1d11426ba889564f382ca92658af84d7b4c7796f"
+    },
+    {
+      "path": "src/cli.rs",
+      "sha256": "829520f145a355473b5a6eb34114987c6c621dc886e75d8bd1fc4c72a8d2b3df"
+    },
+    {
+      "path": "src/lib.rs",
+      "sha256": "f45dde1ee01752c1b90118e5741403a7abf5a7b931a19da9dbf56fd8c2faf5f3"
+    },
+    {
+      "path": "src/store.rs",
+      "sha256": "93d6f2740ccbcd8a40c1415423e03d9fd84d5894405b789e14de70a88bfa5dfe"
+    },
+    {
+      "path": "src/development.rs",
+      "sha256": "4d1e104ea5df8f738e80cd0ecb5e72a6de4f2835b1c2657ecd850f59d3092d70"
+    },
+    {
+      "path": "tests/workflow.rs",
+      "sha256": "1bff5d01cf294779af4fbce3dd28b52f66c457cd56c56194149f89f810a04d7d"
+    },
+    {
+      "path": "mutations/gates.json",
+      "sha256": "289a131699617370117a5348af306286827c83a7ab223d8d5c1377d5d8175abb"
+    },
+    {
+      "path": "i18n/en.json",
+      "sha256": "a9db87f2625a7c869cd413657568cea8f41cde6f2e448dd04882a50b8cdd71a1"
+    },
+    {
+      "path": "templates/contratto_toolkit.md",
+      "sha256": "1fc071d1f694b0ab57af2885fb4f3eadf646d86d8ecb22ab817ab77c183b6862"
+    },
+    {
+      "path": "en/templates/contratto_toolkit.md",
+      "sha256": "775da80621b210446932022cbd625072a00e02fed5aaa552d4c74906333c293f"
+    },
+    {
+      "path": "README.md",
+      "sha256": "c98250bb347192ad833726b2c85a3e1c5643bba4a30af5316c8f7c6931ffad33"
+    },
+    {
+      "path": "en/README.md",
+      "sha256": "1a896a1da5cb8b16ebcec048c7eda686e240ac417dc8fdd561e0078efb75a5e5"
+    },
+    {
+      "path": "skills/dfd-implement/SKILL.md",
+      "sha256": "2b423cc2d864021c8f3496ffbb18b2414fd730a6e0108b7cd7739bdf4df36325"
+    },
+    {
+      "path": "en/skills/dfd-implement/SKILL.md",
+      "sha256": "d8369313336b2698bb2423f985b5e3480799f62b4367a79fca040068edfc4a6d"
+    },
+    {
+      "path": "skills/dfd-setup/SKILL.md",
+      "sha256": "ece289431dbc19bdd24721b6a53d61d27b51651644b2484c679fa557a2db8737"
+    },
+    {
+      "path": "en/skills/dfd-setup/SKILL.md",
+      "sha256": "e0ce3c4dd42b04c630070daf33e08699b7fd12c1da884a5758782a42b56571c0"
+    },
+    {
+      "path": "skills/dfd-verify/SKILL.md",
+      "sha256": "6b893d1824bebea19c22fec037064f05539e30daa517e04b95596b1bd7f6411b"
+    },
+    {
+      "path": "en/skills/dfd-verify/SKILL.md",
+      "sha256": "158f1853feec1f1e84bb5bcef9f7f39e45e64938362cf6324c117616cbd566b8"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "055c04428134b7ba4d43b6529e0268117c20b8362b687d39d2bb9c8f89b2403a"
+    },
+    {
+      "path": ".agents/skills/dfd-implement/SKILL.md",
+      "sha256": "7a296a9c252f5d077c33506aff46b8b842eb80944e5ec5b739dda119296d199d"
+    },
+    {
+      "path": ".agents/skills/dfd-setup/SKILL.md",
+      "sha256": "121aa57190581576865bc272c242c388103791481ceed2808f3acb2faf913e7b"
+    },
+    {
+      "path": ".agents/skills/dfd-verify/SKILL.md",
+      "sha256": "c3895e5ae7c652dcb59c66293c3e6ab150db8aa4543ab3f18d913591f52a4e94"
+    },
+    {
+      "path": ".dfd/kit/templates/contratto_toolkit.md",
+      "sha256": "f4d14a4430cf71b375b6e477b8f2c0aecd0d5b21827eb92aa4a68c330be8c6ed"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-implement/SKILL.md",
+      "sha256": "7a296a9c252f5d077c33506aff46b8b842eb80944e5ec5b739dda119296d199d"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-setup/SKILL.md",
+      "sha256": "121aa57190581576865bc272c242c388103791481ceed2808f3acb2faf913e7b"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-verify/SKILL.md",
+      "sha256": "c3895e5ae7c652dcb59c66293c3e6ab150db8aa4543ab3f18d913591f52a4e94"
+    }
+  ],
+  "checks": [
+    {
+      "task": "source-roots-snapshot",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow source_roots_bind",
+      "executed_at": "2026-10-31T16:09:38+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/01-red-source-roots-snapshot.log",
+        "sha256": "8729c5e7de9313afcc96a7f80dacb64f7b42d30336a538447a0b830abd3b7391"
+      }
+    },
+    {
+      "task": "criteria-fingerprints",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow criteria_fingerprints_require",
+      "executed_at": "2026-10-31T16:09:39+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/02-red-criteria-fingerprints.log",
+        "sha256": "540c3a6029b1ac0f3aa2d04a1853aeabe3f9abb19936bf5809e8e1950dec18f2"
+      }
+    },
+    {
+      "task": "dfd-exec",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow dfd_exec_runs",
+      "executed_at": "2026-10-31T16:09:40+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/03-red-dfd-exec.log",
+        "sha256": "23a4132539771b5e41a51ad9d7adc0cbafe5e8e52ae741bc2c5b6b708cd55299"
+      }
+    },
+    {
+      "task": "source-roots-snapshot",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow source_roots_bind",
+      "executed_at": "2026-10-31T16:12:14+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/04-green-source-roots-snapshot.log",
+        "sha256": "5395efffb4081438fe5c85ea205bb1dee3d2d6a62a120ef7232291b1e43d64dd"
+      }
+    },
+    {
+      "task": "criteria-fingerprints",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow criteria_fingerprints_require",
+      "executed_at": "2026-10-31T16:12:15+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/05-green-criteria-fingerprints.log",
+        "sha256": "958a54323f10dc1b55e20fb61321c739d0e2de72af62fcfd8d96d22c83faf9ae"
+      }
+    },
+    {
+      "task": "dfd-exec",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow dfd_exec_runs",
+      "executed_at": "2026-10-31T16:12:16+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/06-green-dfd-exec.log",
+        "sha256": "5563d0810a8eed02e37500843e3321cf716c9d4b43251e992ddb0c44fe6d17bf"
+      }
+    },
+    {
+      "task": "source-roots-snapshot",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow source_roots_bind",
+      "executed_at": "2026-10-31T21:36:36+00:00",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/07-red-source-excludes.log",
+        "sha256": "85689d92892b6c13e1e239fdee618f3a06dbec8fdcd34e1bd7d6c186c2a8a3d0"
+      }
+    },
+    {
+      "task": "source-roots-snapshot",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow source_roots_bind",
+      "executed_at": "2026-11-01T13:45:30+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/08-green-source-excludes.log",
+        "sha256": "218ad3f3fc97aeb7ff4c5a54f2a99c71a4b5727ac9556f86fc27139a7eaad6ae"
+      }
+    },
+    {
+      "task": "source-roots-snapshot",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow source_roots_bind",
+      "executed_at": "2026-11-01T13:48:31+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/09-green-riconferma-source-roots-snapshot.log",
+        "sha256": "951741c6cb11fbe0e97d14c60af20528d1655263e336a90a5799aa07f656bc17"
+      }
+    },
+    {
+      "task": "criteria-fingerprints",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow criteria_fingerprints_require",
+      "executed_at": "2026-11-01T13:48:33+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/10-green-riconferma-criteria-fingerprints.log",
+        "sha256": "7ef5d91f97bc9196574e1ca9795f41ba99e084be5ee364425c6bcfd0916a54d0"
+      }
+    },
+    {
+      "task": "dfd-exec",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow dfd_exec_runs",
+      "executed_at": "2026-11-01T13:48:34+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/11-green-riconferma-dfd-exec.log",
+        "sha256": "9492e74df87afe638db21c9a7e895fca0a10c3acc98ddfbb914c1498c2252d0f"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor; python3 scripts/check_translations.py; python3 scripts/mutation_test.py",
+      "executed_at": "2026-11-01T13:56:22+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/009-bound-evidence/evidence/12-suite.log",
+        "sha256": "87f41be75ee6430a3c84ccdb4f6995fa9e590beee38469fff021cdbf6b443d30"
+      }
+    }
+  ],
+  "refactor_notes": "Refactor: nessuno oltre alle funzioni nuove (Store::tree, criteria_fingerprints, source_excludes, development::exec). Osservabilità: errori che nominano file e criteri divergenti, avvisi per i file non dichiarati, recorded_by nei check registrati da dfd exec. Red reali per i tre task (source_roots rifiutato come campo sconosciuto). I primi tre red erano stati registrati con un nome di task errato per un errore del ciclo shell (zsh non divide le variabili) e senza filtro sui test: record e log rimossi prima di rieseguirli correttamente. Il test di exec è stato corretto dopo il red (radici create prima della policy). Falso allarme trovato prima del laboratorio (__pycache__ sotto le radici): aggiunto source_excludes con lista integrata, nuovo red/green, design riconfermato. Otto mutanti nuovi, 65/65 intercettati (il mutante sui symlink riscritto con true || perché la prima versione non compilava). Quindici messaggi aggiunti al catalogo. Laboratorio v3: baseline v3-i3-baseline con source_roots [mensa, tests, ci.sh] e green/suite rieseguiti con dfd exec; F01b, F04, F09, F12, F13 BLOCCATI; F00 e baseline da zero verdi. Decisioni registrate dall'agente su richiesta esplicita del manutentore."
+}

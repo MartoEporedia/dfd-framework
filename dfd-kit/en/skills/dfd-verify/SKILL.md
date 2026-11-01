@@ -11,7 +11,7 @@ description: Verify DFD development evidence, task coverage and current file/log
 
 Read `.dfd/kit/templates/contratto_toolkit.md`, specification, plan and evidence.json. Run `dfd verify <id>`: development-review.md is generated; phase advances only for complete/current artifacts.
 
-Review semantics too: red must fail for the expected requirement; green tests the associated criteria; final local/CI suite per lifecycle.json must cover the final refactored/instrumented version. Hashes check local integrity, not log authenticity, semantic coverage or code quality.
+Review semantics too: red must fail for the expected requirement; green tests the associated criteria; final local/CI suite per lifecycle.json must cover the final refactored/instrumented version. Hashes check local integrity, not log authenticity, semantic coverage or code quality. With source_roots, “Suite run on a different version of the files” or “criterion changed after the green” is resolved by actually rerunning the commands, preferably with dfd exec, never by recomputing hashes or snapshots. Examine every development.warnings entry: a skipped test or FAILED with exit 0 must be explained or fixed before declaring development complete.
 
 Missing tests/instrumentation → dfd-implement; incomplete plan → dfd-plan; changed design → reconfirm review. Preserve valid results and rerun invalidated checks. Never declare unexecuted CI passing. Report blocked-plan, blocked-evidence, development-complete or ready-for-pre-release and relevant conditions. Stop at verified development for development-complete. Otherwise prepare pre-release then review-release; rollout execution comes later.
 

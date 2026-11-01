@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "Leggere i log verdi delle evidenze con marcatori configurabili (avviso) e legare gli script della suite al design (issue #4).",
+  "business_metrics": [
+    "F03 e F05 del laboratorio con avviso",
+    "F05 con ci.sh dichiarato: design stale-review",
+    "F00 senza avvisi, baseline verde"
+  ],
+  "epic": {
+    "reference": "https://github.com/MartoEporedia/dfd-framework/issues/4 aperta dal manutentore; scelte (avviso, lista integrata, design fingerprint) espresse in chat il 2026-10-31",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-10-31T08:01:16Z"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "applicable",
+      "implementation": "warnings in development e release per marcatori nei log green/suite/ci con exit 0; gate ed exit code invariati.",
+      "verification": "Test workflow red/green (F03, F05, entrypoint, compatibilità), suite locale, mutanti."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "applicable",
+      "implementation": "Contenuto dei log delle evidenze controllato; hash degli entrypoint nel fingerprint di design.",
+      "verification": "Test workflow red/green (F03, F05, entrypoint, compatibilità), suite locale, mutanti."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "applicable",
+      "implementation": "suite_entrypoints validati da Store: percorsi esterni, assenti o duplicati sono errori di setup.",
+      "verification": "Test workflow red/green (F03, F05, entrypoint, compatibilità), suite locale, mutanti."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Modificare uno script della suite dopo l'approvazione rende il design stale-review.",
+      "verification": "Test workflow red/green (F03, F05, entrypoint, compatibilità), suite locale, mutanti."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Campi facoltativi in lifecycle.json; schema_version 1 e rifiuto dei campi sconosciuti invariati; fingerprint invariato senza i campi.",
+      "verification": "Test workflow red/green (F03, F05, entrypoint, compatibilità), suite locale, mutanti."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Red/green, suite, fmt, Clippy, doctor, mutanti.",
+      "verification": "Test workflow red/green (F03, F05, entrypoint, compatibilità), suite locale, mutanti."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Contratto, guide e skill IT/EN aggiornati.",
+      "verification": "Test workflow red/green (F03, F05, entrypoint, compatibilità), suite locale, mutanti."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "excluded",
+      "justification": "Nessuna scrittura nuova oltre ai report rigenerati."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Scritture e lock invariati."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "excluded",
+      "justification": "Nessuna dipendenza."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "excluded",
+      "justification": "Nessuna soglia di prestazioni."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "excluded",
+      "justification": "Nessun comando delle skill cambia."
+    }
+  ],
+  "test_plan": "Red/green: F03 (skipped) e F05 (FAILED exit 0) con avvisi; red con FAILED senza avvisi; log_markers vuoto e personalizzato; entrypoint modificato dopo l'approvazione con stale-review e changes; entrypoint assente o esterno come errore di setup; compatibilità senza campi. fmt, Clippy, suite, doctor, check_translations, mutanti.",
+  "guardrails": "La CLI non esegue comandi; avvisi senza effetto sui gate; percorsi solo dentro la radice; schema_version 1.",
+  "open_questions": []
+}

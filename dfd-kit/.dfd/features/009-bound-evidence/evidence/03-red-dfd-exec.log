@@ -1,0 +1,29 @@
+$ cargo test --locked --offline --test workflow dfd_exec_runs
+# executed_at: 2026-10-31T16:09:40+00:00
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/workflow.rs (target/debug/deps/workflow-a3ad0388a73b3989)
+
+running 1 test
+test dfd_exec_runs_and_records_red_green_and_suite ... FAILED
+
+failures:
+
+---- dfd_exec_runs_and_records_red_green_and_suite stdout ----
+
+thread 'dfd_exec_runs_and_records_red_green_and_suite' (41470221) panicked at tests/workflow.rs:120:14:
+assertion `left == right` failed: args: ["decide", "001-paypal", "--decision", "approved", "--reviewer", "TL", "--role", "tech-lead", "--note", "Review semantica effettuata", "--human-confirmed"]
+stdout: 
+stderr: DFD: JSON non valido in .dfd/domains/checkout/lifecycle.json: unknown field `source_roots`, expected one of `schema_version`, `mode`, `ci_required`, `rationale`, `log_markers`, `suite_entrypoints`
+
+  left: Some(1)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    dfd_exec_runs_and_records_red_green_and_suite
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 86 filtered out; finished in 0.72s
+
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101

@@ -1,0 +1,59 @@
+$ cargo test --locked --offline --test workflow source_roots_bind
+# executed_at: 2026-10-31T21:36:36+00:00
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.23s
+     Running tests/workflow.rs (target/debug/deps/workflow-a3ad0388a73b3989)
+
+running 1 test
+test source_roots_bind_the_final_suite_to_the_current_files ... FAILED
+
+failures:
+
+---- source_roots_bind_the_final_suite_to_the_current_files stdout ----
+
+thread 'source_roots_bind_the_final_suite_to_the_current_files' (41780007) panicked at tests/workflow.rs:3026:7:
+assertion `left == right` failed: args: ["verify", "001-paypal"]
+stdout: {
+  "development": {
+    "criteria_fingerprints": {
+      "OBS-01": "13f88a512c1575eaf22e64ff0c28e8828d9bd0324189e0c0d743e43b76659e1f"
+    },
+    "design_fingerprint": "82630706d52de62d365bd07b0936bf8a032e9f0b6a42a6f9b0af4274db5464ca",
+    "errors": [
+      "Suite eseguita su una versione diversa dei file: src/__pycache__/checkout.cpython.pyc, tests/target/debug/out; rieseguire la suite."
+    ],
+    "gate": "blocked-evidence",
+    "lifecycle": {
+      "ci_required": true,
+      "mode": "release-preparation",
+      "rationale": "Pilota con CI richiesta prima della pre-release",
+      "schema_version": 1,
+      "source_roots": [
+        "src",
+        "tests"
+      ]
+    },
+    "next": "dfd-implement",
+    "plan_hash": "953c92d402cdbf5fb657af8e25534fb358988feb59cb89bbaeb167e10a40b9fe",
+    "warnings": [
+      "File sotto source_roots non dichiarato in evidence.files: src/__pycache__/checkout.cpython.pyc.",
+      "File sotto source_roots non dichiarato in evidence.files: tests/target/debug/out."
+    ]
+  },
+  "feature": "001-paypal",
+  "phase": "development"
+}
+
+stderr: 
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    source_roots_bind_the_final_suite_to_the_current_files
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 86 filtered out; finished in 1.18s
+
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101

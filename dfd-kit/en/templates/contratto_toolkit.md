@@ -47,6 +47,7 @@ Use the platform's dfd binary without additional runtime/packages. Run at produc
 | `review-design 001-paypal` | Structural report/current design gate |
 | `plan 001-paypal [--refresh]` | TDD plan from current approved design |
 | `verify 001-paypal` | Check development evidence |
+| `exec 001-paypal --kind green --task task-1 -- cargo test` | Explicitly run a project command and record the check with a snapshot |
 | `pre-release 001-paypal [--refresh]` | Prepare/resume rollout after verified development |
 | `review-release 001-paypal` | Structural release checks/activations/gate |
 | `decide 001-paypal --stage release ... --human-confirmed` | Separate human release decision |
@@ -115,7 +116,7 @@ New fingerprints cover specification, structured design, risk, selected criteria
 
 ## Development (DFD TDD)
 
-dfd-feature/plan/implement/verify guide opening, planning, harness execution and checks. The CLI invokes neither LLMs nor project commands; all four adapters share skills.
+dfd-feature/plan/implement/verify guide opening, planning, harness execution and checks. The CLI never invokes LLMs and runs a project command only through an explicitly requested dfd exec; all four adapters share skills.
 
 plan requires current approved/approved-with-conditions design, creates plan.md/plan.json/evidence.json and sets phase development. Initial tasks derive from applicable criteria; refine iteratively:
 
@@ -142,6 +143,29 @@ The harness executes tests and records real logs. All paths are project-relative
 ```
 
 Record relevant code/test/instrumentation files, exact current hashes, nonempty logs, commands and nonfuture timezone dates. Each task requires a real expected-requirement red failure followed by passing green; final local/CI suite follows all greens. Required CI uses kind ci and actual CI logs, never relabeled local execution. Changes to verified files/logs/design/plan invalidate evidence.
+
+Every check may carry three optional fields, still with schema_version 1:
+
+- snapshot: path → sha256 of the files when it ran;
+- criteria_fingerprints: criterion → fingerprint for red and green;
+- recorded_by: "dfd" when recorded by dfd exec; a declaration, not authentication.
+
+A criterion fingerprint is the SHA-256 of its design.json entry, its catalog entry and its DoD text (dod.md units for selective reviews, whole file for legacy ones); status exposes it in development.criteria_fingerprints. A prose-only spec.md change requires design review but no new red/green.
+
+The rules apply only when lifecycle.json declares source_roots:
+
+- the latest final suite must have a snapshot;
+- the snapshot must match the current files under the roots; any changed, added or removed file blocks with “Suite run on a different version of the files”;
+- each task's latest green must carry the current fingerprints of all its criteria;
+- files under the roots missing from evidence.files yield a warning.
+
+dfd exec <id> --kind red|green|suite [--task <task>] -- <program> [args…] is the only command that runs project code, and only on explicit request:
+
+- it runs the program without a shell, from the root, with the inherited environment and the project lock;
+- it stores stdout, stderr, command, UTC date and exit code in a numbered log under evidence/;
+- it appends the check with snapshot (tree under source_roots, or the evidence.files), criteria_fingerprints for red and green, and recorded_by "dfd".
+
+--task is required for red and green and forbidden for suite; CI is not run with exec. The exit code is 0 when the check is recorded, whatever the program's outcome (kept in the check), and 1 if the program cannot start. The recorded command must not invoke dfd commands that take the lock on the same project. Hand-written checks remain allowed, with the snapshot computed the same way. Deliberate falsifiers can write the snapshot too: the rules expose honest mistakes and lazy lies, they do not authenticate evidence.
 
 verify regenerates development-review.md; complete/current evidence sets phase development-verified without moving back a pre-release or release-reviewed phase; failed reverification returns phase development from development-verified or any later phase. Recorded phase is the last step taken, not the gate. status <id> adds effective_phase, derived from current gates and never saved: idea (risk not classified), assessed (no specification), design (design not approved or to reconfirm), design-reviewed (development not started), development (development blocked), development-verified (development complete, pre-release not started), pre-release (release being prepared or to reconfirm), release-reviewed (release approved, also with conditions). Exit 0 means development complete or pre-release readiness by policy; gaps return 2. Hashes establish local integrity, not authenticity, actual execution, quality or semantic coverage. development-complete stops; ready-for-pre-release allows pre-release/review-release only.
 
@@ -197,7 +221,13 @@ Optional `.dfd/domains/<domain>/lifecycle.json`:
 {"schema_version":1,"mode":"development-only","ci_required":false,"rationale":"Local prototype: CI premature; traced final local suite required"}
 ```
 
-All fields required; unknown fields rejected. Modes: development-only/release-preparation. Nonblank rationale required; development-only requires ci_required false. In release preparation justify CI against risk/target: true requires ci evidence; false accepts local suite as a justified human-reviewed alternative. Missing policy retains legacy release-preparation with required CI. Malformed policy errors never silently fall back. Maturity is separate from adoption mode/level and risk route.
+The four example fields are required; unknown fields rejected. Modes: development-only/release-preparation. Nonblank rationale required; development-only requires ci_required false. In release preparation justify CI against risk/target: true requires ci evidence; false accepts local suite as a justified human-reviewed alternative. Missing policy retains legacy release-preparation with required CI. Malformed policy errors never silently fall back. Maturity is separate from adoption mode/level and risk route.
+
+Four optional fields bind the evidence to the project state without executing anything:
+
+- log_markers: strings searched exactly and case-sensitively in the logs of green, suite and ci checks with exit_code 0. Without the field the built-in list applies: FAILED, skipped, Traceback, xfail, XFAIL, panicked; an empty list disables the check. red logs are excluded. Each marker found yields a warning in development.warnings (status, verify, “Warnings” section of development-review.md) and in release.warnings of review-release. Warnings never change gate or exit code: heuristics can be wrong and belong to the review.
+- source_roots: code files or directories, relative to the root (for example ["src", "tests"]), bound to the final suite as described for evidence bound to file state. Each root must exist inside the project without duplicates, otherwise Phase 0 is blocked. Hidden files and directories, symlinks and the names listed in source_excludes at any depth are excluded. Without source_excludes the built-in list __pycache__, node_modules, target applies: generated files, missing in a clone, must not make the snapshot diverge. An empty list excludes nothing.
+- suite_entrypoints: paths, relative to the root, of the scripts that run the suite (for example ["ci.sh"]). Each file must exist inside the project without duplicates, otherwise Phase 0 is blocked. Each file's hash is part of the design fingerprint: changing the script after approval makes the review stale-review and the path appears in changes.
 
 Adding/removing/changing lifecycle invalidates relevant review/plan/evidence; absent-file fingerprints remain compatible. Reassess policy/specification, record actual human decision, refresh plan and rerun affected checks. suite means actual final local execution, ci means actual CI; both require exit 0, valid nonfuture timestamp and nonempty current hashed log. Any invalid declared check blocks even if optional. Final suite and required CI follow all greens.
 

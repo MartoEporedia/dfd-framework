@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "061deba7fea0a0689be841216c25cfdfd385e649fec5ae547b72e88999a68cb1",
+  "tasks": [
+    {
+      "id": "log-markers",
+      "owner": "manutentore del repository",
+      "description": "Avvisi per marcatori nei log green/suite/ci con exit 0",
+      "criteria": [
+        "OBS-01",
+        "OBS-02",
+        "SLO-01",
+        "SLO-02",
+        "UX-01"
+      ],
+      "implementation": "Campo facoltativo log_markers in Lifecycle con lista integrata di default; warnings in development::status, nel report di verify e in review-release; documentazione IT/EN.",
+      "verification": "Regressione cargo test --locked --offline --test workflow log_markers: red su F03 e F05 riprodotti (nessun avviso), green dopo; red esclusi, lista vuota e personalizzata; mutanti su esclusione dei red e lista di default."
+    },
+    {
+      "id": "suite-entrypoints",
+      "owner": "manutentore del repository",
+      "description": "Script della suite dichiarati e inclusi nel fingerprint di design",
+      "criteria": [
+        "OBS-02",
+        "SEC-01",
+        "SEC-03",
+        "SLO-01",
+        "SLO-02",
+        "UX-01"
+      ],
+      "implementation": "Campo facoltativo suite_entrypoints in Lifecycle; validazione in setup (assente, duplicato, fuori radice); hash di ciascun file in design_inputs; documentazione IT/EN.",
+      "verification": "Regressione cargo test --locked --offline --test workflow suite_entrypoints: red su script modificato dopo l'approvazione (resta approved), green con stale-review e changes; errori di setup; compatibilità senza campo; mutante sull'inclusione nel fingerprint."
+    }
+  ],
+  "open_questions": []
+}

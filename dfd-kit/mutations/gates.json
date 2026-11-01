@@ -529,5 +529,125 @@
       "stale_review_lists_what_changed_after_the_decision"
     ],
     "purpose": "La decisione sul record rapido registra lo snapshot dei componenti."
+  },
+  {
+    "id": "log-markers-passing-only",
+    "file": "src/development.rs",
+    "before": "if !passing {",
+    "after": "if false {",
+    "tests": [
+      "log_markers_warn_on_passing_logs_without_changing_the_gate"
+    ],
+    "purpose": "I log red (fallimento atteso) non producono avvisi; solo i log con exit 0 sono sospetti."
+  },
+  {
+    "id": "log-markers-default-list",
+    "file": "src/development.rs",
+    "before": "    \"FAILED\",\n    \"skipped\",\n    \"Traceback\",",
+    "after": "    \"\",\n    \"\",\n    \"\",",
+    "tests": [
+      "log_markers_warn_on_passing_logs_without_changing_the_gate"
+    ],
+    "purpose": "Senza log_markers vale la lista integrata: F03 (skipped) e F05 (FAILED con exit 0) producono un avviso."
+  },
+  {
+    "id": "suite-entrypoint-fingerprint",
+    "file": "src/lib.rs",
+    "before": "hashes.insert(path.clone(), current);",
+    "after": "let _ = current;",
+    "tests": [
+      "suite_entrypoints_bind_the_suite_script_to_the_design"
+    ],
+    "purpose": "Modificare uno script della suite dopo l'approvazione rende il design stale-review (F05)."
+  },
+  {
+    "id": "suite-entrypoint-setup",
+    "file": "src/lib.rs",
+    "before": "if !entrypoints.insert(path) || !file {",
+    "after": "if !entrypoints.insert(path) && !file {",
+    "tests": [
+      "suite_entrypoints_bind_the_suite_script_to_the_design"
+    ],
+    "purpose": "Entrypoint assenti, duplicati o fuori dal progetto sono errori di Fase 0."
+  },
+  {
+    "id": "bound-suite-divergence",
+    "file": "src/development.rs",
+    "before": "if !differing.is_empty() {",
+    "after": "if false {",
+    "tests": [
+      "source_roots_bind_the_final_suite_to_the_current_files"
+    ],
+    "purpose": "Con source_roots, file cambiati, aggiunti o rimossi dopo l'ultima suite bloccano lo sviluppo (F01b, F09, F12)."
+  },
+  {
+    "id": "bound-suite-snapshot-required",
+    "file": "src/development.rs",
+    "before": "None => errors.push(crate::i18n::text(",
+    "after": "None => drop(crate::i18n::text(",
+    "tests": [
+      "source_roots_bind_the_final_suite_to_the_current_files"
+    ],
+    "purpose": "Con source_roots, una suite finale senza snapshot blocca (F04)."
+  },
+  {
+    "id": "bound-undeclared-warning",
+    "file": "src/development.rs",
+    "before": "for path in current.keys().filter(|path| !declared.contains(path)) {",
+    "after": "for path in current.keys().filter(|_| false) {",
+    "tests": [
+      "source_roots_bind_the_final_suite_to_the_current_files"
+    ],
+    "purpose": "I file sotto le radici non dichiarati nelle evidenze producono un avviso."
+  },
+  {
+    "id": "criteria-fingerprint-green",
+    "file": "src/development.rs",
+    "before": "if recorded != current_criteria.get(criterion) {",
+    "after": "if false {",
+    "tests": [
+      "criteria_fingerprints_require_new_green_after_a_criterion_changes"
+    ],
+    "purpose": "Un criterio cambiato dopo il green richiede nuovi red/green per il task (F13)."
+  },
+  {
+    "id": "exec-recorded-by",
+    "file": "src/development.rs",
+    "before": "recorded_by: Some(\"dfd\".into()),",
+    "after": "recorded_by: None,",
+    "tests": [
+      "dfd_exec_runs_and_records_red_green_and_suite"
+    ],
+    "purpose": "I check registrati da dfd exec dichiarano recorded_by dfd."
+  },
+  {
+    "id": "tree-skip-hidden",
+    "file": "src/store.rs",
+    "before": "!name.starts_with('.') && !excludes.contains(name)",
+    "after": "!excludes.contains(name)",
+    "tests": [
+      "source_roots_bind_the_final_suite_to_the_current_files"
+    ],
+    "purpose": "I file nascosti sotto le radici (.cache, .git) restano fuori dallo snapshot."
+  },
+  {
+    "id": "tree-skip-symlinks",
+    "file": "src/store.rs",
+    "before": "                if !fs::symlink_metadata(path.join(&name))?",
+    "after": "                if true || !fs::symlink_metadata(path.join(&name))?",
+    "tests": [
+      "source_roots_bind_the_final_suite_to_the_current_files"
+    ],
+    "purpose": "I symlink sotto le radici non vengono seguiti."
+  },
+  {
+    "id": "source-excludes-default",
+    "file": "src/development.rs",
+    "before": "const DEFAULT_SOURCE_EXCLUDES: [&str; 3] = [\"__pycache__\", \"node_modules\", \"target\"];",
+    "after": "const DEFAULT_SOURCE_EXCLUDES: [&str; 3] = [\"\", \"\", \"\"];",
+    "tests": [
+      "source_roots_bind_the_final_suite_to_the_current_files"
+    ],
+    "purpose": "Le directory generate (__pycache__, node_modules, target) restano fuori dallo snapshot: un clone senza di esse non diverge."
   }
 ]

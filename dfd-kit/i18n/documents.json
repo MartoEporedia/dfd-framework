@@ -103,8 +103,8 @@
     },
     "dfd-kit/README.md": {
       "english": "dfd-kit/en/README.md",
-      "it_sha256": "2be80c840f40f001a7722a971f55f6ff753ad17dfaf804cee920b0dc11e9302d",
-      "en_sha256": "a7dd1cf3c5159a751a4cd72205576a7e6de3c2d4422e32941e62653940055ecc"
+      "it_sha256": "c98250bb347192ad833726b2c85a3e1c5643bba4a30af5316c8f7c6931ffad33",
+      "en_sha256": "1a896a1da5cb8b16ebcec048c7eda686e240ac417dc8fdd561e0078efb75a5e5"
     },
     "dfd-kit/adozione.md": {
       "english": "dfd-kit/en/adozione.md",
@@ -158,8 +158,8 @@
     },
     "dfd-kit/skills/dfd-implement/SKILL.md": {
       "english": "dfd-kit/en/skills/dfd-implement/SKILL.md",
-      "it_sha256": "98c89cd90ba8f980c82cc58dfc3a8a342129c9fb96b06ffd32463ef289415cc2",
-      "en_sha256": "cbcf737eefba3376fb90e2965c1c6e65b87d38c6a7a6e5c7a517b28bece43204"
+      "it_sha256": "2b423cc2d864021c8f3496ffbb18b2414fd730a6e0108b7cd7739bdf4df36325",
+      "en_sha256": "d8369313336b2698bb2423f985b5e3480799f62b4367a79fca040068edfc4a6d"
     },
     "dfd-kit/skills/dfd-init/SKILL.md": {
       "english": "dfd-kit/en/skills/dfd-init/SKILL.md",
@@ -188,8 +188,8 @@
     },
     "dfd-kit/skills/dfd-setup/SKILL.md": {
       "english": "dfd-kit/en/skills/dfd-setup/SKILL.md",
-      "it_sha256": "ff5fa3971300a0e9af7dc8ae737aea077649b333df023d58284932943a0b9d08",
-      "en_sha256": "e5a9da6d5fccbe78bde4767a8c839ea4fe5e4f91081e994022d697604eedee6a"
+      "it_sha256": "ece289431dbc19bdd24721b6a53d61d27b51651644b2484c679fa557a2db8737",
+      "en_sha256": "e0ce3c4dd42b04c630070daf33e08699b7fd12c1da884a5758782a42b56571c0"
     },
     "dfd-kit/skills/dfd-specify/SKILL.md": {
       "english": "dfd-kit/en/skills/dfd-specify/SKILL.md",
@@ -203,8 +203,8 @@
     },
     "dfd-kit/skills/dfd-verify/SKILL.md": {
       "english": "dfd-kit/en/skills/dfd-verify/SKILL.md",
-      "it_sha256": "302361218f85e806152c460c038e8eaf4f948bcee8fff2d6af5d31e9e86f486b",
-      "en_sha256": "04239bac587fcee1132d5d286c05441d1154a3107e7ea163ee5172b6778b24de"
+      "it_sha256": "6b893d1824bebea19c22fec037064f05539e30daa517e04b95596b1bd7f6411b",
+      "en_sha256": "158f1853feec1f1e84bb5bcef9f7f39e45e64938362cf6324c117616cbd566b8"
     },
     "dfd-kit/templates/assessment_adozione.md": {
       "english": "dfd-kit/en/templates/assessment_adozione.md",
@@ -228,8 +228,8 @@
     },
     "dfd-kit/templates/contratto_toolkit.md": {
       "english": "dfd-kit/en/templates/contratto_toolkit.md",
-      "it_sha256": "2573a02bf26b8d7b9192ba51afb9fdbe3d1cb5c1c668dfa29d46b35e41d3971d",
-      "en_sha256": "c529a50447bf3a537b7dc0dd0611c640e38a312b95595a8d9f44ff5dd18b67a8"
+      "it_sha256": "1fc071d1f694b0ab57af2885fb4f3eadf646d86d8ecb22ab817ab77c183b6862",
+      "en_sha256": "775da80621b210446932022cbd625072a00e02fed5aaa552d4c74906333c293f"
     },
     "dfd-kit/templates/dod-estesa.md": {
       "english": "dfd-kit/en/templates/dod-estesa.md",

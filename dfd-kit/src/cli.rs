@@ -131,6 +131,19 @@ pub enum Command {
     },
     /// Verifica lo sviluppo locale o la prontezza per la pre-release secondo policy.
     Verify { id: String },
+    /// Esegue un comando del progetto e registra il check con snapshot e log.
+    Exec {
+        id: String,
+        /// Tipo di check: red, green o suite (la CI resta una CI reale).
+        #[arg(long, value_enum)]
+        kind: crate::model::ExecKind,
+        /// Task del piano, obbligatorio per red e green.
+        #[arg(long)]
+        task: Option<String>,
+        /// Programma e argomenti, dopo --, eseguiti senza shell.
+        #[arg(last = true, required = true)]
+        command: Vec<String>,
+    },
     /// Crea o riprende rollout e preparazione operativa dopo lo sviluppo.
     PreRelease {
         id: String,

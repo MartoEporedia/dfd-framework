@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "Legare le evidenze allo stato dei file e del design su cui sono state prodotte (issue #3).",
+  "business_metrics": [
+    "Laboratorio: F01b, F04, F09, F12, F13 bloccati",
+    "F00 e baseline da zero verdi",
+    "Domini senza source_roots invariati"
+  ],
+  "epic": {
+    "reference": "https://github.com/MartoEporedia/dfd-framework/issues/3 aperta dal manutentore; scelte (dfd exec facoltativo, blocco, per criterio, v1 facoltativo) espresse in chat il 2026-10-31",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-10-31T08:01:14Z"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "applicable",
+      "implementation": "Errori e avvisi nominano file e criteri divergenti.",
+      "verification": "Test workflow red/green (F01b, F04, F09, F12, F13, exec, radici), suite locale, mutanti."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "applicable",
+      "implementation": "snapshot, criteria_fingerprints e recorded_by nei check; regole del gate con source_roots.",
+      "verification": "Test workflow red/green (F01b, F04, F09, F12, F13, exec, radici), suite locale, mutanti."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "applicable",
+      "implementation": "Radici e log tramite Store; symlink e file nascosti esclusi; exec senza shell.",
+      "verification": "Test workflow red/green (F01b, F04, F09, F12, F13, exec, radici), suite locale, mutanti."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "applicable",
+      "implementation": "exec aggiunge log e check senza sovrascrivere.",
+      "verification": "Test workflow red/green (F01b, F04, F09, F12, F13, exec, radici), suite locale, mutanti."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Criterio cambiato dopo il green: nuovi red/green obbligatori per i task coinvolti.",
+      "verification": "Test workflow red/green (F01b, F04, F09, F12, F13, exec, radici), suite locale, mutanti."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Campi facoltativi in schema_version 1; nessun effetto senza source_roots.",
+      "verification": "Test workflow red/green (F01b, F04, F09, F12, F13, exec, radici), suite locale, mutanti."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Red/green, suite, fmt, Clippy, doctor, mutanti.",
+      "verification": "Test workflow red/green (F01b, F04, F09, F12, F13, exec, radici), suite locale, mutanti."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "applicable",
+      "implementation": "Lock del progetto durante exec; scritture atomiche.",
+      "verification": "Test workflow red/green (F01b, F04, F09, F12, F13, exec, radici), suite locale, mutanti."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "applicable",
+      "implementation": "Nessuna dipendenza; exec esegue solo il programma indicato.",
+      "verification": "Test workflow red/green (F01b, F04, F09, F12, F13, exec, radici), suite locale, mutanti."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Contratto, guide e skill IT/EN aggiornati.",
+      "verification": "Test workflow red/green (F01b, F04, F09, F12, F13, exec, radici), suite locale, mutanti."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "excluded",
+      "justification": "Nessuna soglia di prestazioni; il costo dipende dalle radici dichiarate."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "excluded",
+      "justification": "Le skill restano dodici; cambia solo il testo."
+    }
+  ],
+  "test_plan": "Red/green: F01b, F09, F12, F13 e F04 riprodotti con source_roots; file non dichiarato come avviso; exec red/green/suite con log, check, snapshot e recorded_by; programma inesistente; radici con symlink, file nascosti, percorso esterno; dominio senza source_roots invariato. fmt, Clippy, suite, doctor, check_translations, mutanti.",
+  "guardrails": "Esecuzione solo con dfd exec esplicito, senza shell; nessuna approvazione derivata; nessuna regola nuova senza source_roots; schema_version 1.",
+  "open_questions": []
+}

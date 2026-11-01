@@ -1,5 +1,27 @@
 use super::*;
 
+/// Default markers for passing logs: unittest, pytest and cargo failures or skips.
+/// Generated directories skipped under source_roots unless the domain sets source_excludes.
+const DEFAULT_SOURCE_EXCLUDES: [&str; 3] = ["__pycache__", "node_modules", "target"];
+
+fn source_excludes(policy: &Lifecycle) -> Vec<String> {
+    policy.source_excludes.clone().unwrap_or_else(|| {
+        DEFAULT_SOURCE_EXCLUDES
+            .iter()
+            .map(|name| name.to_string())
+            .collect()
+    })
+}
+
+const DEFAULT_LOG_MARKERS: [&str; 6] = [
+    "FAILED",
+    "skipped",
+    "Traceback",
+    "xfail",
+    "XFAIL",
+    "panicked",
+];
+
 fn entry_errors(store: &Store, state: &State) -> Result<Vec<String>> {
     let mut errors = validate_design(store, state)?;
     let gate = gate(store, state, &errors)?;
@@ -389,10 +411,138 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
             }
         }
     }
+    // Suspicious markers in passing logs: warnings only, the gate is unchanged (issue #4).
+    let markers: Vec<String> = policy.log_markers.clone().unwrap_or_else(|| {
+        DEFAULT_LOG_MARKERS
+            .iter()
+            .map(|marker| marker.to_string())
+            .collect()
+    });
+    let mut warnings = vec![];
+    for check in &evidence.checks {
+        // Only passing green/suite/ci logs are suspicious: a red log is expected to fail.
+        let passing = check.exit_code == 0
+            && matches!(
+                check.kind,
+                CheckKind::Green | CheckKind::Suite | CheckKind::Ci
+            );
+        if !passing {
+            continue;
+        }
+        let Some(body) = store
+            .path(&check.log.path)
+            .ok()
+            .filter(|file| file.is_file())
+            .and_then(|_| store.read(&check.log.path).ok())
+        else {
+            continue;
+        };
+        let kind = serde_json::to_value(check.kind)?;
+        for marker in markers.iter().filter(|marker| !marker.is_empty()) {
+            if body.contains(marker.as_str()) {
+                warnings.push(crate::localized_format!(
+                    "Log {} ({}, exit 0) contiene il marcatore «{}».",
+                    "Log {} ({}, exit 0) contains the marker “{}”.",
+                    check.log.path,
+                    kind.as_str().unwrap_or_default(),
+                    marker
+                ));
+            }
+        }
+    }
+    // Evidence bound to the files and the design it ran on (issue #3): only when the
+    // domain declares source_roots.
+    let current_criteria = criteria_fingerprints(store, state)?;
+    if !policy.source_roots.is_empty() {
+        let mut current = BTreeMap::new();
+        for root in &policy.source_roots {
+            store.tree(root, &source_excludes(&policy), &mut current)?;
+        }
+        let latest_suite = evidence
+            .checks
+            .iter()
+            .filter(|check| {
+                matches!(check.kind, CheckKind::Suite | CheckKind::Ci) && check.exit_code == 0
+            })
+            .filter_map(|check| {
+                DateTime::parse_from_rfc3339(&check.executed_at)
+                    .ok()
+                    .map(|date| (date, check))
+            })
+            .max_by_key(|(date, _)| *date)
+            .map(|(_, check)| check);
+        if let Some(suite) = latest_suite {
+            match &suite.snapshot {
+                None => errors.push(crate::i18n::text(
+                    "Suite finale senza snapshot dei file: rieseguirla con dfd exec o registrarne lo snapshot.",
+                )),
+                Some(snapshot) => {
+                    let mut differing: Vec<_> = current
+                        .iter()
+                        .filter(|(path, sha)| snapshot.get(*path) != Some(*sha))
+                        .map(|(path, _)| path.clone())
+                        .collect();
+                    differing.extend(
+                        snapshot
+                            .keys()
+                            .filter(|path| !current.contains_key(*path))
+                            .cloned(),
+                    );
+                    if !differing.is_empty() {
+                        errors.push(crate::localized_format!(
+                            "Suite eseguita su una versione diversa dei file: {}; rieseguire la suite.",
+                            "Suite run on a different version of the files: {}; rerun the suite.",
+                            differing.join(", ")
+                        ));
+                    }
+                }
+            }
+        }
+        let declared: BTreeSet<_> = evidence.files.iter().map(|file| &file.path).collect();
+        for path in current.keys().filter(|path| !declared.contains(path)) {
+            warnings.push(crate::localized_format!(
+                "File sotto source_roots non dichiarato in evidence.files: {}.",
+                "File under source_roots not declared in evidence.files: {}.",
+                path
+            ));
+        }
+        for task in &plan.tasks {
+            let latest_green = evidence
+                .checks
+                .iter()
+                .filter(|check| {
+                    check.kind == CheckKind::Green
+                        && check.exit_code == 0
+                        && check.task.as_deref() == Some(task.id.as_str())
+                })
+                .filter_map(|check| {
+                    DateTime::parse_from_rfc3339(&check.executed_at)
+                        .ok()
+                        .map(|date| (date, check))
+                })
+                .max_by_key(|(date, _)| *date)
+                .map(|(_, check)| check);
+            let Some(green) = latest_green else { continue };
+            for criterion in &task.criteria {
+                let recorded = green
+                    .criteria_fingerprints
+                    .as_ref()
+                    .and_then(|map| map.get(criterion));
+                if recorded != current_criteria.get(criterion) {
+                    errors.push(crate::localized_format!(
+                        "Task {}: criterio {} cambiato dopo il green: servono nuovi red/green.",
+                        "Task {}: criterion {} changed after the green: new red/green required.",
+                        task.id,
+                        criterion
+                    ));
+                }
+            }
+        }
+    }
     let ready = errors.is_empty();
     Ok(
         json!({"gate":if !ready {"blocked-evidence"} else if policy.mode == LifecycleMode::DevelopmentOnly {"development-complete"} else {"ready-for-pre-release"}, "errors":errors,"lifecycle":policy,
-        "design_fingerprint":fingerprint,"plan_hash":plan_hash(store, &state.id)?,"next":if !ready {"dfd-implement"} else if policy.mode == LifecycleMode::DevelopmentOnly {"development-complete"} else {"dfd-pre-release"}}),
+        "design_fingerprint":fingerprint,"plan_hash":plan_hash(store, &state.id)?,"warnings":warnings,"criteria_fingerprints":current_criteria,"next":if !ready {"dfd-implement"} else if policy.mode == LifecycleMode::DevelopmentOnly {"development-complete"} else {"dfd-pre-release"}}),
     )
 }
 
@@ -410,6 +560,16 @@ pub(super) fn verify(store: &Store, id: &str) -> Result<(Value, i32)> {
     );
     for error in output["errors"].as_array().unwrap() {
         report.push_str(&format!("- {}\n", error.as_str().unwrap()));
+    }
+    let warnings = output["warnings"].as_array().cloned().unwrap_or_default();
+    if !warnings.is_empty() {
+        report.push_str(&crate::localized_format!(
+            "\n## Avvisi\n\n",
+            "\n## Warnings\n\n"
+        ));
+        for warning in &warnings {
+            report.push_str(&format!("- {}\n", warning.as_str().unwrap_or_default()));
+        }
     }
     report.push_str(&crate::i18n::text("\nControlli strutturali su evidenze dichiarate e hash locali; non certificano autenticità dei log, qualità del codice o approvazione del rilascio.\n"));
     store.write(
@@ -435,4 +595,120 @@ pub(super) fn verify(store: &Store, id: &str) -> Result<(Value, i32)> {
         json!({"feature":id,"development":output,"phase":state.phase}),
         if ready { 0 } else { 2 },
     ))
+}
+
+/// Run a project command on explicit request and record the check (issue #3): no shell,
+/// project lock held by the caller, numbered log in evidence/, snapshot of source_roots
+/// (or of evidence.files), criteria fingerprints for red/green, recorded_by "dfd".
+pub(super) fn exec(
+    store: &Store,
+    id: &str,
+    kind: ExecKind,
+    task: Option<String>,
+    command: &[String],
+) -> Result<(Value, i32)> {
+    let state = state(store, id)?;
+    let root = format!(".dfd/features/{id}");
+    let evidence_path = format!("{root}/evidence.json");
+    if !store.path(&evidence_path)?.is_file() {
+        return Err(Error::message("Evidenze assenti: eseguire prima dfd plan."));
+    }
+    let plan: Plan = store.json(&format!("{root}/plan.json"))?;
+    let kind = match kind {
+        ExecKind::Red => CheckKind::Red,
+        ExecKind::Green => CheckKind::Green,
+        ExecKind::Suite => CheckKind::Suite,
+    };
+    let criteria = match (kind, &task) {
+        (CheckKind::Suite, None) => None,
+        (CheckKind::Suite, Some(_)) => {
+            return Err(Error::message(
+                "La suite non appartiene a un task: omettere --task.",
+            ))
+        }
+        (_, None) => return Err(Error::message("Red e green richiedono --task.")),
+        (_, Some(task)) => {
+            let Some(planned) = plan.tasks.iter().find(|t| &t.id == task) else {
+                return Err(Error::message(crate::localized_format!(
+                    "Task sconosciuto nel piano: {task}.",
+                    "Unknown task in the plan: {task}.",
+                    task = task
+                )));
+            };
+            let current = criteria_fingerprints(store, &state)?;
+            Some(
+                planned
+                    .criteria
+                    .iter()
+                    .filter_map(|c| current.get(c).map(|fp| (c.clone(), fp.clone())))
+                    .collect::<BTreeMap<_, _>>(),
+            )
+        }
+    };
+    let Some((program, args)) = command.split_first() else {
+        return Err(Error::message("Indicare il comando da eseguire dopo --."));
+    };
+    let output = std::process::Command::new(program)
+        .args(args)
+        .current_dir(&store.root)
+        .output()
+        .map_err(|error| {
+            Error::message(crate::localized_format!(
+                "Comando non avviabile: {program}: {error}",
+                "Command could not start: {program}: {error}",
+                program = program,
+                error = error
+            ))
+        })?;
+    let executed_at = Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Micros, true);
+    let exit_code = output.status.code().unwrap_or(-1);
+    let mut evidence: Evidence = store.json(&evidence_path)?;
+    let policy = lifecycle(store, &state.domain)?;
+    let mut snapshot = BTreeMap::new();
+    if policy.source_roots.is_empty() {
+        for file in &evidence.files {
+            if store.path(&file.path)?.is_file() {
+                snapshot.insert(file.path.clone(), store.hash(&file.path)?);
+            }
+        }
+    } else {
+        for source in &policy.source_roots {
+            store.tree(source, &source_excludes(&policy), &mut snapshot)?;
+        }
+    }
+    let label = serde_json::to_value(kind)?;
+    let label = label.as_str().unwrap_or_default();
+    let suffix = task.as_ref().map(|t| format!("-{t}")).unwrap_or_default();
+    let mut number = evidence.checks.len() + 1;
+    let log = loop {
+        let candidate = format!("{root}/evidence/{number:02}-exec-{label}{suffix}.log");
+        if !store.path(&candidate)?.exists() {
+            break candidate;
+        }
+        number += 1;
+    };
+    let line = command.join(" ");
+    let mut body = format!("$ {line}\n# executed_at: {executed_at}\n").into_bytes();
+    body.extend_from_slice(&output.stdout);
+    body.extend_from_slice(&output.stderr);
+    body.extend_from_slice(format!("# exit_code: {exit_code}\n").as_bytes());
+    store.write(&log, &body, true)?;
+    let check = TestEvidence {
+        task,
+        kind,
+        command: line,
+        executed_at,
+        exit_code,
+        log: FileEvidence {
+            path: log.clone(),
+            sha256: store.hash(&log)?,
+        },
+        snapshot: Some(snapshot),
+        criteria_fingerprints: criteria,
+        recorded_by: Some("dfd".into()),
+    };
+    let recorded = serde_json::to_value(&check)?;
+    evidence.checks.push(check);
+    store.save(&evidence_path, &evidence, false)?;
+    Ok((json!({"feature":id,"check":recorded,"log":log}), 0))
 }

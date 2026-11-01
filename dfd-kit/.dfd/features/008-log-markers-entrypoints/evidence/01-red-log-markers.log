@@ -1,0 +1,25 @@
+$ cargo test --locked --offline --test workflow log_markers
+# executed_at: 2026-10-31T15:40:23+00:00
+   Compiling dfd-kit v0.1.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.00s
+     Running tests/workflow.rs (target/debug/deps/workflow-a3ad0388a73b3989)
+
+running 1 test
+test log_markers_warn_on_passing_logs_without_changing_the_gate ... FAILED
+
+failures:
+
+---- log_markers_warn_on_passing_logs_without_changing_the_gate stdout ----
+
+thread 'log_markers_warn_on_passing_logs_without_changing_the_gate' (41317357) panicked at tests/workflow.rs:2852:82:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    log_markers_warn_on_passing_logs_without_changing_the_gate
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 83 filtered out; finished in 0.99s
+
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101
