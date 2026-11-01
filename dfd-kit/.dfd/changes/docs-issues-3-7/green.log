@@ -1,0 +1,23 @@
+$ python3 scripts/check_translations.py && ./target/release/dfd doctor
+# executed_at: 2026-11-01T14:21:50+00:00
+55 document pairs; 275 messages; 0 errors
+{
+  "resources": 33,
+  "runtime_dependencies": [],
+  "skills": [
+    "dfd-assess",
+    "dfd-feature",
+    "dfd-implement",
+    "dfd-init",
+    "dfd-plan",
+    "dfd-pre-release",
+    "dfd-review-design",
+    "dfd-review-release",
+    "dfd-setup",
+    "dfd-specify",
+    "dfd-status",
+    "dfd-verify"
+  ],
+  "version": "0.1.0"
+}
+# exit_code: 0

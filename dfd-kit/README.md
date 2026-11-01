@@ -54,14 +54,17 @@ Dopo una review di design approvata e attuale:
 ```sh
 dfd plan 001-paypal
 # Raffinare plan.md e plan.json; usare dfd-implement nell'harness
-# Eseguire il ciclo TDD, salvare log e compilare evidence.json
+# Eseguire il ciclo TDD registrando i check con dfd exec, oppure salvare log e compilare evidence.json
+dfd exec 001-paypal --kind red --task task-1 -- cargo test checkout_metrics
+dfd exec 001-paypal --kind green --task task-1 -- cargo test checkout_metrics
+dfd exec 001-paypal --kind suite -- cargo test --locked
 dfd verify 001-paypal
 dfd status 001-paypal
 ```
 
 `dfd-plan` deriva task e test dai criteri DoD applicabili. `dfd-implement` esegue lo sviluppo nell'harness: test rosso, codice, test verde, refactor e strumentazione. `dfd-verify` controlla le evidenze prima della pre-release. La CLI verifica copertura dei criteri, riferimenti al design/piano, esiti e hash dei log e dei file; esegue un comando del progetto solo con `dfd exec`, richiesto esplicitamente, e non certifica l'autenticità dei risultati dichiarati. Con `source_roots` la suite finale è legata allo snapshot dei file e ogni green ai fingerprint dei suoi criteri. Una suite CI ancora da eseguire lascia lo sviluppo aperto solo se richiesta dalla policy del dominio; in development-only una suite finale locale tracciata consente development-complete.
 
-`status` espone separatamente gate di design e gate di sviluppo e indica la prossima skill. Quando design, piano, codice o log cambiano, le evidenze interessate devono essere aggiornate dopo nuove verifiche. Dopo una nuova approvazione del design, `dfd plan <id> --refresh` riallinea il piano preservando i task. `ready-for-pre-release` significa che si può preparare il rilascio; non lo approva.
+`status` espone separatamente gate di design e gate di sviluppo e indica la prossima skill. Esce con 2 quando un gate mostrato è bloccato e lo elenca in `blocking`; `effective_phase` deriva la fase dai gate attuali. Con una review `stale-review`, `changes` elenca componenti e file cambiati dopo l’ultima decisione; `warnings` riporta i marcatori sospetti nei log verdi (test saltati, `FAILED` con exit 0). Quando design, piano, codice o log cambiano, le evidenze interessate devono essere aggiornate dopo nuove verifiche. Dopo una nuova approvazione del design, `dfd plan <id> --refresh` riallinea il piano preservando i task. `ready-for-pre-release` significa che si può preparare il rilascio; non lo approva.
 
 Per installare le nuove skill in un progetto già inizializzato, usare il binario aggiornato ed eseguire `dfd install --harness <adapter>`.
 

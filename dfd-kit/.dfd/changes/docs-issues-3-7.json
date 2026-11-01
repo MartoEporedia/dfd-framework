@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "docs-issues-3-7",
+  "domain": "dfd-kit",
+  "title": "Allineare README e CONTRIBUTING alle modifiche delle issue #3-#7",
+  "owner": "manutentore del repository",
+  "kind": "editorial",
+  "problem": "README e CONTRIBUTING di dfd-kit non descrivono ancora exit code e campi nuovi di status, dfd exec e la copertura dei mutanti introdotti con le issue #3-#7.",
+  "scope": "Solo testo di README.md, CONTRIBUTING.md e relative versioni inglesi, più il manifest delle traduzioni. Nessuna modifica a codice, comandi, schemi o skill.",
+  "known_contract": "Contratto del toolkit già aggiornato nelle PR #8-#13: status (exit 2, blocking, effective_phase, changes, warnings), dfd exec, mutanti in mutations/gates.json.",
+  "scope_bounded": true,
+  "changes_contract": false,
+  "critical": false,
+  "open_questions": [],
+  "risk": {
+    "schema_version": 1,
+    "dimensions": {
+      "architecture": {
+        "level": "low",
+        "rationale": "Solo testo descrittivo di README e CONTRIBUTING, allineato al contratto già aggiornato."
+      },
+      "business": {
+        "level": "low",
+        "rationale": "Solo testo descrittivo di README e CONTRIBUTING, allineato al contratto già aggiornato."
+      },
+      "cost": {
+        "level": "low",
+        "rationale": "Solo testo descrittivo di README e CONTRIBUTING, allineato al contratto già aggiornato."
+      },
+      "reliability": {
+        "level": "low",
+        "rationale": "Solo testo descrittivo di README e CONTRIBUTING, allineato al contratto già aggiornato."
+      },
+      "security": {
+        "level": "low",
+        "rationale": "Solo testo descrittivo di README e CONTRIBUTING, allineato al contratto già aggiornato."
+      }
+    }
+  },
+  "criteria": [
+    "UX-01"
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "6500932f704967cbdb4efc1940fa5e8f1db710d495ffcaa9176f8df16ab6f059"
+    },
+    {
+      "path": "en/README.md",
+      "sha256": "3eecee529dbd1832a0328b57208b00fbe45987836dde6a6b0c52c8b81b98e4bd"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "8065b00b29949dd6dc9596d5e5fe22857837f48cb52e9a72ec2aaa11dc2891ba"
+    },
+    {
+      "path": "en/CONTRIBUTING.md",
+      "sha256": "05fef7c132882052282c11a4c32959431de6ac7001b5297a14923ff3de494a42"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "e884e192a388603c25eb413944b01fde343ecab3046488b2f047e18187f9fb82"
+    }
+  ],
+  "checks": [
+    {
+      "task": null,
+      "kind": "green",
+      "command": "python3 scripts/check_translations.py && ./target/release/dfd doctor",
+      "executed_at": "2026-11-01T14:21:50+00:00",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/changes/docs-issues-3-7/green.log",
+        "sha256": "4874dc8e12dd45b374af6852c7ab545b3eba8660a51d03640bd501994358056c"
+      }
+    }
+  ],
+  "verification_notes": "Modifica editoriale: verifica pertinente con check_translations.py (coppie IT/EN, link, ancore, catalogo) e doctor sul binario aggiornato; nessun red artificiale. Testi confrontati con il contratto e con le PR #8-#13.",
+  "collaboration": null,
+  "decisions": []
+}

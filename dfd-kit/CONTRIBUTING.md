@@ -27,11 +27,11 @@ Usare le skill del toolkit e la CLI secondo il [contratto degli artefatti](templ
 - `src/i18n.rs` e `i18n/en.json`: localizzazione offline, con enum it/en e preferenza separata.
 - `src/model.rs`: contratti JSON versionati e tipi del dominio.
 - `src/lib.rs`: installazione, adozione, rischio e gate di design.
-- `src/development.rs`: piano TDD, evidenze e gate di sviluppo.
+- `src/development.rs`: piano TDD, evidenze, gate di sviluppo e comando `exec`.
 - `src/quick.rs`: record rapido, verifiche ed escalation a light/full.
 - `src/collaboration.rs`: contesto facoltativo e policy team con prove integrate.
 - `src/release.rs`: preparazione operativa, rollout e review di release.
-- `src/store.rs`: accesso ai file, lock e scritture atomiche.
+- `src/store.rs`: accesso ai file, visita delle radici del codice, lock e scritture atomiche.
 - `skills/`: dodici workflow canonici, condivisi dagli adapter.
 - `templates/`: artefatti riusabili e contratto del toolkit.
 - `tests/workflow.rs`: test della CLI su repository temporanei.
@@ -64,7 +64,7 @@ La configurazione `ci/github-actions.yml` configura build e test per Linux x86_6
 
 ## Mutation test
 
-Il runner usa Python 3.9+ e Cargo, senza pacchetti Python aggiuntivi o installazione di `cargo-mutants`. I mutanti curati coprono rischio, review umana, validità dei fingerprint, hash delle evidenze, ordine TDD, CI, rollout, preparazione operativa, comunicazioni e versione degli schemi JSON, oltre a percorso rapido, autonomia individuale, review selettive e snapshot integrati del team.
+Il runner usa Python 3.9+ e Cargo, senza pacchetti Python aggiuntivi o installazione di `cargo-mutants`. I mutanti curati coprono rischio, review umana, validità dei fingerprint, hash delle evidenze, ordine TDD, CI, rollout, preparazione operativa, comunicazioni e versione degli schemi JSON, oltre a percorso rapido, autonomia individuale, review selettive e snapshot integrati del team. Coprono anche exit code di `status` e fase effettiva, testo DoD dei criteri selezionati letto con il parser CommonMark, snapshot delle decisioni e `changes`, marcatori dei log, entrypoint e radici della suite, fingerprint per criterio e `dfd exec`.
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_mutation_runner.py'
