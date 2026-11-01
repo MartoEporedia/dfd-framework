@@ -36,9 +36,9 @@ From dfd-kit/ run dist/dfd-macos-arm64 setup --domain dfd-kit and status (or pla
 
 - src/cli.rs: commands/options; src/model.rs: versioned JSON/domain types.
 - src/lib.rs: install/adoption/risk/design gates; src/i18n.rs and i18n/en.json: offline localization.
-- src/development.rs: TDD plans/evidence/gates; src/quick.rs: rapid verification/promotion.
+- src/development.rs: TDD plans/evidence/gates and the exec command; src/quick.rs: rapid verification/promotion.
 - src/collaboration.rs: optional team policy/integrated evidence; src/release.rs: operational readiness/rollout/release review.
-- src/store.rs: path/lock/atomic writes; build.rs: embedded documents/templates/skills.
+- src/store.rs: path checks, source-root traversal, lock and atomic writes; build.rs: embedded documents/templates/skills.
 - skills/, templates/, examples/: canonical resources; en/: English counterparts.
 - tests/workflow.rs: temporary-project CLI tests; scripts/mutation_test.py and mutations/gates.json: curated gate mutants.
 
@@ -61,7 +61,7 @@ ci/github-actions.yml defines Linux x86_64 musl, macOS arm64/x86_64 and Windows 
 
 ## Mutation testing
 
-Python 3.9+ and Cargo suffice; no additional Python packages/cargo-mutants. Curated mutants cover risk, human review, fingerprints, evidence hashes, TDD chronology, CI, rollout, readiness, communications, schema versions, rapid/solo/selective review and integrated snapshots.
+Python 3.9+ and Cargo suffice; no additional Python packages/cargo-mutants. Curated mutants cover risk, human review, fingerprints, evidence hashes, TDD chronology, CI, rollout, readiness, communications, schema versions, rapid/solo/selective review and integrated snapshots. They also cover status exit code and effective phase, DoD text of selected criteria read with the CommonMark parser, decision snapshots and changes, log markers, suite entrypoints and roots, per-criterion fingerprints and dfd exec.
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_mutation_runner.py'
