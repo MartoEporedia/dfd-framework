@@ -1,0 +1,29 @@
+$ cargo test --locked --offline --test workflow acceptance_change_requires
+# executed_at: 2026-11-12T00:56:12.060805Z
+
+running 1 test
+test acceptance_change_requires_new_green_for_the_criterion ... FAILED
+
+failures:
+
+---- acceptance_change_requires_new_green_for_the_criterion stdout ----
+
+thread 'acceptance_change_requires_new_green_for_the_criterion' (54827120) panicked at tests/workflow.rs:120:14:
+assertion `left == right` failed: args: ["decide", "001-paypal", "--decision", "approved", "--reviewer", "TL", "--role", "tech-lead", "--note", "Review semantica effettuata", "--human-confirmed"]
+stdout: 
+stderr: DFD: JSON non valido in .dfd/features/001-paypal/design.json: unknown field `acceptance`, expected one of `id`, `applicability`, `implementation`, `verification`, `justification`
+
+  left: Some(1)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    acceptance_change_requires_new_green_for_the_criterion
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 89 filtered out; finished in 1.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running tests/workflow.rs (target/debug/deps/workflow-a3ad0388a73b3989)
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101

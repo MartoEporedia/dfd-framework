@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "422862be4cba40fd458cd3f87217c950469cf1bdbc9ee59f91362b07b03bf378",
+  "plan_hash": "16ba64a78215770265b336057a149f0b7f86eee6fae310b5e13fd4141cfebe20",
+  "files": [
+    {
+      "path": "src/model.rs",
+      "sha256": "eb8f2f21c9670c1113ea0c51fc5c1cd9550d5f30c47bea6caadf3084e6416b97"
+    },
+    {
+      "path": "src/lib.rs",
+      "sha256": "e5908ebff5959b827ff47de35563ec3affdfac8f0b1da3164f31fdc3b0cf7006"
+    },
+    {
+      "path": "src/development.rs",
+      "sha256": "b3b5290b89b0bcb0cca5ce39ddf07e82a0e337523688984e24e940e51c14387a"
+    },
+    {
+      "path": "tests/workflow.rs",
+      "sha256": "6e013305ac4c1bbc7fefdba97f63484ca9e5c8d28b0c1cf3d574f8696215792c"
+    },
+    {
+      "path": "mutations/gates.json",
+      "sha256": "49cecefb2961a2ec2275b47dcba327cfb0f31d42a4ec707e54dd2d04370e2692"
+    },
+    {
+      "path": "i18n/en.json",
+      "sha256": "bb21c1f15b34cdfd33a8b011afd77fabf42edb2ce858398ec573f810384a1e8e"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "40c5cfc19adc47faf6b2a5544029367594d0f74927897863760b9c6660ef5db9"
+    },
+    {
+      "path": "templates/contratto_toolkit.md",
+      "sha256": "b600593e0efa07e3d0e547b31f4bc2e0ebc8b34a8ee18641ff3584da73930e75"
+    },
+    {
+      "path": "en/templates/contratto_toolkit.md",
+      "sha256": "2a73366a6308ed8f558b14efea1a758313d02b16e43da2d7560779a1209e40cc"
+    },
+    {
+      "path": ".dfd/kit/templates/contratto_toolkit.md",
+      "sha256": "ab6cb855824e91b58769b91ddadbabd55e825cf7fcd4cbdab320aa155d0da530"
+    },
+    {
+      "path": "skills/dfd-implement/SKILL.md",
+      "sha256": "73968fff0113b8f264875d8026b37213d43d7d696d0f7b78e3efdd358d83bddc"
+    },
+    {
+      "path": "en/skills/dfd-implement/SKILL.md",
+      "sha256": "2926ab35397843b7e11f14da69bc920778eb03d7c9565a87bc1791e8bb20460f"
+    },
+    {
+      "path": ".agents/skills/dfd-implement/SKILL.md",
+      "sha256": "ac8078ce64dc903008abb7d1bb06a59778b71b091f57efb2522656aeeb147ca1"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-implement/SKILL.md",
+      "sha256": "ac8078ce64dc903008abb7d1bb06a59778b71b091f57efb2522656aeeb147ca1"
+    },
+    {
+      "path": "skills/dfd-review-design/SKILL.md",
+      "sha256": "c27fd695b164cea9ec379000d6465251e1e88d6b87444e0546d56f3f99d1131b"
+    },
+    {
+      "path": "en/skills/dfd-review-design/SKILL.md",
+      "sha256": "4f249bf2e2720fb712c4718968840ed82afc374e0e05c3f3d3f606d48592f242"
+    },
+    {
+      "path": ".agents/skills/dfd-review-design/SKILL.md",
+      "sha256": "03fcf028acadd590da885918aaa5d000b3e847007b88ff07edfd14a0c85febe0"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-review-design/SKILL.md",
+      "sha256": "03fcf028acadd590da885918aaa5d000b3e847007b88ff07edfd14a0c85febe0"
+    },
+    {
+      "path": "skills/dfd-setup/SKILL.md",
+      "sha256": "6a7652f8288281a696c94843970a916deb5c0790e759b0c4bf9329add06faf80"
+    },
+    {
+      "path": "en/skills/dfd-setup/SKILL.md",
+      "sha256": "c606fbb76a5b703599057649fc5330d6bf3f5425a2da20151d1847f3c8a805cc"
+    },
+    {
+      "path": ".agents/skills/dfd-setup/SKILL.md",
+      "sha256": "f4491a8cc4cc31b7c3ae914fb999a5484879997d5131de7c95e5948965177342"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-setup/SKILL.md",
+      "sha256": "f4491a8cc4cc31b7c3ae914fb999a5484879997d5131de7c95e5948965177342"
+    },
+    {
+      "path": "skills/dfd-specify/SKILL.md",
+      "sha256": "76cc7a0706267c77dd64fbb3d70a632e3501062e697dd0ef792ff7861a88b243"
+    },
+    {
+      "path": "en/skills/dfd-specify/SKILL.md",
+      "sha256": "3e44ff6896dc60f9e4c62e4a8a6cb5a0495b7dfc24d5d451f8ad5966139586bb"
+    },
+    {
+      "path": ".agents/skills/dfd-specify/SKILL.md",
+      "sha256": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238"
+    },
+    {
+      "path": ".dfd/kit/skills/dfd-specify/SKILL.md",
+      "sha256": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238"
+    }
+  ],
+  "checks": [
+    {
+      "task": "acceptance-design",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow acceptance_files_bind",
+      "executed_at": "2026-11-12T00:56:10.974921Z",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/01-exec-red-acceptance-design.log",
+        "sha256": "86c52ea50352ca4d0cf1a10a9b413fa7c3cc81ee8698d07edec9fa7bc926c44c"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "OBS-01": "108c8c92610a42bebe44246ac97fc1ce39c7635fabe6ee436d52b9dca7bc9971",
+        "OBS-02": "512fec48c62adf749208384d3c4bc353385c91f117e5799eba9802bc5095cb59",
+        "SEC-01": "4a6c8f9f2aa2570e88991a29f6bd5f895893fb42ea22e38573de65ed346d8dfb",
+        "SLO-01": "9b40a3a88984c9aa0049133c75d0158d29e2aa4dffe4ab3009b66ca7a3ba9ca4",
+        "SLO-02": "3b7e107a38b1e78a263c1af297cc2e0598769a3f6abb2ea8d758ca60633e501f",
+        "UX-01": "06554a2c00b6fd5ed951f473196b1d5565e103fd352466ba36d9078e4d5fd0da"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "acceptance-criterion",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow acceptance_change_requires",
+      "executed_at": "2026-11-12T00:56:12.060805Z",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/02-exec-red-acceptance-criterion.log",
+        "sha256": "bd324c9ac65697c4d13c65d79efc73aaa3607ad6d6dd45f0d349a06da72da27b"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "OBS-02": "512fec48c62adf749208384d3c4bc353385c91f117e5799eba9802bc5095cb59",
+        "SEC-03": "b370f836e1676372aa5c8ce1cf9df7a0c7962bd3c4220ddc173bb951e9ab4fdc",
+        "SLO-01": "9b40a3a88984c9aa0049133c75d0158d29e2aa4dffe4ab3009b66ca7a3ba9ca4",
+        "SLO-02": "3b7e107a38b1e78a263c1af297cc2e0598769a3f6abb2ea8d758ca60633e501f"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "acceptance-roots",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow undeclared_acceptance",
+      "executed_at": "2026-11-12T00:56:12.992673Z",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/03-exec-red-acceptance-roots.log",
+        "sha256": "f58e7e7ad875a3b5144b710d59db32538cd4117c755e987fda3cb1ab0ef86e4b"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-01": "5ff3a8194b078075676bfe5a08739ed6aae4b6fa155ece4103641dd93dd05aba",
+        "OBS-01": "108c8c92610a42bebe44246ac97fc1ce39c7635fabe6ee436d52b9dca7bc9971",
+        "SEC-01": "4a6c8f9f2aa2570e88991a29f6bd5f895893fb42ea22e38573de65ed346d8dfb",
+        "SLO-01": "9b40a3a88984c9aa0049133c75d0158d29e2aa4dffe4ab3009b66ca7a3ba9ca4",
+        "SLO-02": "3b7e107a38b1e78a263c1af297cc2e0598769a3f6abb2ea8d758ca60633e501f"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "sh -c set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor >/dev/null; python3 scripts/check_translations.py; python3 -m unittest discover -s tests -p test_mutation_runner.py",
+      "executed_at": "2026-11-12T07:10:19.177408Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/04-exec-suite.log",
+        "sha256": "25ba19778ec91dab64bbff4d8644de0fe53a41088686b45d2f0e7799bde5da2c"
+      },
+      "snapshot": {},
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "acceptance-design",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow acceptance_files_bind",
+      "executed_at": "2026-11-12T07:52:57.224561Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/05-exec-green-acceptance-design.log",
+        "sha256": "1df4d5bae4e366a5f0627d8c3852dc2a8e9166e0d850b581aafc85e4a1f66e01"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "OBS-01": "108c8c92610a42bebe44246ac97fc1ce39c7635fabe6ee436d52b9dca7bc9971",
+        "OBS-02": "512fec48c62adf749208384d3c4bc353385c91f117e5799eba9802bc5095cb59",
+        "SEC-01": "4a6c8f9f2aa2570e88991a29f6bd5f895893fb42ea22e38573de65ed346d8dfb",
+        "SLO-01": "9b40a3a88984c9aa0049133c75d0158d29e2aa4dffe4ab3009b66ca7a3ba9ca4",
+        "SLO-02": "3b7e107a38b1e78a263c1af297cc2e0598769a3f6abb2ea8d758ca60633e501f",
+        "UX-01": "06554a2c00b6fd5ed951f473196b1d5565e103fd352466ba36d9078e4d5fd0da"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "acceptance-criterion",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow acceptance_change_requires",
+      "executed_at": "2026-11-12T07:52:58.591018Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/06-exec-green-acceptance-criterion.log",
+        "sha256": "9b0109db1a9645d521c72e4b3d19208e51b7ae5c94eeed9d0505f5a2d87fda0b"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "OBS-02": "512fec48c62adf749208384d3c4bc353385c91f117e5799eba9802bc5095cb59",
+        "SEC-03": "b370f836e1676372aa5c8ce1cf9df7a0c7962bd3c4220ddc173bb951e9ab4fdc",
+        "SLO-01": "9b40a3a88984c9aa0049133c75d0158d29e2aa4dffe4ab3009b66ca7a3ba9ca4",
+        "SLO-02": "3b7e107a38b1e78a263c1af297cc2e0598769a3f6abb2ea8d758ca60633e501f"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "acceptance-roots",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow undeclared_acceptance",
+      "executed_at": "2026-11-12T07:52:59.842493Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/07-exec-green-acceptance-roots.log",
+        "sha256": "14a6fa1f6d5a05ca447c20fc74765d4dd59b2c9f7f235f21bbdd205ca034b625"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-01": "5ff3a8194b078075676bfe5a08739ed6aae4b6fa155ece4103641dd93dd05aba",
+        "OBS-01": "108c8c92610a42bebe44246ac97fc1ce39c7635fabe6ee436d52b9dca7bc9971",
+        "SEC-01": "4a6c8f9f2aa2570e88991a29f6bd5f895893fb42ea22e38573de65ed346d8dfb",
+        "SLO-01": "9b40a3a88984c9aa0049133c75d0158d29e2aa4dffe4ab3009b66ca7a3ba9ca4",
+        "SLO-02": "3b7e107a38b1e78a263c1af297cc2e0598769a3f6abb2ea8d758ca60633e501f"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "sh -c set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor >/dev/null; python3 scripts/check_translations.py; python3 -m unittest discover -s tests -p test_mutation_runner.py",
+      "executed_at": "2026-11-12T07:53:34.906255Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/08-exec-suite.log",
+        "sha256": "9f867bdac21f57d761b05a55d81ab7fa43bfe43413247aeb95bd82a63755f92d"
+      },
+      "snapshot": {},
+      "recorded_by": "dfd"
+    }
+  ],
+  "refactor_notes": "Refactor: nessuno oltre alle funzioni nuove (acceptance_hash, declared_acceptance). Osservabilità: errori di validazione che nominano criterio e percorso, file di casi in changes con il loro percorso, avviso per i file sotto acceptance_roots non dichiarati. Red reali per i tre task (acceptance e acceptance_roots rifiutati come campi sconosciuti). Mutanti: 6 nuovi, batteria completa 71/71 intercettati (target/mutation-results-full/report.json). Compatibilità: status delle feature 001-010 di dfd-kit e delle baseline v3-i3-baseline e v4-baseline del laboratorio identico (gate e fingerprint) tra il binario eec9dffa e il nuovo. Durante lo sviluppo due attese dei test corrette: un file dichiarato rimosso blocca il design (validazione) invece di renderlo stale-review; review-design esce 2 con gate bloccato (contratto #7)."
+}

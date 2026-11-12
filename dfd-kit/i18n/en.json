@@ -273,5 +273,9 @@
   "Esegue un comando del progetto e registra il check con snapshot e log.": "Run a project command and record the check with snapshot and log.",
   "Tipo di check: red, green o suite (la CI resta una CI reale).": "Check kind: red, green or suite (CI stays a real CI run).",
   "Task del piano, obbligatorio per red e green.": "Plan task, required for red and green.",
-  "Programma e argomenti, dopo --, eseguiti senza shell.": "Program and arguments, after --, run without a shell."
+  "Programma e argomenti, dopo --, eseguiti senza shell.": "Program and arguments, after --, run without a shell.",
+  "File di casi non dichiarato da alcun criterio: {}.": "Acceptance file not declared by any criterion: {}.",
+  "Fase 0: radice dei casi di accettazione assente, duplicata o fuori dal progetto: {path}.": "Phase 0: acceptance root missing, duplicated or outside the project: {path}.",
+  "Criterio {}: file di accettazione ammessi solo per criteri applicabili.": "Criterion {}: acceptance files are allowed only for applicable criteria.",
+  "Criterio {id}: file di accettazione assente, duplicato, non regolare o fuori dal progetto: {path}.": "Criterion {id}: acceptance file missing, duplicated, not a regular file or outside the project: {path}."
 }

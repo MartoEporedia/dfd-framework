@@ -649,5 +649,65 @@
       "source_roots_bind_the_final_suite_to_the_current_files"
     ],
     "purpose": "Le directory generate (__pycache__, node_modules, target) restano fuori dallo snapshot: un clone senza di esse non diverge."
+  },
+  {
+    "id": "acceptance-design-inputs",
+    "file": "src/lib.rs",
+    "before": "                hashes.insert(path.clone(), acceptance_hash(store, path)?);",
+    "after": "                let _ = (path, acceptance_hash(store, path)?);",
+    "tests": [
+      "acceptance_files_bind_the_criterion_to_the_design"
+    ],
+    "purpose": "Un file di casi dichiarato e cambiato dopo l'approvazione rende la review stale-review e compare in changes (F02, F11)."
+  },
+  {
+    "id": "acceptance-criterion-fingerprint",
+    "file": "src/lib.rs",
+    "before": "            inputs[\"acceptance\"] = json!(files);",
+    "after": "            let _ = files;",
+    "tests": [
+      "acceptance_change_requires_new_green_for_the_criterion"
+    ],
+    "purpose": "Con source_roots un file di casi cambiato dopo il green richiede nuovi red/green per i task del criterio."
+  },
+  {
+    "id": "acceptance-file-regular",
+    "file": "src/lib.rs",
+    "before": "            if !declared.insert(path) || !regular {",
+    "after": "            if !declared.insert(path) {",
+    "tests": [
+      "acceptance_files_bind_the_criterion_to_the_design"
+    ],
+    "purpose": "Un file di casi assente, directory, symlink o fuori dal progetto blocca la review di design."
+  },
+  {
+    "id": "acceptance-applicable-only",
+    "file": "src/lib.rs",
+    "before": "        if !item.acceptance.is_empty() && !matches!(item.applicability, Applicability::Applicable)",
+    "after": "        if !item.acceptance.is_empty() && matches!(item.applicability, Applicability::Applicable)",
+    "tests": [
+      "acceptance_files_bind_the_criterion_to_the_design"
+    ],
+    "purpose": "Solo i criteri applicabili dichiarano file di casi."
+  },
+  {
+    "id": "acceptance-roots-warning",
+    "file": "src/development.rs",
+    "before": "        for path in files.keys().filter(|path| !declared.contains(*path)) {",
+    "after": "        for path in files.keys().filter(|path| declared.contains(*path)) {",
+    "tests": [
+      "undeclared_acceptance_files_are_warned"
+    ],
+    "purpose": "Un file di casi sotto acceptance_roots non dichiarato da alcun criterio del dominio produce un avviso; uno dichiarato no."
+  },
+  {
+    "id": "acceptance-roots-setup",
+    "file": "src/lib.rs",
+    "before": "        if !acceptance.insert(path) || !exists {",
+    "after": "        if !acceptance.insert(path) {",
+    "tests": [
+      "undeclared_acceptance_files_are_warned"
+    ],
+    "purpose": "Una radice dei casi assente o fuori dal progetto blocca la Fase 0."
   }
 ]

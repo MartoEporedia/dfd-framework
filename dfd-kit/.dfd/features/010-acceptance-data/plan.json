@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "422862be4cba40fd458cd3f87217c950469cf1bdbc9ee59f91362b07b03bf378",
+  "tasks": [
+    {
+      "id": "acceptance-design",
+      "owner": "manutentore del repository",
+      "description": "criteria[].acceptance validato e incluso nel fingerprint di design",
+      "criteria": [
+        "OBS-01",
+        "OBS-02",
+        "SEC-01",
+        "SLO-01",
+        "SLO-02",
+        "UX-01"
+      ],
+      "implementation": "Campo acceptance in CriterionReference (default, non serializzato se vuoto); validazione in validate_design (criterio applicabile, file regolare nel progetto, niente symlink, niente duplicati); hash dei file dichiarati negli input del design con il percorso come chiave, review selettiva e legacy; contratto, skill e guide IT/EN.",
+      "verification": "Regressione cargo test --locked --offline --test workflow acceptance_files_bind: red (campo sconosciuto), green con stale-review e percorso in changes in review selettiva e legacy, validazione, due feature nello stesso dominio, lista vuota uguale al campo assente; mutanti; status delle feature 001-009 invariato col binario eec9dffa; check_translations e doctor."
+    },
+    {
+      "id": "acceptance-criterion",
+      "owner": "manutentore del repository",
+      "description": "File di casi nel fingerprint del criterio",
+      "criteria": [
+        "OBS-02",
+        "SEC-03",
+        "SLO-01",
+        "SLO-02"
+      ],
+      "implementation": "criteria_fingerprints aggiunge la mappa percorso → sha256 dei file acceptance del criterio, solo se dichiarati; con source_roots la regola esistente blocca il task dopo il green.",
+      "verification": "Regressione cargo test --locked --offline --test workflow acceptance_change_requires: red (campo sconosciuto), green con task bloccato dopo la modifica del caso e riconferma; mutante."
+    },
+    {
+      "id": "acceptance-roots",
+      "owner": "manutentore del repository",
+      "description": "acceptance_roots e avviso sui file di casi non dichiarati",
+      "criteria": [
+        "OBS-01",
+        "SEC-01",
+        "SLO-01",
+        "SLO-02",
+        "COST-01"
+      ],
+      "implementation": "Campo acceptance_roots in Lifecycle validato in Fase 0 come source_roots; nel gate di sviluppo visita con Store::tree e avviso per i file non dichiarati da alcun criterio delle feature del dominio.",
+      "verification": "Regressione cargo test --locked --offline --test workflow undeclared_acceptance: red (campo sconosciuto), green con avviso, file dichiarato da altra feature senza avviso, radici non valide in Fase 0; mutante."
+    }
+  ],
+  "open_questions": []
+}

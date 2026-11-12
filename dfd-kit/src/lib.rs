@@ -371,6 +371,7 @@ fn lifecycle(store: &Store, domain: &str) -> Result<Lifecycle> {
             suite_entrypoints: vec![],
             source_roots: vec![],
             source_excludes: None,
+            acceptance_roots: vec![],
         });
     }
     let policy: Lifecycle = store.json(&relative)?;
@@ -397,6 +398,17 @@ fn setup_errors(store: &Store, domain: &str) -> Result<Vec<String>> {
             errors.push(crate::localized_format!(
                 "Fase 0: radice del codice assente, duplicata o fuori dal progetto: {path}.",
                 "Phase 0: source root missing, duplicated or outside the project: {path}.",
+                path = path
+            ));
+        }
+    }
+    let mut acceptance = BTreeSet::new();
+    for path in &policy.acceptance_roots {
+        let exists = store.path(path).ok().is_some_and(|file| file.exists());
+        if !acceptance.insert(path) || !exists {
+            errors.push(crate::localized_format!(
+                "Fase 0: radice dei casi di accettazione assente, duplicata o fuori dal progetto: {path}.",
+                "Phase 0: acceptance root missing, duplicated or outside the project: {path}.",
                 path = path
             ));
         }
@@ -1147,6 +1159,29 @@ fn validate_design(store: &Store, state: &State) -> Result<Vec<String>> {
             }
             Applicability::Excluded => {}
         }
+        if !item.acceptance.is_empty() && !matches!(item.applicability, Applicability::Applicable) {
+            errors.push(crate::localized_format!(
+                "Criterio {}: file di accettazione ammessi solo per criteri applicabili.",
+                "Criterion {}: acceptance files are allowed only for applicable criteria.",
+                item.id
+            ));
+        }
+        let mut declared = BTreeSet::new();
+        for path in &item.acceptance {
+            let regular = store
+                .path(path)
+                .ok()
+                .and_then(|file| fs::symlink_metadata(file).ok())
+                .is_some_and(|meta| meta.is_file());
+            if !declared.insert(path) || !regular {
+                errors.push(crate::localized_format!(
+                    "Criterio {id}: file di accettazione assente, duplicato, non regolare o fuori dal progetto: {path}.",
+                    "Criterion {id}: acceptance file missing, duplicated, not a regular file or outside the project: {path}.",
+                    id = item.id,
+                    path = path
+                ));
+            }
+        }
     }
     for item in catalog
         .criteria
@@ -1183,6 +1218,15 @@ fn design_inputs(store: &Store, state: &State) -> Result<(Snapshot, Value, Snaps
     for file in ["spec.md", "design.json", "risk.json"] {
         let relative = format!(".dfd/features/{}/{file}", state.id);
         hashes.insert(relative.clone(), store.hash(&relative)?);
+    }
+    // Acceptance files are design dependencies, keyed by their path so that
+    // `changes` names them. An unreadable design adds nothing: validation reports it.
+    if let Ok(design) = store.json::<Design>(&format!(".dfd/features/{}/design.json", state.id)) {
+        for criterion in &design.criteria {
+            for path in &criterion.acceptance {
+                hashes.insert(path.clone(), acceptance_hash(store, path)?);
+            }
+        }
     }
     if state.selective_review {
         let design: Design = store.json(&format!(".dfd/features/{}/design.json", state.id))?;
@@ -1295,14 +1339,55 @@ fn criteria_fingerprints(store: &Store, state: &State) -> Result<BTreeMap<String
             json!(hash(dod.as_bytes()))
         };
         let entry = catalog.criteria.iter().find(|c| c.id == criterion.id);
-        result.insert(
-            criterion.id.clone(),
-            hash(&serde_json::to_vec(
-                &json!({"design":criterion,"catalog":entry,"dod":text}),
-            )?),
-        );
+        let mut inputs = json!({"design":criterion,"catalog":entry,"dod":text});
+        // Only when declared, so that criteria without acceptance keep their fingerprint.
+        if !criterion.acceptance.is_empty() {
+            let mut files = BTreeMap::new();
+            for path in &criterion.acceptance {
+                files.insert(path.clone(), acceptance_hash(store, path)?);
+            }
+            inputs["acceptance"] = json!(files);
+        }
+        result.insert(criterion.id.clone(), hash(&serde_json::to_vec(&inputs)?));
     }
     Ok(result)
+}
+/// sha256 of a declared acceptance file: "absent" when missing or not a regular
+/// file, "invalid" when the path is not allowed; the design review reports both.
+fn acceptance_hash(store: &Store, path: &str) -> Result<String> {
+    let Ok(file) = store.path(path) else {
+        return Ok("invalid".into());
+    };
+    match fs::symlink_metadata(&file) {
+        Ok(meta) if meta.is_file() => store.hash(path),
+        Ok(_) => Ok("absent".into()),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok("absent".into()),
+        Err(error) => Err(error.into()),
+    }
+}
+/// Acceptance files declared by the criteria of any feature of the domain. Features
+/// whose state or design cannot be read declare nothing.
+fn declared_acceptance(store: &Store, domain: &str) -> Result<BTreeSet<String>> {
+    let mut declared = BTreeSet::new();
+    let directory = store.path(".dfd/features")?;
+    if !directory.exists() {
+        return Ok(declared);
+    }
+    for entry in fs::read_dir(directory)? {
+        let id = entry?.file_name().to_string_lossy().into_owned();
+        let Ok(state) = store.json::<State>(&format!(".dfd/features/{id}/state.json")) else {
+            continue;
+        };
+        if state.domain != domain {
+            continue;
+        }
+        if let Ok(design) = store.json::<Design>(&format!(".dfd/features/{id}/design.json")) {
+            for criterion in design.criteria {
+                declared.extend(criterion.acceptance);
+            }
+        }
+    }
+    Ok(declared)
 }
 fn design_fingerprint(store: &Store, state: &State) -> Result<String> {
     let (hashes, context, _) = design_inputs(store, state)?;

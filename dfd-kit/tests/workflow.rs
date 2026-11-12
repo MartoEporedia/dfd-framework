@@ -3224,3 +3224,249 @@ fn dfd_exec_runs_and_records_red_green_and_suite() {
         3
     );
 }
+
+impl Project {
+    /// Declare acceptance files for OBS-01 in the design of a feature.
+    fn accept(&self, id: &str, files: Value) {
+        let path = format!(".dfd/features/{id}/design.json");
+        let mut design = self.read(&path);
+        design["criteria"][0]["acceptance"] = files;
+        self.save(&path, &design);
+    }
+    fn decide_design(&self, id: &str) {
+        self.run(
+            &[
+                "decide",
+                id,
+                "--decision",
+                "approved",
+                "--reviewer",
+                "TL",
+                "--role",
+                "tech-lead",
+                "--note",
+                "Review semantica effettuata",
+                "--human-confirmed",
+            ],
+            0,
+        );
+    }
+    /// A second feature in the checkout domain, with its own acceptance file.
+    fn second_feature(&self, file: &str) {
+        let id = "002-applepay";
+        self.run(
+            &[
+                "feature",
+                "--legacy-review",
+                id,
+                "--domain",
+                "checkout",
+                "--title",
+                "Apple Pay",
+                "--scope",
+                "Nuovo pagamento",
+            ],
+            0,
+        );
+        self.risk(id);
+        self.run(&["specify", id], 0);
+        self.write(
+            &format!(".dfd/features/{id}/spec.md"),
+            "# Apple Pay\nObiettivo: pagare con Apple Pay.\nOBS-01: contatore errori verificato dai casi.\n",
+        );
+        self.save(&format!(".dfd/features/{id}/design.json"), &json!({
+            "schema_version":1,"owner":"checkout-team","objective":"Pagare con Apple Pay",
+            "business_metrics":["Tasso di completamento checkout"],
+            "epic":{"reference":"ticket-124","approved_by":"PM","approved_at":Utc::now().to_rfc3339()},
+            "criteria":[{"id":"OBS-01","applicability":"applicable","implementation":"Contatore errori","verification":"Casi di accettazione","acceptance":[file]}],
+            "test_plan":"Casi del nuovo flusso", "guardrails":"Usare il provider esistente","open_questions":[]
+        }));
+    }
+}
+
+#[test]
+fn acceptance_files_bind_the_criterion_to_the_design() {
+    // dfd-gate-lab v4 (tests as data): acceptance files are design dependencies of
+    // the criterion they verify, per feature.
+    let gate = |p: &Project, id: &str| p.run(&["status", id], 0)["gate"].clone();
+    for selective in [false, true] {
+        let p = Project::new();
+        p.ready();
+        p.write("casi/OBS-01.casi", "| errori | atteso |\n| 1 | 1 |\n");
+        p.accept("001-paypal", json!(["casi/OBS-01.casi"]));
+        if selective {
+            let path = ".dfd/features/001-paypal/state.json";
+            let mut state = p.read(path);
+            state["selective_review"] = json!(true);
+            p.save(path, &state);
+        }
+        p.approve();
+        assert_eq!(gate(&p, "001-paypal"), "approved", "selective={selective}");
+        // F02: the cases are weakened after the approval.
+        p.write("casi/OBS-01.casi", "| errori | atteso |\n");
+        let status = p.run(&["status", "001-paypal"], 0);
+        assert_eq!(status["gate"], "stale-review", "selective={selective}");
+        assert_eq!(
+            status["changes"]["changed"],
+            json!(["casi/OBS-01.casi"]),
+            "selective={selective}"
+        );
+        p.approve();
+        assert_eq!(gate(&p, "001-paypal"), "approved");
+        // A removed file blocks the design: the declaration no longer holds.
+        fs::remove_file(p.path("casi/OBS-01.casi")).unwrap();
+        let status = p.run(&["status", "001-paypal"], 2);
+        assert_eq!(status["gate"], "blocked");
+        assert!(status["errors"].to_string().contains("casi/OBS-01.casi"));
+    }
+
+    // Two features in the same domain: changing the cases of one does not touch the other.
+    let p = Project::new();
+    p.ready();
+    p.write("casi/paypal.casi", "| caso |\n| 1 |\n");
+    p.write("casi/applepay.casi", "| caso |\n| 1 |\n");
+    p.accept("001-paypal", json!(["casi/paypal.casi"]));
+    p.approve();
+    p.second_feature("casi/applepay.casi");
+    p.decide_design("002-applepay");
+    p.write("casi/paypal.casi", "| caso |\n| 2 |\n");
+    assert_eq!(gate(&p, "001-paypal"), "stale-review");
+    assert_eq!(gate(&p, "002-applepay"), "approved");
+
+    // Invalid declarations block the design review and name criterion and path.
+    let p = Project::new();
+    p.ready();
+    p.write("casi/OBS-01.casi", "| caso |\n| 1 |\n");
+    #[cfg(unix)]
+    std::os::unix::fs::symlink(p.path("casi/OBS-01.casi"), p.path("casi/link.casi")).unwrap();
+    let mut cases = vec![
+        (json!(["casi/missing.casi"]), "casi/missing.casi"),
+        (json!(["../outside.casi"]), "../outside.casi"),
+        (json!(["casi"]), "casi"),
+        (
+            json!(["casi/OBS-01.casi", "casi/OBS-01.casi"]),
+            "casi/OBS-01.casi",
+        ),
+    ];
+    if cfg!(unix) {
+        cases.push((json!(["casi/link.casi"]), "casi/link.casi"));
+    }
+    for (files, path) in cases {
+        p.accept("001-paypal", files.clone());
+        let review = p.run(&["review-design", "001-paypal"], 2);
+        assert_eq!(review["gate"], "blocked", "{files}");
+        let errors = review["errors"].to_string();
+        assert!(
+            errors.contains("OBS-01") && errors.contains(path),
+            "{files}: {errors}"
+        );
+    }
+    // Only applicable criteria can declare acceptance files.
+    let mut design = p.read(".dfd/features/001-paypal/design.json");
+    design["criteria"][0] = json!({"id":"OBS-01","applicability":"excluded",
+        "justification":"Fuori ambito","acceptance":["casi/OBS-01.casi"]});
+    p.save(".dfd/features/001-paypal/design.json", &design);
+    let review = p.run(&["review-design", "001-paypal"], 2);
+    assert_eq!(review["gate"], "blocked");
+    assert!(review["errors"].to_string().contains("OBS-01"), "{review}");
+}
+
+#[test]
+fn acceptance_change_requires_new_green_for_the_criterion() {
+    // With source_roots, a case changed after the green needs new red/green (F02, F11).
+    let p = Project::new();
+    p.bound();
+    p.run(&["verify", "001-paypal"], 0);
+    let refresh = |p: &Project| {
+        p.approve();
+        p.run(&["plan", "001-paypal", "--refresh"], 0);
+        let status = p.run(&["status", "001-paypal"], 2);
+        let mut evidence = p.read(".dfd/features/001-paypal/evidence.json");
+        evidence["design_fingerprint"] = status["development"]["design_fingerprint"].clone();
+        evidence["plan_hash"] = status["development"]["plan_hash"].clone();
+        p.save(".dfd/features/001-paypal/evidence.json", &evidence);
+    };
+    let fingerprint = |p: &Project| {
+        p.run(&["status", "001-paypal"], 0)["development"]["criteria_fingerprints"]["OBS-01"]
+            .clone()
+    };
+    // An empty list is the absent field: the criterion fingerprint does not change.
+    let before = fingerprint(&p);
+    p.accept("001-paypal", json!([]));
+    refresh(&p);
+    assert_eq!(fingerprint(&p), before);
+    // Declared cases enter the criterion fingerprint: a new green is required.
+    p.write("casi/OBS-01.casi", "| errori | atteso |\n| 1 | 1 |\n");
+    p.accept("001-paypal", json!(["casi/OBS-01.casi"]));
+    refresh(&p);
+    let blocked = p.run(&["verify", "001-paypal"], 2);
+    assert!(
+        blocked["development"]["errors"]
+            .to_string()
+            .contains("OBS-01"),
+        "{blocked}"
+    );
+    p.rebind();
+    p.run(&["verify", "001-paypal"], 0);
+    // The cases change after the green: design review again and new red/green.
+    p.write("casi/OBS-01.casi", "| errori | atteso |\n| 1 | 2 |\n");
+    assert_eq!(p.run(&["status", "001-paypal"], 2)["gate"], "stale-review");
+    refresh(&p);
+    let blocked = p.run(&["verify", "001-paypal"], 2);
+    let errors = blocked["development"]["errors"].to_string();
+    assert!(
+        errors.contains("OBS-01") && errors.contains("task-1"),
+        "{blocked}"
+    );
+    p.rebind();
+    p.run(&["verify", "001-paypal"], 0);
+}
+
+#[test]
+fn undeclared_acceptance_files_are_warned() {
+    let warnings =
+        |p: &Project| p.run(&["verify", "001-paypal"], 0)["development"]["warnings"].to_string();
+    let policy = |roots: Value| {
+        json!({"schema_version":1,"mode":"release-preparation","ci_required":true,
+            "rationale":"Pilota con CI richiesta prima della pre-release","acceptance_roots":roots})
+    };
+    let p = Project::new();
+    p.developed();
+    p.write("casi/OBS-01.casi", "| caso |\n| 1 |\n");
+    p.write("casi/.bozza.casi", "nascosto\n");
+    p.relifecycle(policy(json!(["casi"])));
+    // A case file nobody declares: warning, not a block.
+    let found = warnings(&p);
+    assert!(found.contains("casi/OBS-01.casi"), "{found}");
+    assert!(!found.contains(".bozza"), "{found}");
+    // Declared by this feature: no warning.
+    p.accept("001-paypal", json!(["casi/OBS-01.casi"]));
+    p.relifecycle(policy(json!(["casi"])));
+    assert!(!warnings(&p).contains("casi/"), "{}", warnings(&p));
+    // Declared by another feature of the domain: no warning either.
+    p.write("casi/applepay.casi", "| caso |\n| 1 |\n");
+    assert!(warnings(&p).contains("casi/applepay.casi"));
+    p.second_feature("casi/applepay.casi");
+    assert!(
+        !warnings(&p).contains("casi/applepay.casi"),
+        "{}",
+        warnings(&p)
+    );
+
+    // Invalid roots block Phase 0.
+    for roots in [
+        json!(["../outside"]),
+        json!(["missing"]),
+        json!(["casi", "casi"]),
+    ] {
+        p.save(
+            ".dfd/domains/checkout/lifecycle.json",
+            &policy(roots.clone()),
+        );
+        assert_eq!(
+            p.run(&["setup", "--domain", "checkout"], 2)["gate"],
+            "blocked",
+            "{roots}"
+        );
+    }
+}
