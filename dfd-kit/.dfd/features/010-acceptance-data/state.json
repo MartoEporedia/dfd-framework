@@ -5,7 +5,7 @@
   "domain": "dfd-kit",
   "kind": "feature",
   "scope": "Campo facoltativo criteria[].acceptance in design.json: file di casi di accettazione (test come dati) inclusi nel fingerprint di design e nel fingerprint del criterio; campo di dominio acceptance_roots in lifecycle.json con avviso per i file di casi non dichiarati da alcuna feature",
-  "phase": "development",
+  "phase": "pre-release",
   "created_at": "2026-11-12T00:06:54.626056Z",
   "risk": "medium",
   "route": "full-proportional",

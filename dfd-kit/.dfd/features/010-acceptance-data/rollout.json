@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "development_fingerprint": "b2b45790b9caf4c3bb403d5b82e68ca9ac74b9cec5e3ecf458b2b2e429d6d67b",
+  "owner": "manutentore del repository",
+  "artifact": "Release GitHub v0.2.0 di dfd-kit: dfd-linux-x86_64.tar.gz, dfd-macos-arm64.tar.gz, dfd-macos-x86_64.tar.gz, dfd-windows-x86_64.tar.gz e SHA256SUMS, costruiti da .github/workflows/release.yml",
+  "revision": "Commit di merge della PR #15 su main, con il contenuto verificato al commit 7f81362186edad7f68d2985b5caba479d4f67608 (CI run 43218912063); il workflow di release riesegue tutta la CI sul commit del tag",
+  "environment": "GitHub Releases del repository pubblico MartoEporedia/dfd-framework",
+  "strategy": "direct",
+  "strategy_rationale": "Un binario scaricabile non ha traffico da frazionare: l'esposizione è la pubblicazione della release al push del tag, preceduta dai controlli e dalla CI completa nello stesso run; il rollback elimina release e tag.",
+  "steps": [
+    {
+      "id": "release-v0-2-0",
+      "audience": "chi scarica dfd-kit dall'ultima release, compreso il prompt di installazione",
+      "percentage": 100,
+      "duration_minutes": 60,
+      "promotion": "workflow Release verde; quattro archivi e SHA256SUMS nella release; dfd-macos-arm64 scaricato, checksum verificato, dfd --version 0.2.0 e dfd doctor riuscito; note con le sezioni IT ed EN della 0.2.0",
+      "stop": "workflow Release fallito, archivio mancante, checksum non corrispondente o doctor fallito sul binario scaricato"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "signal": "errori, changes e avvisi sui casi nei test del job ci della release",
+      "threshold": "test acceptance_* verdi; nomi di criterio e percorso presenti",
+      "verification": "Test workflow red/green (acceptance nel design e nel criterio, validazione, acceptance_roots, due feature, fingerprint legacy), suite locale, mutanti, laboratorio v4."
+    },
+    {
+      "id": "OBS-02",
+      "signal": "legame tra criterio, file di casi e decisione",
+      "threshold": "test acceptance_files_bind verde; tag v0.2.0 sul merge di #15 con ci e publish verdi nello stesso run",
+      "verification": "Test workflow red/green (acceptance nel design e nel criterio, validazione, acceptance_roots, due feature, fingerprint legacy), suite locale, mutanti, laboratorio v4."
+    },
+    {
+      "id": "SEC-01",
+      "signal": "validazione dei percorsi di acceptance",
+      "threshold": "percorsi esterni e symlink rifiutati nei test; nessuna lettura fuori dal progetto",
+      "verification": "Test workflow red/green (acceptance nel design e nel criterio, validazione, acceptance_roots, due feature, fingerprint legacy), suite locale, mutanti, laboratorio v4."
+    },
+    {
+      "id": "SEC-03",
+      "signal": "invalidazione dopo un caso cambiato",
+      "threshold": "stale-review e nuovo green richiesti nei test; mutanti acceptance-* intercettati",
+      "verification": "Test workflow red/green (acceptance nel design e nel criterio, validazione, acceptance_roots, due feature, fingerprint legacy), suite locale, mutanti, laboratorio v4."
+    },
+    {
+      "id": "SLO-01",
+      "signal": "status sui progetti esistenti col nuovo binario",
+      "threshold": "gate e fingerprint invariati su feature 001-009 e baseline del laboratorio; suite completa verde",
+      "verification": "Test workflow red/green (acceptance nel design e nel criterio, validazione, acceptance_roots, due feature, fingerprint legacy), suite locale, mutanti, laboratorio v4."
+    },
+    {
+      "id": "SLO-02",
+      "signal": "job quality, mutations, binaries",
+      "threshold": "tutti success; mutanti 71/71",
+      "verification": "Test workflow red/green (acceptance nel design e nel criterio, validazione, acceptance_roots, due feature, fingerprint legacy), suite locale, mutanti, laboratorio v4."
+    },
+    {
+      "id": "COST-01",
+      "signal": "binario scaricato dalla release",
+      "threshold": "dfd doctor riesce senza toolchain né rete",
+      "verification": "Test workflow red/green (acceptance nel design e nel criterio, validazione, acceptance_roots, due feature, fingerprint legacy), suite locale, mutanti, laboratorio v4."
+    },
+    {
+      "id": "UX-01",
+      "signal": "note della release e documentazione",
+      "threshold": "sezioni IT ed EN della 0.2.0 presenti; contratto e skill IT/EN coerenti (check_translations 0 errori)",
+      "verification": "Test workflow red/green (acceptance nel design e nel criterio, validazione, acceptance_roots, due feature, fingerprint legacy), suite locale, mutanti, laboratorio v4."
+    }
+  ],
+  "alarms": [
+    {
+      "name": "Notifica di fallimento del workflow Release",
+      "owner": "Marco Martorana",
+      "status": "planned",
+      "reference": "Notifiche GitHub Actions per i workflow falliti avviati dal proprio push (impostazioni di notifica dell'account)",
+      "activation_plan": "Attiva al push del tag v0.1.0; verificare dopo il run che le notifiche Actions dell'account siano abilitate e, in caso di fallimento, che la notifica arrivi",
+      "justification": "",
+      "evidence": []
+    }
+  ],
+  "dashboards": [
+    {
+      "name": "Pagine Actions e Releases del repository",
+      "owner": "Marco Martorana",
+      "status": "ready",
+      "reference": "https://github.com/MartoEporedia/dfd-framework/actions e https://github.com/MartoEporedia/dfd-framework/releases",
+      "activation_plan": "",
+      "justification": "",
+      "evidence": [
+        {
+          "path": ".dfd/features/010-acceptance-data/evidence/13-ci.log",
+          "sha256": "119d1a93a56dad1e66c4814c0651cfadac68169e42e147702edddb2b3e6c6ade"
+        }
+      ]
+    }
+  ],
+  "feature_flag": {
+    "name": "Controllo dell'esposizione tramite tag",
+    "owner": "Marco Martorana",
+    "status": "excluded",
+    "reference": "",
+    "activation_plan": "",
+    "justification": "Senza tag v0.2.0 non esiste release: il push del tag è il controllo dell'esposizione e il rollback è eliminare release e tag.",
+    "evidence": []
+  },
+  "rollback_trigger": "Workflow Release fallito dopo la creazione della release, archivio mancante, checksum non corrispondente o doctor fallito sul binario scaricato",
+  "rollback_procedure": "gh release delete v0.2.0 --cleanup-tag --yes; correggere sul ramo; pubblicare v0.2.1 con la sua sezione nel changelog",
+  "rollback_verification": "gh release view v0.2.0 fallisce e la pagina Releases non mostra la v0.2.0; la release successiva supera la promozione",
+  "on_call": "Marco Martorana",
+  "communications": [
+    {
+      "audience": "manutentore e chi segue il repository",
+      "owner": "Marco Martorana",
+      "informed_at": "2026-11-12T12:33:29Z",
+      "reference": "https://github.com/MartoEporedia/dfd-framework/pull/15"
+    }
+  ],
+  "non_functional_tests": [
+    {
+      "area": "load",
+      "applicability": "excluded",
+      "justification": "Nessun servizio: la CLI legge in più solo i file dichiarati; GitHub serve i file della release.",
+      "execution": null
+    },
+    {
+      "area": "resilience",
+      "applicability": "applicable",
+      "justification": "",
+      "execution": {
+        "command": "cargo test --locked --offline --test workflow undeclared_acceptance",
+        "executed_at": "2026-11-12T12:30:50.490281Z",
+        "exit_code": 0,
+        "log": {
+          "path": ".dfd/features/010-acceptance-data/evidence/11-exec-green-acceptance-roots.log",
+          "sha256": "8ac61098b7dec9cf2c8271b1ad3176a6e1d881cb587c3e4b2c9ce1429007c5da"
+        }
+      }
+    },
+    {
+      "area": "security",
+      "applicability": "applicable",
+      "justification": "",
+      "execution": {
+        "command": "cargo test --locked --offline --test workflow acceptance_files_bind",
+        "executed_at": "2026-11-12T12:30:47.488454Z",
+        "exit_code": 0,
+        "log": {
+          "path": ".dfd/features/010-acceptance-data/evidence/09-exec-green-acceptance-design.log",
+          "sha256": "a81e50c8e587c1ec9a0ca2bfd97533181af430d1f0e9ed862107d52b367fd165"
+        }
+      }
+    }
+  ],
+  "open_questions": []
+}
