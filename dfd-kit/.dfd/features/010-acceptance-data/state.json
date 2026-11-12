@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "010-acceptance-data",
+  "title": "Casi di accettazione come dipendenze del design",
+  "domain": "dfd-kit",
+  "kind": "feature",
+  "scope": "Campo facoltativo criteria[].acceptance in design.json: file di casi di accettazione (test come dati) inclusi nel fingerprint di design e nel fingerprint del criterio; campo di dominio acceptance_roots in lifecycle.json con avviso per i file di casi non dichiarati da alcuna feature",
+  "phase": "design",
+  "created_at": "2026-11-12T00:06:54.626056Z",
+  "risk": "medium",
+  "route": "full-proportional",
+  "assessment_hash": "2bda3ed2751c56264065c00c421182cfdc9342e672a90844b8817a4788cbf66f",
+  "decisions": [],
+  "selective_review": true
+}

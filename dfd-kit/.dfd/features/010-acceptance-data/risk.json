@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "medium",
+      "rationale": "Nuovi campi facoltativi in design.json (criteria[].acceptance) e lifecycle.json (acceptance_roots); il fingerprint di design e quello per criterio includono file del progetto fuori da .dfd."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Toolkit in solo sviluppo, unico utilizzatore il manutentore."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Hash dei soli file dichiarati e visita delle radici dei casi; nessuna dipendenza o servizio."
+    },
+    "reliability": {
+      "level": "medium",
+      "rationale": "Un errore nel calcolo dei fingerprint invaliderebbe review e green esistenti, oppure non invaliderebbe quelli da invalidare; i design senza acceptance devono mantenere i fingerprint attuali."
+    },
+    "security": {
+      "level": "low",
+      "rationale": "La CLI legge in più solo file dichiarati e radici di dominio, tramite Store (niente escape, niente symlink); nessuna esecuzione e nessuna scrittura nuova."
+    }
+  }
+}
