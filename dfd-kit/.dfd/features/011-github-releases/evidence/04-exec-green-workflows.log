@@ -1,0 +1,11 @@
+$ python3 -m unittest tests.test_workflows -v
+# executed_at: 2026-11-12T11:19:40.661166Z
+test_ci_runs_on_main_pull_requests_and_as_reusable_workflow (tests.test_workflows.WorkflowsTest.test_ci_runs_on_main_pull_requests_and_as_reusable_workflow) ... ok
+test_release_checks_first_and_only_publish_can_write (tests.test_workflows.WorkflowsTest.test_release_checks_first_and_only_publish_can_write) ... ok
+test_third_party_actions_have_a_fixed_version (tests.test_workflows.WorkflowsTest.test_third_party_actions_have_a_fixed_version) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+OK
+# exit_code: 0

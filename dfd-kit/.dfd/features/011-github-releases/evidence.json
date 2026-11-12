@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "318ca710e2590351684ee0f467dd69988a5e9bf92ae43657b3b959a7be7d1a59",
+  "plan_hash": "00f528d1034a19411c7ccc35e33dc9078b77b7682b58064f67f07b2beeda3baa",
+  "files": [
+    {
+      "path": "scripts/release_notes.py",
+      "sha256": "f980c6a977da4243a158f1c52e149d8f60e57ad54b31cd7479d6e5763a088df8"
+    },
+    {
+      "path": "tests/test_release_notes.py",
+      "sha256": "3708b85f2638c5d2d99e8640e3fb8adab7444401df7d06617a8de206e3edb6e6"
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "sha256": "3cc0472a5801e6a5516ec4f803cae6662a2cb253709f415781f55ee13ac7e35c"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "7f62d70e21ce34927f77086203721f13fa7194a5ce1aa08dbe81d9848b29161e"
+    },
+    {
+      "path": "en/CHANGELOG.md",
+      "sha256": "d82a17540294af2c45ca1ba7a487b43c891e5c9d5c855f2e25a7385f4152c605"
+    },
+    {
+      "path": "README.md",
+      "sha256": "9851d25bd70f0b33dda5c4b35b0e52b8b2eff88a5052925f30e663b8f1af702d"
+    },
+    {
+      "path": "en/README.md",
+      "sha256": "a86a09bbceea1c4d34bf966b558ef74251e77749f9556f8077dcb924ce1db03e"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "196dd86805cbdf201eb1b28d0833a036fd1b9bbc20b3c508b9001512c10bf6de"
+    },
+    {
+      "path": "en/CONTRIBUTING.md",
+      "sha256": "ba9db0519f1c7682ed818281ac2d79dc634e0c9dbff6466dd3eca90ded7d74e9"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "9c8ad8d75de6c3d759554c7ea599aa05357da9a51dcae8eb79015c8cc0faa048"
+    }
+  ],
+  "checks": [
+    {
+      "task": "release-notes",
+      "kind": "red",
+      "command": "python3 -m unittest tests.test_release_notes -v",
+      "executed_at": "2026-11-12T11:18:34.713805Z",
+      "exit_code": 1,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/01-exec-red-release-notes.log",
+        "sha256": "0a8c25c827a1bc8b32325d8fef24b4940369f2b5411fdd32e6fb547df26dd0f9"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-01": "298866526c96f26335e9e114870cb7aae6d2eb01a9eb9f8016e8e082c9efbfca",
+        "OBS-01": "6a11419e67593e1cc08dcbf6ba2daef4013ed4c86d9de3fcfa334677b0ea0726",
+        "SLO-02": "de3edcb5e2c93146d37645117a9ca231186c3c9e75625d03a0db222c01627959"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "workflows",
+      "kind": "red",
+      "command": "python3 -m unittest tests.test_workflows -v",
+      "executed_at": "2026-11-12T11:18:34.846817Z",
+      "exit_code": 1,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/02-exec-red-workflows.log",
+        "sha256": "e9589ea19f3c3bdf5674b95250ef59c5578cea6c1b47d32650ac287506b84077"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-02": "1e324550a9d706cf78a1d949f59270f4b2d5771bf072b14b34890eebef101bee",
+        "OBS-02": "a29e458d64c8e43b523611ced272c96c924051f3248b7dcb6a2090a675d68587",
+        "SEC-01": "83dd88afbd9448a23c6263cdcc18c25cb31ec65edb87950e54ff4cccf051ed34",
+        "SEC-02": "34c31b5ffaec1d8db256688ac0bd9bfe34ed0c2c9f8fdc96de94d20f887d3f6a",
+        "SEC-03": "5197e5567c9fabac2449b1dc9ee7ba6664161f2ca6e7edf0b10ca6b7677db352",
+        "SLO-01": "9f86d67f85044a8cb40972ddb1c46f02886093fd226b4d886507604fe5441902",
+        "SLO-04": "17a946e85cb6ceb79a933f1bc3435fb2da7ca9c9a623daa890840168ed8993b3"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "release-notes",
+      "kind": "green",
+      "command": "python3 -m unittest tests.test_release_notes -v",
+      "executed_at": "2026-11-12T11:19:40.514369Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/03-exec-green-release-notes.log",
+        "sha256": "7488fc6018a58421c79cc9a9a7be74369d571b5a6f7f1d0b2fec92fa44b4fe1c"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-01": "298866526c96f26335e9e114870cb7aae6d2eb01a9eb9f8016e8e082c9efbfca",
+        "OBS-01": "6a11419e67593e1cc08dcbf6ba2daef4013ed4c86d9de3fcfa334677b0ea0726",
+        "SLO-02": "de3edcb5e2c93146d37645117a9ca231186c3c9e75625d03a0db222c01627959"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "workflows",
+      "kind": "green",
+      "command": "python3 -m unittest tests.test_workflows -v",
+      "executed_at": "2026-11-12T11:19:40.661166Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/04-exec-green-workflows.log",
+        "sha256": "97ba9587b31ef5cd0e8e180a8558baef9f18efef4c31f0a3dc47c5b07cedd55b"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-02": "1e324550a9d706cf78a1d949f59270f4b2d5771bf072b14b34890eebef101bee",
+        "OBS-02": "a29e458d64c8e43b523611ced272c96c924051f3248b7dcb6a2090a675d68587",
+        "SEC-01": "83dd88afbd9448a23c6263cdcc18c25cb31ec65edb87950e54ff4cccf051ed34",
+        "SEC-02": "34c31b5ffaec1d8db256688ac0bd9bfe34ed0c2c9f8fdc96de94d20f887d3f6a",
+        "SEC-03": "5197e5567c9fabac2449b1dc9ee7ba6664161f2ca6e7edf0b10ca6b7677db352",
+        "SLO-01": "9f86d67f85044a8cb40972ddb1c46f02886093fd226b4d886507604fe5441902",
+        "SLO-04": "17a946e85cb6ceb79a933f1bc3435fb2da7ca9c9a623daa890840168ed8993b3"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "changelog-docs",
+      "kind": "red",
+      "command": "python3 scripts/release_notes.py --check v0.1.0",
+      "executed_at": "2026-11-12T11:19:40.786537Z",
+      "exit_code": 1,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/05-exec-red-changelog-docs.log",
+        "sha256": "902b43bc7568277481142107c157a736a83d33bdec58792b4bfd07fb8bd530e3"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "SLO-02": "de3edcb5e2c93146d37645117a9ca231186c3c9e75625d03a0db222c01627959",
+        "UX-01": "a83b404a1e79b87eab3082c04ed4ec763aad035adc213e8a6275389f7f948ac2"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "changelog-docs",
+      "kind": "green",
+      "command": "sh -c python3 scripts/release_notes.py --check v0.1.0 && python3 scripts/release_notes.py v0.1.0 && python3 scripts/check_translations.py",
+      "executed_at": "2026-11-12T11:21:13.010562Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/06-exec-green-changelog-docs.log",
+        "sha256": "1c35994c01af839b7c5d7f297202e8d5c4fd7178e234c992bcbe6f7430d42bd0"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "SLO-02": "de3edcb5e2c93146d37645117a9ca231186c3c9e75625d03a0db222c01627959",
+        "UX-01": "a83b404a1e79b87eab3082c04ed4ec763aad035adc213e8a6275389f7f948ac2"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "sh -c set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor >/dev/null; python3 scripts/check_translations.py; python3 -m unittest discover -s tests -p \"test_*.py\" -v",
+      "executed_at": "2026-11-12T11:22:06.189714Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/07-exec-suite.log",
+        "sha256": "834dec41079c5ac333d1a45a6724f134374d5bb4074f91b34d6d1711113dcfd7"
+      },
+      "snapshot": {},
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "sh -c set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor >/dev/null; python3 scripts/check_translations.py; python3 -m unittest discover -s tests -p \"test_*.py\" -v",
+      "executed_at": "2026-11-12T11:30:14.804842Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/08-exec-suite.log",
+        "sha256": "2ce60bd449240e8927d9ac2026872fda18983e138a4a00f657bc81a80d6b4cc9"
+      },
+      "snapshot": {
+        "CHANGELOG.md": "7f62d70e21ce34927f77086203721f13fa7194a5ce1aa08dbe81d9848b29161e",
+        "CONTRIBUTING.md": "196dd86805cbdf201eb1b28d0833a036fd1b9bbc20b3c508b9001512c10bf6de",
+        "README.md": "9851d25bd70f0b33dda5c4b35b0e52b8b2eff88a5052925f30e663b8f1af702d",
+        "en/CHANGELOG.md": "d82a17540294af2c45ca1ba7a487b43c891e5c9d5c855f2e25a7385f4152c605",
+        "en/CONTRIBUTING.md": "ba9db0519f1c7682ed818281ac2d79dc634e0c9dbff6466dd3eca90ded7d74e9",
+        "en/README.md": "a86a09bbceea1c4d34bf966b558ef74251e77749f9556f8077dcb924ce1db03e",
+        "i18n/documents.json": "9c8ad8d75de6c3d759554c7ea599aa05357da9a51dcae8eb79015c8cc0faa048",
+        "scripts/release_notes.py": "f980c6a977da4243a158f1c52e149d8f60e57ad54b31cd7479d6e5763a088df8",
+        "tests/test_release_notes.py": "3708b85f2638c5d2d99e8640e3fb8adab7444401df7d06617a8de206e3edb6e6",
+        "tests/test_workflows.py": "3cc0472a5801e6a5516ec4f803cae6662a2cb253709f415781f55ee13ac7e35c"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "ci",
+      "command": "GitHub Actions DFD Kit run 43209565384 (pull_request #16, commit 210c08cf5382dba60cb6fb3ed7f7c44d16d11577): quality, mutations, binaries x4",
+      "executed_at": "2026-11-12T11:34:04Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/09-ci.log",
+        "sha256": "3dc2f3e71128d878703870279cc74815c0b5db00a064bdd730db29043102a237"
+      }
+    }
+  ],
+  "refactor_notes": "Refactor: CI spostata da ci/github-actions.yml a .github/workflows/dfd-kit.yml senza cambiare i job; timeout dei mutanti da 15 a 20 minuti: 485 s in locale, 5 min 49 s alla prima esecuzione CI (run 43208625313). Osservabilità: release_notes.py --check nomina tag, versione o sezione errati; il job publish stampa archivi e SHA256SUMS. File fuori dalla radice del progetto DFD (dfd-kit/), non dichiarabili in evidence.files perché la CLI rifiuta percorsi esterni: .github/workflows/dfd-kit.yml sha256 70c678c4954a5ba7828bb9c41b0359335cdbb9b8965ae32851eb8310d4f555a6; .github/workflows/release.yml sha256 fd55ebecc75211b3b732c84b41e19ff1f491901e8221ab706adcf386a3db4953; README.md sha256 e2e63dab1577fa9f2ebcfe6ce9c72a38483db7e407416c8a01107a011e9b5814; en/README.md sha256 adff256f05c39141926819f0374d154bf660a615f01ad64a54606cc64fd9def9. actionlint non disponibile in locale: workflow validati da tests/test_workflows.py e dalla CI reale. Avvisi FAILED/skipped sul log 06-exec-green-changelog-docs: falsi positivi, il log stampa le note del changelog e la voce su log_markers cita quelle parole. CI reale: run 43209565384 verde, 6 job; mutanti 65/65 in 4 min 44 s (la 010 non è su questo ramo). Avviso skipped su 09-ci.log: falso positivo, sono passi interni di dtolnay/rust-toolchain (outcome=skipped); nessun test ignorato (0 ignored in ogni cargo test)."
+}

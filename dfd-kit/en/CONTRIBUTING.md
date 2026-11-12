@@ -57,7 +57,18 @@ python3 scripts/check_translations.py
 
 Add --offline when dependencies are cached. Preserve Cargo.lock. Use rustfmt/snake_case and dfd-action skill names. Maintain both Italian and English resources; see [glossary/maintenance](../../en/glossario.md). Versioned JSON is schema_version 1 and rejects unknown fields. Preserve user artifacts, idempotence, missing-data handling, feature isolation, decision invalidation and proportionate adoption. Tests run without external programs in PATH. doctor checks both embedded languages; real harness behavior requires a pilot.
 
-ci/github-actions.yml defines Linux x86_64 musl, macOS arm64/x86_64 and Windows x86_64 builds/checks, producing binary archives/checksums without automatic releases. Activate by copying into repository-root .github/workflows/. Local success does not certify other operating systems or CI execution.
+The CI .github/workflows/dfd-kit.yml runs on push to main, on pull requests and manually: fmt and Clippy, mutants, and builds/tests for Linux x86_64 musl, macOS arm64/x86_64 and Windows x86_64, producing binary archives with checksums as artifacts. Local success does not certify other operating systems. The workflow runs from dfd-kit/.
+
+## Releases
+
+The dfd-kit domain is in release-preparation with CI required. A release comes from the feature that carries it:
+
+1. update CHANGELOG.md and en/CHANGELOG.md, moving the [Unreleased] entries into a `## [X.Y.Z] - YYYY-MM-DD` section, and set version in Cargo.toml (with Cargo.lock) to X.Y.Z;
+2. check with `python3 scripts/release_notes.py --check vX.Y.Z` and read the notes with `python3 scripts/release_notes.py vX.Y.Z`;
+3. complete DFD pre-release and release review, with the real CI log of the PR recorded as kind ci;
+4. after the merge, create and push the tag vX.Y.Z on the main commit.
+
+The workflow .github/workflows/release.yml repeats the check, runs the full CI, then publishes the release with the four archives, a combined SHA256SUMS and the IT/EN notes. It never overwrites an existing release. A wrong release is fixed with a new patch version.
 
 ## Mutation testing
 
@@ -73,7 +84,7 @@ Default Cargo offline; --online fetches dependencies. --timeout 180 limits each 
 
 JSON/logs default to target/mutation-results/; --output changes location. Reports include source/test/manifest hashes, results and score. killed means test failure; survived means full suite also passed. Compilation errors, missing tests and timeouts are distinct and do not count as kills. Exit 0 requires all selected mutants killed; failed baseline/incomplete runs invalidate results. Locks protect reports; remove after interruption only when no runner is active.
 
-The score covers curated mutations only. Add id/file/original/replacement/observable behavior/at least one detecting test to mutations/gates.json. Prefer compilable mutants. Strengthen tests or justify equivalent survivors rather than removing them to improve scores. CI mutations job preserves artifacts even on failure; no GitHub execution is implied by local configuration.
+The score covers curated mutations only. Add id/file/original/replacement/observable behavior/at least one detecting test to mutations/gates.json. Prefer compilable mutants. Strengthen tests or justify equivalent survivors rather than removing them to improve scores. The mutations job in .github/workflows/dfd-kit.yml preserves artifacts even on failure.
 
 ## Contributions and framework resources
 

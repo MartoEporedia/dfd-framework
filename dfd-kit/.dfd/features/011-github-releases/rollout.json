@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "development_fingerprint": "b73be9e8bf3ae8510bebbae3b08c1a3b3f04ffe038b6fcd20cdfa0a87a1b7f81",
+  "owner": "manutentore del repository",
+  "artifact": "Release GitHub v0.1.0 di dfd-kit: dfd-linux-x86_64.tar.gz, dfd-macos-arm64.tar.gz, dfd-macos-x86_64.tar.gz, dfd-windows-x86_64.tar.gz e SHA256SUMS, costruiti da .github/workflows/release.yml",
+  "revision": "Commit di merge della PR #16 su main, con il contenuto verificato al commit 210c08cf5382dba60cb6fb3ed7f7c44d16d11577 (CI run 43209565384); il workflow di release riesegue tutta la CI sul commit del tag",
+  "environment": "GitHub Releases del repository pubblico MartoEporedia/dfd-framework",
+  "strategy": "direct",
+  "strategy_rationale": "Un binario scaricabile non ha traffico da frazionare: l'esposizione è la pubblicazione della release al push del tag, preceduta dai controlli e dalla CI completa nello stesso run; il rollback elimina release e tag.",
+  "steps": [
+    {
+      "id": "release-v0-1-0",
+      "audience": "chi scarica dfd-kit dall'ultima release, compreso il prompt di installazione",
+      "percentage": 100,
+      "duration_minutes": 60,
+      "promotion": "workflow Release verde; quattro archivi e SHA256SUMS nella release; dfd-macos-arm64 scaricato, checksum verificato e dfd doctor riuscito; note con le sezioni IT ed EN della 0.1.0",
+      "stop": "workflow Release fallito, archivio mancante, checksum non corrispondente o doctor fallito sul binario scaricato"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "signal": "esito di release_notes.py --check nel job check del run di release",
+      "threshold": "exit 0 per v0.1.0; un tag incoerente non crea alcuna release",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "OBS-02",
+      "signal": "legame tra tag, commit e run",
+      "threshold": "tag v0.1.0 sul merge di #16; job ci e publish verdi nello stesso run",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SEC-01",
+      "signal": "permessi dei job nel run di release",
+      "threshold": "solo publish con contents: write; check e ci con contents: read",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SEC-02",
+      "signal": "unicità della release",
+      "threshold": "nessuna release v0.1.0 preesistente; archivi mai sovrascritti",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SEC-03",
+      "signal": "decisione di release prima del tag",
+      "threshold": "release-decisions.json approvata prima del push del tag, su richiesta esplicita del manutentore",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SLO-01",
+      "signal": "cargo test nel job ci della release",
+      "threshold": "tutti i test verdi, 0 ignorati",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SLO-02",
+      "signal": "job quality, mutations, binaries",
+      "threshold": "tutti success; mutanti intercettati al 100%",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SLO-04",
+      "signal": "CI sulla PR e sul tag",
+      "threshold": "success in entrambi i run",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "COST-01",
+      "signal": "binario scaricato dalla release",
+      "threshold": "dfd doctor riesce senza toolchain né rete",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "COST-02",
+      "signal": "durata del job mutations",
+      "threshold": "sotto il timeout di 20 minuti (misurati 4 min 44 s sulla PR)",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "UX-01",
+      "signal": "note della release e prompt di installazione",
+      "threshold": "sezioni IT ed EN della 0.1.0 presenti; l'archivio scaricato con il prompt supera la verifica del checksum",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    }
+  ],
+  "alarms": [
+    {
+      "name": "Notifica di fallimento del workflow Release",
+      "owner": "Marco Martorana",
+      "status": "planned",
+      "reference": "Notifiche GitHub Actions per i workflow falliti avviati dal proprio push (impostazioni di notifica dell'account)",
+      "activation_plan": "Attiva al push del tag v0.1.0; verificare dopo il run che le notifiche Actions dell'account siano abilitate e, in caso di fallimento, che la notifica arrivi",
+      "justification": "",
+      "evidence": []
+    }
+  ],
+  "dashboards": [
+    {
+      "name": "Pagine Actions e Releases del repository",
+      "owner": "Marco Martorana",
+      "status": "ready",
+      "reference": "https://github.com/MartoEporedia/dfd-framework/actions e https://github.com/MartoEporedia/dfd-framework/releases",
+      "activation_plan": "",
+      "justification": "",
+      "evidence": [
+        {
+          "path": ".dfd/features/011-github-releases/evidence/09-ci.log",
+          "sha256": "3dc2f3e71128d878703870279cc74815c0b5db00a064bdd730db29043102a237"
+        }
+      ]
+    }
+  ],
+  "feature_flag": {
+    "name": "Controllo dell'esposizione tramite tag",
+    "owner": "Marco Martorana",
+    "status": "excluded",
+    "reference": "",
+    "activation_plan": "",
+    "justification": "Senza tag v0.1.0 non esiste release: il push del tag è il controllo dell'esposizione e il rollback è eliminare release e tag.",
+    "evidence": []
+  },
+  "rollback_trigger": "Workflow Release fallito dopo la creazione della release, archivio mancante, checksum non corrispondente o doctor fallito sul binario scaricato",
+  "rollback_procedure": "gh release delete v0.1.0 --cleanup-tag --yes; correggere sul ramo; pubblicare v0.1.1 con la sua sezione nel changelog",
+  "rollback_verification": "gh release view v0.1.0 fallisce e la pagina Releases non mostra la v0.1.0; la release successiva supera la promozione",
+  "on_call": "Marco Martorana",
+  "communications": [
+    {
+      "audience": "manutentore e chi segue il repository",
+      "owner": "Marco Martorana",
+      "informed_at": "2026-11-12T11:22:41Z",
+      "reference": "https://github.com/MartoEporedia/dfd-framework/pull/16"
+    }
+  ],
+  "non_functional_tests": [
+    {
+      "area": "load",
+      "applicability": "excluded",
+      "justification": "Nessun servizio: GitHub serve i file della release; il carico non dipende da dfd-kit.",
+      "execution": null
+    },
+    {
+      "area": "resilience",
+      "applicability": "applicable",
+      "justification": "",
+      "execution": {
+        "command": "python3 -m unittest tests.test_release_notes -v",
+        "executed_at": "2026-11-12T11:19:40.514369Z",
+        "exit_code": 0,
+        "log": {
+          "path": ".dfd/features/011-github-releases/evidence/03-exec-green-release-notes.log",
+          "sha256": "7488fc6018a58421c79cc9a9a7be74369d571b5a6f7f1d0b2fec92fa44b4fe1c"
+        }
+      }
+    },
+    {
+      "area": "security",
+      "applicability": "applicable",
+      "justification": "",
+      "execution": {
+        "command": "python3 -m unittest tests.test_workflows -v",
+        "executed_at": "2026-11-12T11:19:40.661166Z",
+        "exit_code": 0,
+        "log": {
+          "path": ".dfd/features/011-github-releases/evidence/04-exec-green-workflows.log",
+          "sha256": "97ba9587b31ef5cd0e8e180a8558baef9f18efef4c31f0a3dc47c5b07cedd55b"
+        }
+      }
+    }
+  ],
+  "open_questions": []
+}
