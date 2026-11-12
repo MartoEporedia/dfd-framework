@@ -1,0 +1,82 @@
+$ python3 -m unittest tests.test_release_notes -v
+# executed_at: 2026-11-12T11:18:34.713805Z
+test_check_accepts_a_consistent_tag (tests.test_release_notes.ReleaseNotesTest.test_check_accepts_a_consistent_tag) ... ERROR
+test_check_rejects_bad_tags_versions_and_sections (tests.test_release_notes.ReleaseNotesTest.test_check_rejects_bad_tags_versions_and_sections) ... ERROR
+test_command_line_exit_codes (tests.test_release_notes.ReleaseNotesTest.test_command_line_exit_codes) ... FAIL
+test_notes_take_the_section_in_both_languages (tests.test_release_notes.ReleaseNotesTest.test_notes_take_the_section_in_both_languages) ... ERROR
+test_section_stops_at_the_next_version (tests.test_release_notes.ReleaseNotesTest.test_section_stops_at_the_next_version) ... ERROR
+
+======================================================================
+ERROR: test_check_accepts_a_consistent_tag (tests.test_release_notes.ReleaseNotesTest.test_check_accepts_a_consistent_tag)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 70, in test_check_accepts_a_consistent_tag
+    self.assertEqual(load().check(self.project(), "v0.1.0"), [])
+                     ~~~~^^
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 15, in load
+    spec.loader.exec_module(module)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 755, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 892, in get_code
+  File "<frozen importlib._bootstrap_external>", line 950, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/release_notes.py'
+
+======================================================================
+ERROR: test_check_rejects_bad_tags_versions_and_sections (tests.test_release_notes.ReleaseNotesTest.test_check_rejects_bad_tags_versions_and_sections)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 73, in test_check_rejects_bad_tags_versions_and_sections
+    rn = load()
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 15, in load
+    spec.loader.exec_module(module)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 755, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 892, in get_code
+  File "<frozen importlib._bootstrap_external>", line 950, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/release_notes.py'
+
+======================================================================
+ERROR: test_notes_take_the_section_in_both_languages (tests.test_release_notes.ReleaseNotesTest.test_notes_take_the_section_in_both_languages)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 56, in test_notes_take_the_section_in_both_languages
+    notes = load().notes(self.project(), "v0.1.0")
+            ~~~~^^
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 15, in load
+    spec.loader.exec_module(module)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 755, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 892, in get_code
+  File "<frozen importlib._bootstrap_external>", line 950, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/release_notes.py'
+
+======================================================================
+ERROR: test_section_stops_at_the_next_version (tests.test_release_notes.ReleaseNotesTest.test_section_stops_at_the_next_version)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 64, in test_section_stops_at_the_next_version
+    notes = load().notes(self.project(version="0.2.0"), "v0.2.0")
+            ~~~~^^
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 15, in load
+    spec.loader.exec_module(module)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 755, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 892, in get_code
+  File "<frozen importlib._bootstrap_external>", line 950, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/release_notes.py'
+
+======================================================================
+FAIL: test_command_line_exit_codes (tests.test_release_notes.ReleaseNotesTest.test_command_line_exit_codes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 93, in test_command_line_exit_codes
+    self.assertEqual(ok.returncode, 0, ok.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 0 : /opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/release_notes.py': [Errno 2] No such file or directory
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.027s
+
+FAILED (failures=1, errors=4)
+# exit_code: 1

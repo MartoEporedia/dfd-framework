@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "Pubblicare dfd-kit come release GitHub al push di un tag v*, con binari per quattro sistemi, checksum e note tratte da CHANGELOG.md IT/EN; attivare la CI e portare il dominio in release-preparation.",
+  "business_metrics": [
+    "Release v0.1.0 con quattro archivi, SHA256SUMS complessivo e note IT/EN dal changelog",
+    "Tag incoerente con Cargo.toml o senza sezione del changelog: nessuna release",
+    "CI verde sulla PR; prompt di installazione che scarica dalla release"
+  ],
+  "epic": {
+    "reference": "Richiesta del manutentore in chat il 2026-11-12; scelte (tag v*, CHANGELOG IT/EN, v0.1.0 ora e v0.2.0 con #15, release-preparation con CI) espresse in chat il 2026-11-12",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-11-12T11:14:52Z"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "applicable",
+      "implementation": "release_notes.py --check nomina tag, versione o sezione errati; job falliti fermano la release.",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "applicable",
+      "implementation": "Log CI reali registrati come kind ci; release legata a tag e commit.",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "applicable",
+      "implementation": "contents: read per la CI, contents: write solo nel job di pubblicazione; azioni a versione fissata.",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "applicable",
+      "implementation": "Release esistente non sovrascritta; dist locale invariato.",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Release solo dopo pre-release e review di release umana; tag dal manutentore o su sua richiesta esplicita.",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "CLI e contratti invariati.",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Test dello script, suite locale, CI reale.",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SLO-04",
+      "applicability": "applicable",
+      "implementation": "CI attivata e richiesta per la release (ci_required true).",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "applicable",
+      "implementation": "Nessuna dipendenza nuova nel binario; script con la sola libreria standard.",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "applicable",
+      "implementation": "Timeout dei mutanti commisurato alla durata reale misurata.",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "README, CONTRIBUTING, prompt di installazione e changelog IT/EN coerenti.",
+      "verification": "tests/test_release_notes.py red/green, suite locale, CI reale sulla PR, revisione dei workflow, prima release v0.1.0."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Nessuna scrittura della CLI cambia."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "excluded",
+      "justification": "Skill e adapter invariati."
+    },
+    {
+      "id": "UX-03",
+      "applicability": "excluded",
+      "justification": "Nessun cambiamento alle skill."
+    }
+  ],
+  "test_plan": "Red/green di tests/test_release_notes.py (sezioni IT/EN, tag non conforme, versione diversa da Cargo.toml, sezione assente o vuota, ultima sezione, Unreleased); suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR con log scaricati come kind ci; revisione dei workflow; release v0.1.0 verificata scaricando archivi e checksum.",
+  "guardrails": "Nessuna release senza CI verde, sezione del changelog e versione coerente; nessuna sovrascrittura; permessi minimi; tag creato dal manutentore o su sua richiesta esplicita.",
+  "open_questions": []
+}

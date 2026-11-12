@@ -3,8 +3,8 @@
   "documents": {
     "README.md": {
       "english": "en/README.md",
-      "it_sha256": "922d48e88cce6dfecd919c9d2d8f2d087fb73cf86d8d2a8a6172e987e3765e32",
-      "en_sha256": "54c4a65d48fb716c8f4c2a13127b1801ef9dd898f068ccb78b0b14f4b69a5f77"
+      "it_sha256": "e2e63dab1577fa9f2ebcfe6ce9c72a38483db7e407416c8a01107a011e9b5814",
+      "en_sha256": "adff256f05c39141926819f0374d154bf660a615f01ad64a54606cc64fd9def9"
     },
     "adozione.md": {
       "english": "en/adozione.md",
@@ -96,15 +96,20 @@
       "it_sha256": "c702732ebf8b35b5194d1801e9a226b919820f857d60fd57b9d8b5606b05a90d",
       "en_sha256": "2f84f4e51d7a054938405b0e9bf02a9a109243eee589543ca854ce4a3608c859"
     },
+    "dfd-kit/CHANGELOG.md": {
+      "english": "dfd-kit/en/CHANGELOG.md",
+      "it_sha256": "7f62d70e21ce34927f77086203721f13fa7194a5ce1aa08dbe81d9848b29161e",
+      "en_sha256": "d82a17540294af2c45ca1ba7a487b43c891e5c9d5c855f2e25a7385f4152c605"
+    },
     "dfd-kit/CONTRIBUTING.md": {
       "english": "dfd-kit/en/CONTRIBUTING.md",
-      "it_sha256": "8065b00b29949dd6dc9596d5e5fe22857837f48cb52e9a72ec2aaa11dc2891ba",
-      "en_sha256": "05fef7c132882052282c11a4c32959431de6ac7001b5297a14923ff3de494a42"
+      "it_sha256": "196dd86805cbdf201eb1b28d0833a036fd1b9bbc20b3c508b9001512c10bf6de",
+      "en_sha256": "ba9db0519f1c7682ed818281ac2d79dc634e0c9dbff6466dd3eca90ded7d74e9"
     },
     "dfd-kit/README.md": {
       "english": "dfd-kit/en/README.md",
-      "it_sha256": "6500932f704967cbdb4efc1940fa5e8f1db710d495ffcaa9176f8df16ab6f059",
-      "en_sha256": "3eecee529dbd1832a0328b57208b00fbe45987836dde6a6b0c52c8b81b98e4bd"
+      "it_sha256": "9851d25bd70f0b33dda5c4b35b0e52b8b2eff88a5052925f30e663b8f1af702d",
+      "en_sha256": "a86a09bbceea1c4d34bf966b558ef74251e77749f9556f8077dcb924ce1db03e"
     },
     "dfd-kit/adozione.md": {
       "english": "dfd-kit/en/adozione.md",

@@ -2,13 +2,15 @@ name: DFD Kit
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
+  # Called by release.yml before publishing a release.
+  workflow_call:
 
 permissions:
   contents: read
 
-# Copiare questo file in .github/workflows/ nella radice per attivarlo.
 defaults:
   run:
     working-directory: dfd-kit
@@ -26,7 +28,9 @@ jobs:
 
   mutations:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    # Measured: 485 s locally (Apple Silicon, warm cache), 5 min 49 s on the first hosted
+    # run (2026-11-12, 71 mutants). About three times the measured CI time.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable

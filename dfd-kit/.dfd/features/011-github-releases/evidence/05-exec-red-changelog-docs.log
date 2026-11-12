@@ -1,0 +1,5 @@
+$ python3 scripts/release_notes.py --check v0.1.0
+# executed_at: 2026-11-12T11:19:40.786537Z
+release: CHANGELOG.md assente
+release: en/CHANGELOG.md assente
+# exit_code: 1

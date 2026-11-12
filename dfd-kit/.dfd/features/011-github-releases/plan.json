@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "318ca710e2590351684ee0f467dd69988a5e9bf92ae43657b3b959a7be7d1a59",
+  "tasks": [
+    {
+      "id": "release-notes",
+      "owner": "manutentore del repository",
+      "description": "Script delle note di release e controllo di tag, versione e changelog",
+      "criteria": [
+        "OBS-01",
+        "SLO-02",
+        "COST-01"
+      ],
+      "implementation": "scripts/release_notes.py (libreria standard): sezione di una versione da CHANGELOG.md ed en/CHANGELOG.md, note IT+EN, --check su formato del tag, versione di Cargo.toml e sezione non vuota.",
+      "verification": "Red/green di python3 -m unittest tests.test_release_notes (sezioni, tag non conforme, versione diversa, sezione assente o vuota, ultima sezione, Unreleased)."
+    },
+    {
+      "id": "workflows",
+      "owner": "manutentore del repository",
+      "description": "CI attiva e workflow di release",
+      "criteria": [
+        "OBS-02",
+        "SEC-01",
+        "SEC-02",
+        "SEC-03",
+        "SLO-01",
+        "SLO-04",
+        "COST-02"
+      ],
+      "implementation": ".github/workflows/dfd-kit.yml (CI spostata da ci/github-actions.yml, workflow_call, timeout dei mutanti misurato) e .github/workflows/release.yml (check, CI, pubblicazione con contents: write, SHA256SUMS complessivo, nessuna sovrascrittura).",
+      "verification": "Red: test strutturale dei workflow (tests/test_workflows.py) fallisce senza i file; green con trigger, permessi e passi attesi; CI reale verde sulla PR con log registrati come kind ci."
+    },
+    {
+      "id": "changelog-docs",
+      "owner": "manutentore del repository",
+      "description": "CHANGELOG IT/EN e documentazione di installazione e rilascio",
+      "criteria": [
+        "UX-01",
+        "SLO-02"
+      ],
+      "implementation": "CHANGELOG.md ed en/CHANGELOG.md con [Unreleased] e 0.1.0; README (radice e dfd-kit) e prompt di installazione che scaricano dalla release; CONTRIBUTING con la procedura di rilascio; riferimenti a ci/github-actions.yml aggiornati.",
+      "verification": "Red: release_notes.py --check v0.1.0 fallisce senza changelog; green con il changelog; check_translations senza errori."
+    }
+  ],
+  "open_questions": []
+}

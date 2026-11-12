@@ -12,7 +12,7 @@ Il dominio `dfd-kit` è configurato in modalità brownfield nella directory `dfd
 
 La CLI `dfd` è un eseguibile Rust con skill e template incorporati. Per usarlo non servono Python, Node, jq o altri runtime. La versione 0.1 copre adozione, setup di dominio, rischio, specifica, review di design, sviluppo TDD, pre-release e review di release. Esecuzione del rollout e apprendimento post-release saranno fasi successive.
 
-La prima build locale è disponibile in `dist/dfd-macos-arm64`. La configurazione CI in `ci/github-actions.yml` prepara le build per gli altri sistemi; per attivarla, copiarla in `.github/workflows/` nella radice del repository. Le build non sono ancora pubblicate come release. Dopo aver ottenuto il binario per il proprio sistema, posizionarlo nel PATH con nome `dfd`, oppure invocarlo tramite il suo percorso.
+I binari per Linux x86_64 (musl), macOS arm64 e x86_64 e Windows x86_64 sono pubblicati nelle [release GitHub](https://github.com/MartoEporedia/dfd-framework/releases), con `SHA256SUMS` e le note del [changelog](CHANGELOG.md). Su altri sistemi compilare con `cargo build --locked --release`. Dopo aver ottenuto il binario per il proprio sistema, posizionarlo nel PATH con nome `dfd`, oppure invocarlo tramite il suo percorso.
 
 ```sh
 dfd doctor

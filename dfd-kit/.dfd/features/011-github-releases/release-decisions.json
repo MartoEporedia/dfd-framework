@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "decisions": [
+    {
+      "decision": "approved-with-conditions",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead",
+      "note": "Release v0.1.0 approvata: CI reale verde (run 43209565384), rollout diretto con il tag, rollback eliminando release e tag. Avvisi dei log spiegati in refactor_notes. Registrata dall'agente su decisione espressa del manutentore in chat il 2026-11-12, che ha anche chiesto merge della PR #16 e push del tag.",
+      "conditions": [
+        {
+          "text": "Verificare la notifica di fallimento del workflow Release dopo il primo run",
+          "owner": "Marco Martorana",
+          "due_phase": "post-release"
+        }
+      ],
+      "recorded_at": "2026-11-12T11:54:57.376276Z",
+      "fingerprint": "db254b88491dbda52d25bf04efe6f90550150143a9108f78b5aeb07147b13b8d",
+      "snapshot": {
+        ".dfd/features/011-github-releases/evidence.json": "df3fa9578e220e0c9042ba8216d35b3efa9f93b81ba324c726fc9efdb2c82706",
+        ".dfd/features/011-github-releases/evidence/01-exec-red-release-notes.log": "0a8c25c827a1bc8b32325d8fef24b4940369f2b5411fdd32e6fb547df26dd0f9",
+        ".dfd/features/011-github-releases/evidence/02-exec-red-workflows.log": "e9589ea19f3c3bdf5674b95250ef59c5578cea6c1b47d32650ac287506b84077",
+        ".dfd/features/011-github-releases/evidence/03-exec-green-release-notes.log": "7488fc6018a58421c79cc9a9a7be74369d571b5a6f7f1d0b2fec92fa44b4fe1c",
+        ".dfd/features/011-github-releases/evidence/04-exec-green-workflows.log": "97ba9587b31ef5cd0e8e180a8558baef9f18efef4c31f0a3dc47c5b07cedd55b",
+        ".dfd/features/011-github-releases/evidence/05-exec-red-changelog-docs.log": "902b43bc7568277481142107c157a736a83d33bdec58792b4bfd07fb8bd530e3",
+        ".dfd/features/011-github-releases/evidence/06-exec-green-changelog-docs.log": "1c35994c01af839b7c5d7f297202e8d5c4fd7178e234c992bcbe6f7430d42bd0",
+        ".dfd/features/011-github-releases/evidence/07-exec-suite.log": "834dec41079c5ac333d1a45a6724f134374d5bb4074f91b34d6d1711113dcfd7",
+        ".dfd/features/011-github-releases/evidence/08-exec-suite.log": "2ce60bd449240e8927d9ac2026872fda18983e138a4a00f657bc81a80d6b4cc9",
+        ".dfd/features/011-github-releases/evidence/09-ci.log": "3dc2f3e71128d878703870279cc74815c0b5db00a064bdd730db29043102a237",
+        ".dfd/features/011-github-releases/plan.json": "cdbae79f41b6556f9ea49d7ae0647c279879668ce4c0cbab9259305ea8fd2ec3",
+        ".dfd/features/011-github-releases/plan.md": "bc5ca1b594a7378a3644a10219c777acc03df3c8576c9fda3e7ca21b90ef34c6",
+        ".dfd/features/011-github-releases/release-notes.md": "absent",
+        ".dfd/features/011-github-releases/rollout.json": "96b86feed1930d05e7ad1cfc011649977766e5b682d99c3cadc7d1777bc03f83",
+        ".dfd/features/011-github-releases/rollout.md": "d6001cbfd022f1ca7c56936f8489063a2cb425557b601f9c67582d31b55152cf",
+        "CHANGELOG.md": "7f62d70e21ce34927f77086203721f13fa7194a5ce1aa08dbe81d9848b29161e",
+        "CONTRIBUTING.md": "196dd86805cbdf201eb1b28d0833a036fd1b9bbc20b3c508b9001512c10bf6de",
+        "README.md": "9851d25bd70f0b33dda5c4b35b0e52b8b2eff88a5052925f30e663b8f1af702d",
+        "design": "318ca710e2590351684ee0f467dd69988a5e9bf92ae43657b3b959a7be7d1a59",
+        "design-decision": "23cbd9c3f41b5f19bd7484af106ab54bb85bc4b411a7d928c28527375e264e9d",
+        "en/CHANGELOG.md": "d82a17540294af2c45ca1ba7a487b43c891e5c9d5c855f2e25a7385f4152c605",
+        "en/CONTRIBUTING.md": "ba9db0519f1c7682ed818281ac2d79dc634e0c9dbff6466dd3eca90ded7d74e9",
+        "en/README.md": "a86a09bbceea1c4d34bf966b558ef74251e77749f9556f8077dcb924ce1db03e",
+        "i18n/documents.json": "9c8ad8d75de6c3d759554c7ea599aa05357da9a51dcae8eb79015c8cc0faa048",
+        "scripts/release_notes.py": "f980c6a977da4243a158f1c52e149d8f60e57ad54b31cd7479d6e5763a088df8",
+        "tests/test_release_notes.py": "3708b85f2638c5d2d99e8640e3fb8adab7444401df7d06617a8de206e3edb6e6",
+        "tests/test_workflows.py": "3cc0472a5801e6a5516ec4f803cae6662a2cb253709f415781f55ee13ac7e35c"
+      }
+    }
+  ]
+}

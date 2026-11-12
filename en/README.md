@@ -32,12 +32,17 @@ SLOs or thresholds.
    - mode: brownfield if code or processes already exist, otherwise greenfield;
    - language: en or it (Italian is the CLI default).
 
-2. dfd CLI. Use `dfd` if it is already on PATH. Otherwise clone the repository
-   into a temporary directory, outside this project:
-   - macOS arm64: use dfd-kit/dist/dfd-macos-arm64, verify its checksum against
-     dfd-kit/dist/SHA256SUMS and make it executable (chmod +x);
-   - other systems: build with `cargo build --locked --release` in dfd-kit/
-     (requires Rust; the binary is target/release/dfd, dfd.exe on Windows).
+2. dfd CLI. Use `dfd` if it is already on PATH. Otherwise, in a temporary
+   directory outside this project:
+   - download from the latest release
+     (https://github.com/MartoEporedia/dfd-framework/releases/latest) the archive
+     for your system (dfd-linux-x86_64, dfd-macos-arm64, dfd-macos-x86_64 or
+     dfd-windows-x86_64, with the .tar.gz extension) and the SHA256SUMS file;
+     verify the archive checksum, extract it and make the binary executable on
+     macOS and Linux (chmod +x);
+   - if there is no archive for your system, clone the repository and build with
+     `cargo build --locked --release` in dfd-kit/ (requires Rust; the binary is
+     target/release/dfd, dfd.exe on Windows).
    Copy the binary to a PATH directory as `dfd`, or note its absolute path and
    use it in the following commands. Run `dfd doctor`.
 

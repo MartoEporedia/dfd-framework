@@ -28,12 +28,17 @@ non inventare DoD, SLO o soglie.
    - modalità: brownfield se esistono già codice o processi, altrimenti greenfield;
    - lingua: it (default) o en.
 
-2. CLI dfd. Usa `dfd` se è già nel PATH. Altrimenti clona il repository in una
-   directory temporanea, fuori da questo progetto:
-   - macOS arm64: usa dfd-kit/dist/dfd-macos-arm64, verifica il checksum con
-     dfd-kit/dist/SHA256SUMS e rendilo eseguibile (chmod +x);
-   - altri sistemi: compila con `cargo build --locked --release` in dfd-kit/
-     (richiede Rust; il binario è target/release/dfd, dfd.exe su Windows).
+2. CLI dfd. Usa `dfd` se è già nel PATH. Altrimenti, in una directory temporanea
+   fuori da questo progetto:
+   - scarica dall'ultima release
+     (https://github.com/MartoEporedia/dfd-framework/releases/latest) l'archivio
+     del tuo sistema (dfd-linux-x86_64, dfd-macos-arm64, dfd-macos-x86_64 o
+     dfd-windows-x86_64, con estensione .tar.gz) e il file SHA256SUMS;
+     verifica il checksum dell'archivio, estrailo e rendi eseguibile il binario
+     su macOS e Linux (chmod +x);
+   - se manca l'archivio del tuo sistema, clona il repository e compila con
+     `cargo build --locked --release` in dfd-kit/ (richiede Rust; il binario è
+     target/release/dfd, dfd.exe su Windows).
    Copia il binario in una directory del PATH con nome `dfd`, oppure annota il
    percorso assoluto e usalo nei comandi successivi. Esegui `dfd doctor`.
 

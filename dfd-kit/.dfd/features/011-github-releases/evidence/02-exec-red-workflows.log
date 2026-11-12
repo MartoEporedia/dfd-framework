@@ -1,0 +1,39 @@
+$ python3 -m unittest tests.test_workflows -v
+# executed_at: 2026-11-12T11:18:34.846817Z
+test_ci_runs_on_main_pull_requests_and_as_reusable_workflow (tests.test_workflows.WorkflowsTest.test_ci_runs_on_main_pull_requests_and_as_reusable_workflow) ... ERROR
+test_release_checks_first_and_only_publish_can_write (tests.test_workflows.WorkflowsTest.test_release_checks_first_and_only_publish_can_write) ... ERROR
+test_third_party_actions_have_a_fixed_version (tests.test_workflows.WorkflowsTest.test_third_party_actions_have_a_fixed_version) ... ok
+
+======================================================================
+ERROR: test_ci_runs_on_main_pull_requests_and_as_reusable_workflow (tests.test_workflows.WorkflowsTest.test_ci_runs_on_main_pull_requests_and_as_reusable_workflow)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_workflows.py", line 18, in test_ci_runs_on_main_pull_requests_and_as_reusable_workflow
+    ci = (WORKFLOWS / "dfd-kit.yml").read_text()
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 787, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/martoeporedia/lavori/dfd-framework/.github/workflows/dfd-kit.yml'
+
+======================================================================
+ERROR: test_release_checks_first_and_only_publish_can_write (tests.test_workflows.WorkflowsTest.test_release_checks_first_and_only_publish_can_write)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_workflows.py", line 27, in test_release_checks_first_and_only_publish_can_write
+    release = (WORKFLOWS / "release.yml").read_text()
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 787, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/martoeporedia/lavori/dfd-framework/.github/workflows/release.yml'
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (errors=2)
+# exit_code: 1

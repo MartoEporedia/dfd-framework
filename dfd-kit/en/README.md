@@ -38,7 +38,7 @@ The dfd-kit domain is adopted in brownfield/development-only mode. Resume [domai
 
 The Rust executable embeds skills/templates; users need no Python, Node, jq or other runtime. Version 0.1 covers adoption, domain setup, risk, specification, design review, TDD development, pre-release and release review. Rollout execution/post-release learning are later phases.
 
-The initial local macOS arm64 build is under dist/dfd-macos-arm64. ci/github-actions.yml prepares other builds; activate by copying to repository-root .github/workflows/. Builds are not published releases. Put the correct binary in PATH as dfd or invoke its path; macOS/Linux may need chmod +x, Windows uses dfd.exe.
+Binaries for Linux x86_64 (musl), macOS arm64 and x86_64 and Windows x86_64 are published as [GitHub releases](https://github.com/MartoEporedia/dfd-framework/releases), with SHA256SUMS and the [changelog](CHANGELOG.md) notes. On other systems build with cargo build --locked --release. Put the correct binary in PATH as dfd or invoke its path; macOS/Linux may need chmod +x, Windows uses dfd.exe.
 
 ```sh
 dfd doctor

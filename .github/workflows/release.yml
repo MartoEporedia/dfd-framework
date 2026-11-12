@@ -1,0 +1,54 @@
+name: Release
+
+# Publishes dfd-kit as a GitHub release when a tag v<major>.<minor>.<patch> is pushed.
+# The tag must match dfd-kit/Cargo.toml and both changelogs need a section for it;
+# the full CI must pass; an existing release is never overwritten.
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag, Cargo.toml and changelogs agree
+        working-directory: dfd-kit
+        run: python3 scripts/release_notes.py --check "$GITHUB_REF_NAME"
+
+  ci:
+    needs: check
+    uses: ./.github/workflows/dfd-kit.yml
+
+  publish:
+    needs: [check, ci]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: Archives, checksums and notes
+        run: |
+          mkdir -p release
+          find artifacts -name 'dfd-*.tar.gz' -exec cp {} release/ \;
+          ls release
+          test "$(ls release/*.tar.gz | wc -l)" -eq 4
+          (cd release && sha256sum *.tar.gz > SHA256SUMS && cat SHA256SUMS)
+          python3 dfd-kit/scripts/release_notes.py "$GITHUB_REF_NAME" > notes.md
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "La release $GITHUB_REF_NAME esiste già: non viene sovrascritta." >&2
+            exit 1
+          fi
+          gh release create "$GITHUB_REF_NAME" release/* --repo "$GITHUB_REPOSITORY" \
+            --title "dfd-kit $GITHUB_REF_NAME" --notes-file notes.md --verify-tag
