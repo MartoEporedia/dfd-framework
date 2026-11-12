@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "harness": "codex",
   "files": {
     ".agents/skills/dfd-assess/SKILL.md": "750bce6567c94fbe492760ce2c7a4cb79d6c84e02ac5fff3907694045a6a0e40",

@@ -6,6 +6,17 @@ Tutte le modifiche rilevanti di DFD Kit. Il formato segue [Keep a Changelog](htt
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-12
+
+### Aggiunto
+
+- `criteria[].acceptance` in `design.json`: ogni criterio applicabile dichiara i suoi file di casi di accettazione (test come dati). I file entrano nel fingerprint di design, così un caso cambiato manda in `stale-review` la sola feature che lo dichiara e `changes` lo nomina, e nel fingerprint del criterio, così con `source_roots` servono nuovi red/green (#15).
+- `acceptance_roots` in `lifecycle.json`: avviso per i file di casi che nessun criterio del dominio dichiara (#15).
+
+### Modificato
+
+- Contratto e skill `dfd-setup`, `dfd-specify`, `dfd-review-design`, `dfd-implement` descrivono i casi di accettazione (#15).
+
 ## [0.1.0] - 2026-11-12
 
 Prima release pubblicata.

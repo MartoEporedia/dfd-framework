@@ -96,7 +96,7 @@
   - `dfd status` delle feature 001-009 invariato rispetto al binario `eec9dffa…`;
   - laboratorio v4 rieseguito con baseline che usa `acceptance` e `acceptance_roots: ["tests/casi"]`;
   - F00 sulle baseline v3-i3 e v4 esistenti.
-- Validazione in produzione: nessun rilascio (modalità `development-only`).
+- Validazione in produzione: release GitHub `v0.2.0`. Il dominio è in `release-preparation` dalla feature 011, quindi servono CI reale sulla PR #15, pre-release e review di release; la versione in `Cargo.toml` e la sezione `0.2.0` di `CHANGELOG.md` ed `en/CHANGELOG.md` fanno parte di questa feature.
 
 ## 7. Domande aperte e review
 
@@ -106,3 +106,4 @@
 ## 8. Revisioni
 
 - 2026-11-12: prima bozza, con le scelte del manutentore.
+- 2026-11-12: dopo la release `v0.1.0` (feature 011) il dominio è in `release-preparation`; la feature porta la release `v0.2.0` (rebase su `main`, versione e changelog).

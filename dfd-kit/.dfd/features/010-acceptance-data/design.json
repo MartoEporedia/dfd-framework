@@ -5,7 +5,8 @@
   "business_metrics": [
     "Laboratorio v4 con acceptance: F02, F02r, F11, F11c bloccati; F00, CX-codice, CX-dati come in v4",
     "File di casi non dichiarato segnalato; nessuna invalidazione tra feature dello stesso dominio",
-    "Feature 001-009 e baseline v3-i3/v4 senza acceptance con gate e fingerprint invariati"
+    "Feature 001-009 e baseline v3-i3/v4 senza acceptance con gate e fingerprint invariati",
+    "Release GitHub v0.2.0 pubblicata dal workflow di release con CI verde, archivi e checksum verificati"
   ],
   "epic": {
     "reference": "Richiesta del manutentore in chat il 2026-11-12 dopo il laboratorio dfd-gate-lab v4; scelte (per criterio, avviso con acceptance_roots) espresse in chat il 2026-11-12",
