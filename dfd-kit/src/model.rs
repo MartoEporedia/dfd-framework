@@ -109,6 +109,10 @@ pub struct Lifecycle {
     /// the built-in list of generated directories (issue #3).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub source_excludes: Option<Vec<String>>,
+    /// Files and directories holding acceptance files (tests as data): files under
+    /// them that no criterion of the domain declares raise a warning.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub acceptance_roots: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -239,6 +243,11 @@ pub struct CriterionReference {
     pub verification: String,
     #[serde(default)]
     pub justification: String,
+    /// Acceptance files (tests as data) verifying the criterion: dependencies of the
+    /// design and of the criterion fingerprint. Not serialized when empty, so that
+    /// fingerprints of designs without acceptance files do not change.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub acceptance: Vec<String>,
 }
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]

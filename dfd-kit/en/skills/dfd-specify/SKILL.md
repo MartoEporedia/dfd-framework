@@ -16,7 +16,7 @@ Read feature state/risk and domain dod.md, criteria.json, guardrails.md, process
 3. Iterate: record questions/assumptions/alternatives in design.json.open_questions; ask focused questions and update both artifacts. Continue independent sections, reuse existing answers, and never turn assumptions into facts. Remove questions only when clarified, preserving their resolution. Questions permit drafting but block approval.
 4. Complete spec.md with context, objective, scope, scenarios, contracts, risk and tests. Light needs proportionate detail; full covers dependencies, failures, security, SLOs, cost and future release validation within guardrails.
 5. Keep design.json coherent: owner, objective, metrics, epic reference, criteria applicability/exclusions, tests/guardrails. Use actual domain IDs, evaluate every changes criterion and justify exclusions. Unrelated baseline gaps stay in adoption planning.
-6. Describe implementation and planned verification per applicable criterion. Plans are not executed tests. Do not invent epic approval, production metrics or CI results.
+6. Describe implementation and planned verification per applicable criterion. Plans are not executed tests. When the project verifies the criterion with acceptance cases (tests as data), write them now, before the code, and declare them in criteria[].acceptance: they are part of the design and the owner reads them at review. Do not invent epic approval, production metrics or CI results.
 7. Run `dfd review-design <id>` for structural gaps; update both artifacts when design changes.
 
 Present specification/questions for review. Completed documents do not approve the design.

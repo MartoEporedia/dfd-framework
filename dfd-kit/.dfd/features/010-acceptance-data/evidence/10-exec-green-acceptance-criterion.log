@@ -1,0 +1,11 @@
+$ cargo test --locked --offline --test workflow acceptance_change_requires
+# executed_at: 2026-11-12T12:30:49.115121Z
+
+running 1 test
+test acceptance_change_requires_new_green_for_the_criterion ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 89 filtered out; finished in 1.50s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running tests/workflow.rs (target/debug/deps/workflow-ff3d4fc9eadea208)
+# exit_code: 0

@@ -450,6 +450,21 @@ pub(super) fn status(store: &Store, state: &State) -> Result<Value> {
             }
         }
     }
+    // Acceptance files nobody declares are not protected by any review: warn.
+    if !policy.acceptance_roots.is_empty() {
+        let mut files = BTreeMap::new();
+        for root in &policy.acceptance_roots {
+            store.tree(root, &source_excludes(&policy), &mut files)?;
+        }
+        let declared = declared_acceptance(store, &state.domain)?;
+        for path in files.keys().filter(|path| !declared.contains(*path)) {
+            warnings.push(crate::localized_format!(
+                "File di casi non dichiarato da alcun criterio: {}.",
+                "Acceptance file not declared by any criterion: {}.",
+                path
+            ));
+        }
+    }
     // Evidence bound to the files and the design it ran on (issue #3): only when the
     // domain declares source_roots.
     let current_criteria = criteria_fingerprints(store, state)?;
