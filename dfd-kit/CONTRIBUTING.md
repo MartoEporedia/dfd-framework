@@ -60,7 +60,18 @@ Usare rustfmt e nomi `snake_case`; le skill usano nomi `dfd-<azione>` in kebab-c
 
 Verificare comportamenti osservabili: preservazione dei file, idempotenza, gestione dei dati mancanti, isolamento delle feature, invalidazione delle decisioni e adozione proporzionata. I test eseguono il binario senza programmi nel PATH. `doctor` verifica le skill incorporate; non sostituisce una prova reale nell'harness.
 
-La configurazione `ci/github-actions.yml` configura build e test per Linux x86_64 con musl, macOS arm64/x86_64 e Windows x86_64. Produce archivi del binario con checksum come artifact, senza pubblicare automaticamente release. I test locali su un sistema non certificano gli altri sistemi. Per attivare la CI, copiare il file in `.github/workflows/` nella radice del repository; il workflow esegue i comandi dalla directory `dfd-kit/`.
+La CI `.github/workflows/dfd-kit.yml` gira su push a `main`, sulle pull request e a mano. Esegue fmt e Clippy, i mutanti e build e test per Linux x86_64 con musl, macOS arm64/x86_64 e Windows x86_64, e produce archivi del binario con checksum come artifact. I test locali su un sistema non certificano gli altri sistemi. Il workflow esegue i comandi dalla directory `dfd-kit/`.
+
+## Rilasci
+
+Il dominio `dfd-kit` è in `release-preparation` con CI richiesta. Una release esce dalla feature che la porta:
+
+1. aggiornare `CHANGELOG.md` ed `en/CHANGELOG.md`, spostando le voci di `[Unreleased]` in una sezione `## [X.Y.Z] - AAAA-MM-GG`, e portare `version` in `Cargo.toml` (con `Cargo.lock`) a `X.Y.Z`;
+2. controllare con `python3 scripts/release_notes.py --check vX.Y.Z` e leggere le note con `python3 scripts/release_notes.py vX.Y.Z`;
+3. completare pre-release e review di release DFD, con il log della CI reale della PR registrato come `kind: ci`;
+4. dopo il merge, creare e spingere il tag `vX.Y.Z` sul commit di `main`.
+
+Il workflow `.github/workflows/release.yml` ripete il controllo, esegue tutta la CI, poi pubblica la release con i quattro archivi, un `SHA256SUMS` complessivo e le note IT/EN. Non sovrascrive una release esistente. Una release sbagliata si corregge con una nuova versione di patch.
 
 ## Mutation test
 
@@ -81,7 +92,7 @@ Il report JSON e i log sono in `target/mutation-results/`; cambiare directory co
 
 Il punteggio riguarda questo insieme mirato, non tutte le mutazioni possibili nel programma. Per aggiungere una mutazione, inserire in `mutations/gates.json` ID, file, frammento originale/sostituito, comportamento alterato e almeno un test. Preferire mutanti compilabili con un effetto osservabile; verificare che il test fallisca per quel comportamento. Non rimuovere mutanti sopravvissuti per alzare il punteggio: rafforzare i test oppure documentare perché un mutante è equivalente.
 
-Il job `mutations` in `ci/github-actions.yml` esegue il runner e conserva i risultati come artifact anche in caso di fallimento. Come gli altri job, si attiva copiando il workflow nella radice del repository; non è stato eseguito su GitHub in questa sessione.
+Il job `mutations` in `.github/workflows/dfd-kit.yml` esegue il runner e conserva i risultati come artifact anche in caso di fallimento.
 
 ## Contributi
 

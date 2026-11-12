@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "318ca710e2590351684ee0f467dd69988a5e9bf92ae43657b3b959a7be7d1a59",
+  "plan_hash": "8f62619c004e013ae1e4aa341a8beee56f44de922909b84a842ee38f8a62f342",
+  "files": [],
+  "checks": [
+    {
+      "task": "release-notes",
+      "kind": "red",
+      "command": "python3 -m unittest tests.test_release_notes -v",
+      "executed_at": "2026-11-12T11:18:34.713805Z",
+      "exit_code": 1,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/01-exec-red-release-notes.log",
+        "sha256": "0a8c25c827a1bc8b32325d8fef24b4940369f2b5411fdd32e6fb547df26dd0f9"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-01": "298866526c96f26335e9e114870cb7aae6d2eb01a9eb9f8016e8e082c9efbfca",
+        "OBS-01": "6a11419e67593e1cc08dcbf6ba2daef4013ed4c86d9de3fcfa334677b0ea0726",
+        "SLO-02": "de3edcb5e2c93146d37645117a9ca231186c3c9e75625d03a0db222c01627959"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "workflows",
+      "kind": "red",
+      "command": "python3 -m unittest tests.test_workflows -v",
+      "executed_at": "2026-11-12T11:18:34.846817Z",
+      "exit_code": 1,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/02-exec-red-workflows.log",
+        "sha256": "e9589ea19f3c3bdf5674b95250ef59c5578cea6c1b47d32650ac287506b84077"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-02": "1e324550a9d706cf78a1d949f59270f4b2d5771bf072b14b34890eebef101bee",
+        "OBS-02": "a29e458d64c8e43b523611ced272c96c924051f3248b7dcb6a2090a675d68587",
+        "SEC-01": "83dd88afbd9448a23c6263cdcc18c25cb31ec65edb87950e54ff4cccf051ed34",
+        "SEC-02": "34c31b5ffaec1d8db256688ac0bd9bfe34ed0c2c9f8fdc96de94d20f887d3f6a",
+        "SEC-03": "5197e5567c9fabac2449b1dc9ee7ba6664161f2ca6e7edf0b10ca6b7677db352",
+        "SLO-01": "9f86d67f85044a8cb40972ddb1c46f02886093fd226b4d886507604fe5441902",
+        "SLO-04": "17a946e85cb6ceb79a933f1bc3435fb2da7ca9c9a623daa890840168ed8993b3"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "release-notes",
+      "kind": "green",
+      "command": "python3 -m unittest tests.test_release_notes -v",
+      "executed_at": "2026-11-12T11:19:40.514369Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/03-exec-green-release-notes.log",
+        "sha256": "7488fc6018a58421c79cc9a9a7be74369d571b5a6f7f1d0b2fec92fa44b4fe1c"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-01": "298866526c96f26335e9e114870cb7aae6d2eb01a9eb9f8016e8e082c9efbfca",
+        "OBS-01": "6a11419e67593e1cc08dcbf6ba2daef4013ed4c86d9de3fcfa334677b0ea0726",
+        "SLO-02": "de3edcb5e2c93146d37645117a9ca231186c3c9e75625d03a0db222c01627959"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "workflows",
+      "kind": "green",
+      "command": "python3 -m unittest tests.test_workflows -v",
+      "executed_at": "2026-11-12T11:19:40.661166Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/04-exec-green-workflows.log",
+        "sha256": "97ba9587b31ef5cd0e8e180a8558baef9f18efef4c31f0a3dc47c5b07cedd55b"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-02": "1e324550a9d706cf78a1d949f59270f4b2d5771bf072b14b34890eebef101bee",
+        "OBS-02": "a29e458d64c8e43b523611ced272c96c924051f3248b7dcb6a2090a675d68587",
+        "SEC-01": "83dd88afbd9448a23c6263cdcc18c25cb31ec65edb87950e54ff4cccf051ed34",
+        "SEC-02": "34c31b5ffaec1d8db256688ac0bd9bfe34ed0c2c9f8fdc96de94d20f887d3f6a",
+        "SEC-03": "5197e5567c9fabac2449b1dc9ee7ba6664161f2ca6e7edf0b10ca6b7677db352",
+        "SLO-01": "9f86d67f85044a8cb40972ddb1c46f02886093fd226b4d886507604fe5441902",
+        "SLO-04": "17a946e85cb6ceb79a933f1bc3435fb2da7ca9c9a623daa890840168ed8993b3"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "changelog-docs",
+      "kind": "red",
+      "command": "python3 scripts/release_notes.py --check v0.1.0",
+      "executed_at": "2026-11-12T11:19:40.786537Z",
+      "exit_code": 1,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/05-exec-red-changelog-docs.log",
+        "sha256": "902b43bc7568277481142107c157a736a83d33bdec58792b4bfd07fb8bd530e3"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "SLO-02": "de3edcb5e2c93146d37645117a9ca231186c3c9e75625d03a0db222c01627959",
+        "UX-01": "a83b404a1e79b87eab3082c04ed4ec763aad035adc213e8a6275389f7f948ac2"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "changelog-docs",
+      "kind": "green",
+      "command": "sh -c python3 scripts/release_notes.py --check v0.1.0 && python3 scripts/release_notes.py v0.1.0 && python3 scripts/check_translations.py",
+      "executed_at": "2026-11-12T11:21:13.010562Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/06-exec-green-changelog-docs.log",
+        "sha256": "1c35994c01af839b7c5d7f297202e8d5c4fd7178e234c992bcbe6f7430d42bd0"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "SLO-02": "de3edcb5e2c93146d37645117a9ca231186c3c9e75625d03a0db222c01627959",
+        "UX-01": "a83b404a1e79b87eab3082c04ed4ec763aad035adc213e8a6275389f7f948ac2"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "sh -c set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor >/dev/null; python3 scripts/check_translations.py; python3 -m unittest discover -s tests -p \"test_*.py\" -v",
+      "executed_at": "2026-11-12T11:22:06.189714Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/011-github-releases/evidence/07-exec-suite.log",
+        "sha256": "834dec41079c5ac333d1a45a6724f134374d5bb4074f91b34d6d1711113dcfd7"
+      },
+      "snapshot": {},
+      "recorded_by": "dfd"
+    }
+  ],
+  "refactor_notes": ""
+}

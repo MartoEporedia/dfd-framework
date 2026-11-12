@@ -1,0 +1,13 @@
+$ python3 -m unittest tests.test_release_notes -v
+# executed_at: 2026-11-12T11:19:40.514369Z
+test_check_accepts_a_consistent_tag (tests.test_release_notes.ReleaseNotesTest.test_check_accepts_a_consistent_tag) ... ok
+test_check_rejects_bad_tags_versions_and_sections (tests.test_release_notes.ReleaseNotesTest.test_check_rejects_bad_tags_versions_and_sections) ... ok
+test_command_line_exit_codes (tests.test_release_notes.ReleaseNotesTest.test_command_line_exit_codes) ... ok
+test_notes_take_the_section_in_both_languages (tests.test_release_notes.ReleaseNotesTest.test_notes_take_the_section_in_both_languages) ... ok
+test_section_stops_at_the_next_version (tests.test_release_notes.ReleaseNotesTest.test_section_stops_at_the_next_version) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.124s
+
+OK
+# exit_code: 0
