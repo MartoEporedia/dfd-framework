@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "design_fingerprint": "422862be4cba40fd458cd3f87217c950469cf1bdbc9ee59f91362b07b03bf378",
-  "plan_hash": "16ba64a78215770265b336057a149f0b7f86eee6fae310b5e13fd4141cfebe20",
+  "design_fingerprint": "e532455a0eb33715452f45d636e3b03cdd238d40c1abd5c99e67f2e0e2a8e666",
+  "plan_hash": "c14c5fa27da5610bab5182a0160fc9110a6d03b5926ae9575f079204a90b44c0",
   "files": [
     {
       "path": "src/model.rs",
@@ -29,7 +29,7 @@
     },
     {
       "path": "i18n/documents.json",
-      "sha256": "40c5cfc19adc47faf6b2a5544029367594d0f74927897863760b9c6660ef5db9"
+      "sha256": "c7fc54c58656c2705bfba68dac44483868ef70334d432943f2ee7c0e8cb05cea"
     },
     {
       "path": "templates/contratto_toolkit.md",
@@ -106,6 +106,22 @@
     {
       "path": ".dfd/kit/skills/dfd-specify/SKILL.md",
       "sha256": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "b5e52f3ca09aab68a2222ff1769d5455fe1bf214becf2e20806079600c7581fe"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "0bda8cf2d20066ef8dde4e20c93f8e1df0734375646095a2c79e257785254a1c"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "90ae6b1075b69861b08771e8d2525bf4a5120fb1cf528136dd17f8b8e24c971c"
+    },
+    {
+      "path": "en/CHANGELOG.md",
+      "sha256": "914a96415ea081e4d41051123ad591f3c2df07b3e7124ec1f93578b299e8448e"
     }
   ],
   "checks": [
@@ -254,7 +270,188 @@
       },
       "snapshot": {},
       "recorded_by": "dfd"
+    },
+    {
+      "task": "acceptance-design",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow acceptance_files_bind",
+      "executed_at": "2026-11-12T12:30:47.488454Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/09-exec-green-acceptance-design.log",
+        "sha256": "a81e50c8e587c1ec9a0ca2bfd97533181af430d1f0e9ed862107d52b367fd165"
+      },
+      "snapshot": {
+        ".agents/skills/dfd-implement/SKILL.md": "ac8078ce64dc903008abb7d1bb06a59778b71b091f57efb2522656aeeb147ca1",
+        ".agents/skills/dfd-review-design/SKILL.md": "03fcf028acadd590da885918aaa5d000b3e847007b88ff07edfd14a0c85febe0",
+        ".agents/skills/dfd-setup/SKILL.md": "f4491a8cc4cc31b7c3ae914fb999a5484879997d5131de7c95e5948965177342",
+        ".agents/skills/dfd-specify/SKILL.md": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238",
+        ".dfd/kit/skills/dfd-implement/SKILL.md": "ac8078ce64dc903008abb7d1bb06a59778b71b091f57efb2522656aeeb147ca1",
+        ".dfd/kit/skills/dfd-review-design/SKILL.md": "03fcf028acadd590da885918aaa5d000b3e847007b88ff07edfd14a0c85febe0",
+        ".dfd/kit/skills/dfd-setup/SKILL.md": "f4491a8cc4cc31b7c3ae914fb999a5484879997d5131de7c95e5948965177342",
+        ".dfd/kit/skills/dfd-specify/SKILL.md": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238",
+        ".dfd/kit/templates/contratto_toolkit.md": "ab6cb855824e91b58769b91ddadbabd55e825cf7fcd4cbdab320aa155d0da530",
+        "en/skills/dfd-implement/SKILL.md": "2926ab35397843b7e11f14da69bc920778eb03d7c9565a87bc1791e8bb20460f",
+        "en/skills/dfd-review-design/SKILL.md": "4f249bf2e2720fb712c4718968840ed82afc374e0e05c3f3d3f606d48592f242",
+        "en/skills/dfd-setup/SKILL.md": "c606fbb76a5b703599057649fc5330d6bf3f5425a2da20151d1847f3c8a805cc",
+        "en/skills/dfd-specify/SKILL.md": "3e44ff6896dc60f9e4c62e4a8a6cb5a0495b7dfc24d5d451f8ad5966139586bb",
+        "en/templates/contratto_toolkit.md": "2a73366a6308ed8f558b14efea1a758313d02b16e43da2d7560779a1209e40cc",
+        "i18n/documents.json": "c7fc54c58656c2705bfba68dac44483868ef70334d432943f2ee7c0e8cb05cea",
+        "i18n/en.json": "bb21c1f15b34cdfd33a8b011afd77fabf42edb2ce858398ec573f810384a1e8e",
+        "mutations/gates.json": "49cecefb2961a2ec2275b47dcba327cfb0f31d42a4ec707e54dd2d04370e2692",
+        "skills/dfd-implement/SKILL.md": "73968fff0113b8f264875d8026b37213d43d7d696d0f7b78e3efdd358d83bddc",
+        "skills/dfd-review-design/SKILL.md": "c27fd695b164cea9ec379000d6465251e1e88d6b87444e0546d56f3f99d1131b",
+        "skills/dfd-setup/SKILL.md": "6a7652f8288281a696c94843970a916deb5c0790e759b0c4bf9329add06faf80",
+        "skills/dfd-specify/SKILL.md": "76cc7a0706267c77dd64fbb3d70a632e3501062e697dd0ef792ff7861a88b243",
+        "src/development.rs": "b3b5290b89b0bcb0cca5ce39ddf07e82a0e337523688984e24e940e51c14387a",
+        "src/lib.rs": "e5908ebff5959b827ff47de35563ec3affdfac8f0b1da3164f31fdc3b0cf7006",
+        "src/model.rs": "eb8f2f21c9670c1113ea0c51fc5c1cd9550d5f30c47bea6caadf3084e6416b97",
+        "templates/contratto_toolkit.md": "b600593e0efa07e3d0e547b31f4bc2e0ebc8b34a8ee18641ff3584da73930e75",
+        "tests/workflow.rs": "6e013305ac4c1bbc7fefdba97f63484ca9e5c8d28b0c1cf3d574f8696215792c"
+      },
+      "criteria_fingerprints": {
+        "OBS-01": "108c8c92610a42bebe44246ac97fc1ce39c7635fabe6ee436d52b9dca7bc9971",
+        "OBS-02": "512fec48c62adf749208384d3c4bc353385c91f117e5799eba9802bc5095cb59",
+        "SEC-01": "4a6c8f9f2aa2570e88991a29f6bd5f895893fb42ea22e38573de65ed346d8dfb",
+        "SLO-01": "9b40a3a88984c9aa0049133c75d0158d29e2aa4dffe4ab3009b66ca7a3ba9ca4",
+        "SLO-02": "3b7e107a38b1e78a263c1af297cc2e0598769a3f6abb2ea8d758ca60633e501f",
+        "UX-01": "06554a2c00b6fd5ed951f473196b1d5565e103fd352466ba36d9078e4d5fd0da"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "acceptance-criterion",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow acceptance_change_requires",
+      "executed_at": "2026-11-12T12:30:49.115121Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/10-exec-green-acceptance-criterion.log",
+        "sha256": "58e0a714d51ea76cf473a60c1e68c05c2cfe73502f2c49d74318bccd6922e4c6"
+      },
+      "snapshot": {
+        ".agents/skills/dfd-implement/SKILL.md": "ac8078ce64dc903008abb7d1bb06a59778b71b091f57efb2522656aeeb147ca1",
+        ".agents/skills/dfd-review-design/SKILL.md": "03fcf028acadd590da885918aaa5d000b3e847007b88ff07edfd14a0c85febe0",
+        ".agents/skills/dfd-setup/SKILL.md": "f4491a8cc4cc31b7c3ae914fb999a5484879997d5131de7c95e5948965177342",
+        ".agents/skills/dfd-specify/SKILL.md": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238",
+        ".dfd/kit/skills/dfd-implement/SKILL.md": "ac8078ce64dc903008abb7d1bb06a59778b71b091f57efb2522656aeeb147ca1",
+        ".dfd/kit/skills/dfd-review-design/SKILL.md": "03fcf028acadd590da885918aaa5d000b3e847007b88ff07edfd14a0c85febe0",
+        ".dfd/kit/skills/dfd-setup/SKILL.md": "f4491a8cc4cc31b7c3ae914fb999a5484879997d5131de7c95e5948965177342",
+        ".dfd/kit/skills/dfd-specify/SKILL.md": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238",
+        ".dfd/kit/templates/contratto_toolkit.md": "ab6cb855824e91b58769b91ddadbabd55e825cf7fcd4cbdab320aa155d0da530",
+        "en/skills/dfd-implement/SKILL.md": "2926ab35397843b7e11f14da69bc920778eb03d7c9565a87bc1791e8bb20460f",
+        "en/skills/dfd-review-design/SKILL.md": "4f249bf2e2720fb712c4718968840ed82afc374e0e05c3f3d3f606d48592f242",
+        "en/skills/dfd-setup/SKILL.md": "c606fbb76a5b703599057649fc5330d6bf3f5425a2da20151d1847f3c8a805cc",
+        "en/skills/dfd-specify/SKILL.md": "3e44ff6896dc60f9e4c62e4a8a6cb5a0495b7dfc24d5d451f8ad5966139586bb",
+        "en/templates/contratto_toolkit.md": "2a73366a6308ed8f558b14efea1a758313d02b16e43da2d7560779a1209e40cc",
+        "i18n/documents.json": "c7fc54c58656c2705bfba68dac44483868ef70334d432943f2ee7c0e8cb05cea",
+        "i18n/en.json": "bb21c1f15b34cdfd33a8b011afd77fabf42edb2ce858398ec573f810384a1e8e",
+        "mutations/gates.json": "49cecefb2961a2ec2275b47dcba327cfb0f31d42a4ec707e54dd2d04370e2692",
+        "skills/dfd-implement/SKILL.md": "73968fff0113b8f264875d8026b37213d43d7d696d0f7b78e3efdd358d83bddc",
+        "skills/dfd-review-design/SKILL.md": "c27fd695b164cea9ec379000d6465251e1e88d6b87444e0546d56f3f99d1131b",
+        "skills/dfd-setup/SKILL.md": "6a7652f8288281a696c94843970a916deb5c0790e759b0c4bf9329add06faf80",
+        "skills/dfd-specify/SKILL.md": "76cc7a0706267c77dd64fbb3d70a632e3501062e697dd0ef792ff7861a88b243",
+        "src/development.rs": "b3b5290b89b0bcb0cca5ce39ddf07e82a0e337523688984e24e940e51c14387a",
+        "src/lib.rs": "e5908ebff5959b827ff47de35563ec3affdfac8f0b1da3164f31fdc3b0cf7006",
+        "src/model.rs": "eb8f2f21c9670c1113ea0c51fc5c1cd9550d5f30c47bea6caadf3084e6416b97",
+        "templates/contratto_toolkit.md": "b600593e0efa07e3d0e547b31f4bc2e0ebc8b34a8ee18641ff3584da73930e75",
+        "tests/workflow.rs": "6e013305ac4c1bbc7fefdba97f63484ca9e5c8d28b0c1cf3d574f8696215792c"
+      },
+      "criteria_fingerprints": {
+        "OBS-02": "512fec48c62adf749208384d3c4bc353385c91f117e5799eba9802bc5095cb59",
+        "SEC-03": "b370f836e1676372aa5c8ce1cf9df7a0c7962bd3c4220ddc173bb951e9ab4fdc",
+        "SLO-01": "9b40a3a88984c9aa0049133c75d0158d29e2aa4dffe4ab3009b66ca7a3ba9ca4",
+        "SLO-02": "3b7e107a38b1e78a263c1af297cc2e0598769a3f6abb2ea8d758ca60633e501f"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "acceptance-roots",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow undeclared_acceptance",
+      "executed_at": "2026-11-12T12:30:50.490281Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/11-exec-green-acceptance-roots.log",
+        "sha256": "8ac61098b7dec9cf2c8271b1ad3176a6e1d881cb587c3e4b2c9ce1429007c5da"
+      },
+      "snapshot": {
+        ".agents/skills/dfd-implement/SKILL.md": "ac8078ce64dc903008abb7d1bb06a59778b71b091f57efb2522656aeeb147ca1",
+        ".agents/skills/dfd-review-design/SKILL.md": "03fcf028acadd590da885918aaa5d000b3e847007b88ff07edfd14a0c85febe0",
+        ".agents/skills/dfd-setup/SKILL.md": "f4491a8cc4cc31b7c3ae914fb999a5484879997d5131de7c95e5948965177342",
+        ".agents/skills/dfd-specify/SKILL.md": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238",
+        ".dfd/kit/skills/dfd-implement/SKILL.md": "ac8078ce64dc903008abb7d1bb06a59778b71b091f57efb2522656aeeb147ca1",
+        ".dfd/kit/skills/dfd-review-design/SKILL.md": "03fcf028acadd590da885918aaa5d000b3e847007b88ff07edfd14a0c85febe0",
+        ".dfd/kit/skills/dfd-setup/SKILL.md": "f4491a8cc4cc31b7c3ae914fb999a5484879997d5131de7c95e5948965177342",
+        ".dfd/kit/skills/dfd-specify/SKILL.md": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238",
+        ".dfd/kit/templates/contratto_toolkit.md": "ab6cb855824e91b58769b91ddadbabd55e825cf7fcd4cbdab320aa155d0da530",
+        "en/skills/dfd-implement/SKILL.md": "2926ab35397843b7e11f14da69bc920778eb03d7c9565a87bc1791e8bb20460f",
+        "en/skills/dfd-review-design/SKILL.md": "4f249bf2e2720fb712c4718968840ed82afc374e0e05c3f3d3f606d48592f242",
+        "en/skills/dfd-setup/SKILL.md": "c606fbb76a5b703599057649fc5330d6bf3f5425a2da20151d1847f3c8a805cc",
+        "en/skills/dfd-specify/SKILL.md": "3e44ff6896dc60f9e4c62e4a8a6cb5a0495b7dfc24d5d451f8ad5966139586bb",
+        "en/templates/contratto_toolkit.md": "2a73366a6308ed8f558b14efea1a758313d02b16e43da2d7560779a1209e40cc",
+        "i18n/documents.json": "c7fc54c58656c2705bfba68dac44483868ef70334d432943f2ee7c0e8cb05cea",
+        "i18n/en.json": "bb21c1f15b34cdfd33a8b011afd77fabf42edb2ce858398ec573f810384a1e8e",
+        "mutations/gates.json": "49cecefb2961a2ec2275b47dcba327cfb0f31d42a4ec707e54dd2d04370e2692",
+        "skills/dfd-implement/SKILL.md": "73968fff0113b8f264875d8026b37213d43d7d696d0f7b78e3efdd358d83bddc",
+        "skills/dfd-review-design/SKILL.md": "c27fd695b164cea9ec379000d6465251e1e88d6b87444e0546d56f3f99d1131b",
+        "skills/dfd-setup/SKILL.md": "6a7652f8288281a696c94843970a916deb5c0790e759b0c4bf9329add06faf80",
+        "skills/dfd-specify/SKILL.md": "76cc7a0706267c77dd64fbb3d70a632e3501062e697dd0ef792ff7861a88b243",
+        "src/development.rs": "b3b5290b89b0bcb0cca5ce39ddf07e82a0e337523688984e24e940e51c14387a",
+        "src/lib.rs": "e5908ebff5959b827ff47de35563ec3affdfac8f0b1da3164f31fdc3b0cf7006",
+        "src/model.rs": "eb8f2f21c9670c1113ea0c51fc5c1cd9550d5f30c47bea6caadf3084e6416b97",
+        "templates/contratto_toolkit.md": "b600593e0efa07e3d0e547b31f4bc2e0ebc8b34a8ee18641ff3584da73930e75",
+        "tests/workflow.rs": "6e013305ac4c1bbc7fefdba97f63484ca9e5c8d28b0c1cf3d574f8696215792c"
+      },
+      "criteria_fingerprints": {
+        "COST-01": "5ff3a8194b078075676bfe5a08739ed6aae4b6fa155ece4103641dd93dd05aba",
+        "OBS-01": "108c8c92610a42bebe44246ac97fc1ce39c7635fabe6ee436d52b9dca7bc9971",
+        "SEC-01": "4a6c8f9f2aa2570e88991a29f6bd5f895893fb42ea22e38573de65ed346d8dfb",
+        "SLO-01": "9b40a3a88984c9aa0049133c75d0158d29e2aa4dffe4ab3009b66ca7a3ba9ca4",
+        "SLO-02": "3b7e107a38b1e78a263c1af297cc2e0598769a3f6abb2ea8d758ca60633e501f"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "sh -c set -e; cargo fmt --all --check; cargo clippy --locked --offline --all-targets -- -D warnings; cargo test --locked --offline; cargo build --locked --offline --release; ./target/release/dfd doctor >/dev/null; python3 scripts/check_translations.py; python3 -m unittest discover -s tests -p \"test_*.py\" -v; python3 scripts/release_notes.py --check v0.2.0",
+      "executed_at": "2026-11-12T12:31:31.313354Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/010-acceptance-data/evidence/12-exec-suite.log",
+        "sha256": "cf4dec11e9032a867416143bef7abbd0f9789fc32fe387622742926175614d54"
+      },
+      "snapshot": {
+        ".agents/skills/dfd-implement/SKILL.md": "ac8078ce64dc903008abb7d1bb06a59778b71b091f57efb2522656aeeb147ca1",
+        ".agents/skills/dfd-review-design/SKILL.md": "03fcf028acadd590da885918aaa5d000b3e847007b88ff07edfd14a0c85febe0",
+        ".agents/skills/dfd-setup/SKILL.md": "f4491a8cc4cc31b7c3ae914fb999a5484879997d5131de7c95e5948965177342",
+        ".agents/skills/dfd-specify/SKILL.md": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238",
+        ".dfd/kit/skills/dfd-implement/SKILL.md": "ac8078ce64dc903008abb7d1bb06a59778b71b091f57efb2522656aeeb147ca1",
+        ".dfd/kit/skills/dfd-review-design/SKILL.md": "03fcf028acadd590da885918aaa5d000b3e847007b88ff07edfd14a0c85febe0",
+        ".dfd/kit/skills/dfd-setup/SKILL.md": "f4491a8cc4cc31b7c3ae914fb999a5484879997d5131de7c95e5948965177342",
+        ".dfd/kit/skills/dfd-specify/SKILL.md": "25cca95dc8da70dafd5e5c6a8a9134e7a18bd43895cd3d68baf7a47550ef4238",
+        ".dfd/kit/templates/contratto_toolkit.md": "ab6cb855824e91b58769b91ddadbabd55e825cf7fcd4cbdab320aa155d0da530",
+        "en/skills/dfd-implement/SKILL.md": "2926ab35397843b7e11f14da69bc920778eb03d7c9565a87bc1791e8bb20460f",
+        "en/skills/dfd-review-design/SKILL.md": "4f249bf2e2720fb712c4718968840ed82afc374e0e05c3f3d3f606d48592f242",
+        "en/skills/dfd-setup/SKILL.md": "c606fbb76a5b703599057649fc5330d6bf3f5425a2da20151d1847f3c8a805cc",
+        "en/skills/dfd-specify/SKILL.md": "3e44ff6896dc60f9e4c62e4a8a6cb5a0495b7dfc24d5d451f8ad5966139586bb",
+        "en/templates/contratto_toolkit.md": "2a73366a6308ed8f558b14efea1a758313d02b16e43da2d7560779a1209e40cc",
+        "i18n/documents.json": "c7fc54c58656c2705bfba68dac44483868ef70334d432943f2ee7c0e8cb05cea",
+        "i18n/en.json": "bb21c1f15b34cdfd33a8b011afd77fabf42edb2ce858398ec573f810384a1e8e",
+        "mutations/gates.json": "49cecefb2961a2ec2275b47dcba327cfb0f31d42a4ec707e54dd2d04370e2692",
+        "skills/dfd-implement/SKILL.md": "73968fff0113b8f264875d8026b37213d43d7d696d0f7b78e3efdd358d83bddc",
+        "skills/dfd-review-design/SKILL.md": "c27fd695b164cea9ec379000d6465251e1e88d6b87444e0546d56f3f99d1131b",
+        "skills/dfd-setup/SKILL.md": "6a7652f8288281a696c94843970a916deb5c0790e759b0c4bf9329add06faf80",
+        "skills/dfd-specify/SKILL.md": "76cc7a0706267c77dd64fbb3d70a632e3501062e697dd0ef792ff7861a88b243",
+        "src/development.rs": "b3b5290b89b0bcb0cca5ce39ddf07e82a0e337523688984e24e940e51c14387a",
+        "src/lib.rs": "e5908ebff5959b827ff47de35563ec3affdfac8f0b1da3164f31fdc3b0cf7006",
+        "src/model.rs": "eb8f2f21c9670c1113ea0c51fc5c1cd9550d5f30c47bea6caadf3084e6416b97",
+        "templates/contratto_toolkit.md": "b600593e0efa07e3d0e547b31f4bc2e0ebc8b34a8ee18641ff3584da73930e75",
+        "tests/workflow.rs": "6e013305ac4c1bbc7fefdba97f63484ca9e5c8d28b0c1cf3d574f8696215792c"
+      },
+      "recorded_by": "dfd"
     }
   ],
-  "refactor_notes": "Refactor: nessuno oltre alle funzioni nuove (acceptance_hash, declared_acceptance). Osservabilità: errori di validazione che nominano criterio e percorso, file di casi in changes con il loro percorso, avviso per i file sotto acceptance_roots non dichiarati. Red reali per i tre task (acceptance e acceptance_roots rifiutati come campi sconosciuti). Mutanti: 6 nuovi, batteria completa 71/71 intercettati (target/mutation-results-full/report.json). Compatibilità: status delle feature 001-010 di dfd-kit e delle baseline v3-i3-baseline e v4-baseline del laboratorio identico (gate e fingerprint) tra il binario eec9dffa e il nuovo. Durante lo sviluppo due attese dei test corrette: un file dichiarato rimosso blocca il design (validazione) invece di renderlo stale-review; review-design esce 2 con gate bloccato (contratto #7). Laboratorio dfd-gate-lab v4, ramo v4-acc (baseline v4-acc-baseline, report/risultati-v4.md): F02, F02r, F11, F11c, F15a bloccati; F16 (caso orfano mai eseguito) segnalato; F17: cambiare un caso della 001 lascia approvato il design della 002 (con suite_entrypoints anche la 002 andava in stale-review); F00, CX-codice e CX-dati come in v4. Il check 04-exec-suite è una suite registrata per errore prima dei green; la suite finale valida è 08-exec-suite."
+  "refactor_notes": "Refactor: nessuno oltre alle funzioni nuove (acceptance_hash, declared_acceptance). Osservabilità: errori di validazione che nominano criterio e percorso, file di casi in changes con il loro percorso, avviso per i file sotto acceptance_roots non dichiarati. Red reali per i tre task (acceptance e acceptance_roots rifiutati come campi sconosciuti). Mutanti: 6 nuovi, batteria completa 71/71 intercettati (target/mutation-results-full/report.json). Compatibilità: status delle feature 001-010 di dfd-kit e delle baseline v3-i3-baseline e v4-baseline del laboratorio identico (gate e fingerprint) tra il binario eec9dffa e il nuovo. Durante lo sviluppo due attese dei test corrette: un file dichiarato rimosso blocca il design (validazione) invece di renderlo stale-review; review-design esce 2 con gate bloccato (contratto #7). Laboratorio dfd-gate-lab v4, ramo v4-acc (baseline v4-acc-baseline, report/risultati-v4.md): F02, F02r, F11, F11c, F15a bloccati; F16 (caso orfano mai eseguito) segnalato; F17: cambiare un caso della 001 lascia approvato il design della 002 (con suite_entrypoints anche la 002 andava in stale-review); F00, CX-codice e CX-dati come in v4. Il check 04-exec-suite è una suite registrata per errore prima dei green; la suite finale valida è 08-exec-suite. Release v0.2.0: rebase su main dopo la feature 011 senza conflitti; versione 0.2.0 in Cargo.toml e Cargo.lock; sezione 0.2.0 in CHANGELOG.md ed en/CHANGELOG.md, verificata da release_notes.py --check v0.2.0 dentro la suite (nessun task red/green dedicato: il changelog è editoriale e già scritto, un red sarebbe artificiale). Green e suite rieseguiti dopo il rebase (09-12)."
 }
