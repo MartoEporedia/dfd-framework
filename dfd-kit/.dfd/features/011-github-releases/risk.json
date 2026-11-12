@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "medium",
+      "rationale": "Nuovo processo di rilascio: CI GitHub Actions attiva, workflow di release al push di un tag, changelog versionato; il dominio passa da development-only a release-preparation."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Toolkit pubblico ma con un solo utilizzatore noto, il manutentore; la prima release rende scaricabile il binario a chi segue il prompt di installazione."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Runner GitHub Actions gratuiti per repository pubblici; nessuna dipendenza nuova nel binario."
+    },
+    "reliability": {
+      "level": "low",
+      "rationale": "Una release sbagliata si corregge con una nuova release o eliminando quella pubblicata; i binari esistenti non cambiano."
+    },
+    "security": {
+      "level": "medium",
+      "rationale": "Binari pubblicati per utenti terzi: il workflow di release ha permesso contents: write limitato al job di pubblicazione, checksum SHA-256 per ogni archivio, azioni di terze parti a versione fissata."
+    }
+  }
+}
