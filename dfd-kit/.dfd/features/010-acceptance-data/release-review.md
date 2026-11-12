@@ -1,6 +1,6 @@
 # Review di release DFD
 
-Gate: "awaiting-human-review"
+Gate: "approved-with-conditions"
 
 - Avviso: Log .dfd/features/010-acceptance-data/evidence/13-ci.log (ci, exit 0) contiene il marcatore «skipped».
 - Attivazione pianificata: Notifica di fallimento del workflow Release
