@@ -1,6 +1,6 @@
 # Review di release DFD
 
-Gate: "awaiting-human-review"
+Gate: "approved-with-conditions"
 
 - Avviso: Log .dfd/features/011-github-releases/evidence/06-exec-green-changelog-docs.log (green, exit 0) contiene il marcatore «FAILED».
 - Avviso: Log .dfd/features/011-github-releases/evidence/06-exec-green-changelog-docs.log (green, exit 0) contiene il marcatore «skipped».
