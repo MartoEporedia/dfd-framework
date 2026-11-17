@@ -228,7 +228,18 @@
         "tests/workflow.rs": "0d9a87081adcd65dbe91e3bedb35dcb2249db743541ad1977b0a35717f83856f"
       },
       "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "ci",
+      "command": "GitHub Actions DFD Kit run 44200728266 (pull_request #18, commit c9e33ba6068b0e818cea88d8ea69c7e29f0ab64f): quality, mutations, binaries x4",
+      "executed_at": "2026-11-17T23:41:38Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/12-ci.log",
+        "sha256": "8ad9bad48d36aa3f6ce1f7bc5cee4ddf841100f5d4fa7535149ee7e7aada2e1d"
+      }
     }
   ],
-  "refactor_notes": "Refactor: in i18n.rs il test di scope parte ora dall'inglese e verifica il ripristino passando per l'italiano; init/install salvano il default solo se manca language.json, senza mai sovrascrivere una preferenza. La normalizzazione del test sui bundle replica quella di build.rs (riga di navigazione e riga vuota successiva). Lo spostamento dei 112 file (56 coppie) è avvenuto con git mv tramite uno script temporaneo fuori dal repository, che ha ricalcolato i link relativi e messo l'inglese per primo nella navigazione; il testo è invariato salvo link, navigazione e le frasi sulla struttura aggiornate in entrambe le lingue. Il runner dei mutanti copia ora it/ invece di en/. Mutanti mirati: 6/6 killed (evidence/mutations/report.json). Osservabilità: nessuna strumentazione nuova necessaria; gli errori di lingua restano messaggi espliciti della CLI e check_translations nomina percorso e tipo di errore. Correzioni alle evidenze: il run 02 (registrato come green) è fallito per il requisito, perché init senza --lang non salvava ancora language.json; è riclassificato come red. Il run 05 (green di bundle-layout) è fallito per un errore del test, non del requisito: la normalizzazione non toglieva la riga vuota dopo la navigazione. È escluso dai check; il log resta in evidence/05-exec-green-bundle-layout.log."
+  "refactor_notes": "Refactor: in i18n.rs il test di scope parte ora dall'inglese e verifica il ripristino passando per l'italiano; init/install salvano il default solo se manca language.json, senza mai sovrascrivere una preferenza. La normalizzazione del test sui bundle replica quella di build.rs (riga di navigazione e riga vuota successiva). Lo spostamento dei 112 file (56 coppie) è avvenuto con git mv tramite uno script temporaneo fuori dal repository, che ha ricalcolato i link relativi e messo l'inglese per primo nella navigazione; il testo è invariato salvo link, navigazione e le frasi sulla struttura aggiornate in entrambe le lingue. Il runner dei mutanti copia ora it/ invece di en/. Mutanti mirati: 6/6 killed (evidence/mutations/report.json). Osservabilità: nessuna strumentazione nuova necessaria; gli errori di lingua restano messaggi espliciti della CLI e check_translations nomina percorso e tipo di errore. Correzioni alle evidenze: il run 02 (registrato come green) è fallito per il requisito, perché init senza --lang non salvava ancora language.json; è riclassificato come red. Il run 05 (green di bundle-layout) è fallito per un errore del test, non del requisito: la normalizzazione non toglieva la riga vuota dopo la navigazione. È escluso dai check; il log resta in evidence/05-exec-green-bundle-layout.log. Avviso 'skipped' nel log CI (evidence/12-ci.log): proviene dal passo interno condizionale __run_3 dell'azione dtolnay/rust-toolchain (outcome=skipped), presente anche nel log CI della feature 011; nessun test è stato saltato."
 }
