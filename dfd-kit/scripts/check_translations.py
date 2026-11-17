@@ -13,13 +13,14 @@ MANIFEST = ROOT / "dfd-kit/i18n/documents.json"
 
 
 def pairs():
+    """English documents live in the original paths; each Italian counterpart lives under it/."""
     result = []
     for base in (ROOT, ROOT / "dfd-kit"):
         sources = [p for p in base.glob("*.md") if p.name != "AGENTS.md"]
         for folder in ("templates", "examples", "skills"):
             sources.extend((base / folder).rglob("*.md"))
         for source in sorted(sources):
-            result.append((source, base / "en" / source.relative_to(base)))
+            result.append((source, base / "it" / source.relative_to(base)))
     return result
 
 
@@ -63,20 +64,20 @@ def check(update=False):
     errors = []
     snapshot = {}
     paired = pairs()
-    expected_english = {english for _, english in paired}
-    for base in (ROOT / "en", ROOT / "dfd-kit/en"):
-        for english in base.rglob("*.md"):
-            if english not in expected_english:
-                errors.append(f"Unpaired English document: {english.relative_to(ROOT)}")
-    for source, english in paired:
-        if not english.is_file():
-            errors.append(f"Missing English counterpart: {english.relative_to(ROOT)}")
+    expected_italian = {italian for _, italian in paired}
+    for base in (ROOT / "it", ROOT / "dfd-kit/it"):
+        for italian in base.rglob("*.md"):
+            if italian not in expected_italian:
+                errors.append(f"Unpaired Italian document: {italian.relative_to(ROOT)}")
+    for english, italian in paired:
+        if not italian.is_file():
+            errors.append(f"Missing Italian counterpart: {italian.relative_to(ROOT)}")
             continue
-        it, en = source.read_text(), english.read_text()
+        en, it = english.read_text(), italian.read_text()
         ids = lambda text: set(re.findall(r"\b(?:OBS|SEC|SLO|COST|UX|COMP)-\d{2,}\b", text))
         if ids(it) != ids(en):
-            errors.append(f"Criterion mismatch {source.relative_to(ROOT)}: IT only {sorted(ids(it)-ids(en))}; EN only {sorted(ids(en)-ids(it))}")
-        for path, text in ((source, it), (english, en)):
+            errors.append(f"Criterion mismatch {english.relative_to(ROOT)}: EN only {sorted(ids(en)-ids(it))}; IT only {sorted(ids(it)-ids(en))}")
+        for path, text in ((english, en), (italian, it)):
             if text.count("<!-- dfd-language -->") != 1:
                 errors.append(f"Missing/duplicate language navigation: {path.relative_to(ROOT)}")
             if len(re.findall(r"^# ", re.sub(r"```[^\n]*\n.*?```", "", text, flags=re.S), re.M)) != 1:
@@ -87,10 +88,10 @@ def check(update=False):
             if strip_navigation(it) == strip_navigation(en):
                 errors.append(f"Untranslated document: {path.relative_to(ROOT)}")
             errors.extend(links(path, text))
-        snapshot[str(source.relative_to(ROOT))] = {
-            "english": str(english.relative_to(ROOT)),
-            "it_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+        snapshot[str(english.relative_to(ROOT))] = {
+            "italian": str(italian.relative_to(ROOT)),
             "en_sha256": hashlib.sha256(english.read_bytes()).hexdigest(),
+            "it_sha256": hashlib.sha256(italian.read_bytes()).hexdigest(),
         }
     catalog = json.loads((ROOT / "dfd-kit/i18n/en.json").read_text())
     fields = lambda text: re.findall(r"\{[^{}]*\}", text)
@@ -114,7 +115,7 @@ def check(update=False):
         if message not in catalog:
             errors.append(f"Missing help translation: {message!r}")
     if update and not errors:
-        MANIFEST.write_text(json.dumps({"schema_version": 1, "documents": snapshot}, ensure_ascii=False, indent=2) + "\n")
+        MANIFEST.write_text(json.dumps({"schema_version": 2, "documents": snapshot}, ensure_ascii=False, indent=2) + "\n")
     elif not update:
         old = json.loads(MANIFEST.read_text())["documents"] if MANIFEST.exists() else {}
         for name in sorted(snapshot.keys() | old.keys()):

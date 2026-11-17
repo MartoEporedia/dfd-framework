@@ -31,11 +31,12 @@ fn main() {
         }
     }
     files.sort();
+    // English is primary and lives in the original paths; Italian lives under it/.
     let mut generated = String::from("pub const FILES: &[(&str, &str)] = &[\n");
     for file in &files {
-        println!("cargo:rerun-if-changed={}", file.display());
         let relative = file.to_str().unwrap().replace('\\', "/");
-        let absolute = root.join(file);
+        let absolute = root.join("it").join(&relative);
+        println!("cargo:rerun-if-changed={}", absolute.display());
         let body = without_navigation(&fs::read_to_string(&absolute).unwrap());
         generated.push_str(&format!("({relative:?}, {body:?}),\n"));
     }
@@ -43,13 +44,13 @@ fn main() {
     generated.push_str("pub const FILES_EN: &[(&str, &str)] = &[\n");
     for file in &files {
         let relative = file.to_str().unwrap().replace('\\', "/");
-        let absolute = root.join("en").join(&relative);
+        let absolute = root.join(file);
         println!("cargo:rerun-if-changed={}", absolute.display());
         let body = without_navigation(&fs::read_to_string(&absolute).unwrap());
         generated.push_str(&format!("({relative:?}, {body:?}),\n"));
     }
     generated.push_str("];\n");
-    println!("cargo:rerun-if-changed=en");
+    println!("cargo:rerun-if-changed=it");
     println!("cargo:rerun-if-changed=templates");
     println!("cargo:rerun-if-changed=skills");
     println!("cargo:rerun-if-changed=examples");

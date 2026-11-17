@@ -1,47 +1,50 @@
-<!-- dfd-language --> [Italiano](CONTRIBUTING.md) | [English](en/CONTRIBUTING.md)
+<!-- dfd-language --> [English](CONTRIBUTING.md) | [Italiano](it/CONTRIBUTING.md)
 
-# Sviluppare DFD Kit
+<a id="sviluppare-dfd-kit"></a>
 
-La CLI è scritta in Rust; gli utilizzatori eseguono un binario e non devono installare Rust, interpreti o pacchetti aggiuntivi. Lo sviluppo richiede la toolchain Rust stable con Cargo, rustfmt e Clippy.
+<a id="processo-di-sviluppo-obbligatorio"></a>
 
-## Processo di sviluppo obbligatorio
+<a id="struttura"></a>
 
-Dal 2026-10-09 ogni sviluppo della CLI e delle skill segue DFD, inclusi bugfix e refactor. La regola persistente è in [AGENTS.md](../AGENTS.md#dfd-obbligatorio-per-cli-e-skill).
+<a id="comandi"></a>
 
-Il progetto adottato è questa directory (`dfd-kit/`), con dominio `dfd-kit`, modalità brownfield e harness Codex. Il [setup operativo](.dfd/domains/dfd-kit/process.md), la [DoD](.dfd/domains/dfd-kit/dod.md) e l’[assessment](.dfd/domains/dfd-kit/assessment.md) sono i riferimenti per il prossimo cambiamento. Le skill installate vivono in `.agents/skills/`; le sorgenti da sviluppare restano in `skills/`.
+<a id="convenzioni-e-verifiche"></a>
 
-```sh
-./dist/dfd-macos-arm64 setup --domain dfd-kit
-./dist/dfd-macos-arm64 status
-```
+<a id="mutation-test"></a>
 
-Prima di lavorare al cambiamento, riprendere gli artefatti e verificare il setup del dominio. Se manca, completare la Fase 0. Classificare il rischio e scegliere rapido/light/full. Il rapido usa un solo record; light/full richiedono una feature con specifica iterativa.
+<a id="esempio-ripetere-solo-la-verifica-sullintegrità-delle-evidenze"></a>
 
-Per light/full, dopo la review di design attuale derivare il piano. Raccogliere evidenze reali: regressione red/green per fix comportamentali, verifica pertinente per modifiche editoriali e mutation test sugli invarianti importanti. Preparare pre-release e review di release per i cambiamenti destinati al rilascio. Le decisioni umane già espresse e ancora pertinenti si riusano; i controlli strutturali non conferiscono approvazioni.
+<a id="contributi"></a>
 
-Usare le skill del toolkit e la CLI secondo il [contratto degli artefatti](templates/contratto_toolkit.md). Conservare setup, specifiche, decisioni e risultati nel repository; aggiornarli quando cambia il lavoro e riconfermare i gate invalidati.
+<a id="documenti-del-framework"></a>
 
-## Struttura
+<a id="sviluppo-prima-della-ci"></a>
 
-- `src/cli.rs`: comandi e opzioni.
-- `src/i18n.rs` e `i18n/en.json`: localizzazione offline, con enum it/en e preferenza separata.
-- `src/model.rs`: contratti JSON versionati e tipi del dominio.
-- `src/lib.rs`: installazione, adozione, rischio e gate di design.
-- `src/development.rs`: piano TDD, evidenze, gate di sviluppo e comando `exec`.
-- `src/quick.rs`: record rapido, verifiche ed escalation a light/full.
-- `src/collaboration.rs`: contesto facoltativo e policy team con prove integrate.
-- `src/release.rs`: preparazione operativa, rollout e review di release.
-- `src/store.rs`: accesso ai file, visita delle radici del codice, lock e scritture atomiche.
-- `skills/`: dodici workflow canonici, condivisi dagli adapter.
-- `templates/`: artefatti riusabili e contratto del toolkit.
-- `tests/workflow.rs`: test della CLI su repository temporanei.
-- `scripts/mutation_test.py`: runner isolato di mutation test.
-- `mutations/gates.json`: mutazioni mirate ai gate e riferimenti ai test che le intercettano.
-- `build.rs`: incorpora documenti, template e skill nel binario.
+<a id="fix-rapidi-singolo-sviluppatore-e-team"></a>
 
-## Comandi
+# Developing DFD Kit
 
-Eseguire questi comandi dalla directory `dfd-kit/` (`cd dfd-kit` dalla radice del repository).
+CLI users need only the binary. Development requires stable Rust/Cargo, rustfmt and Clippy.
+
+## Mandatory development process
+
+Since 2026-10-09 CLI/skill work, including fixes/refactoring/support artifacts, follows DFD. Read [AGENTS.md](../AGENTS.md), existing [domain process](.dfd/domains/dfd-kit/process.md), [DoD](.dfd/domains/dfd-kit/dod.md) and [assessment](.dfd/domains/dfd-kit/assessment.md). Adopted root is dfd-kit/, brownfield, Codex. Installed skills live in .agents/skills; edit canonical skills/ sources.
+
+From dfd-kit/ run dist/dfd-macos-arm64 setup --domain dfd-kit and status (or platform/current candidate binary). Complete missing Phase 0 first. Assess risk and choose rapid/light/full. Rapid uses one scoped record. Light/full require iterative specification, human design review, then derived plan and TDD. Reuse actual relevant human decisions; structural checks confer no approval. Record real red/green for behavior fixes, pertinent editorial checks and mutants for important invariants. Prepare pre-release/release review only for distribution. Keep all artifacts in the repository according to the [contract](templates/contratto_toolkit.md).
+
+## Structure
+
+- src/cli.rs: commands/options; src/model.rs: versioned JSON/domain types.
+- src/lib.rs: install/adoption/risk/design gates; src/i18n.rs and i18n/en.json: offline localization.
+- src/development.rs: TDD plans/evidence/gates and the exec command; src/quick.rs: rapid verification/promotion.
+- src/collaboration.rs: optional team policy/integrated evidence; src/release.rs: operational readiness/rollout/release review.
+- src/store.rs: path checks, source-root traversal, lock and atomic writes; build.rs: embedded documents/templates/skills.
+- skills/, templates/, examples/: canonical English resources; it/: Italian counterparts.
+- tests/workflow.rs: temporary-project CLI tests; scripts/mutation_test.py and mutations/gates.json: curated gate mutants.
+
+## Commands
+
+Run from dfd-kit/:
 
 ```sh
 cargo fmt --all --check
@@ -52,60 +55,41 @@ cargo build --locked --release
 python3 scripts/check_translations.py
 ```
 
-Se tutte le dipendenze sono già in cache, aggiungere `--offline` ai comandi Cargo. Conservare `Cargo.lock`: la CLI deve avere build riproducibili rispetto alle versioni delle dipendenze.
+Add --offline when dependencies are cached. Preserve Cargo.lock. Use rustfmt/snake_case and dfd-action skill names. Maintain both Italian and English resources; see [glossary/maintenance](../glossario.md). Versioned JSON is schema_version 1 and rejects unknown fields. Preserve user artifacts, idempotence, missing-data handling, feature isolation, decision invalidation and proportionate adoption. Tests run without external programs in PATH. doctor checks both embedded languages; real harness behavior requires a pilot.
 
-## Convenzioni e verifiche
+The CI .github/workflows/dfd-kit.yml runs on push to main, on pull requests and manually: fmt and Clippy, mutants, and builds/tests for Linux x86_64 musl, macOS arm64/x86_64 and Windows x86_64, producing binary archives with checksums as artifacts. Local success does not certify other operating systems. The workflow runs from dfd-kit/.
 
-Usare rustfmt e nomi `snake_case`; le skill usano nomi `dfd-<azione>` in kebab-case. Mantenere documentazione e workflow completi in italiano e inglese, nei percorsi originali e in `en/`; seguire il [glossario e le regole di sincronizzazione](../glossario.md). Quando cambia un contratto JSON, aggiornare modelli, guida e test; la prima versione accetta solo `schema_version: 1` e rifiuta campi sconosciuti.
+## Releases
 
-Verificare comportamenti osservabili: preservazione dei file, idempotenza, gestione dei dati mancanti, isolamento delle feature, invalidazione delle decisioni e adozione proporzionata. I test eseguono il binario senza programmi nel PATH. `doctor` verifica le skill incorporate; non sostituisce una prova reale nell'harness.
+The dfd-kit domain is in release-preparation with CI required. A release comes from the feature that carries it:
 
-La CI `.github/workflows/dfd-kit.yml` gira su push a `main`, sulle pull request e a mano. Esegue fmt e Clippy, i mutanti e build e test per Linux x86_64 con musl, macOS arm64/x86_64 e Windows x86_64, e produce archivi del binario con checksum come artifact. I test locali su un sistema non certificano gli altri sistemi. Il workflow esegue i comandi dalla directory `dfd-kit/`.
+1. update CHANGELOG.md and it/CHANGELOG.md, moving the [Unreleased] entries into a `## [X.Y.Z] - YYYY-MM-DD` section, and set version in Cargo.toml (with Cargo.lock) to X.Y.Z;
+2. check with `python3 scripts/release_notes.py --check vX.Y.Z` and read the notes with `python3 scripts/release_notes.py vX.Y.Z`;
+3. complete DFD pre-release and release review, with the real CI log of the PR recorded as kind ci;
+4. after the merge, create and push the tag vX.Y.Z on the main commit.
 
-## Rilasci
+The workflow .github/workflows/release.yml repeats the check, runs the full CI, then publishes the release with the four archives, a combined SHA256SUMS and the IT/EN notes. It never overwrites an existing release. A wrong release is fixed with a new patch version.
 
-Il dominio `dfd-kit` è in `release-preparation` con CI richiesta. Una release esce dalla feature che la porta:
+## Mutation testing
 
-1. aggiornare `CHANGELOG.md` ed `en/CHANGELOG.md`, spostando le voci di `[Unreleased]` in una sezione `## [X.Y.Z] - AAAA-MM-GG`, e portare `version` in `Cargo.toml` (con `Cargo.lock`) a `X.Y.Z`;
-2. controllare con `python3 scripts/release_notes.py --check vX.Y.Z` e leggere le note con `python3 scripts/release_notes.py vX.Y.Z`;
-3. completare pre-release e review di release DFD, con il log della CI reale della PR registrato come `kind: ci`;
-4. dopo il merge, creare e spingere il tag `vX.Y.Z` sul commit di `main`.
-
-Il workflow `.github/workflows/release.yml` ripete il controllo, esegue tutta la CI, poi pubblica la release con i quattro archivi, un `SHA256SUMS` complessivo e le note IT/EN. Non sovrascrive una release esistente. Una release sbagliata si corregge con una nuova versione di patch.
-
-## Mutation test
-
-Il runner usa Python 3.9+ e Cargo, senza pacchetti Python aggiuntivi o installazione di `cargo-mutants`. I mutanti curati coprono rischio, review umana, validità dei fingerprint, hash delle evidenze, ordine TDD, CI, rollout, preparazione operativa, comunicazioni e versione degli schemi JSON, oltre a percorso rapido, autonomia individuale, review selettive e snapshot integrati del team. Coprono anche exit code di `status` e fase effettiva, testo DoD dei criteri selezionati letto con il parser CommonMark, snapshot delle decisioni e `changes`, marcatori dei log, entrypoint e radici della suite, fingerprint per criterio e `dfd exec`.
+Python 3.9+ and Cargo suffice; no additional Python packages/cargo-mutants. Curated mutants cover risk, human review, fingerprints, evidence hashes, TDD chronology, CI, rollout, readiness, communications, schema versions, rapid/solo/selective review and integrated snapshots. They also cover status exit code and effective phase, DoD text of selected criteria read with the CommonMark parser, decision snapshots and changes, log markers, suite entrypoints and roots, per-criterion fingerprints and dfd exec.
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_mutation_runner.py'
 python3 scripts/mutation_test.py
-# Esempio: ripetere solo la verifica sull'integrità delle evidenze
 python3 scripts/mutation_test.py --only evidence-file-integrity
 ```
 
-Per default Cargo lavora offline; con dipendenze non ancora in cache usare `--online`. `--timeout 180` imposta il limite per ciascuna invocazione Cargo. Il runner copia gli input di build sotto `target/`, applica un mutante alla volta e ripristina la copia dopo il test. Non modifica i sorgenti originali né i binari distribuiti. Su macOS/Linux un timeout termina anche i processi figli del comando Cargo. La cache di build è separata in `target/mutation-build/`.
+Default Cargo offline; --online fetches dependencies. --timeout 180 limits each Cargo invocation. The runner copies inputs under target/, mutates one fragment per isolated copy, and never edits original source/distributed binaries. On macOS/Linux timeouts terminate child processes. Build cache is target/mutation-build/. Baseline suite and selected test existence are checked first. Each source fragment must match exactly once; missing/ambiguous fragments fail. Run targeted tests first, then full suite before declaring a mutant survived.
 
-Prima verifica la suite completa senza modifiche e l'esistenza dei test selezionati. Ogni mutante deve sostituire esattamente un frammento: se il sorgente cambia rendendo il frammento assente o ambiguo, il runner fallisce esplicitamente. Esegue prima i test mirati; se passano, esegue l'intera suite per confermare la sopravvivenza del mutante.
+JSON/logs default to target/mutation-results/; --output changes location. Reports include source/test/manifest hashes, results and score. killed means test failure; survived means full suite also passed. Compilation errors, missing tests and timeouts are distinct and do not count as kills. Exit 0 requires all selected mutants killed; failed baseline/incomplete runs invalidate results. Locks protect reports; remove after interruption only when no runner is active.
 
-Il report JSON e i log sono in `target/mutation-results/`; cambiare directory con `--output <directory>`. Il report include gli hash dei sorgenti/test e del manifest, gli esiti e il punteggio. `killed` significa che un test ha fallito; `survived` significa che anche la suite completa è passata. Errori di compilazione, test non trovati e timeout sono distinti e **non** contano come mutanti intercettati. Il comando restituisce `0` solo se tutti i mutanti selezionati sono intercettati; baseline fallita o run incompleto rendono il risultato non valido. Un lock protegge la directory del report dalle esecuzioni concorrenti; dopo un'interruzione forzata rimuoverlo solo se nessun runner è attivo.
+The score covers curated mutations only. Add id/file/original/replacement/observable behavior/at least one detecting test to mutations/gates.json. Prefer compilable mutants. Strengthen tests or justify equivalent survivors rather than removing them to improve scores. The mutations job in .github/workflows/dfd-kit.yml preserves artifacts even on failure.
 
-Il punteggio riguarda questo insieme mirato, non tutte le mutazioni possibili nel programma. Per aggiungere una mutazione, inserire in `mutations/gates.json` ID, file, frammento originale/sostituito, comportamento alterato e almeno un test. Preferire mutanti compilabili con un effetto osservabile; verificare che il test fallisca per quel comportamento. Non rimuovere mutanti sopravvissuti per alzare il punteggio: rafforzare i test oppure documentare perché un mutante è equivalente.
+## Contributions and framework resources
 
-Il job `mutations` in `.github/workflows/dfd-kit.yml` esegue il runner e conserva i risultati come artifact anche in caso di fallimento.
+Describe problem, final behavior and actual validation; link issues and update templates/skills/reading paths together. Use concise imperative commits, such as feat: add brownfield adoption assessment. Existing local-history conventions are not assumed.
 
-## Contributi
+Root framework documents remain canonical; toolkit copies adopt revisions explicitly. Toolkit-specific template corrections do not overwrite framework originals. Domain lifecycle is development-only: traced final local suite, no simulated CI; distribution requires explicit policy transition/review reconfirmation.
 
-Descrivere problema, comportamento risultante e verifiche svolte. Collegare le issue pertinenti e aggiornare template, skill e percorsi di lettura insieme alle modifiche al framework. Usare messaggi concisi, per esempio `feat: add brownfield adoption assessment` o `fix: invalidate stale design reviews`. Non è disponibile una cronologia Git locale da cui dedurre una convenzione precedente.
-
-## Documenti del framework
-
-Le copie locali di fondamenta, processo, rischio, RACI e adozione sono risorse del bundle. I documenti canonici del framework rimangono nella radice del repository. Aggiornare le copie in modo esplicito quando il toolkit adotta una revisione del framework; le correzioni ai template del toolkit non devono sovrascrivere gli originali della radice.
-
-## Sviluppo prima della CI
-
-Il dominio di questo toolkit usa [lifecycle.json](.dfd/domains/dfd-kit/lifecycle.json) in modalità solo sviluppo. La suite finale locale tracciata consente di chiudere lo sviluppo senza CI simulata. La preparazione al rilascio richiede una transizione esplicita, rivalutazione della scelta CI e riconferma delle review invalidate. Vedere il [contratto](templates/contratto_toolkit.md#policy-di-maturità-del-dominio).
-
-## Fix rapidi, singolo sviluppatore e team
-
-Per un fix circoscritto usare `dfd quick <id> --domain <dominio> --title "..." --owner "..."`: un solo record, rischio motivato e test di regressione pertinenti. Le modifiche editoriali richiedono una verifica utile, senza red artificiale. Il singolo dev non deve aprire PR o ottenere una review indipendente; il [contesto team](templates/collaborazione.md) è facoltativo. Cambiamenti critici o dubbi impongono light/full; `dfd promote <id> --to <feature-id>` conserva l’origine. Per comandi, gate e prove integrate vedere il [contratto](templates/contratto_toolkit.md#percorso-rapido).
+For scoped noncritical fixes use quick with title/owner/domain and one record. Solo needs no PR/second reviewer. Enable optional team policy explicitly. Promote critical/uncertain changes, retaining origin. See contract for gates and integrated evidence.

@@ -1,0 +1,174 @@
+{
+  "scope": "curated gate mutations",
+  "mutations": [
+    {
+      "id": "language-resource-selection",
+      "file": "src/i18n.rs",
+      "purpose": "La scelta inglese deve installare risorse realmente inglesi per tutti gli adapter.",
+      "tests": [
+        "bilingual_english_resources_work_in_every_adapter_offline"
+      ],
+      "status": "killed",
+      "seconds": 4.84,
+      "logs": [
+        "logs/language-resource-selection-bilingual_english_resources_work_in_every_adapter_offline.log"
+      ]
+    },
+    {
+      "id": "language-persistence",
+      "file": "src/i18n.rs",
+      "purpose": "Le invocazioni senza override devono riprendere la lingua del progetto.",
+      "tests": [
+        "bilingual_project_language_resources_and_preservation"
+      ],
+      "status": "killed",
+      "seconds": 6.8,
+      "logs": [
+        "logs/language-persistence-bilingual_project_language_resources_and_preservation.log"
+      ]
+    },
+    {
+      "id": "language-file-preservation",
+      "file": "src/lib.rs",
+      "purpose": "Un cambio lingua non deve sovrascrivere skill modificate né cambiare la preferenza su conflitto.",
+      "tests": [
+        "bilingual_conflicts_do_not_change_language_or_files"
+      ],
+      "status": "killed",
+      "seconds": 6.73,
+      "logs": [
+        "logs/language-file-preservation-bilingual_conflicts_do_not_change_language_or_files.log"
+      ]
+    },
+    {
+      "id": "language-default-english",
+      "file": "src/i18n.rs",
+      "purpose": "Un progetto senza language.json deve usare l'inglese, lingua principale.",
+      "tests": [
+        "default_language_is_english_without_preference"
+      ],
+      "status": "killed",
+      "seconds": 5.76,
+      "logs": [
+        "logs/language-default-english-default_language_is_english_without_preference.log"
+      ]
+    },
+    {
+      "id": "language-init-saves-default",
+      "file": "src/lib.rs",
+      "purpose": "init senza --lang deve salvare il default quando manca una preferenza.",
+      "tests": [
+        "default_language_is_english_without_preference"
+      ],
+      "status": "killed",
+      "seconds": 6.38,
+      "logs": [
+        "logs/language-init-saves-default-default_language_is_english_without_preference.log"
+      ]
+    },
+    {
+      "id": "language-italian-bundle",
+      "file": "src/i18n.rs",
+      "purpose": "La scelta italiana deve installare le risorse di it/.",
+      "tests": [
+        "installed_bundles_follow_english_primary_layout"
+      ],
+      "status": "killed",
+      "seconds": 6.24,
+      "logs": [
+        "logs/language-italian-bundle-installed_bundles_follow_english_primary_layout.log"
+      ]
+    }
+  ],
+  "baseline": "passed",
+  "complete": true,
+  "source_sha256": {
+    "Cargo.lock": "0bda8cf2d20066ef8dde4e20c93f8e1df0734375646095a2c79e257785254a1c",
+    "Cargo.toml": "b5e52f3ca09aab68a2222ff1769d5455fe1bf214becf2e20806079600c7581fe",
+    "build.rs": "bc26853d8904a899468de1234f52523ae7cf348bbdaa015489fe9caa0b67eb1d",
+    "examples/checkout_dod.md": "3803d79104b6106ed6479ef0ba9e48fd868871015c47dfc6da8d1bff70003031",
+    "examples/checkout_paypal_spec.md": "c7c745274fa28b18815fa1b16a3593c0c9df8c650294591ba78f0b7cb91aa5cb",
+    "i18n/documents.json": "b924488faaf1361a6f4c2a2a41e5e13c5cbc6983cd682b3a0b93682c3cde78a0",
+    "i18n/en.json": "bb21c1f15b34cdfd33a8b011afd77fabf42edb2ce858398ec573f810384a1e8e",
+    "it/CHANGELOG.md": "490d40f84f7084ff1c931ff027151b85448a94ff9ad7b4b9df9ead30f85d1271",
+    "it/CONTRIBUTING.md": "2db8363fe88d4a2a07da4df616f148cec750e1fcb5fe8a17fe910eb9e65f7f68",
+    "it/README.md": "dc8d67c5709ceb3082739b769fbd69657a4337fda719d73d1038001c57c8ddb9",
+    "it/adozione.md": "82acbf64f6df4e0e31c431eea7795468bd88c12074ebbe350804806e6d519d2d",
+    "it/examples/checkout_dod.md": "072d5ab6b67cd4b0865751010e06c3e57befca00865a142f74f4a2bfdc6848ab",
+    "it/examples/checkout_paypal_spec.md": "e6b13a8ed3c6496391e6229d57779c635379c0ad9f2cdb775a4158c7fd8455cd",
+    "it/fondamenta.md": "7df9d599ad996bbfad0a395f8871e074165291a3fb0b26d77e84e681ba62f0d0",
+    "it/harness-proposta.md": "83065eead56989a5c5a444c601cd78ebf55f518ed26cc521518ce0ef15afe8f7",
+    "it/processo-e2e.md": "6886aca3fce3afa601f7051d0044f74b65e4e0a3ed36b3d0bdfc4e57cb4e0c4d",
+    "it/raci.md": "1e8fe6fd6a1db3683030c4943246094b4c758289c96ba3a7fafe2050f8bd8474",
+    "it/rischio.md": "3bacc08cb9169c1f0d735d85d1ef1f3a8f4c7bc84dcf8ffca48955e555123e68",
+    "it/skills/dfd-assess/SKILL.md": "85c60433db538501fe6123af4737b8e44554c6699e549e9f473711503fe4bf52",
+    "it/skills/dfd-feature/SKILL.md": "a7da3dae1202266409cc6fc4fda72760fcb4a229a527f57408807266e672611a",
+    "it/skills/dfd-implement/SKILL.md": "76defbea159d685da17302e090e468f871b75c7f4387f04640f2b96867bb7b03",
+    "it/skills/dfd-init/SKILL.md": "ef4be8af6153701ebb60c2f4b7f42dec157af399cf3560180613e04a6ac356ce",
+    "it/skills/dfd-plan/SKILL.md": "29045f9ad4dcc92d9f10a9f08a765ba7c359918b0a94a277db855b0899756cd8",
+    "it/skills/dfd-pre-release/SKILL.md": "1e1e7b6957a671e2351300a0346dd52741ee5923c02951281d4b0efcdfcf0dec",
+    "it/skills/dfd-review-design/SKILL.md": "bb00e50e9139c265a89c410ec087e3e82b0782c3d291d4cedce6d2ac9145d87b",
+    "it/skills/dfd-review-release/SKILL.md": "9abaa1cce843f94ee5419b02c2de998928aece28e132a0bb2f176589454276ca",
+    "it/skills/dfd-setup/SKILL.md": "8969d29e77cf7cba451af23b4e6885000ada8cdbedd7dad6b6159c567b11161e",
+    "it/skills/dfd-specify/SKILL.md": "78a969172865e103e81b35f399f0671073aea56ba09291b5350cbc794be9d83a",
+    "it/skills/dfd-status/SKILL.md": "4f798a01a95bb4463c8256e1dfb553b73729afc602a83089146e78a8d44e1305",
+    "it/skills/dfd-verify/SKILL.md": "02bc0a7eec96e5e73ff2eee962ac1c9a5d00f6fcf9788f53e908e76095fb5331",
+    "it/templates/assessment_adozione.md": "09eeb7a36464c7035f39b51041d9b41c396a0993cec897b4533252d891c518a3",
+    "it/templates/cambiamento_rapido.md": "a9069607771877aa9403ca884d550121b3cd4d2cded6586a16d07e488192b718",
+    "it/templates/collaborazione.md": "e4a9572697666c50c1b15d9c85c49e8cb8888e4abb26f403345c361e720c53ab",
+    "it/templates/configurazione_rollout.md": "5c638395ba9addf8b1497f7d5ead2106e6e950fb67646f30e582b632cdbfdacb",
+    "it/templates/contratto_toolkit.md": "b340109c0a28e06358fcdae97ffa84451310c04abf573610994fe850181672d4",
+    "it/templates/dod-estesa.md": "92c9bc495ef5865798a57459bcea5795e5b87d8b462a0c5fcc2f7c48669974dc",
+    "it/templates/guardrail_dominio.md": "bed8806eaae5a40e6a67bee57817be6955fc176a8ba75d8e44c1dc3f3ffe8cbf",
+    "it/templates/processo_dominio.md": "be9941eeb9b68c15e2ae534510adf16acba8c56d4d318c2ca56b4f0c158def74",
+    "it/templates/review_design.md": "732a8c1f4fa15f553331992eb6536e662150a9cf7b845bd1a9f893b47014ae36",
+    "it/templates/review_design_light.md": "96e3c754b987a68c63e30902d20614a572e1bd215b4fb92cdac4883fa49d39bb",
+    "it/templates/review_indice.md": "08f0f7ee5ca670dacad68c339a60095a15a98b3be94119047b5a639db7b7da8d",
+    "it/templates/review_release.md": "9c3e4fe5d22a51ccfdd5bba9de50b7be921cc7ffba378c969bc61b275f1e81d4",
+    "it/templates/review_release_light.md": "c908a0e08e9aa2c93ea6cce88f5a2a8ed8f8321ffd80101c4c3d77d8e19782b4",
+    "it/templates/specifica_feature.md": "77f775af56e09944f07ce371f30d7b3ceb058507235c6703a51e1f0a60988edc",
+    "skills/dfd-assess/SKILL.md": "b7b309749c4e98f6c6988461598500365764c09733a11201dec586ea0e480dfe",
+    "skills/dfd-feature/SKILL.md": "db700d2200e0a10546f641f4a1cf3f978804b3c7903c006dffbb627721478a7e",
+    "skills/dfd-implement/SKILL.md": "3c8459ddd646f71f0d4c851050b3b13a96fc1bd2c3766d79fc946d1456573dee",
+    "skills/dfd-init/SKILL.md": "700fd03432e71294ede0ff3c920a157250d9d04ece71ca4cd7a0d5b8bce178a4",
+    "skills/dfd-plan/SKILL.md": "3220e2ba7cd19798d92bfe9626168e40da7f2c433cd29f9a5e2dead47a3eb929",
+    "skills/dfd-pre-release/SKILL.md": "6e03eea474a8593c246b1157c356f6497ea92a7d323e4cf8eec0e846fbb82e51",
+    "skills/dfd-review-design/SKILL.md": "52480debc8fa851fb39371f64292d55c01e305fa30eac5246c09027c266105a1",
+    "skills/dfd-review-release/SKILL.md": "5a87ed5aa5f956cfcc7f2b349a69fbaacca9d36c806c2df23241486e3df3349d",
+    "skills/dfd-setup/SKILL.md": "54dac80f8f417d2a4d63ad8b014e3dc401786d2098172740b00800d7dbd33169",
+    "skills/dfd-specify/SKILL.md": "59c6464c3fbbbb50cb020bf5a40fe2eb247946498fc5361ab9609953fb8d23e4",
+    "skills/dfd-status/SKILL.md": "f743dc1fce8cec162c68e22fec1f8a166361011b3185ec95b1644c71060aef5c",
+    "skills/dfd-verify/SKILL.md": "9cbef5ee4285014a04127902ef523682c273d5e735ae22bda2389ca5ddba5e5e",
+    "src/cli.rs": "829520f145a355473b5a6eb34114987c6c621dc886e75d8bd1fc4c72a8d2b3df",
+    "src/collaboration.rs": "78b65934163b11f027c525e90d0ea206d920fab934234144548654bf83ca8124",
+    "src/development.rs": "b3b5290b89b0bcb0cca5ce39ddf07e82a0e337523688984e24e940e51c14387a",
+    "src/i18n.rs": "4487f79cf0e89839a377b19a654d11589cffea831ecab2627ad103aed6f9d68f",
+    "src/lib.rs": "18292c669f0b55cac59f250197943c4e66e61f30c387f9ce0bfd033a5a1dbbf9",
+    "src/main.rs": "1cd75c09b37b15882b1a88490d84369817260e082373ae2115d93d55003c36bb",
+    "src/model.rs": "eb8f2f21c9670c1113ea0c51fc5c1cd9550d5f30c47bea6caadf3084e6416b97",
+    "src/quick.rs": "9ca39d375748b8aea788801bbb71d520752d6a5eed3aa6f22e58f97bf896ebac",
+    "src/release.rs": "4dde5aeac299496472c1855c744d300a5b292b240ff0a96423f90b385a35e172",
+    "src/store.rs": "93d6f2740ccbcd8a40c1415423e03d9fd84d5894405b789e14de70a88bfa5dfe",
+    "templates/assessment_adozione.md": "7c2e8db26b0d1512b0eb6fbc6ebef36a9af6b571e420d5693ea0f3bee4a471ff",
+    "templates/cambiamento_rapido.md": "30c21646d1d2d2b6be5466dc8d70520424a7940c580e9f47319ae6e2850fb167",
+    "templates/collaborazione.md": "6e1be430726e8a4c5faa89179e6f3c5c766f36c2762e2ced8bb866f584687841",
+    "templates/configurazione_rollout.md": "11cbcf5ab9328827b6455c2a6ec9a66942faff7a24a987c19f718db16a5c79b0",
+    "templates/contratto_toolkit.md": "3d6ca602e8f410bc919bca57da762756cefeb24298a0142865d5fd73f68a7701",
+    "templates/dod-estesa.md": "1ebe0c61befb793bc35788a2c5090edabd94ffc5a31abf78fd5e797873f7f62b",
+    "templates/guardrail_dominio.md": "2050a42f665f9e8feb797facfd755775dd00ddd7e65d0c011db60eede362a855",
+    "templates/processo_dominio.md": "6f5775b43c6632bd6ab3b28e053f018dc5f75bfef271563510b6f4f590b08b04",
+    "templates/review_design.md": "a075e1780e979f716ac548b43f2fcf0d2360ea1e126cf8320d933409c8fd7089",
+    "templates/review_design_light.md": "d6893878f15780de61f6ee025b22b2d3c2c9d2f9d6137b0f20dfe20c78488b2b",
+    "templates/review_indice.md": "681320e7434156e9a794bb9978f0f9a3783a79e6e02ef3fd2cd5eaf0fe45e1e6",
+    "templates/review_release.md": "6fd334a67e2e72b48abb3704cadb264db06ae800486f1f371f55927b5a036da7",
+    "templates/review_release_light.md": "2ff5e9f63068bb72f22c99fc286faa8afa47acc43eefccbf5592347298294813",
+    "templates/specifica_feature.md": "fae642a8a360e2c2ea60165ef3c55ba2fb718b2593eab2392bc019cc773880ad",
+    "tests/workflow.rs": "0d9a87081adcd65dbe91e3bedb35dcb2249db743541ad1977b0a35717f83856f"
+  },
+  "manifest_sha256": "5322bc97aad8837c073e29c6d8e57895f29dcf4132aa64b09a13e3a3a928294f",
+  "baseline_seconds": 40.42,
+  "summary": {
+    "killed": 6
+  },
+  "score": 1.0
+}

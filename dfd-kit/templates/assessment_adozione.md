@@ -1,40 +1,50 @@
-<!-- dfd-language --> [Italiano](assessment_adozione.md) | [English](../en/templates/assessment_adozione.md)
+<!-- dfd-language --> [English](assessment_adozione.md) | [Italiano](../it/templates/assessment_adozione.md)
 
-# Assessment di adozione DFD – [Dominio]
+<a id="assessment-di-adozione-dfd--dominio"></a>
 
-> **Stato**: draft  
-> **Data**: YYYY-MM-DD  
-> **Proprietari**: [Team / responsabile]
+# DFD adoption assessment – [Domain]
 
-## 1. Ambito pilota
+> **Status**: draft  
+> **Date**: YYYY-MM-DD  
+> **Owners**: [Team / responsible person]
 
-- Prodotto e dominio: TODO
-- Processi e review da mantenere: TODO
-- Livello di adozione attuale (0–3) e motivazione: TODO
-- Livello target (0–3) e orizzonte: TODO
-- Interventi pilota, nuovi o significativamente modificati: TODO
+<a id="1-ambito-pilota"></a>
 
-## 2. Snapshot dell'esistente
+## 1. Pilot scope
 
-| Area | Fatti osservati | Fonti | Lacune / informazioni mancanti |
+- Product/domain: TODO
+- Processes/reviews to retain: TODO
+- Current level (0–3) and rationale: TODO
+- Target level (0–3) and horizon: TODO
+- New/significantly changed pilot work: TODO
+
+<a id="2-snapshot-dellesistente"></a>
+
+## 2. Existing-system snapshot
+
+| Area | Observed facts | Sources | Gaps / missing information |
 |---|---|---|---|
-| Processo: specifiche, test, CI/CD | TODO | TODO | TODO |
-| Osservabilità: metriche, log, trace | TODO | TODO | TODO |
-| Sicurezza: accesso, dati, audit | TODO | TODO | TODO |
-| Affidabilità: SLO, allarmi | TODO | TODO | TODO |
-| Costo: misure, budget, soglie | TODO | TODO | TODO |
-| Cultura: review, TDD, post-mortem | TODO | TODO | TODO |
+| Process: specification/tests/CI/CD | TODO | TODO | TODO |
+| Observability: metrics/logs/traces | TODO | TODO | TODO |
+| Security: access/data/audit | TODO | TODO | TODO |
+| Reliability: SLOs/alarms | TODO | TODO | TODO |
+| Cost: measurements/budgets/thresholds | TODO | TODO | TODO |
+| Culture: review/TDD/post-mortems | TODO | TODO | TODO |
 
-## 3. Adozione incrementale
+<a id="3-adozione-incrementale"></a>
 
-Separare i requisiti del lavoro nuovo/modificato dalle lacune baseline del legacy. Collegare alla DoD i criteri coinvolti dal pilota; pianificare gli altri senza trasformarli automaticamente in blocchi per ogni feature.
+## 3. Incremental adoption
 
-| Intervento | Criterio DoD | Responsabile | Evidenza attesa | Priorità |
+Separate new/changed-work requirements from legacy baseline gaps. Link pilot criteria to the DoD; plan unrelated gaps without automatically blocking every feature.
+
+| Change | DoD criterion | Owner | Expected evidence | Priority |
 |---|---|---|---|---|
 | TODO | TODO | TODO | TODO | TODO |
 
-## 4. Valutazione del pilota
+<a id="4-valutazione-del-pilota"></a>
 
-- Indicatori di utilità da confrontare: TODO
-- Data e responsabile della retrospettiva: TODO
-- Condizioni per estendere l'adozione: TODO
+## 4. Pilot evaluation
+
+- Usefulness indicators to compare: TODO
+- Retrospective date/owner: TODO
+- Conditions for extending adoption: TODO

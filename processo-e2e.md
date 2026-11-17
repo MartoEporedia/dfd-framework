@@ -1,580 +1,257 @@
-<!-- dfd-language --> [Italiano](processo-e2e.md) | [English](en/processo-e2e.md)
+<!-- dfd-language --> [English](processo-e2e.md) | [Italiano](it/processo-e2e.md)
 
-# Processo End-to-End – DoD-First Driven (DFD)
+<a id="processo-end-to-end--dod-first-driven-dfd"></a>
 
-> **Stato**: draft / stabile  
-> **Ultimo aggiornamento**: 2026-11-17  
-> **Proprietari**: [@team / @persona]  
-> **Riferimenti**:
-> - [Documento “vivo” DFD]
-> - [DoD Estesa – Servizio X]
-> - [Checklist di Review DFD]
+<a id="obiettivo"></a>
 
-Questo documento descrive il **processo end-to-end** per sviluppare e rilasciare feature con DFD, dalla nascita dell’idea alla valutazione post-release.
+<a id="artefatti-del-setup"></a>
 
----
+<a id="quando-aggiornare-il-setup"></a>
 
-## 0. Fase 0 – Setup DFD di dominio
+<a id="relazione-con-il-processo-end-to-end"></a>
 
-Prima di applicare DFD a un prodotto / dominio, è necessario definire un **setup DFD locale**.  
-Questa non è una fase di una singola feature, ma un **prerequisito di dominio**.
+# End-to-end process – DoD-First Driven (DFD)
 
-### Obiettivo
+> **Status**: draft / stable  
+> **Last updated**: 2026-11-17  
+> **Owners**: [@team / @person]  
+> **References**: [Foundations](fondamenta.md), [Extended DoD](templates/dod-estesa.md), [Review index](templates/review_indice.md).
 
-Definire gli “strumenti del gioco” per usare DFD in modo coerente in questo dominio:
+This process connects product work, DoD-driven design and TDD, controlled production rollout and learning.
 
-- come sono fatte le DoD Estese;
-- come sono fatte le Specifiche di Feature;
-- quali guardrail globali valgono;
-- come si usano template e checklist nel processo.
+<a id="0-fase-0--setup-dfd-di-dominio"></a>
 
-### Artefatti del setup
+## 0. Phase 0 – Domain DFD setup
 
-Almeno:
+Before feature work, establish a domain extended DoD, global guardrails, local templates/checklists and process conventions. The end-to-end process assumes this setup exists. If missing, complete Phase 0 first. The domain references the DoD as contract, guardrails as constraints and adapted templates/checklists as working artifacts.
 
-1. **DoD Estesa di dominio (bozza iniziale)**  
-   - Usa il [template DoD Estesa](templates/dod-estesa.md).  
-   - Adattalo al tuo dominio (es. Checkout, Auth, Reporting).  
-   - Definisci:
-     - assi rilevanti (Osservabilità, Sicurezza, SLO, Costo, UX, ecc.);
-     - convenzioni di naming dei criteri (OBS-01, SEC-01, SLO-01, COST-01, …);
-     - eventuali criteri “standard” per questo tipo di servizio.
+The setup establishes how domain DoDs and feature specifications are written, which global constraints apply and how templates/checklists are used. Adapt the [DoD template](templates/dod-estesa.md) to Checkout, Auth, Reporting or the actual domain, identifying observability, security, SLO, cost, UX and any standard service criteria. Keep stable IDs such as OBS-01, SEC-01, SLO-01 and COST-01.
 
-2. **Guardrail globali di dominio**  
-   - Principi architetturali (es. isolamento tenant, tracciabilità end-to-end).  
-   - Vincoli di sicurezza (es. nessun PII in chiaro nei log, audit minimo).  
-   - SLO trasversali (es. disponibilità minima per servizi critici).  
-   - Linee guida di osservabilità (metriche minime, log minimi).
+Domain guardrails specify architecture (tenant isolation/end-to-end traceability), security (no plaintext PII, minimum audit), shared SLOs and minimum metrics/logs. Choose unchanged or adapted templates explicitly; document domain-specific additions and review practices, ownership, artifact locations and how this setup evolves. The feature lifecycle assumes these shared artifacts already exist. Update the setup also when the same kind of manual intervention keeps being needed to unblock work. Setup changes name categories of change, never past incidents: they must hold for features nobody has written yet.
 
-3. **Adattamento template DFD**  
-   - Decidi se:
-     - usi i template così come sono;
-     - o li adattate (es. aggiungi campi specifici al tuo contesto).  
-   - Documenta eventuali differenze rispetto al framework centrale.
+<a id="1-panoramica"></a>
 
-4. **Convenzioni di processo**  
-   - Come si classificano le feature (low / medium / high risk).  
-   - Quali checklist usare (full / light) in base al rischio.  
-   - Dove vivono gli artefatti DFD (repo, wiki, cartelle per servizio).
+## 1. Overview
 
-### Quando aggiornare il setup
+Phase 0 is the domain prerequisite; eight feature phases follow: Idea/Epic, Design, Design review, TDD Development, Pre-release, Release review, Shift-right release and Post-release. Each phase specifies inputs, activities, outputs, exit criteria and a checkpoint/gate.
 
-Il setup non è un documento “una tantum”. Va aggiornato quando:
+<a id="2-fasi-del-processo"></a>
 
-- cambi il dominio / architettura in modo significativo;  
-- emergono pattern ricorrenti non coperti;  
-- incidenti / learning mostrano che alcuni criteri DoD mancano o sono sbagliati;
-- lo stesso tipo di intervento manuale si ripete per sbloccare il lavoro;  
-- il team vuole semplificare / rafforzare il processo.
-
-Le modifiche al setup nominano categorie di cambiamento, mai incidenti passati: devono valere anche per feature non ancora scritte.
-
-### Relazione con il processo end-to-end
-
-Una volta definito il setup:
-
-- ogni **epic / feature** del dominio usa:
-  - la DoD Estesa di dominio come riferimento;
-  - i guardrail globali come vincoli;
-  - i template e le checklist adattati.
-
-Il processo end-to-end (Idea → Post-release) **presuppone** che il setup esista.  
-Se manca, la prima attività da fare è proprio la Fase 0.
-
-## 1. Panoramica
-
-Il processo è suddiviso in **8 fasi**:
-
-0. Setup DFD di dominio (prerequisito di dominio) 
-1. Idea / Epic  
-2. Design DFD  
-3. Review DFD (design)  
-4. Sviluppo (TDD DFD)  
-5. Pre-release DFD  
-6. Review DFD (release)  
-7. Rilascio shift-right  
-8. Post-release DFD  
-
-Ogni fase ha:
-
-- **Input**: artefatti necessari per iniziare.  
-- **Attività**: cosa viene fatto.  
-- **Output**: artefatti prodotti.  
-- **Criteri di uscita**: condizioni per considerare la fase chiusa.  
-- **Gate**: punto di controllo (spesso con checklist DFD).
-
----
-
-## 2. Fasi del processo
+## 2. Process phases
 
 ### 2.1 Idea / Epic
 
-**Obiettivo**: definire l’opportunità / problema e il valore atteso.
+**Objective:** define the opportunity/problem and expected value.  
+**Input:** business request, product insight or user feedback.  
+**Activities:** define the epic/ticket, estimate impact/complexity and identify the primary domain/service.  
+**Output:** epic with problem/opportunity, business KPIs and high-level estimate.  
+**Exit:** Product/PM has approved the epic and the primary domain is identified.
 
-**Input**:
+- [ ] Epic ready for the product backlog.
 
-- Richiesta business / insight prodotto / feedback utenti.
+<a id="22-design-dfd"></a>
 
-**Attività**:
+### 2.2 DFD Design
 
-- Definizione dell’epic (o equivalente nel tool di gestione lavoro).
-- Stima ad alto livello di impatto e complessità.
-- Identificazione del dominio / servizio principale coinvolto.
+**Objective:** turn the approved epic into a DoD-aligned feature specification. The specification itself is the design artifact; no separate “DFD Design” document is required.  
+**Inputs:** approved epic, domain/service extended DoD and architecture guardrails.  
+**Activities:** record the requester's words verbatim, separate assumptions, appetite and no-go; specify functional behavior and the reaction to unforeseen states (explicit, observable failure, recovery); relevant OBS-xx, SEC-xx, SLO-xx, COST-xx and UX-xx criteria, guardrails and the DoD change-type constraints; initial tests/validation.  
+**Outputs:** draft specification and ADRs/architecture notes when decisions need recording.  
+**Exit:** main fields complete, relevant criteria referenced, reaction to unforeseen states defined and guardrails checked with no known violation.
 
-**Output**:
+- [ ] Specification ready for design review.
 
-- Epic / ticket con:
-  - descrizione del problema / opportunità;
-  - obiettivi business (KPI);
-  - stima ad alto livello.
+<a id="23-review-dfd-design"></a>
 
-**Criteri di uscita**:
+### 2.3 DFD Review (design)
 
-- Epic approvata dal Product / PM.
-- Dominio / servizio principale identificato.
+**Objective:** validate consistency with DFD and the DoD.  
+**Inputs:** draft specification, extended DoD and guardrails.  
+**Activities:** relevant Tech Lead, Product, Dev, QA, Ops and Security review using the design checklist; identify gaps, architecture/security risks and questions.  
+**Outputs:** approved, approved with conditions, or changes requested specification, plus actions/clarifications.  
+**Exit:** at least approved with conditions; remaining actions clear and assigned.
 
-**Gate**:
+- [ ] Development may proceed, with or without conditions.
 
-- [ ] Epic pronta per entrare nel backlog di prodotto.
+<a id="24-sviluppo-tdd-dfd"></a>
 
----
+### 2.4 Development (DFD TDD)
 
-### 2.2 Design DFD
+**Objective:** implement through DoD-driven TDD.  
+**Inputs:** approved specification and extended DoD.  
+**Activities:** design unit/integration/E2E tests and relevant load/resilience/security tests; red → green code → refactor; implement structured logs, necessary custom metrics and trace IDs. Criteria that emerge during development: no code is added that no criterion or scenario of the specification justifies; when unspecified behavior is needed, the implementer proposes it as a criterion or scenario in the specification; review compares every added criterion with the requester's words. One that conflicts does not enter; a consistent one that changes the design invalidates the design review, which must be reconfirmed.  
+**Outputs:** code, test suite and observability instrumentation.  
+**Exit:** applicable tests pass, with a final local suite in development-only and CI according to justified domain release policy; coverage meets team standards; no code without a specification criterion or scenario that justifies it; logs/metrics align with DoD.
 
-**Obiettivo**: tradurre l’epic in una **specifica di feature** allineata alla DoD.
+- [ ] Development complete in development-only; ready for pre-release only in release-preparation.
 
-> **Nota**: non esiste un documento separato di “Design DFD”.  
-> Il design è contenuto nella **Specifica di Feature**, che funge da artefatto principale di design in ottica DFD.
+<a id="25-pre-release-dfd"></a>
 
-**Input**:
+### 2.5 DFD Pre-release
 
-- Epic approvata.
-- DoD Estesa del servizio / dominio.
-- Architecture Guardrails.
+**Objective:** prepare shift-right production release.  
+**Inputs:** ready code/tests, specification and DoD.  
+**Activities:** define rollout phases, promotion/stop/rollback criteria, alarms and dashboards; configure flags and CloudWatch/equivalent; confirm relevant nonfunctional tests and DoD-aligned thresholds.  
+**Outputs:** rollout configuration, configured alarms/dashboards or activation tickets, Support/stakeholder communication plan.  
+**Exit:** complete rollout configuration, ready resources or a clear activation plan, stakeholders informed.
 
-**Attività**:
+- [ ] Ready for release review.
 
-- Scrittura della **Specifica di Feature** (template DFD):
-  - parole del richiedente alla lettera, assunzioni separate, appetite e no-go;
-  - descrizione funzionale;
-  - reazione agli stati non previsti (fallimento esplicito e osservabile, recupero);
-  - allineamento ai criteri DoD (OBS-xx, SEC-xx, SLO-xx, COST-xx, UX-xx);
-  - identificazione di guardrail coinvolti e dei vincoli per tipo di cambiamento della DoD;
-  - primi abbozzi di test e validazione.
+<a id="26-review-dfd-release"></a>
 
-**Output**:
+### 2.6 DFD Review (release)
 
-- Specifica di Feature (draft).
-- Eventuali ADR / note architetturali (se servono decisioni).
+**Objective:** validate release preparation against DFD.  
+**Inputs:** updated specification, rollout configuration and DoD.  
+**Activities:** relevant Tech Lead, Dev, Ops, Product and Security review with release checklist; verify consistency of specification/tests/rollout, alarm/rollback thresholds and SLO/cost/UX impact.  
+**Outputs:** release approved, approved with conditions, or changes requested; assigned remaining actions.  
+**Exit:** at least approved with conditions and clear ownership of remaining actions.
 
-**Criteri di uscita**:
+- [ ] Production rollout may start.
 
-- Specifica completa nei campi principali.
-- Criteri DoD rilevanti identificati e citati.
-- Reazione agli stati non previsti definita.
-- Guardrail verificati (nessuna violazione nota).
+<a id="27-rilascio-shift-right"></a>
 
-**Gate**:
+### 2.7 Shift-right release
 
-- [ ] Specifica pronta per review DFD (design).
+**Objective:** release through controlled canary/tenant exposure.  
+**Inputs:** release review approval and rollout configuration.  
+**Activities:** execute technical canary and tenant/segment phases as planned; actively monitor errors/latency, completion/business KPIs and relevant cost; promote, stop or partially/fully roll back. Check that the version is in use everywhere it is needed (environments, tenants, devices, clients): an external blocker, such as an offline device, resumes by itself once it clears; a step only a person can take becomes a single request with the exact action.  
+**Outputs:** completed/interrupted rollout, decision log and operational/incident notes.  
+**Exit:** success, with the version in use at every planned place, or documented interruption with mitigation plan.
 
----
+- [ ] Feature considered released, including a documented rollback outcome.
 
-### 2.3 Review DFD (design)
+<a id="28-post-release-dfd"></a>
 
-**Obiettivo**: validare che la specifica sia coerente con DFD e DoD.
+### 2.8 DFD Post-release
 
-**Input**:
+**Objective:** consolidate learning and update DoD/guardrails.  
+**Inputs:** rollout outcome and post-release metrics/feedback.  
+**Activities:** compare business/SLO/cost/UX outcomes; identify successes, friction, incidents and near misses; trace every issue to its cause (a mistake a check caught is normal operation and changes nothing; content missing from the specification means fixing the specification and the template or setup that did not ask for it; a wrong result nobody caught means clarifying why the specification allowed it, then fixing as above); measure the cost of the process (human interventions needed to unblock work, time and resources spent on verification) and consider a lighter route when the process costs more than it prevents; propose DoD, guardrail and process improvements.  
+**Outputs:** internal note/post-mortem where appropriate and proposed document changes.  
+**Exit:** learning documented/shared and improvement actions assigned.
 
-- Specifica di Feature (draft).
-- DoD Estesa.
-- Architecture Guardrails.
-
-**Attività**:
-
-- Review collettiva (Tech Lead, Product, Dev, QA, Ops, Security come necessario).
-- Uso della **Checklist di Review DFD** (sezione design).
-- Identificazione di:
-  - lacune nella specifica;
-  - rischi architetturali / di sicurezza;
-  - punti aperti da chiarire.
-
-**Output**:
-
-- Specifica di Feature:
-  - approvata;
-  - approvata con condizioni;
-  - da rivedere.
-- Lista di azioni / chiarimenti richiesti.
-
-**Criteri di uscita**:
-
-- Specifica almeno “approvata con condizioni”.
-- Azioni residue chiare e assegnate.
-
-**Gate**:
-
-- [ ] OK a procedere con lo sviluppo (con o senza condizioni).
-
----
-
-### 2.4 Sviluppo (TDD DFD)
-
-**Obiettivo**: implementare la feature seguendo TDD, con i test guidati dalla DoD.
-
-**Input**:
-
-- Specifica di Feature approvata.
-- DoD Estesa.
-
-**Attività**:
-
-- Progettazione dei test:
-  - unitari, di integrazione, end-to-end;
-  - test non funzionali (carico, resilienza, sicurezza) se rilevanti.
-- Ciclo TDD:
-  - test rosso → codice verde → refactor.
-- Implementazione della strumentazione:
-  - log strutturati;
-  - metriche custom (se necessarie);
-  - trace ID.
-- Criteri emersi durante lo sviluppo:
-  - non si aggiunge codice che nessun criterio o scenario della specifica giustifica;
-  - se serve un comportamento non specificato, chi implementa lo propone come criterio o scenario nella specifica;
-  - la review confronta ogni criterio aggiunto con le parole del richiedente: uno in conflitto non entra; uno coerente che cambia il design invalida la review di design, da riconfermare.
-
-**Output**:
-
-- Codice implementato.
-- Suite di test (unitari, integrazione, ecc.).
-- Strumentazione osservabilità (log, metriche, trace).
-
-**Criteri di uscita**:
-
-- Tutti i test applicabili verdi, con suite finale locale in solo sviluppo e CI secondo la policy motivata del dominio in preparazione al rilascio.
-- Copertura test adeguata (secondo standard del team).
-- Nessun codice senza un criterio o scenario della specifica che lo giustifichi.
-- Log e metriche allineati alla DoD.
-
-**Gate**:
-
-- [ ] Sviluppo completato in solo sviluppo; feature pronta per pre-release DFD solo in preparazione al rilascio.
-
----
-
-### 2.5 Pre-release DFD
-
-**Obiettivo**: preparare il rilascio in produzione in ottica shift-right.
-
-**Input**:
-
-- Codice e test pronti.
-- Specifica di Feature.
-- DoD Estesa.
-
-**Attività**:
-
-- Definizione della **Configurazione Rollout**:
-  - fasi di rollout;
-  - criteri di promozione / stop / rollback;
-  - allarmi e dashboard.
-- Configurazione di:
-  - feature flag (se usati);
-  - allarmi CloudWatch (o equivalente);
-  - dashboard di monitoraggio.
-- Verifica che:
-  - i test non funzionali siano stati eseguiti (carico, resilienza, sicurezza);
-  - le soglie di allarme siano coerenti con la DoD.
-
-**Output**:
-
-- Configurazione Rollout (documento / file di config).
-- Allarmi e dashboard configurati (o ticket per configurarli).
-- Piano di comunicazione a Supporto / stakeholder.
-
-**Criteri di uscita**:
-
-- Configurazione Rollout completa.
-- Allarmi e dashboard pronti (o piano chiaro per attivarli).
-- Supporto / stakeholder informati.
-
-**Gate**:
-
-- [ ] Feature pronta per review DFD (release).
-
----
-
-### 2.6 Review DFD (release)
-
-**Obiettivo**: validare che il rilascio sia preparato in modo coerente con DFD.
-
-**Input**:
-
-- Specifica di Feature (aggiornata).
-- Configurazione Rollout.
-- DoD Estesa.
-
-**Attività**:
-
-- Review collettiva (Tech Lead, Dev, Ops, Product, Security come necessario).
-- Uso della **Checklist di Review DFD** (sezione release).
-- Verifica di:
-  - coerenza tra specifica, test e configurazione rollout;
-  - soglie di allarme e criteri di rollback;
-  - impatto su SLO, costo, UX.
-
-**Output**:
-
-- Decisione:
-  - OK a rilasciare;
-  - OK con condizioni;
-  - da rivedere.
-- Eventuali azioni residue.
-
-**Criteri di uscita**:
-
-- Almeno “OK con condizioni”.
-- Azioni residue chiare e assegnate.
-
-**Gate**:
-
-- [ ] OK a iniziare il rollout in produzione.
-
----
-
-### 2.7 Rilascio shift-right
-
-**Obiettivo**: rilasciare la feature in produzione con canary e rollout controllati.
-
-**Input**:
-
-- Approvazione dalla review DFD (release).
-- Configurazione Rollout.
-
-**Attività**:
-
-- Esecuzione del rollout secondo le fasi definite:
-  - canary tecnico (se previsto);
-  - rollout per tenant / segmento.
-- Monitoraggio attivo di:
-  - metriche tecniche (error rate, latency);
-  - metriche business (tasso di completamento, KPI);
-  - costo (se rilevante).
-- Decisioni di:
-  - promozione alla fase successiva;
-  - stop;
-  - rollback parziale o totale.
-- Verifica che la versione sia in uso ovunque serva (ambienti, tenant, dispositivi, client):
-  - un blocco esterno, come un dispositivo offline, si riprende da solo quando sparisce;
-  - un passo che solo una persona può fare diventa una sola richiesta con l'azione esatta.
-
-**Output**:
-
-- Rollout eseguito (completato o interrotto).
-- Decision log (promozioni, stop, rollback).
-- Eventuali incidenti / note operative.
-
-**Criteri di uscita**:
-
-- Rollout completato con successo, con la versione in uso in tutti i punti previsti, **oppure**
-- Rollout interrotto con decisione documentata e piano di mitigazione.
-
-**Gate**:
-
-- [ ] Feature considerata “rilasciata” (anche se con rollback).
-
----
-
-### 2.8 Post-release DFD
-
-**Obiettivo**: consolidare i learning e aggiornare DoD / guardrail se necessario.
-
-**Input**:
-
-- Esito del rollout.
-- Metriche e feedback post-release.
-
-**Attività**:
-
-- Analisi dei risultati:
-  - rispetto agli obiettivi business;
-  - rispetto a SLO, costo, UX.
-- Identificazione di:
-  - cosa ha funzionato bene;
-  - cosa ha creato attrito;
-  - eventuali incidenti / near-miss.
-- Riconduzione di ogni problema alla sua causa:
-  - errore intercettato da una verifica: è il funzionamento normale, nessuna modifica;
-  - contenuto mancante nella specifica: correggere la specifica e il template o setup che non lo chiedeva;
-  - risultato sbagliato non intercettato: chiarire perché la specifica lo permetteva, poi correggere come sopra.
-- Misura del costo del processo: interventi umani necessari per sbloccare il lavoro, tempo e risorse spesi in verifica. Se il processo costa più di quanto previene, valutare un percorso più leggero.
-- Proposte di:
-  - aggiornamento della DoD Estesa;
-  - nuovi guardrail;
-  - miglioramenti al processo DFD.
-
-**Output**:
-
-- Nota interna / post-mortem (se necessario).
-- Proposte di modifica a:
-  - DoD Estesa;
-  - Architecture Guardrails;
-  - Processo DFD (se rilevante).
-
-**Criteri di uscita**:
-
-- Learning documentati e condivisi.
-- Azioni di miglioramento identificate (con owner).
-
-**Gate**:
-
-- [ ] Feature chiusa dal punto di vista DFD.
-
----
+- [ ] Feature closed from the DFD perspective.
 
 ## 3. Definition of Ready (DoR)
 
-Le **Definition of Ready (DoR)** definiscono i criteri minimi perché un lavoro possa entrare in una fase successiva.  
-Si applicano solo ai tre passaggi chiave: **Idea→Design**, **Design→Sviluppo**, **Pre-release→Rilascio**.
+Minimum entry criteria apply at three key transitions: Idea→Design, Design→Development and Pre-release→Release.
 
----
+<a id="31-dor-per-entrare-in-design-dfd"></a>
 
-### 3.1 DoR per entrare in Design DFD
+### 3.1 Entry to DFD Design
 
-Prima di iniziare il design di una feature, l’epic deve soddisfare i seguenti criteri minimi:
+- [ ] Clear business objective in 1–2 sentences.
+- [ ] At least high-level success KPIs, such as checkout conversion or support ticket reduction.
+- [ ] Primary domain/service identified.
+- [ ] High-level complexity estimate, such as T-shirt size.
+- [ ] Product backlog priority assigned.
+- [ ] Epic approved by Product Manager/Owner.
 
-- [ ] **Obiettivo business chiaro** (1–2 frasi: che problema risolve / che opportunità sfrutta).  
-- [ ] **KPI / metriche di successo** almeno ad alto livello (es. “aumento conversione checkout”, “riduzione ticket supporto”).  
-- [ ] **Dominio / servizio principale** identificato (es. Checkout, Pagamenti, Catalogo).  
-- [ ] **Stima ad alto livello** di complessità (T-shirt size o simile).  
-- [ ] **Priorità** definita nel backlog di prodotto.  
-- [ ] **Epic approvata** dal Product Manager / Product Owner.
+Otherwise keep refining the epic before design.
 
-Se questi criteri non sono soddisfatti, l’epic resta in raffinazione prodotto e non entra in Design DFD.
+<a id="32-dor-per-entrare-in-sviluppo-tdd-dfd"></a>
 
----
+### 3.2 Entry to Development (DFD TDD)
 
-### 3.2 DoR per entrare in Sviluppo (TDD DFD)
+- [ ] Main specification fields complete: scenarios/stories, interfaces/APIs/events and external dependencies.
+- [ ] Relevant OBS-xx, SEC-xx, SLO-xx, COST-xx and UX-xx criteria referenced.
+- [ ] Guardrails checked with no known violation.
+- [ ] Architecture, security and reliability risks identified.
+- [ ] Tech Lead/Architect approval in principle, even informally before formal review.
+- [ ] Design review at least approved with conditions, with no open architecture/security blocker.
 
-Prima di iniziare lo sviluppo di una feature, la Specifica di Feature deve soddisfare i seguenti criteri minimi:
+Otherwise complete design before implementation.
 
-- [ ] **Specifica di Feature** compilata nei campi principali:
-  - scenari / user story;
-  - interfacce / API / eventi;
-  - dipendenze esterne.
-- [ ] **Criteri DoD rilevanti** identificati e citati (OBS-xx, SEC-xx, SLO-xx, COST-xx, UX-xx).  
-- [ ] **Guardrail globali** verificati (nessuna violazione nota).  
-- [ ] **Rischi principali** identificati (architetturali, sicurezza, affidabilità).  
-- [ ] **Approvazione in linea di principio** da parte del Tech Lead / Architect (anche informale, prima della review formale).  
-- [ ] **Review DFD (design)** almeno “approvata con condizioni” (nessun blocco architetturale / di sicurezza aperto).
+<a id="33-dor-per-entrare-in-rilascio-shift-right"></a>
 
-Se questi criteri non sono soddisfatti, la feature non entra in sviluppo; si completa prima il design.
+### 3.3 Entry to Shift-right Release
 
----
+- [ ] Applicable unit/integration/E2E tests pass, with local/CI evidence required by domain release policy.
+- [ ] Relevant load, resilience and security tests executed.
+- [ ] Rollout phases, promotion/stop/rollback criteria, alarms and dashboards defined.
+- [ ] Operational resources configured or clear activation plan available.
+- [ ] Support and key stakeholders informed, including Ops/Security when relevant.
+- [ ] Release review at least approved with conditions, with no open technical/security blocker.
 
-### 3.3 DoR per entrare in Rilascio shift-right
+Otherwise complete pre-release before rollout.
 
-Prima di iniziare un rollout in produzione, la feature deve soddisfare i seguenti criteri minimi:
+<a id="4-rappresentazione-sintetica-del-flusso"></a>
 
-- [ ] **Tutti i test applicabili verdi**, con evidenze locali/CI secondo la policy di rilascio del dominio (unitari, integrazione, E2E).  
-- [ ] **Test non funzionali** eseguiti (se rilevanti: carico, resilienza, sicurezza).  
-- [ ] **Configurazione Rollout** definita:
-  - fasi di rollout;
-  - criteri di promozione / stop / rollback;
-  - allarmi e dashboard.
-- [ ] **Allarmi e dashboard** configurati (o piano chiaro per attivarli).  
-- [ ] **Supporto / stakeholder** informati (almeno i team chiave: Support, Ops, Security se rilevante).  
-- [ ] **Review DFD (release)** almeno “OK con condizioni” (nessun blocco tecnico / di sicurezza aperto).
-
-Se questi criteri non sono soddisfatti, la feature non entra in rollout; si completa prima la pre-release.
-
----
-
-## 4. Rappresentazione sintetica del flusso
+## 4. Flow overview
 
 ```text
-Idea/Epic
-   ↓
-Design DFD
-   ↓
-Review DFD (design)
-   ↓
-Sviluppo (TDD DFD)
-   ↓
-Pre-release DFD
-   ↓
-Review DFD (release)
-   ↓
-Rilascio shift-right
-   ↓
-Post-release DFD
+Idea/Epic → DFD Design → Design Review → DFD TDD Development
+→ Pre-release → Release Review → Shift-right Release → Post-release
 ```
 
----
+<a id="5-eccezioni-e-semplificazioni"></a>
 
-## 5. Eccezioni e semplificazioni
+## 5. Exceptions and simplifications
 
-Per feature piccole / a basso rischio, il processo può essere **semplificato**:
+Small low-risk features may use light design/review and direct rollout without canary when guardrails allow. Rules must be explicit (for example excluding payment, security and critical SLO changes) and approved by Tech Lead/Architect.
 
-- Design DFD e review DFD (design) possono essere leggeri (checklist ridotta).
-- Rollout può essere diretto (senza canary), se il rischio è basso e i guardrail lo consentono.
+<a id="maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio"></a>
 
-Le regole di semplificazione devono essere:
+## Project maturity: development only and release preparation
 
-- esplicite (es. “feature che non toccano pagamento, sicurezza o SLO critici”);
-- approvate dal Tech Lead / Architect.
+Maturity is independent of DFD adoption level and feature risk. Phase 0 declares mode, CI policy and justification.
 
-## Maturità del progetto: solo sviluppo e preparazione al rilascio
-
-La maturità del progetto è distinta dal livello di adozione DFD e dal rischio della feature. La Fase 0 dichiara una modalità, la scelta sulla CI e la relativa motivazione:
-
-| Modalità | Verifiche di sviluppo | Uscita |
+| Mode | Development checks | Outcome |
 |---|---|---|
-| Solo sviluppo (`development-only`) | Light/full: review di design, TDD e suite finale locale; rapido: verifiche pertinenti. CI facoltativa | Sviluppo completato; nessuna pre-release o autorizzazione a distribuire |
-| Preparazione al rilascio (`release-preparation`) | Stessi controlli, con CI richiesta per default; un’alternativa locale richiede motivazione rispetto a rischio e destinazione e review umana | Prontezza alla pre-release, poi review di release distinta |
+| `development-only` | Light/full: design review, TDD and final local suite; rapid: relevant checks; optional CI | Development complete; no pre-release or distribution approval |
+| `release-preparation` | Same checks; CI required by default; a local alternative needs risk/target justification and human review | Ready for pre-release, followed by a separate release review |
 
-L’assenza della CI non è una lacuna bloccante in solo sviluppo. Restano obbligatorie le verifiche applicabili e la tracciabilità di comando, data, risultato e log: un test locale non viene dichiarato CI. Quando prevista, la suite finale deve seguire i test green. Una CI dichiarata fallita continua a bloccare anche quando facoltativa.
+Missing CI does not block development-only. Applicable checks remain mandatory with command, date, result and real log; local tests are never labeled CI. The final suite, when required, follows green tests. Declared failed CI still blocks even when optional.
 
-Prima di distribuire, passare esplicitamente alla preparazione al rilascio: rivalutare rischio, criteri, policy CI e verifiche nell’ambiente di destinazione. Riconfermare review e aggiornare piano ed evidenze invalidati. La modalità solo sviluppo non attenua controlli di sicurezza o rischio; il completamento locale non sostituisce l’approvazione umana del rilascio. Il learning può provenire anche dagli esperimenti locali, prima di disporre di dati di produzione.
+Before distribution explicitly switch to release preparation; reassess risk, criteria, CI policy and target-environment checks. Reconfirm invalidated reviews and update plans/evidence. Development-only does not weaken security/risk controls, and local completion does not replace human release approval. Local experiments can produce learning before production data exists.
 
-## Percorsi proporzionati e lavoro individuale o in team
+<a id="percorsi-proporzionati-e-lavoro-individuale-o-in-team"></a>
 
-DFD si applica sia al singolo sviluppatore sia a un team. La maturità del progetto (solo sviluppo / preparazione al rilascio), il rischio dell’intervento e l’organizzazione del lavoro sono scelte distinte. Il team non è un prerequisito.
+## Proportionate routes and solo or team work
 
-| Percorso | Quando | Minimo utile |
+DFD supports solo developers and teams. Maturity, change risk and work organization are independent; a team is not a prerequisite.
+
+| Route | Eligibility | Useful minimum |
 |---|---|---|
-| Rapido | Fix che ripristina un contratto noto o modifica editoriale; ambito circoscritto, rischio interamente low, nessun contratto/guardrail cambiato, nessun comportamento critico o dubbio aperto | Un record con problema, ambito, owner, rischio motivato, criteri pertinenti e verifiche reali |
-| Light | Funzionalità contenuta, fix non ammissibile al rapido o dubbi da chiarire, senza condizioni full | Specifica breve, criteri applicabili, review pertinente ed evidenze |
-| Full | Almeno una dimensione high, almeno due medium o nuovo servizio | Analisi, design e verifiche approfonditi secondo il rischio; preparazione operativa quando si distribuisce |
+| Rapid | Scoped known-contract restoration/editorial change, all Low, no changed contract/guardrail, critical behavior or open question | One record: problem, scope, owner, justified risk, relevant criteria and real checks |
+| Light | Contained feature, ineligible fix or questions needing clarification, without full conditions | Brief specification, applicable criteria, relevant review and evidence |
+| Full | Any High, at least two Medium or a new service | Risk-appropriate analysis, design and checks; operational preparation for distribution |
 
-Il rapido è una scelta esplicita per interventi ammissibili, non il risultato del numero di righe modificate. Una sola medium esclude il rapido e porta almeno a light. Rischio ignoto blocca la scelta; dubbi o variazioni di contratto richiedono chiarimento o promozione. Un comportamento critico richiede full completo. La CLI propone il percorso con i motivi; il manutentore può correggere la valutazione documentandone i fatti, senza override silenziosi dei gate.
+Rapid eligibility is explicit, never based on line count. One Medium excludes rapid; unknown risk blocks choice. Questions or contract changes need clarification/promotion. Critical behavior requires full complete. The maintainer can correct assessments with documented facts; gates have no silent override.
 
-### Fix rapidi e test che prevengono danni
+<a id="fix-rapidi-e-test-che-prevengono-danni"></a>
 
-Per un fix comportamentale serve una regressione che riproduca il bug, fallisca per il requisito atteso prima della correzione e passi dopo. Un errore di compilazione o ambiente non vale come red. Per una modifica editoriale basta una verifica pertinente di contenuto, link o output: nessun test artificiale. Collegare i criteri realmente coinvolti e motivare il perimetro delle verifiche; non imporre suite completa o mutation test a ogni correzione.
+### Quick fixes and tests that prevent harm
 
-Dare priorità a perdita di dati, autorizzazioni, pagamenti, compatibilità, scritture parziali, retry e rollback. Verificare anche gli effetti del fallimento: un’operazione rifiutata deve preservare i dati; retry e richieste duplicate non devono duplicare effetti. Gli interventi critici escono dal rapido anche se minuscoli. Usare mutanti mirati sugli invarianti importanti per verificare che una protezione rimossa venga rilevata. Numero di test e copertura percentuale da soli non dimostrano protezione dai bug gravi.
+A behavioral regression must reproduce the bug, fail for the expected requirement before the fix and pass afterwards. Compilation/environment failures are not red evidence. Editorial changes need relevant content/link/output checks without artificial tests. Match suites and mutation tests to actual risk.
 
-Ogni bug importante sfuggito in produzione deve produrre una verifica capace di intercettarlo al livello efficace (unitario, integrazione o end-to-end); aggiornare i criteri DFD quando il problema è sistemico. Il learning degli esperimenti locali resta utile prima della produzione.
+Prioritize data loss, authorization, payments, compatibility, partial writes, retry and rollback. Rejected operations must preserve data; retries/duplicates must not duplicate effects. Critical changes leave rapid even when tiny. Target mutants at important invariants; test count/coverage alone does not establish protection. Every serious escaped production bug yields an effective unit/integration/E2E regression; systemic issues update DoD criteria. Local learning is useful too.
 
-### Un solo record e riuso delle decisioni
+<a id="un-solo-record-e-riuso-delle-decisioni"></a>
 
-Il rapido non richiede specifica, piano e report di design separati: usare il [record rapido](templates/cambiamento_rapido.md). Una PR può semplicemente riferirsi a quel record, senza duplicarlo. Con la CLI il record macchina è `.dfd/changes/<id>.json`; log e file verificati sono evidenze di supporto, non nuovi documenti di processo. Riprendere il design già approvato indicato nel contratto noto; non riaprire il design per un ripristino circoscritto.
+### One record and reused decisions
 
-Il singolo dev può completare il rapido con record ed evidenze, senza PR, secondo reviewer o nuovo gate di approvazione del design. `change-verified` è un esito tecnico, non una decisione umana simulata. Se il team richiede review indipendente, la review ordinaria della PR soddisfa la review del cambiamento: registrarla una volta, con persona, riferimento, revisione e snapshot. Una review registrata volontariamente resta comunque vincolata a ciò che è stato esaminato.
+Rapid uses the [quick change record](templates/cambiamento_rapido.md), without separate specification, plan or design report. A PR can reference it. The CLI record is `.dfd/changes/<id>.json`; logs/files support evidence. Reuse the approved design referenced by the known contract rather than reopening design for scoped restoration.
 
-### Collaborazione facoltativa e integrazione
+A solo developer can finish rapid without a PR, second reviewer or new design approval. `change-verified` is a technical result. If team policy requires independence, record the real ordinary PR review once with person, reference, revision and snapshot. Voluntarily recorded reviews still bind to the examined material.
 
-Versionare DoD, guardrail e policy comuni; assegnare ID distinti e owner per intervento. I riferimenti a issue, branch, PR e revisione sono opzionali per il lavoro individuale e richiesti quando la policy del team li rende necessari. I ruoli sono assegnabili per intervento: il reviewer può essere un collega delegato secondo la policy, senza dipendere sempre dalla stessa persona. Una review di PR può soddisfare il gate DFD pertinente: non chiedere due approvazioni equivalenti.
+<a id="collaborazione-facoltativa-e-integrazione"></a>
 
-Gli artefatti delle feature restano separati: evitare uno stato centrale da modificare per ogni fix. Il lock della CLI protegge una cartella locale, non coordina cloni diversi. Usare Git e review dei conflitti; non risolvere automaticamente conflitti tra decisioni o evidenze scegliendo l’ultima scrittura. Dopo il merge, rivalutare snapshot e prove interessate.
+### Optional collaboration and integration
 
-Prima della distribuzione, la policy team può richiedere review indipendente e prove sulla versione integrata corrente: i test verdi di due branch isolati non dimostrano che i due cambiamenti funzionino insieme. La verifica deve coprire i file dell’intervento, avere revisione coerente, comandi, esiti, date e log reali. Un hash non autentica una persona o un commit: la review semantica verifica origine, completezza dei test e corrispondenza della revisione dichiarata.
+Version shared DoD, guardrails and policy; assign distinct IDs/owners. Issue/branch/PR/revision references are optional solo and required only by explicit team policy. Delegate reviewers per change. One applicable PR review can satisfy the DFD gate without duplicate approvals.
 
-### Review selettive ed evoluzione del setup
+Keep feature artifacts separate. A CLI lock protects one local directory, not separate clones. Use Git and explicit conflict review; never settle decision/evidence conflicts automatically with last-write-wins. Reassess affected snapshots and evidence after merge.
 
-Per le nuove feature, i contratti normativi dei criteri sono nel catalogo strutturato e i vincoli nei guardrail e nella policy lifecycle. Il fingerprint considera specifica, rischio, criteri valutati e vincoli operativi pertinenti; correzioni ai template, convenzioni descrittive, aggiunta di domini o lacune baseline estranee non invalidano da sole il design. Il catalogo e i guardrail devono contenere tutte le prescrizioni operative: non introdurre obblighi soltanto nel testo di processo escluso dal fingerprint. Nuovi criteri changes da valutare o modifiche ai contratti pertinenti riaprono il design.
+Before distribution, team policy may require independence and checks of the current integrated revision. Passing isolated branches does not prove integration. Checks cover change files and consistent revision, command, result, dates and real logs. Hashes authenticate neither people nor commits; semantic review assesses origin, completeness and declared revision.
 
-Cambiare le regole comuni tramite una modifica revisionata, indicando le feature interessate e le eventuali azioni. I guardrail comuni restano conservativi: una modifica normativa può coinvolgere tutto il dominio. La CLI non distingue semanticamente un refuso da una modifica di sicurezza nei file normativi. Le feature legacy conservano i fingerprint precedenti; non migrare approvazioni automaticamente.
+<a id="review-selettive-ed-evoluzione-del-setup"></a>
 
-Il rapido conclude lo sviluppo e non autorizza una distribuzione: quando si decide di rilasciare, riprendere/promuovere una feature light/full che riferisce il record rapido, rivalutando policy e integrazione prima della review di release.
+### Selective reviews and setup evolution
+
+For new features, normative criterion contracts live in the structured catalog and constraints in guardrails/lifecycle. Fingerprints include specification, risk, assessed criteria and relevant operational constraints. Template fixes, descriptive conventions, added domains and unrelated baseline gaps alone do not invalidate design. Keep all operational requirements in catalog/guardrails rather than hiding them in excluded process prose. New changes criteria or relevant contract changes reopen design.
+
+Review shared-rule changes and identify affected features/actions. Shared guardrails stay conservative and can affect the whole domain. The CLI cannot semantically distinguish a typo from a security change in normative files. Legacy features retain previous fingerprints; never migrate approvals automatically.
+
+Rapid completes development, not distribution. To release, resume/promote a light/full feature referencing the quick change and reassess policy/integration before release review.

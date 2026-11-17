@@ -1,0 +1,92 @@
+<!-- dfd-language --> [English](../../templates/review_release_light.md) | [Italiano](review_release_light.md)
+
+# Checklist di Review DFD – Release (Light)
+
+> **Tipo di review**: release (feature piccola / basso rischio)  
+> **Data**: YYYY-MM-DD  
+> **Partecipanti**: [@team / @persone]  
+> **Riferimenti**:
+> - [Specifica di Feature]
+> - [DoD Estesa – Servizio X]
+> - [Configurazione Rollout (anche leggera)]
+
+> **Quando usare questa versione**:  
+> Feature che **non toccano** pagamento, sicurezza, SLO critici o architettura core.  
+> Esempi: piccoli cambiamenti UI, testi, metriche interne, refactor non funzionali.
+
+---
+
+## 0. DoR – Release (Light)
+
+- [ ] **Test verdi** (unitari / integrazione principali).  
+- [ ] **Nessun test non funzionale** richiesto (o già eseguito in passato per casi simili).  
+- [ ] **Piano di rilascio semplice**:
+  - [ ] rollout diretto o canary leggero;
+  - [ ] nessun feature flag complesso (o già esistente).
+- [ ] **Supporto / stakeholder** informati (almeno per awareness, se il cambiamento è visibile agli utenti).
+
+---
+
+## 1. DoD Estesa (verifica leggera)
+
+### 1.1 Osservabilità
+
+- [ ] Nessun nuovo allarme critico richiesto.  
+- [ ] Log coerenti con lo standard del servizio (se ci sono nuovi log).  
+- [ ] Nessun impatto negativo su dashboard esistenti.
+
+### 1.2 Sicurezza
+
+- [ ] Nessun cambiamento su controlli di accesso / autorizzazioni.  
+- [ ] Nessun nuovo dato sensibile trattato o loggato.
+
+### 1.3 Affidabilità / SLO
+
+- [ ] Nessun impatto atteso su latenza, error rate o disponibilità.  
+- [ ] Nessuna nuova dipendenza esterna critica.
+
+### 1.4 Costo
+
+- [ ] Nessun impatto significativo sul costo del servizio.
+
+---
+
+## 2. Guardrail globali (verifica rapida)
+
+- [ ] La feature non viola i guardrail architetturali.  
+- [ ] La feature non viola i guardrail di sicurezza.  
+- [ ] La feature non viola i guardrail di osservabilità.  
+- [ ] La feature non viola i guardrail di costo.
+
+---
+
+## 3. Test e rilascio
+
+- [ ] Test principali verdi e verificabili secondo la policy locale/CI del dominio.  
+- [ ] Piano di rilascio chiaro (diretto o canary leggero).  
+- [ ] Procedura di rollback chiara (anche semplice: “disabilita flag / revert PR”).
+
+---
+
+## 4. Esito della review di release (Light)
+
+- [ ] **OK a rilasciare** (può procedere il rollout in produzione)  
+- [ ] **OK con condizioni**: [condizioni da soddisfare prima o durante il rollout]  
+- [ ] **Da rivedere**: [motivi, cosa manca]
+
+**Firme / approvazioni**:
+
+- [@persona] – [ruolo]
+
+## Maturità e policy delle verifiche
+
+- Modalità del dominio: solo sviluppo / preparazione al rilascio.
+- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
+- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
+- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
+
+In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
+
+## Proporzionalità e collaborazione
+
+Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.

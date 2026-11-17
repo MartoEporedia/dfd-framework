@@ -1,344 +1,146 @@
-<!-- dfd-language --> [Italiano](rischio.md) | [English](en/rischio.md)
+<!-- dfd-language --> [English](rischio.md) | [Italiano](it/rischio.md)
 
-# Criteri di Rischio Feature – DoD-First Driven (DFD)
+<a id="criteri-di-rischio-feature--dod-first-driven-dfd"></a>
 
-> **Stato**: draft / stabile  
-> **Ultimo aggiornamento**: YYYY-MM-DD  
-> **Proprietari**: [@team / @persona]  
-> **Riferimenti**:
-> - [Processo End-to-End DFD]
-> - [Checklist di Review DFD – Design]
-> - [Checklist di Review DFD – Release]
-> - [Checklist di Review DFD – Design (Light)]
-> - [Checklist di Review DFD – Release (Light)]
+<a id="classificazione-del-rischio-dfd"></a>
 
-Questo documento definisce **criteri pratici** per decidere se una feature deve seguire il percorso **DFD full** (checklist complete) o **DFD light** (checklist leggere).
+# Feature risk criteria – DoD-First Driven (DFD)
 
----
+> **Status**: draft / stable  
+> **Last updated**: YYYY-MM-DD  
+> **Owners**: [@team / @person]  
+> **References**: [Process](processo-e2e.md), [full design](templates/review_design.md), [full release](templates/review_release.md), [light design](templates/review_design_light.md), [light release](templates/review_release_light.md).
 
-## 1. Obiettivo
+<a id="1-obiettivo"></a>
 
-Evitare di applicare un processo “pesante” a feature piccole / a basso rischio, mantenendo al contempo rigore su:
+## 1. Objective
 
-- sicurezza;
-- affidabilità / SLO;
-- costo;
-- impatto su utenti e business.
+Match process rigor to feature risk while protecting security, reliability/SLOs, cost, users and business. Classification selects full or light design and release checklists.
 
-La classificazione del rischio guida la scelta tra:
+<a id="2-dimensioni-di-rischio"></a>
 
-- **Checklist full** (design + release);
-- **Checklist light** (design + release).
+## 2. Risk dimensions
 
----
+Assess **all five dimensions** as Low, Medium or High: security, reliability/SLOs, cost, user/business impact and architectural complexity. Document the facts supporting each assessment.
 
-## 2. Dimensioni di rischio
+<a id="21-sicurezza"></a>
 
-Valuta la feature lungo queste **5 dimensioni**:
+### 2.1 Security
 
-1. **Sicurezza**  
-2. **Affidabilità / SLO**  
-3. **Costo**  
-4. **Impatto su utenti / business**  
-5. **Complessità architetturale**
+- **Low:** no changes to access/authorization, sensitive data (PII/payment data), audit/security logging, encryption, secrets or IAM; no new externally exposed endpoint.
+- **Medium:** small changes to security logging, such as new audit events; additional cases within the existing authorization model; new internal endpoint with no direct external exposure.
+- **High:** new access/authorization controls; new sensitive data handled or logged; encryption, secrets or critical IAM policy changes; new public endpoint handling sensitive data.
 
-Per ogni dimensione, assegna un livello: **Basso**, **Medio**, **Alto**.
+<a id="22-affidabilità--slo"></a>
 
----
+### 2.2 Reliability / SLOs
 
-### 2.1 Sicurezza
+- **Low:** no expected latency, error-rate or availability impact; no new critical external dependency; UI, text or noncritical internal logic changes.
+- **Medium:** slight latency/error impact within comfortable SLO margins and acceptable fallback/degradation; new noncritical dependency, such as an established internal service.
+- **High:** significant latency (approaching/exceeding SLO), error-rate or availability impact; new critical dependency such as a payment provider/core service; changes to retry, timeout, circuit breaker or failure handling for critical dependencies.
 
-**Basso**:
+<a id="23-costo"></a>
 
-- Nessun cambiamento su:
-  - controlli di accesso / autorizzazioni;
-  - gestione dati sensibili (PII, dati di pagamento, ecc.);
-  - audit / logging di sicurezza.
-- Nessun nuovo endpoint esposto verso l’esterno.
-- Nessun cambiamento su crittografia, gestione segreti, policy IAM.
+### 2.3 Cost
 
-**Medio**:
+- **Low:** no significant service cost impact or new intensive CPU, memory, I/O or storage usage.
+- **Medium:** estimated increase < 5% monthly service cost or < 5% per transaction; moderate new usage such as additional custom metrics/logs.
+- **High:** estimated increase ≥ 5% monthly service cost or ≥ 10% per transaction; intensive new workloads, heavy batches, data pipelines or substantial storage.
 
-- Piccoli cambiamenti su:
-  - logging di sicurezza (nuovi eventi di audit);
-  - regole di autorizzazione esistenti (aggiunta di casi, senza cambiare modello).
-- Nuovo endpoint interno (non esposto direttamente a utenti esterni).
+<a id="24-impatto-su-utenti--business"></a>
 
-**Alto**:
+### 2.4 User / business impact
 
-- Nuovi controlli di accesso / autorizzazioni.
-- Nuovi dati sensibili trattati o loggati.
-- Cambiamenti su:
-  - crittografia;
-  - gestione segreti;
-  - policy IAM critiche.
-- Nuovo endpoint pubblico che tratta dati sensibili.
+- **Low:** invisible internal refactoring/logging/metrics; small UI/text changes outside critical flows; no main conversion, churn or revenue KPI impact.
+- **Medium:** visible changes confined to noncritical areas with limited KPI impact; optional feature for a subset of users, not enabled for everyone by default.
+- **High:** checkout, login, payment or onboarding changes; default enablement for all users/tenants; potentially significant positive or negative business KPI impact.
 
----
+<a id="25-complessità-architetturale"></a>
 
-### 2.2 Affidabilità / SLO
+### 2.5 Architectural complexity
 
-**Basso**:
+- **Low:** local to one service/module; no public API, shared domain event or key data schema changes; no new architectural pattern.
+- **Medium:** 2–3 services/modules; small backward-compatible API additions or new domain events without breaking existing consumers.
+- **High:** many services/modules; public API breaking changes or regression risks; critical events/key schemas; significant new communication patterns or domain boundaries.
 
-- Nessun impatto atteso su:
-  - latenza;
-  - error rate;
-  - disponibilità.
-- Nessuna nuova dipendenza esterna critica.
-- Cambiamenti confinati a:
-  - UI;
-  - testi;
-  - logica interna non critica.
+<a id="3-regole-di-classificazione"></a>
 
-**Medio**:
+## 3. Classification rules
 
-- Possibile impatto lieve su latenza / error rate, ma:
-  - entro margini ampi rispetto agli SLO;
-  - con fallback / degradazione accettabile.
-- Nuova dipendenza esterna non critica (es. servizio interno già stabile).
+<a id="31-feature-low-risk--dfd-light"></a>
 
-**Alto**:
+### 3.1 Low Risk → DFD Light
 
-- Impatto significativo su:
-  - latenza (avvicina o supera SLO);
-  - error rate;
-  - disponibilità.
-- Nuova dipendenza esterna critica (es. provider di pagamento, servizio core).
-- Cambiamenti su:
-  - retry, timeout, circuit breaker;
-  - gestione errori di dipendenze critiche.
+All dimensions Low, or at most one Medium and none High. Typical examples: internal refactoring, minor UI/text changes, internal metrics/logs without significant performance/cost impact, or noncritical scoped fixes. Use light design and release checklists.
 
----
+<a id="32-feature-medium-risk--dfd-full-semplificato"></a>
 
-### 2.3 Costo
+### 3.2 Medium Risk → DFD Full (proportionate)
 
-**Basso**:
+The original generic Medium rule includes at least one Medium and no High, overlapping the explicit Low rule. Apply the documented precedence: one Medium follows light; **at least two Medium dimensions** select proportionate full. Apply full checklists in proportion to affected dimensions, with a smaller/shorter review when appropriate. Examples include optional features for some tenants, internal dashboards and integrations with established internal services.
 
-- Nessun impatto significativo sul costo del servizio.
-- Nessun nuovo uso intensivo di risorse (CPU, memoria, I/O, storage).
+<a id="33-feature-high-risk--dfd-full-completo"></a>
 
-**Medio**:
+### 3.3 High Risk → DFD Full (complete)
 
-- Aumento stimato del costo:
-  - < 5% mensile per il servizio;
-  - o < 5% per transazione.
-- Nuovo uso moderato di risorse (es. nuove metriche custom, log aggiuntivi).
+Any High dimension requires complete, detailed full checklists and all relevant reviewers (Tech Lead, Security, Ops, Product). Examples: new payment methods, authorization/sensitive data changes, substantial architecture/core service changes or default enablement of critical flows. New services also require full complete.
 
-**Alto**:
+<a id="4-processo-di-classificazione"></a>
 
-- Aumento stimato del costo:
-  - ≥ 5% mensile per il servizio;
-  - o ≥ 10% per transazione.
-- Nuovo uso intensivo di risorse (es. batch pesanti, nuove pipeline dati, nuovi storage significativi).
+## 4. Classification process
 
----
+<a id="41-chi-classifica"></a>
 
-### 2.4 Impatto su utenti / business
+### 4.1 Who classifies
 
-**Basso**:
+Tech Lead and lead developer assess initially; Product contributes user/business impact. Consult Security, Ops/SRE or Architect when uncertain, especially on security, SLOs or cost.
 
-- Cambiamenti non visibili agli utenti finali (es. refactor, log, metriche interne).
-- Piccoli cambiamenti UI / testi, senza impatto su flussi critici.
-- Nessun impatto su KPI business principali (conversione, churn, revenue).
+<a id="42-quando-classificare"></a>
 
-**Medio**:
+### 4.2 When to classify
 
-- Cambiamenti visibili agli utenti, ma:
-  - confinati a parti non critiche del prodotto;
-  - con impatto limitato su KPI business.
-- Nuova feature opzionale, non abilitata di default per tutti.
+Before design, ideally during epic creation/refinement. Update when design reveals additional risks.
 
-**Alto**:
+<a id="43-dove-documentare"></a>
 
-- Cambiamenti su flussi critici (es. checkout, login, pagamento, onboarding).
-- Feature abilitata di default per tutti gli utenti / tenant.
-- Possibile impatto significativo su KPI business (positivo o negativo).
+### 4.3 Where to document
 
----
+Record Low/Medium/High in the epic/ticket and/or specification, including per-dimension justification. Example: security Low, reliability Medium, cost Low, business Medium, architecture Low → Medium Risk, full proportionate.
 
-### 2.5 Complessità architetturale
+<a id="5-esempi-pratici"></a>
 
-**Basso**:
+## 5. Practical examples
 
-- Cambiamenti locali a un singolo servizio / modulo.
-- Nessuna modifica a:
-  - contratti API pubblici;
-  - eventi di dominio condivisi;
-  - schemi dati chiave.
-- Nessun nuovo pattern architetturale introdotto.
+<a id="51-esempio-1--refactor-interno"></a>
 
-**Medio**:
+### 5.1 Internal refactoring
 
-- Cambiamenti che coinvolgono 2–3 servizi / moduli.
-- Piccole modifiche a:
-  - contratti API (campi aggiuntivi, backward compatible);
-  - eventi di dominio (nuovi eventi, senza rompere consumatori esistenti).
+All five dimensions Low → light (or rapid when explicitly eligible).
 
-**Alto**:
+<a id="52-esempio-2--nuova-dashboard-interna"></a>
 
-- Cambiamenti che coinvolgono molti servizi / moduli.
-- Modifiche a:
-  - contratti API pubblici (breaking changes o rischi di regressione);
-  - eventi di dominio critici;
-  - schemi dati chiave.
-- Introduzione di nuovi pattern architetturali significativi (es. nuovo stile di comunicazione, nuovo boundary di dominio).
+### 5.2 New internal dashboard
 
----
+Security Medium (new audit events), reliability Low, cost Medium (queries/database cost), business Low (internal users), architecture Medium (two services) → full proportionate.
 
-## 3. Regole di classificazione
+<a id="53-esempio-3--nuovo-metodo-di-pagamento-paypal"></a>
 
-### 3.1 Feature “Low Risk” → DFD Light
+### 5.3 New payment method (PayPal)
 
-Una feature è **Low Risk** (adatta a **DFD light**) se:
+Security High (new payment data/flows), reliability High (critical provider/latency/errors), cost Medium (transaction cost), business High (checkout/conversion), architecture High (provider/end-to-end flows) → full complete.
 
-- **Tutte** le dimensioni sono valutate **Basso**, **oppure**
-- Al massimo **una** dimensione è **Medio**, e nessuna è **Alto**.
+<a id="6-eccezioni"></a>
 
-Esempi tipici:
+## 6. Exceptions
 
-- Refactor interno senza cambiamenti esterni.
-- Piccoli cambiamenti UI / testi.
-- Nuove metriche / log interni, senza impatto su performance o costo significativo.
-- Bug fix non critici, con test locali e impatto limitato.
+Tech Lead/Architect may escalate Medium to High for prudence or strengthen an already High route with more reviews, tests or a slower rollout. Record exceptions in the specification and share relevant changes with the team.
 
-Per queste feature:
+<a id="percorsi-proporzionati-rapido-light-e-full"></a>
 
-- si usa la **Checklist di Review DFD – Design (Light)**;
-- si usa la **Checklist di Review DFD – Release (Light)**.
+## Proportionate routes: rapid, light and full
 
----
+Rapid is an explicit option for a scoped fix restoring a known contract or an editorial change: every dimension Low, no changed contract/guardrail, no critical behavior or open question. Line count does not determine eligibility. One Medium excludes rapid; unknown risk blocks route selection. Any High, two Medium or a new service requires full. Critical behavior always requires full complete, however small the patch.
 
-### 3.2 Feature “Medium Risk” → DFD Full (semplificato)
+Behavior fixes require a relevant red/green regression; editorial changes require a useful check without artificial red. Match suites/mutants to data loss, authorization, payments, compatibility, retry, partial writes and rollback. Check that rejected operations preserve data and retries/duplicates do not repeat effects.
 
-Una feature è **Medium Risk** se:
-
-- Almeno **una** dimensione è **Medio**;
-- Nessuna dimensione è **Alto**.
-
-Per queste feature:
-
-- si usa il **processo DFD full**, ma:
-  - le checklist possono essere applicate in modo “proporzionato” (focus sulle dimensioni Medio/Alto);
-  - la review può essere più leggera (meno partecipanti, tempo più breve).
-
-Esempi tipici:
-
-- Nuova feature opzionale per un sottoinsieme di tenant.
-- Modifiche a flussi non critici (es. report interni, dashboard).
-- Nuove integrazioni con servizi interni già stabili.
-
----
-
-### 3.3 Feature “High Risk” → DFD Full (completo)
-
-Una feature è **High Risk** se:
-
-- Almeno **una** dimensione è **Alto**.
-
-Per queste feature:
-
-- si usa il **processo DFD full** senza semplificazioni;
-- le checklist vanno compilate in modo **completo e dettagliato**;
-- la review deve coinvolgere tutti i ruoli rilevanti (Tech Lead, Security, Ops, Product, ecc.).
-
-Esempi tipici:
-
-- Nuovi metodi di pagamento / cambiamenti su flussi di pagamento.
-- Cambiamenti su sicurezza (accesso, autorizzazioni, dati sensibili).
-- Modifiche architetturali significative (nuovi boundary, nuovi servizi core).
-- Feature abilitata di default per tutti gli utenti su flussi critici.
-
----
-
-## 4. Processo di classificazione
-
-### 4.1 Chi classifica
-
-- La classificazione iniziale è fatta da:
-  - **Tech Lead** + **Developer** principale;
-  - con contributo di **Product** per la dimensione “Impatto su utenti / business”.
-
-- In caso di dubbi (specialmente su sicurezza / SLO / costo):
-  - coinvolgere **Security**, **Ops / SRE**, o **Architect** per una valutazione congiunta.
-
-### 4.2 Quando classificare
-
-- La classificazione va fatta **prima di iniziare il design** (idealmente quando si crea l’epic o si inizia a raffinarla).
-- Può essere aggiornata durante il design, se emergono nuovi rischi.
-
-### 4.3 Dove documentare
-
-- La classificazione va annotata:
-  - nell’**epic / ticket** (es. campo “Rischio DFD: Low / Medium / High”);
-  - e/o nella **Specifica di Feature** (sezione “Classificazione del rischio”).
-
-Esempio:
-
-```markdown
-## Classificazione del rischio DFD
-
-- Sicurezza: Basso  
-- Affidabilità / SLO: Medio  
-- Costo: Basso  
-- Impatto su utenti / business: Medio  
-- Complessità architetturale: Basso  
-
-**Classificazione complessiva**: Medium Risk → DFD Full (semplificato)
-```
-
----
-
-## 5. Esempi pratici
-
-### 5.1 Esempio 1 – Refactor interno
-
-- Sicurezza: Basso  
-- Affidabilità / SLO: Basso  
-- Costo: Basso  
-- Impatto su utenti / business: Basso  
-- Complessità architetturale: Basso  
-
-**Classificazione**: Low Risk → **DFD Light**
-
----
-
-### 5.2 Esempio 2 – Nuova dashboard interna
-
-- Sicurezza: Medio (nuovi eventi di audit)  
-- Affidabilità / SLO: Basso  
-- Costo: Medio (nuove query, possibile aumento costo DB)  
-- Impatto su utenti / business: Basso (solo utenti interni)  
-- Complessità architetturale: Medio (coinvolge 2 servizi)
-
-**Classificazione**: Medium Risk → **DFD Full (semplificato)**
-
----
-
-### 5.3 Esempio 3 – Nuovo metodo di pagamento (PayPal)
-
-- Sicurezza: Alto (nuovi dati, nuovi flussi di pagamento)  
-- Affidabilità / SLO: Alto (nuova dipendenza critica, impatto su latenza e error rate)  
-- Costo: Medio (aumento costo per transazione)  
-- Impatto su utenti / business: Alto (flusso checkout, KPI conversione)  
-- Complessità architetturale: Alto (nuovo provider, nuovi flussi end-to-end)
-
-**Classificazione**: High Risk → **DFD Full (completo)**
-
----
-
-## 6. Eccezioni
-
-In casi particolari, il **Tech Lead** o l’**Architect** possono decidere di:
-
-- trattare una feature **Medium Risk** come **High Risk** (es. per prudenza, se il team è poco esperto);
-- trattare una feature **High Risk** con un percorso **full rafforzato** (es. più review, più test, rollout più graduale).
-
-Le eccezioni vanno annotate nella specifica di feature e, se rilevanti, condivise con il team.
-
-## Percorsi proporzionati: rapido, light e full
-
-Il rapido ammette solo fix di un contratto noto o modifiche editoriali, con ambito circoscritto, tutte le dimensioni low, nessun contratto/guardrail cambiato e nessun dubbio aperto. Non dipende dal numero di righe. Una sola medium esclude il rapido e richiede almeno light; rischio ignoto blocca la scelta. Almeno una high, due medium o un nuovo servizio richiedono full secondo le regole precedenti. Un comportamento critico richiede full completo, anche per una correzione minuscola.
-
-Per un bug comportamentale serve una regressione red/green pertinente; per una modifica editoriale serve una verifica utile, senza red artificiale. Scegliere suite e mutation test in funzione dei rischi: perdita di dati, autorizzazioni, pagamenti, compatibilità, retry, scritture parziali e rollback. I test devono verificare anche che un fallimento preservi i dati e che retry o duplicati non ripetano gli effetti.
-
-Il singolo dev usa gli stessi percorsi senza PR o secondo reviewer obbligatori. Le policy team sono facoltative e non riducono il rischio del cambiamento. Vedere [percorsi e verifiche](fondamenta.md#percorsi-proporzionati-e-lavoro-individuale-o-in-team) e il [record rapido](templates/cambiamento_rapido.md).
+Solo developers follow the same routes without mandatory PRs or a second reviewer. Optional team policy does not reduce risk. See [routes and checks](fondamenta.md#percorsi-proporzionati-e-lavoro-individuale-o-in-team) and the [quick change record](templates/cambiamento_rapido.md).

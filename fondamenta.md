@@ -1,296 +1,195 @@
-<!-- dfd-language --> [Italiano](fondamenta.md) | [English](en/fondamenta.md)
+<!-- dfd-language --> [English](fondamenta.md) | [Italiano](it/fondamenta.md)
 
-# DoD-First Driven (DFD) – Fondamenta
+<a id="dod-first-driven-dfd--fondamenta"></a>
 
-> **Stato**: draft / stabile  
-> **Ultimo aggiornamento**: 2026-11-17  
-> **Proprietari**: [@team / @persona]  
-> **Riferimenti**:
-> - [Processo End-to-End](processo-e2e.md)
-> - [Criteri di Rischio](rischio.md)
-> - [Modello RACI](raci.md)
-> - [Template DoD Estesa](templates/dod-estesa.md)
-> - [Template Specifica di Feature](templates/specifica_feature.md)
-> - [Template Configurazione Rollout](templates/configurazione_rollout.md)
-> - [Esempio DoD – Checkout AWS ECS](examples/checkout_dod.md)
-> - [Esempio Specifica – PayPal](examples/checkout_paypal_spec.md)
+# DoD-First Driven (DFD) – Foundations
 
-Questo documento definisce le **fondamenta** di **DoD-First Driven (DFD)**, un approccio in cui i criteri di **Definition of Done (DoD) estesa** guidano:
+> **Status**: draft / stable  
+> **Last updated**: 2026-11-17  
+> **Owners**: [@team / @person]  
+> **References**: [End-to-end process](processo-e2e.md), [Risk criteria](rischio.md), [RACI](raci.md), [Extended DoD](templates/dod-estesa.md), [Feature specification](templates/specifica_feature.md), [Rollout](templates/configurazione_rollout.md), [Checkout example](examples/checkout_dod.md), [PayPal example](examples/checkout_paypal_spec.md).
 
-- la specifica delle feature (Spec-Driven Design);
-- la progettazione e l’esecuzione dei test (Test-Driven Development);
-- la valutazione delle release in produzione (shift-right, canary, rollout controllati).
+DFD makes the extended Definition of Done guide feature specifications (Spec-Driven Design), test design and execution (Test-Driven Development), and production release evaluation (shift-right, canaries and controlled rollout). This living document evolves through experiments, feedback and production data.
 
-Il documento è **vivo**: evolve in base agli esperimenti, ai feedback e ai dati di produzione.
+<a id="1-idea-centrale"></a>
 
----
+## 1. Core idea
 
-## 1. Idea centrale
+The Definition of Done is a **continuous contract**, used before, during and after release. It explicitly prioritizes observability (metrics, logs and traces), security (access, audit and data protection), reliability / SLOs, and cost per service, transaction or tenant. These connect what we build and its constraints, how we verify it, and how we validate production behavior without damaging the wider system. See the [process](processo-e2e.md).
 
-DFD si basa su un’idea semplice:
+<a id="2-principi"></a>
 
-> La **Definition of Done** non è una checklist finale, ma un **contratto continuo** usato in tre momenti: prima, durante e dopo il rilascio.
+## 2. Principles
 
-In DFD, la DoD è **estesa** rispetto alla forma classica: include in modo esplicito e prioritario:
+<a id="21-dod-come-contratto"></a>
 
-- **Osservabilità** (metriche, log, trace);
-- **Sicurezza** (accesso, audit, protezione dati);
-- **Affidabilità / SLO**;
-- **Costo** (per servizio, per transazione, eventualmente per tenant).
+### 2.1 DoD as a contract
 
-Questi assi diventano il filo conduttore tra:
+Done criteria are explicit, referenceable and used throughout every phase. Each feature explains how it meets relevant criteria: functional behavior and tests, observability, security, reliability and sustainable cost.
 
-- **Specifica** (cosa costruiamo e con quali vincoli);
-- **Test** (come verifichiamo che sia fatto “bene”);
-- **Rilascio** (come validiamo che funzioni in produzione senza rompere il sistema globale).
+<a id="22-specifica-prima-del-codice"></a>
 
-Per il processo dettagliato, vedi [Processo End-to-End](processo-e2e.md).
+### 2.2 Specification before code
 
----
+Start with a clear specification of behavior, interfaces and constraints. Reference applicable DoD criteria explicitly and stay within product guardrails for architecture, security, observability and cost. The specification cannot foresee every case: instead it defines what happens in unforeseen states, with an explicit, observable failure in place of silent continuation.
 
-## 2. Principi
+<a id="23-test-derivati-dalla-dod"></a>
 
-### 2.1 DoD come contratto
+### 2.3 Tests derived from the DoD
 
-- I criteri di Done sono **espliciti, riferibili e usati** in tutte le fasi.
-- Ogni feature deve mostrare come soddisfa i criteri DoD rilevanti.
-- La DoD è “estesa”: non solo “funziona e ha i test”, ma anche “è osservabile, sicura, affidabile e sostenibile in termini di costo”.
+Every relevant criterion has at least one associated automated test. Tests verify compliance with the DoD as well as functional behavior. Criteria guide the test → code → refactor cycle. No code is written that no criterion or scenario justifies: behavior that emerges during development enters the specification first and is compared with the original request.
 
-### 2.2 Specifica prima del codice
+<a id="24-validazione-continua-shift-right"></a>
 
-- Si parte da una **specifica chiara** (comportamenti, interfacce, vincoli).
-- La specifica cita esplicitamente i **criteri DoD** che intende soddisfare.
-- La specifica opera entro i **guardrail globali** del prodotto (architettura, sicurezza, osservabilità, costo).
-- La specifica non può prevedere ogni caso: definisce invece cosa succede negli **stati non previsti**, con un fallimento esplicito e osservabile al posto di una prosecuzione silenziosa.
+### 2.4 Continuous validation (shift-right)
 
-### 2.3 Test derivati dalla DoD
+Use the DoD to evaluate production canaries, tenant rollout and experiments. Derive release alarms and metrics from criteria. Treat release as a controlled experiment.
 
-- Ogni criterio DoD rilevante ha almeno un **test automatico** associato.
-- I test non verificano solo “funziona”, ma “rispetta la DoD”.
-- Il ciclo TDD (test → codice → refactor) è guidato dai criteri DoD.
-- Non si scrive codice che nessun criterio o scenario giustifica: un comportamento emerso durante lo sviluppo entra prima nella specifica e viene confrontato con la richiesta originale.
+<a id="25-guardrail-globali-spec-locali"></a>
 
-### 2.4 Validazione continua (shift-right)
+### 2.5 Global guardrails, local specifications
 
-- La DoD guida anche la **valutazione in produzione**: canary, rollout per tenant, esperimenti.
-- Gli **allarmi** e le metriche di rilascio sono derivati dai criteri DoD.
-- Il rilascio è un **esperimento controllato**, non un “speriamo non esploda”.
-
-### 2.5 Guardrail globali, spec locali
-
-- Esiste un **quadro globale** (architettura, sicurezza, osservabilità, costo) che definisce i confini.
-- Le spec locali si muovono dentro questi guardrail e **non possono violarli**.
-- Eventuali eccezioni devono essere **esplicite e documentate**.
+The global architectural, security, observability and cost framework defines boundaries. Local specifications refer to it and must respect it. Document and justify exceptions explicitly.
 
 ### 2.6 Feedback loop
 
-- I dati di produzione (metriche, errori, costo, feedback) alimentano il **miglioramento della DoD**.
-- La DoD è **viva**: si evolve in base a ciò che si impara in produzione.
-- Il framework stesso (DFD) evolve in base agli esperimenti.
+Production metrics, errors, cost and feedback improve the living DoD. Experiments also improve DFD itself.
 
----
+<a id="3-artefatti-principali"></a>
 
-## 3. Artefatti principali
+## 3. Main artifacts
 
-### 3.1 DoD Estesa
+<a id="31-dod-estesa"></a>
 
-Documento (o sezione) che definisce i criteri di Done per il prodotto / dominio, includendo almeno:
+### 3.1 Extended DoD
 
-- **Osservabilità** (metriche, log, trace, dashboard);
-- **Sicurezza** (accesso, audit, protezione dati);
-- **Affidabilità / SLO**;
-- **Costo** (per servizio, per transazione);
-- Eventuali altri assi (UX, compliance, ecc.).
+The central reference defines product/domain Done criteria: observability (including dashboards), security, reliability/SLOs, cost and additional concerns such as UX or compliance. Use the [template](templates/dod-estesa.md) and [Checkout example](examples/checkout_dod.md).
 
-La DoD Estesa è il **riferimento centrale** di DFD.
+<a id="32-specifica-di-feature"></a>
 
-- Template: [DoD Estesa](templates/dod-estesa.md)
-- Esempio: [Checkout AWS ECS](examples/checkout_dod.md)
+### 3.2 Feature specification
 
-### 3.2 Specifica di Feature
+For each significant feature or service, describe scenarios, use cases, architectural boundaries and dependencies. Reference criteria (OBS-xx, SEC-xx, SLO-xx, COST-xx, UX-xx) and justify any guardrail exceptions. See the [template](templates/specifica_feature.md) and [PayPal example](examples/checkout_paypal_spec.md).
 
-Per ogni feature o servizio significativo:
+<a id="33-suite-di-test"></a>
 
-- Descrizione funzionale (scenari, casi d’uso);
-- Confini architetturali e dipendenze;
-- Riferimenti espliciti ai **criteri DoD** soddisfatti (OBS-xx, SEC-xx, SLO-xx, COST-xx, UX-xx);
-- Eventuali eccezioni ai guardrail globali (con motivazione).
+### 3.3 Test suite
 
-- Template: [Specifica di Feature](templates/specifica_feature.md)
-- Esempio: [PayPal su Checkout](examples/checkout_paypal_spec.md)
+Include unit, integration, security and observability tests, with a mapping to criteria. Add load/stress tests for relevant SLOs and synthetic/end-to-end tests for critical flows.
 
-### 3.3 Suite di test
+<a id="34-configurazione-di-rilascio"></a>
 
-- Test unitari, di integrazione, sicurezza, osservabilità.
-- Mappatura (anche informale) tra **criteri DoD** e test.
-- Eventuali test di carico / stress per SLO.
-- Eventuali test sintetici / end-to-end per flussi critici.
+### 3.4 Release configuration
 
-### 3.4 Configurazione di rilascio
+Define canary thresholds, duration and rollback; tenant/segment exposure through feature flags or AppConfig; alarms for errors, latency, security and cost; promotion and stop criteria. Use the [rollout template](templates/configurazione_rollout.md).
 
-- Policy di **canary** (soglie, durata, criteri di rollback).
-- Rollout per **tenant / segmento** (feature flag, AppConfig, ecc.).
-- Allarmi derivati dalla DoD (error rate, latency, errori di sicurezza, variazioni di costo).
-- Criteri di promozione / stop del rollout.
+<a id="35-quadro-globale-guardrail"></a>
 
-- Template: [Configurazione Rollout](templates/configurazione_rollout.md)
+### 3.5 Global framework (guardrails)
 
-### 3.5 Quadro globale (guardrail)
+Document architectural principles, global API/event/data contracts, shared SLOs and constraints, observability and security guidance. Local specifications explicitly refer to these documents.
 
-Documento (o insieme di documenti) che definisce:
+<a id="36-setup-dfd-di-dominio"></a>
 
-- **Principi architetturali**;
-- **Contratti globali** (API, eventi di dominio, schemi dati chiave);
-- **SLO e vincoli trasversali**;
-- **Linee guida su osservabilità e sicurezza**.
+### 3.6 Domain DFD setup
 
-Le spec locali devono **riferirsi esplicitamente** a questo quadro.
+Maintain a domain DoD (initial draft and evolution), domain guardrails, local template adaptations and process conventions. Setup evolves with the domain and production learning. See [Phase 0](processo-e2e.md#0-fase-0--setup-dfd-di-dominio).
 
-### 3.6 Setup DFD di dominio
+<a id="4-processo-e-ruoli"></a>
 
-Oltre agli artefatti per singola feature (DoD Estesa, Specifica, Rollout), DFD prevede un **setup di dominio**:
+## 4. Process and roles
 
-- una DoD Estesa di dominio (bozza iniziale + evoluzione);  
-- guardrail globali specifici del dominio;  
-- eventuale adattamento dei template DFD al contesto locale;  
-- convenzioni di processo (come si usa DFD in questo dominio).
+<a id="41-processo-end-to-end"></a>
 
-Il setup non è un documento “una tantum”: evolve con il dominio e con i learning di produzione.  
-Per i dettagli, vedi [Processo End-to-End – Fase 0](processo-e2e.md#0-fase-0--setup-dfd-di-dominio).
+### 4.1 End-to-end process
 
----
+The [process](processo-e2e.md) defines Idea/Epic, Design, Development, Pre-release, Release and Post-release, with design/release review gates and key Definitions of Ready.
 
-## 4. Processo e ruoli
+<a id="42-ruoli-e-responsabilità"></a>
 
-### 4.1 Processo End-to-End
+### 4.2 Roles and responsibilities
 
-Il processo DFD è descritto in dettaglio in:
+See [RACI](raci.md). Product owns objectives, KPIs and priorities; Tech Lead/Architect owns architectural consistency, guardrails and design/release approval; developers own specification, code, tests and instrumentation; QA/SDET owns nonfunctional tests and validation; Ops/SRE owns alarms, dashboards and rollout support; Security owns security review, audit and data protection; Support supplies user feedback and post-release reports.
 
-- [Processo End-to-End](processo-e2e.md)
+<a id="5-dfd-full-vs-dfd-light"></a>
 
-Include:
+## 5. DFD full versus DFD light
 
-- fasi (Idea/Epic, Design, Sviluppo, Pre-release, Rilascio, Post-release);
-- gate di review (design, release);
-- **Definition of Ready (DoR)** per i passaggi chiave.
+Choose by [risk](rischio.md): low → light design and release checklists; medium → proportionate full; high → complete full with broader review. Use the [full design](templates/review_design.md), [light design](templates/review_design_light.md), [full release](templates/review_release.md) or [light release](templates/review_release_light.md) checklist.
 
-### 4.2 Ruoli e responsabilità
+<a id="6-cosa-dfd-non-è"></a>
 
-I ruoli e le responsabilità sono definiti in:
+## 6. What DFD is not
 
-- [Modello RACI](raci.md)
+DFD evolves with its DoD and guardrails. Criteria need to be clear, referenceable and used; they need not all be executable or machine-readable. AI can accelerate work but is optional. DFD complements Domain-Driven Design, Agile and DevOps by connecting them through the DoD.
 
-In sintesi:
+<a id="7-evoluzione-del-documento"></a>
 
-- **PM**: obiettivi business, KPI, priorità.
-- **Tech Lead / Architect**: coerenza architetturale, rispetto guardrail, approvazione design/release.
-- **Dev**: specifica, codice, test, strumentazione osservabilità.
-- **QA / SDET**: test non funzionali, validazione.
-- **Ops / SRE**: allarmi, dashboard, supporto al rollout.
-- **Security**: review sicurezza, audit, protezione dati.
-- **Support**: feedback utenti, segnalazioni post-release.
+## 7. Document evolution
 
----
+Track significant changes in changelogs, ADRs or revision notes. Guild experiments, tools and pilots feed revisions; the latest version is the reference for articles, talks and internal initiatives. Propose changes through an issue/MR or the [risk exceptions process](rischio.md#6-eccezioni).
 
-## 5. DFD full vs DFD light
+<a id="maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio"></a>
 
-Non tutte le feature hanno lo stesso rischio. DFD prevede due “modalità”:
+## Project maturity: development only and release preparation
 
-- **DFD full**: per feature medium / high risk.
-- **DFD light**: per feature low risk.
+Maturity is independent of DFD adoption level and feature risk. Phase 0 declares mode, CI policy and justification.
 
-I criteri per scegliere sono definiti in:
-
-- [Criteri di Rischio](rischio.md)
-
-In sintesi:
-
-- **Low Risk** → checklist light (design + release).
-- **Medium Risk** → DFD full, applicato in modo proporzionato.
-- **High Risk** → DFD full completo, con review allargata.
-
-Template di review:
-
-- [Checklist di Review DFD – Design](templates/review_design.md)
-- [Checklist di Review DFD – Design (Light)](templates/review_design_light.md)
-- [Checklist di Review DFD – Release](templates/review_release.md)
-- [Checklist di Review DFD – Release (Light)](templates/review_release_light.md)
-
----
-
-## 6. Cosa DFD non è
-
-- Non è un processo **rigido**: la DoD e i guardrail evolvono.
-- Non richiede che tutto sia **eseguibile** in forma machine-readable: basta che i criteri siano chiari, riferibili e usati.
-- Non è specifico per **AI**: l’AI può essere un acceleratore, ma il framework vale anche in contesti tradizionali.
-- Non è un sostituto di **Domain-Driven Design**, **Agile**, **DevOps**: è un layer sopra, che usa la DoD come filo conduttore.
-
----
-
-## 7. Evoluzione del documento
-
-Questo documento è **vivo**:
-
-- Le modifiche significative vengono tracciate (es. changelog, ADR, note di revisione).
-- Gli esperimenti (gilda, tool, progetti pilota) producono feedback che alimentano revisioni.
-- La versione più aggiornata è il riferimento per articoli, talk e iniziative interne.
-
-Per proporre modifiche al framework:
-
-- aprire una issue / MR su questo repo;
-- o seguire il processo definito in [Criteri di Rischio](rischio.md) (sezione “Eccezioni”).
-
-## Maturità del progetto: solo sviluppo e preparazione al rilascio
-
-La maturità del progetto è distinta dal livello di adozione DFD e dal rischio della feature. La Fase 0 dichiara una modalità, la scelta sulla CI e la relativa motivazione:
-
-| Modalità | Verifiche di sviluppo | Uscita |
+| Mode | Development checks | Outcome |
 |---|---|---|
-| Solo sviluppo (`development-only`) | Light/full: review di design, TDD e suite finale locale; rapido: verifiche pertinenti. CI facoltativa | Sviluppo completato; nessuna pre-release o autorizzazione a distribuire |
-| Preparazione al rilascio (`release-preparation`) | Stessi controlli, con CI richiesta per default; un’alternativa locale richiede motivazione rispetto a rischio e destinazione e review umana | Prontezza alla pre-release, poi review di release distinta |
+| `development-only` | Light/full: design review, TDD and final local suite; rapid: relevant checks; optional CI | Development complete; no pre-release or distribution approval |
+| `release-preparation` | Same checks; CI required by default; a local alternative needs risk/target justification and human review | Ready for pre-release, followed by a separate release review |
 
-L’assenza della CI non è una lacuna bloccante in solo sviluppo. Restano obbligatorie le verifiche applicabili e la tracciabilità di comando, data, risultato e log: un test locale non viene dichiarato CI. Quando prevista, la suite finale deve seguire i test green. Una CI dichiarata fallita continua a bloccare anche quando facoltativa.
+Missing CI does not block development-only. Applicable checks remain mandatory with command, date, result and real log; local tests are never labeled CI. The final suite, when required, follows green tests. Declared failed CI still blocks even when optional.
 
-Prima di distribuire, passare esplicitamente alla preparazione al rilascio: rivalutare rischio, criteri, policy CI e verifiche nell’ambiente di destinazione. Riconfermare review e aggiornare piano ed evidenze invalidati. La modalità solo sviluppo non attenua controlli di sicurezza o rischio; il completamento locale non sostituisce l’approvazione umana del rilascio. Il learning può provenire anche dagli esperimenti locali, prima di disporre di dati di produzione.
+Before distribution explicitly switch to release preparation; reassess risk, criteria, CI policy and target-environment checks. Reconfirm invalidated reviews and update plans/evidence. Development-only does not weaken security/risk controls, and local completion does not replace human release approval. Local experiments can produce learning before production data exists.
 
-## Percorsi proporzionati e lavoro individuale o in team
+<a id="percorsi-proporzionati-e-lavoro-individuale-o-in-team"></a>
 
-DFD si applica sia al singolo sviluppatore sia a un team. La maturità del progetto (solo sviluppo / preparazione al rilascio), il rischio dell’intervento e l’organizzazione del lavoro sono scelte distinte. Il team non è un prerequisito.
+## Proportionate routes and solo or team work
 
-| Percorso | Quando | Minimo utile |
+DFD supports solo developers and teams. Maturity, change risk and work organization are independent; a team is not a prerequisite.
+
+| Route | Eligibility | Useful minimum |
 |---|---|---|
-| Rapido | Fix che ripristina un contratto noto o modifica editoriale; ambito circoscritto, rischio interamente low, nessun contratto/guardrail cambiato, nessun comportamento critico o dubbio aperto | Un record con problema, ambito, owner, rischio motivato, criteri pertinenti e verifiche reali |
-| Light | Funzionalità contenuta, fix non ammissibile al rapido o dubbi da chiarire, senza condizioni full | Specifica breve, criteri applicabili, review pertinente ed evidenze |
-| Full | Almeno una dimensione high, almeno due medium o nuovo servizio | Analisi, design e verifiche approfonditi secondo il rischio; preparazione operativa quando si distribuisce |
+| Rapid | Scoped known-contract restoration/editorial change, all Low, no changed contract/guardrail, critical behavior or open question | One record: problem, scope, owner, justified risk, relevant criteria and real checks |
+| Light | Contained feature, ineligible fix or questions needing clarification, without full conditions | Brief specification, applicable criteria, relevant review and evidence |
+| Full | Any High, at least two Medium or a new service | Risk-appropriate analysis, design and checks; operational preparation for distribution |
 
-Il rapido è una scelta esplicita per interventi ammissibili, non il risultato del numero di righe modificate. Una sola medium esclude il rapido e porta almeno a light. Rischio ignoto blocca la scelta; dubbi o variazioni di contratto richiedono chiarimento o promozione. Un comportamento critico richiede full completo. La CLI propone il percorso con i motivi; il manutentore può correggere la valutazione documentandone i fatti, senza override silenziosi dei gate.
+Rapid eligibility is explicit, never based on line count. One Medium excludes rapid; unknown risk blocks choice. Questions or contract changes need clarification/promotion. Critical behavior requires full complete. The maintainer can correct assessments with documented facts; gates have no silent override.
 
-### Fix rapidi e test che prevengono danni
+<a id="fix-rapidi-e-test-che-prevengono-danni"></a>
 
-Per un fix comportamentale serve una regressione che riproduca il bug, fallisca per il requisito atteso prima della correzione e passi dopo. Un errore di compilazione o ambiente non vale come red. Per una modifica editoriale basta una verifica pertinente di contenuto, link o output: nessun test artificiale. Collegare i criteri realmente coinvolti e motivare il perimetro delle verifiche; non imporre suite completa o mutation test a ogni correzione.
+### Quick fixes and tests that prevent harm
 
-Dare priorità a perdita di dati, autorizzazioni, pagamenti, compatibilità, scritture parziali, retry e rollback. Verificare anche gli effetti del fallimento: un’operazione rifiutata deve preservare i dati; retry e richieste duplicate non devono duplicare effetti. Gli interventi critici escono dal rapido anche se minuscoli. Usare mutanti mirati sugli invarianti importanti per verificare che una protezione rimossa venga rilevata. Numero di test e copertura percentuale da soli non dimostrano protezione dai bug gravi.
+A behavioral regression must reproduce the bug, fail for the expected requirement before the fix and pass afterwards. Compilation/environment failures are not red evidence. Editorial changes need relevant content/link/output checks without artificial tests. Match suites and mutation tests to actual risk.
 
-Ogni bug importante sfuggito in produzione deve produrre una verifica capace di intercettarlo al livello efficace (unitario, integrazione o end-to-end); aggiornare i criteri DFD quando il problema è sistemico. Il learning degli esperimenti locali resta utile prima della produzione.
+Prioritize data loss, authorization, payments, compatibility, partial writes, retry and rollback. Rejected operations must preserve data; retries/duplicates must not duplicate effects. Critical changes leave rapid even when tiny. Target mutants at important invariants; test count/coverage alone does not establish protection. Every serious escaped production bug yields an effective unit/integration/E2E regression; systemic issues update DoD criteria. Local learning is useful too.
 
-### Un solo record e riuso delle decisioni
+<a id="un-solo-record-e-riuso-delle-decisioni"></a>
 
-Il rapido non richiede specifica, piano e report di design separati: usare il [record rapido](templates/cambiamento_rapido.md). Una PR può semplicemente riferirsi a quel record, senza duplicarlo. Con la CLI il record macchina è `.dfd/changes/<id>.json`; log e file verificati sono evidenze di supporto, non nuovi documenti di processo. Riprendere il design già approvato indicato nel contratto noto; non riaprire il design per un ripristino circoscritto.
+### One record and reused decisions
 
-Il singolo dev può completare il rapido con record ed evidenze, senza PR, secondo reviewer o nuovo gate di approvazione del design. `change-verified` è un esito tecnico, non una decisione umana simulata. Se il team richiede review indipendente, la review ordinaria della PR soddisfa la review del cambiamento: registrarla una volta, con persona, riferimento, revisione e snapshot. Una review registrata volontariamente resta comunque vincolata a ciò che è stato esaminato.
+Rapid uses the [quick change record](templates/cambiamento_rapido.md), without separate specification, plan or design report. A PR can reference it. The CLI record is `.dfd/changes/<id>.json`; logs/files support evidence. Reuse the approved design referenced by the known contract rather than reopening design for scoped restoration.
 
-### Collaborazione facoltativa e integrazione
+A solo developer can finish rapid without a PR, second reviewer or new design approval. `change-verified` is a technical result. If team policy requires independence, record the real ordinary PR review once with person, reference, revision and snapshot. Voluntarily recorded reviews still bind to the examined material.
 
-Versionare DoD, guardrail e policy comuni; assegnare ID distinti e owner per intervento. I riferimenti a issue, branch, PR e revisione sono opzionali per il lavoro individuale e richiesti quando la policy del team li rende necessari. I ruoli sono assegnabili per intervento: il reviewer può essere un collega delegato secondo la policy, senza dipendere sempre dalla stessa persona. Una review di PR può soddisfare il gate DFD pertinente: non chiedere due approvazioni equivalenti.
+<a id="collaborazione-facoltativa-e-integrazione"></a>
 
-Gli artefatti delle feature restano separati: evitare uno stato centrale da modificare per ogni fix. Il lock della CLI protegge una cartella locale, non coordina cloni diversi. Usare Git e review dei conflitti; non risolvere automaticamente conflitti tra decisioni o evidenze scegliendo l’ultima scrittura. Dopo il merge, rivalutare snapshot e prove interessate.
+### Optional collaboration and integration
 
-Prima della distribuzione, la policy team può richiedere review indipendente e prove sulla versione integrata corrente: i test verdi di due branch isolati non dimostrano che i due cambiamenti funzionino insieme. La verifica deve coprire i file dell’intervento, avere revisione coerente, comandi, esiti, date e log reali. Un hash non autentica una persona o un commit: la review semantica verifica origine, completezza dei test e corrispondenza della revisione dichiarata.
+Version shared DoD, guardrails and policy; assign distinct IDs/owners. Issue/branch/PR/revision references are optional solo and required only by explicit team policy. Delegate reviewers per change. One applicable PR review can satisfy the DFD gate without duplicate approvals.
 
-### Review selettive ed evoluzione del setup
+Keep feature artifacts separate. A CLI lock protects one local directory, not separate clones. Use Git and explicit conflict review; never settle decision/evidence conflicts automatically with last-write-wins. Reassess affected snapshots and evidence after merge.
 
-Per le nuove feature, i contratti normativi dei criteri sono nel catalogo strutturato e i vincoli nei guardrail e nella policy lifecycle. Il fingerprint considera specifica, rischio, criteri valutati e vincoli operativi pertinenti; correzioni ai template, convenzioni descrittive, aggiunta di domini o lacune baseline estranee non invalidano da sole il design. Il catalogo e i guardrail devono contenere tutte le prescrizioni operative: non introdurre obblighi soltanto nel testo di processo escluso dal fingerprint. Nuovi criteri changes da valutare o modifiche ai contratti pertinenti riaprono il design.
+Before distribution, team policy may require independence and checks of the current integrated revision. Passing isolated branches does not prove integration. Checks cover change files and consistent revision, command, result, dates and real logs. Hashes authenticate neither people nor commits; semantic review assesses origin, completeness and declared revision.
 
-Cambiare le regole comuni tramite una modifica revisionata, indicando le feature interessate e le eventuali azioni. I guardrail comuni restano conservativi: una modifica normativa può coinvolgere tutto il dominio. La CLI non distingue semanticamente un refuso da una modifica di sicurezza nei file normativi. Le feature legacy conservano i fingerprint precedenti; non migrare approvazioni automaticamente.
+<a id="review-selettive-ed-evoluzione-del-setup"></a>
 
-Il rapido conclude lo sviluppo e non autorizza una distribuzione: quando si decide di rilasciare, riprendere/promuovere una feature light/full che riferisce il record rapido, rivalutando policy e integrazione prima della review di release.
+### Selective reviews and setup evolution
+
+For new features, normative criterion contracts live in the structured catalog and constraints in guardrails/lifecycle. Fingerprints include specification, risk, assessed criteria and relevant operational constraints. Template fixes, descriptive conventions, added domains and unrelated baseline gaps alone do not invalidate design. Keep all operational requirements in catalog/guardrails rather than hiding them in excluded process prose. New changes criteria or relevant contract changes reopen design.
+
+Review shared-rule changes and identify affected features/actions. Shared guardrails stay conservative and can affect the whole domain. The CLI cannot semantically distinguish a typo from a security change in normative files. Legacy features retain previous fingerprints; never migrate approvals automatically.
+
+Rapid completes development, not distribution. To release, resume/promote a light/full feature referencing the quick change and reassess policy/integration before release review.

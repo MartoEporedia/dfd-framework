@@ -1,164 +1,160 @@
 <!-- dfd-language -->
-[Italiano](README.md) | [English](en/README.md)
+[English](README.md) | [Italiano](it/README.md)
+
+<a id="come-leggere-questo-repo-per-ruolo"></a>
+
+<a id="progetti-ancora-in-sviluppo"></a>
+
+<a id="processo-proporzionato-anche-per-un-solo-dev"></a>
 
 # DFD Framework
 
-**Italiano:** framework, template ed esempi nei percorsi qui sotto. **English:** [complete reading paths](en/README.md).
+DoD-First Driven connects iterative specifications, tests and production validation through verifiable Definition of Done criteria and risk-proportionate reviews.
 
-DFD Kit: [Italiano](dfd-kit/README.md) | [English](dfd-kit/en/README.md). [Glossario e manutenzione](glossario.md) / [Glossary and maintenance](en/glossario.md).
+<a id="installare-dfd-con-un-agente-qualsiasi-harness"></a>
 
-Framework DoD-First Driven: dalla specifica iterativa al rilascio, con criteri verificabili e review proporzionate al rischio.
+## Installing DFD with an agent (any harness)
 
-## Installare DFD con un agente (qualsiasi harness)
-
-Copiare il prompt seguente nell'agente di coding (Claude Code, Codex, OpenCode, GitHub Copilot, Cursor, Gemini CLI, Windsurf, Cline o altro), aperto nel repository in cui adottare DFD. L'agente ottiene la CLI `dfd`, installa le skill nel formato dell'harness e si ferma prima della Fase 0, che va completata con `dfd-init`.
+Paste the following prompt into your coding agent (Claude Code, Codex, OpenCode, GitHub Copilot, Cursor, Gemini CLI, Windsurf, Cline or others), opened in the repository adopting DFD. The agent obtains the `dfd` CLI, installs the skills in the harness format and stops before Phase 0, which is completed with `dfd-init`.
 
 ```text
-Installa il framework DFD (DoD-First Driven) in questo repository.
-Sorgente: https://github.com/MartoEporedia/dfd-framework (toolkit in dfd-kit/).
+Install the DFD (DoD-First Driven) framework in this repository.
+Source: https://github.com/MartoEporedia/dfd-framework (toolkit in dfd-kit/).
 
-Regole: non sovrascrivere file esistenti (AGENTS.md, CLAUDE.md, istruzioni Copilot,
-regole dell'harness); non modificare i file gestiti in .dfd/ o nelle directory delle
-skill installate; chiedimi conferma prima di installare software a livello di sistema;
-non inventare DoD, SLO o soglie.
+Rules: do not overwrite existing files (AGENTS.md, CLAUDE.md, Copilot instructions,
+harness rules); do not modify managed files in .dfd/ or in the installed skill
+directories; ask me before installing system-wide software; do not invent DoD,
+SLOs or thresholds.
 
-1. Contesto. Identifica l'harness in cui stai girando, il sistema operativo e
-   l'architettura. Chiedimi solo ciò che non puoi dedurre:
-   - dominio pilota (es. checkout);
-   - modalità: brownfield se esistono già codice o processi, altrimenti greenfield;
-   - lingua: it (default) o en.
+1. Context. Identify the harness you are running in, the operating system and
+   architecture. Ask me only what you cannot infer:
+   - pilot domain (e.g. checkout);
+   - mode: brownfield if code or processes already exist, otherwise greenfield;
+   - language: en (default) or it.
 
-2. CLI dfd. Usa `dfd` se è già nel PATH. Altrimenti, in una directory temporanea
-   fuori da questo progetto:
-   - scarica dall'ultima release
-     (https://github.com/MartoEporedia/dfd-framework/releases/latest) l'archivio
-     del tuo sistema (dfd-linux-x86_64, dfd-macos-arm64, dfd-macos-x86_64 o
-     dfd-windows-x86_64, con estensione .tar.gz) e il file SHA256SUMS;
-     verifica il checksum dell'archivio, estrailo e rendi eseguibile il binario
-     su macOS e Linux (chmod +x);
-   - se manca l'archivio del tuo sistema, clona il repository e compila con
-     `cargo build --locked --release` in dfd-kit/ (richiede Rust; il binario è
-     target/release/dfd, dfd.exe su Windows).
-   Copia il binario in una directory del PATH con nome `dfd`, oppure annota il
-   percorso assoluto e usalo nei comandi successivi. Esegui `dfd doctor`.
+2. dfd CLI. Use `dfd` if it is already on PATH. Otherwise, in a temporary
+   directory outside this project:
+   - download from the latest release
+     (https://github.com/MartoEporedia/dfd-framework/releases/latest) the archive
+     for your system (dfd-linux-x86_64, dfd-macos-arm64, dfd-macos-x86_64 or
+     dfd-windows-x86_64, with the .tar.gz extension) and the SHA256SUMS file;
+     verify the archive checksum, extract it and make the binary executable on
+     macOS and Linux (chmod +x);
+   - if there is no archive for your system, clone the repository and build with
+     `cargo build --locked --release` in dfd-kit/ (requires Rust; the binary is
+     target/release/dfd, dfd.exe on Windows).
+   Copy the binary to a PATH directory as `dfd`, or note its absolute path and
+   use it in the following commands. Run `dfd doctor`.
 
-3. Adapter. Scegli l'adapter nativo se l'harness è supportato:
+3. Adapter. Choose the native adapter if the harness is supported:
    claude-code (.claude/skills/), opencode (.opencode/skills/),
    copilot (.github/skills/), codex (.agents/skills/).
-   Per qualunque altro harness usa codex: installa le skill in .agents/skills/,
-   il formato più portabile.
+   For any other harness use codex: it installs the skills in .agents/skills/,
+   the most portable format.
 
-4. Init. Esegui:
-   dfd --lang <lingua> --project <root del repo> init --harness <adapter> --domain <dominio> --mode <modalità>
-   Se un file gestito risulta in conflitto, fermati e mostrami il conflitto.
+4. Init. Run:
+   dfd --lang <language> --project <repo root> init --harness <adapter> --domain <domain> --mode <mode>
+   If a managed file conflicts, stop and show me the conflict.
 
-5. Harness non nativi. Se hai usato codex come fallback, rendi le dodici skill
+5. Non-native harnesses. If you used codex as a fallback, make the twelve skills
    (dfd-init, dfd-setup, dfd-feature, dfd-assess, dfd-specify, dfd-review-design,
    dfd-plan, dfd-implement, dfd-verify, dfd-pre-release, dfd-review-release,
-   dfd-status) rilevabili dal tuo harness nel suo meccanismo nativo (regole,
-   comandi, workflow o file di istruzioni): preferisci riferimenti ai file
-   .agents/skills/<skill>/SKILL.md invece di copie; se l'harness richiede copie,
-   indica che la fonte è .agents/skills/ e che vanno rigenerate dopo
-   `dfd install`. Aggiungi le istruzioni in coda ai file esistenti, senza
-   riscriverli.
+   dfd-status) discoverable through your harness's native mechanism (rules,
+   commands, workflows or instruction files): prefer references to
+   .agents/skills/<skill>/SKILL.md over copies; if the harness requires copies,
+   state that .agents/skills/ is the source and that they must be regenerated
+   after `dfd install`. Append instructions to existing files without rewriting
+   them.
 
-6. Verifica e resoconto. Controlla che .dfd/ e le skill esistano e che il tuo
-   harness le veda. Riportami: binario e versione usati, adapter, file creati o
-   modificati, eventuali limiti. Indica come invocare la prima skill nel tuo
-   harness (es. /dfd-init, $dfd-init) per completare la Fase 0: assessment, DoD,
-   guardrail e convenzioni del dominio, verificati con `dfd setup --domain <dominio>`.
-   Non avviare la Fase 0 senza la mia conferma.
+6. Verify and report. Check that .dfd/ and the skills exist and that your harness
+   sees them. Report: binary and version used, adapter, files created or
+   modified, any limitations. Tell me how to invoke the first skill in your
+   harness (e.g. /dfd-init, $dfd-init) to complete Phase 0: assessment, DoD,
+   guardrails and domain conventions, verified with `dfd setup --domain <domain>`.
+   Do not start Phase 0 without my confirmation.
 ```
 
-Per i dettagli su adapter, lingua e cambio di harness (`dfd install --harness <adapter>`) vedere il [DFD Kit](dfd-kit/README.md).
+See [DFD Kit](dfd-kit/README.md) for adapters, language and switching harness (`dfd install --harness <adapter>`).
 
-## Come leggere questo repo (per ruolo)
+## Reading paths by role
 
 ### Product Manager / Product Owner
 
-1. **[Fondamenta](fondamenta.md)** – per capire l’idea centrale e il “perché” di DFD.  
-2. **[Processo End-to-End](processo-e2e.md)** – per vedere come si inserisce il prodotto nelle varie fasi (soprattutto Idea/Epic e Post-release).  
-3. **[Criteri di Rischio](rischio.md)** – per capire quando una feature richiede un percorso full o light.  
-4. **[Template Specifica di Feature](templates/specifica_feature.md)** – per vedere come vengono strutturati obiettivi, KPI e impatto su utenti/business.
+1. [Foundations](fondamenta.md): central idea and rationale.
+2. [End-to-end process](processo-e2e.md): product participation, especially Idea/Epic and Post-release.
+3. [Risk criteria](rischio.md): choose full/light.
+4. [Feature specification](templates/specifica_feature.md): objectives, KPIs and user/business impact.
 
-Focus: obiettivi business, KPI, priorità, impatto su UX e metriche di prodotto.
-
----
+Focus: business goals, KPIs, priorities, UX and product metrics.
 
 ### Tech Lead / Architect
 
-1. **[Fondamenta](fondamenta.md)** – visione d’insieme del framework.  
-2. **[Processo End-to-End](processo-e2e.md)** – per governare le fasi e i gate di review.  
-3. **[Modello RACI](raci.md)** – per chiarire ruoli e responsabilità nel team.  
-4. **[Criteri di Rischio](rischio.md)** – per decidere il livello di rigore (full vs light).  
-5. **[Template DoD Estesa](templates/dod-estesa.md)** + **[Esempio Checkout](examples/checkout_dod.md)** – per definire o affinare la DoD del dominio.  
-6. **[Template Specifica di Feature](templates/specifica_feature.md)** + **[Esempio PayPal](examples/checkout_paypal_spec.md)** – per guidare la progettazione delle feature.
+1. [Foundations](fondamenta.md).
+2. [Process](processo-e2e.md): phases/review gates.
+3. [RACI](raci.md): responsibilities.
+4. [Risk](rischio.md): proportionate rigor.
+5. [Extended DoD](templates/dod-estesa.md) and [Checkout example](examples/checkout_dod.md).
+6. [Feature specification](templates/specifica_feature.md) and [PayPal example](examples/checkout_paypal_spec.md).
 
-Focus: coerenza architetturale, guardrail, sicurezza, SLO, evoluzione della DoD.
-
----
+Focus: architecture, guardrails, security, SLOs and DoD evolution.
 
 ### Developer
 
-1. **[Fondamenta](fondamenta.md)** – per capire la logica di fondo (DoD come contratto).  
-2. **[Processo End-to-End](processo-e2e.md)** – per sapere cosa ci si aspetta in ogni fase.  
-3. **[Template Specifica di Feature](templates/specifica_feature.md)** – per leggere/scrivere specifiche allineate a DFD.  
-4. **[Checklist di Review DFD – Design](templates/review_design.md)** (e Light) – per prepararsi alle review.  
-5. **[Template DoD Estesa](templates/dod-estesa.md)** – per capire quali criteri di osservabilità, sicurezza, SLO, costo devi soddisfare.
+1. [Foundations](fondamenta.md): DoD as contract.
+2. [Process](processo-e2e.md): phase expectations.
+3. [Specification](templates/specifica_feature.md).
+4. [Design review](templates/review_design.md) and [light version](templates/review_design_light.md).
+5. [Extended DoD](templates/dod-estesa.md).
 
-Focus: scrivere codice e test in ottica TDD DFD, strumentare log/metriche/trace, rispettare la DoD.
-
----
+Focus: DFD TDD, logs/metrics/traces and DoD compliance.
 
 ### QA / SDET
 
-1. **[Fondamenta](fondamenta.md)** – per inquadrare il ruolo dei test in DFD.  
-2. **[Processo End-to-End](processo-e2e.md)** – per vedere dove intervengono i test (sviluppo, pre-release, post-release).  
-3. **[Checklist di Review DFD – Design](templates/review_design.md)** e **[Release](templates/review_release.md)** – per partecipare attivamente alle review.  
-4. **[Template DoD Estesa](templates/dod-estesa.md)** – per derivare test da OBS-xx, SEC-xx, SLO-xx, COST-xx.  
-5. **[Esempio PayPal](examples/checkout_paypal_spec.md)** – per vedere un caso concreto di test e validazione.
+1. [Foundations](fondamenta.md).
+2. [Process](processo-e2e.md): development, pre-release and post-release tests.
+3. [Design](templates/review_design.md) and [release](templates/review_release.md) review.
+4. [Extended DoD](templates/dod-estesa.md): derive tests from OBS-xx, SEC-xx, SLO-xx and COST-xx.
+5. [PayPal example](examples/checkout_paypal_spec.md).
 
-Focus: test funzionali e non funzionali, resilienza, sicurezza, validazione in produzione.
-
----
+Focus: functional/nonfunctional tests, resilience, security and production validation.
 
 ### Ops / SRE
 
-1. **[Fondamenta](fondamenta.md)** – per capire il legame tra DoD, allarmi e rilascio.  
-2. **[Processo End-to-End](processo-e2e.md)** – per vedere il tuo ruolo in pre-release e rollout.  
-3. **[Template Configurazione Rollout](templates/configurazione_rollout.md)** – per definire fasi, soglie, rollback.  
-4. **[Template DoD Estesa](templates/dod-estesa.md)** – per allineare allarmi e dashboard ai criteri DoD.  
-5. **[Esempio Checkout](examples/checkout_dod.md)** – per vedere un caso concreto di osservabilità e SLO.
+1. [Foundations](fondamenta.md).
+2. [Process](processo-e2e.md): pre-release/rollout responsibilities.
+3. [Rollout configuration](templates/configurazione_rollout.md).
+4. [Extended DoD](templates/dod-estesa.md): align alarms/dashboards.
+5. [Checkout example](examples/checkout_dod.md).
 
-Focus: allarmi, dashboard, canary, rollout, gestione incidenti legati a SLO e osservabilità.
-
----
+Focus: alarms, dashboards, canaries, rollout and SLO/observability incidents.
 
 ### Security Engineer
 
-1. **[Fondamenta](fondamenta.md)** – per inquadrare il ruolo della sicurezza in DFD.  
-2. **[Criteri di Rischio](rischio.md)** – per identificare le feature high risk su sicurezza.  
-3. **[Template DoD Estesa](templates/dod-estesa.md)** – sezione Sicurezza (SEC-xx).  
-4. **[Checklist di Review DFD – Design](templates/review_design.md)** e **[Release](templates/review_release.md)** – per partecipare alle review con focus security.  
-5. **[Esempio PayPal](examples/checkout_paypal_spec.md)** – per vedere un caso concreto di criteri SEC-xx.
+1. [Foundations](fondamenta.md).
+2. [Risk](rischio.md): high-security-risk features.
+3. [Extended DoD](templates/dod-estesa.md): SEC-xx.
+4. [Design](templates/review_design.md) and [release](templates/review_release.md) review.
+5. [PayPal example](examples/checkout_paypal_spec.md).
 
-Focus: controlli di accesso, audit, protezione dati, conformità, review di sicurezza.
-
----
+Focus: access, audit, data protection, compliance and security review.
 
 ### Support / Customer Success
 
-1. **[Fondamenta](fondamenta.md)** – per capire la logica di validazione in produzione.  
-2. **[Processo End-to-End](processo-e2e.md)** – per vedere quando sei coinvolto (pre-release, post-release).  
-3. **[Criteri di Rischio](rischio.md)** – per capire quali feature possono avere più impatto sugli utenti.  
-4. **[Esempio PayPal](examples/checkout_paypal_spec.md)** – per vedere come una feature può impattare UX e KPI.
+1. [Foundations](fondamenta.md).
+2. [Process](processo-e2e.md): pre-release/post-release participation.
+3. [Risk](rischio.md): user impact.
+4. [PayPal example](examples/checkout_paypal_spec.md).
 
-Focus: feedback utenti, segnalazioni post-release, impatto su UX e business KPI.
+Focus: feedback, post-release reports, UX and business KPIs.
 
-## Progetti ancora in sviluppo
+## Projects still in development
 
-DFD supporta la modalità **solo sviluppo**, con specifiche iterative, review e verifiche locali tracciate anche quando la CI è prematura. La **preparazione al rilascio** si attiva esplicitamente quando si decide di distribuire, rivalutando rischio, policy CI e requisiti operativi. Vedere [fondamenta](fondamenta.md#maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio) e [processo](processo-e2e.md#maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio).
+Development-only supports iterative specifications, reviews and traced local checks while CI is premature. Switch explicitly to release preparation when distributing, reassessing risk, CI and operational requirements. See [foundations](fondamenta.md#maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio) and [process](processo-e2e.md#maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio).
 
-## Processo proporzionato, anche per un solo dev
+## Proportionate process, including solo developers
 
-Scegliere **rapido** per fix circoscritti entro un contratto noto, **light** per cambiamenti contenuti da specificare e **full** per rischi maggiori. Il rapido usa un solo [record](templates/cambiamento_rapido.md), con regressione red/green per bug e verifiche pertinenti per modifiche editoriali. DFD funziona per singoli sviluppatori e team; PR, review indipendente e verifiche integrate dipendono dalle [convenzioni di collaborazione](templates/collaborazione.md). Vedere [rischio](rischio.md#percorsi-proporzionati-rapido-light-e-full) e [CLI](dfd-kit/README.md).
+Choose rapid for scoped known-contract fixes, light for contained work needing specification, full for higher risk. Rapid uses [one record](templates/cambiamento_rapido.md), red/green for bugs and relevant editorial checks. Team PR/independence/integration requirements come from [optional policy](templates/collaborazione.md). See [risk](rischio.md#percorsi-proporzionati-rapido-light-e-full) and [DFD Kit](dfd-kit/README.md).
+
+## Language and contribution
+
+Read the complete framework in either language; filenames and criterion IDs are shared. See the [glossary and maintenance rules](glossario.md). Toolkit documentation, skills and templates also have both versions.

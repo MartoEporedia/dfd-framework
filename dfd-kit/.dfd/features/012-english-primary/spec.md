@@ -79,7 +79,7 @@
 ## 5. Guardrail e decisioni
 
 - Guardrail: nessuna perdita di contenuto; artefatti `.dfd/` intatti; contratti JSON invariati; nessuna dipendenza nuova.
-- Decisioni: le due scelte del manutentore citate in §1. Le proposte da confermare in review sono in §7.
+- Decisioni: le due scelte del manutentore citate in §1 e quelle prese in review, in §7.
 - Collegamenti: feature 003-bilingual (bundle e lingua), 011-github-releases (changelog e release).
 
 ## 6. Test e validazione prevista
@@ -95,11 +95,12 @@
 
 ## 7. Domande aperte e review
 
-- Proposte da confermare in review:
+- Decisioni prese in review (manutentore, 2026-11-18, "Approvo con le 4 proposte"):
   - gli alias `<a id>` con slug italiani restano nei file inglesi;
   - il progetto `dfd-kit` stesso (senza `language.json`) passa ai messaggi inglesi, i suoi artefatti restano italiani;
   - il catalogo dei messaggi resta con sorgente italiana;
-  - questa feature parte dal branch della PR #17 (ondata 1), così lo spostamento include quei contenuti; la sua PR va unita dopo la #17.
+  - questa feature parte dal branch della PR #17 (ondata 1) e la sua PR va unita dopo la #17.
+- Punti bloccanti da chiarire: nessuno.
 - Condizioni e responsabili: nessuna.
 - Riferimento alla review e alla decisione umana: `design-review.md`, `review-notes.md`, decisione del manutentore.
 

@@ -1,139 +1,152 @@
-<!-- dfd-language --> [Italiano](review_design.md) | [English](../en/templates/review_design.md)
+<!-- dfd-language --> [English](review_design.md) | [Italiano](../it/templates/review_design.md)
 
-# Checklist di Review DFD – Design
+<a id="checklist-di-review-dfd--design"></a>
 
-> **Tipo di review**: design  
-> **Data**: YYYY-MM-DD  
-> **Partecipanti**: [@team / @persone]  
-> **Riferimenti**:
-> - [Specifica di Feature]
-> - [DoD Estesa – Servizio X]
-> - [Architecture Guardrails]
-> - [Processo End-to-End DFD – Definition of Ready]
+# DFD review checklist – Design
 
----
+> **Review type**: design  
+> **Date**: YYYY-MM-DD  
+> **Participants**: [@team / @people]  
+> **References**: [Feature specification], [Extended DoD], [Architecture Guardrails], [Process / DoR].
 
-## 0. Verifica Definition of Ready (DoR) – Design
+<a id="0-verifica-definition-of-ready-dor--design"></a>
 
-Prima di procedere con la review di design, verificare che l’epic soddisfi i seguenti criteri:
+## 0. Definition of Ready – Design
 
-- [ ] **Obiettivo business chiaro** (1–2 frasi: che problema risolve / che opportunità sfrutta).  
-- [ ] **KPI / metriche di successo** almeno ad alto livello (es. “aumento conversione checkout”, “riduzione ticket supporto”).  
-- [ ] **Dominio / servizio principale** identificato (es. Checkout, Pagamenti, Catalogo).  
-- [ ] **Stima ad alto livello** di complessità (T-shirt size o simile).  
-- [ ] **Priorità** definita nel backlog di prodotto.  
-- [ ] **Epic approvata** dal Product Manager / Product Owner.
+- [ ] Clear business objective (1–2 sentences).
+- [ ] At least high-level KPIs (conversion/support tickets, for example).
+- [ ] Primary domain/service identified.
+- [ ] High-level complexity estimate.
+- [ ] Product backlog priority defined.
+- [ ] Epic approved by Product Manager/Owner.
 
-Se questi criteri non sono soddisfatti, la review di design non dovrebbe procedere; si completa prima l’epic.
+Otherwise complete the epic first.
 
----
+<a id="1-allineamento-alla-dod-estesa"></a>
 
-## 1. Allineamento alla DoD Estesa
+## 1. Extended DoD alignment
 
-### 1.1 Osservabilità
+<a id="11-osservabilità"></a>
 
-- [ ] La feature cita esplicitamente i criteri **OBS-xx** rilevanti.
-- [ ] Sono definite le metriche obbligatorie (request, error, latency) per ogni nuovo endpoint.
-- [ ] Sono definite le custom metric business (se applicabile).
-- [ ] I log includono: `tenantId`, `userId`, `operation`, `outcome`, `errorCode`, `traceId`.
-- [ ] È previsto l’uso del trace ID su log e metriche.
-- [ ] Sono identificate le dashboard da aggiornare / creare.
+### 1.1 Observability
 
-### 1.2 Sicurezza
+- [ ] Relevant OBS-xx criteria explicitly referenced defined in the specification.
+- [ ] Requests/errors/latency for each new endpoint defined in the specification.
+- [ ] Business custom metrics, when applicable, defined in the specification.
+- [ ] Logs include tenantId, userId, operation, outcome, errorCode, traceId.
+- [ ] Trace ID in logs/metrics defined in the specification.
+- [ ] Relevant dashboards defined in the specification.
 
-- [ ] La feature cita esplicitamente i criteri **SEC-xx** rilevanti.
-- [ ] Sono definiti i controlli di accesso (ruoli, policy).
-- [ ] È verificata la protezione dati (nessun dato sensibile in chiaro nei log).
-- [ ] Sono definiti gli eventi di audit da loggare.
-- [ ] Sono rispettati gli standard / policy indicati nella DoD.
+<a id="12-sicurezza"></a>
 
-### 1.3 Affidabilità / SLO
+### 1.2 Security
 
-- [ ] La feature cita esplicitamente i criteri **SLO-xx** rilevanti.
-- [ ] È stimato l’impatto su latenza, error rate, disponibilità.
-- [ ] Sono definite le mitigazioni per dipendenze esterne (timeout, retry, fallback).
-- [ ] Sono identificati i nuovi rischi per affidabilità e le relative contromisure.
+- [ ] Relevant SEC-xx criteria defined in the specification.
+- [ ] Access roles/policies defined in the specification.
+- [ ] Data protection verified: no plaintext sensitive log data.
+- [ ] Audit events defined in the specification.
+- [ ] DoD standards/policies respected.
 
-### 1.4 Costo
+<a id="13-affidabilità--slo"></a>
 
-- [ ] La feature cita esplicitamente i criteri **COST-xx** rilevanti.
-- [ ] È stimato l’impatto sul costo mensile del servizio.
-- [ ] È stimato l’impatto sul costo per transazione (se applicabile).
-- [ ] È verificato il rispetto delle soglie di allarme (COST-03).
+### 1.3 Reliability / SLOs
 
-### 1.5 Esperienza utente / business KPI
+- [ ] Relevant SLO-xx criteria defined in the specification.
+- [ ] Latency/error-rate/availability impact assessed for the proposed design.
+- [ ] Dependency timeout/retry/fallback mitigations defined in the specification.
+- [ ] New reliability risks and countermeasures identified.
 
-- [ ] Sono identificati i KPI business impattati (es. tasso di completamento).
-- [ ] Sono definite le soglie di peggioramento accettabile (UX-02).
-- [ ] È definito un piano di validazione in produzione (rollout per tenant, esperimento).
+<a id="14-costo"></a>
 
----
+### 1.4 Cost
 
-## 2. Guardrail globali
+- [ ] Relevant COST-xx criteria defined in the specification.
+- [ ] Monthly cost impact assessed for the proposed design.
+- [ ] Transaction cost impact assessed when applicable for the proposed design.
+- [ ] COST-03 thresholds checked against the estimate.
 
-- [ ] La feature non viola i guardrail architetturali.
-- [ ] La feature non viola i guardrail di sicurezza.
-- [ ] La feature non viola i guardrail di osservabilità.
-- [ ] La feature non viola i guardrail di costo.
-- [ ] Eventuali eccezioni sono esplicite, motivate e approvate.
+<a id="15-esperienza-utente--business-kpi"></a>
 
----
+### 1.5 UX / business KPIs
 
-## 3. Test e validazione
+- [ ] Affected business KPIs identified for the design.
+- [ ] Acceptable UX-02 deterioration thresholds clear and measurable.
+- [ ] Production validation plan outlined.
 
-### 3.1 Test funzionali
+<a id="2-guardrail-globali"></a>
 
-- [ ] Piano di test unitari per la logica nuova / modificata.
-- [ ] Piano di test di integrazione per le nuove / modificate API.
-- [ ] Piano di test end-to-end per i flussi principali.
+## 2. Global guardrails
 
-### 3.2 Test non funzionali
+- [ ] Architectural guardrails respected.
+- [ ] Security guardrails respected.
+- [ ] Observability guardrails respected.
+- [ ] Cost guardrails respected.
+- [ ] Exceptions explicit, justified and approved.
 
-- [ ] Piano di test di carico (se rilevante per SLO).
-- [ ] Piano di test di resilienza (dipendenze down, timeout, fallback).
-- [ ] Piano di test di sicurezza (accesso non autorizzato, input malevoli).
+<a id="3-test-e-validazione"></a>
 
-### 3.3 Validazione in produzione (shift-right)
+## 3. Tests and validation
 
-- [ ] È definita un’idea di piano di canary tecnico (metriche, soglie, rollback).
-- [ ] È definita un’idea di piano di rollout per tenant / segmento.
+<a id="31-test-funzionali"></a>
 
----
+### 3.1 Functional tests
 
-## 4. Operatività e supporto
+- [ ] Unit tests for new/changed logic planned.
+- [ ] Integration tests for new/changed APIs planned.
+- [ ] E2E tests for main flows planned.
 
-- [ ] Sono stati identificati i team da informare prima del rilascio (Support, Ops, Security).
-- [ ] Sono stati identificati gli alert operativi principali da configurare in pre-release.
+<a id="32-test-non-funzionali"></a>
 
----
+### 3.2 Nonfunctional tests
 
-## 5. Decisioni e aperture
+- [ ] Relevant load tests planned.
+- [ ] Resilience tests for failures/timeouts/fallback planned.
+- [ ] Security tests for unauthorized access/malicious input planned.
 
-- [ ] Decisioni prese in review: [elenco sintetico]
-- [ ] Aperture residue (da decidere / investigare): [elenco]
+<a id="33-validazione-in-produzione-shift-right"></a>
 
----
+### 3.3 Production validation (shift-right)
 
-## 6. Esito della review di design
+- [ ] Technical canary plan: metrics, thresholds and rollback outlined.
+- [ ] Tenant/segment rollout plan outlined.
 
-- [ ] **Approvata** (può procedere allo sviluppo)
-- [ ] **Approvata con condizioni**: [condizioni da soddisfare]
-- [ ] **Da rivedere**: [motivi, cosa manca]
+<a id="4-operatività-e-supporto"></a>
 
-**Firme / approvazioni**:
+## 4. Operations and support
 
-- [@persona1] – [ruolo]
-- [@persona2] – [ruolo]
+- [ ] Teams to inform before release identified (Support, Ops, Security).
+- [ ] Main operational alerts to configure at pre-release identified.
 
-## Maturità e policy delle verifiche
+<a id="5-decisioni-e-aperture"></a>
 
-- Modalità del dominio: solo sviluppo / preparazione al rilascio.
-- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
-- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
-- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
+## 5. Decisions and open questions
 
-In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
+- [ ] Decisions: [list].
+- [ ] Remaining questions/investigations: [list].
 
-## Proporzionalità e collaborazione
+<a id="6-esito-della-review-di-design"></a>
 
-Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.
+## 6. Review outcome
+
+- [ ] Design approved: development may proceed.
+- [ ] Approved with conditions: [conditions and owners].
+- [ ] Changes requested: [reasons/gaps].
+
+Approvals: [@person1 – role], [@person2 – role].
+
+<a id="maturità-e-policy-delle-verifiche"></a>
+
+## Maturity and verification policy
+
+- Domain mode: development-only / release-preparation.
+- CI required: yes / no; rationale based on risk and target.
+- Final suite: command, environment, date, result and reference to the real log.
+- Questions/requirements deferred to pre-release: owner and activation condition.
+
+In development-only, finish design and proportionate checks without prematurely requiring CI, rollout, on-call or release communications. Release checklists apply when preparing distribution. Before release reassess risk/policy, reconfirm reviews and refresh evidence. Deferred work must not be marked executed.
+
+<a id="proporzionalità-e-collaborazione"></a>
+
+## Proportionality and collaboration
+
+First consider rapid for scoped noncritical fixes, using one [quick change record](cambiamento_rapido.md) rather than completing this entire template. Match light/full detail to risk. Owner and checks are required; PRs, independence and integrated checks depend on [optional team conventions](collaborazione.md). Solo developers do not simulate roles or communications. Reuse applicable reviews; test failure effects and important regressions.

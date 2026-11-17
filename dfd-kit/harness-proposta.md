@@ -1,148 +1,77 @@
-<!-- dfd-language --> [Italiano](harness-proposta.md) | [English](en/harness-proposta.md)
+<!-- dfd-language --> [English](harness-proposta.md) | [Italiano](it/harness-proposta.md)
 
-# DFD Kit – Integrazione negli harness di coding
+<a id="dfd-kit--integrazione-negli-harness-di-coding"></a>
 
-> **Stato**: MVP 0.1 implementato; da validare con un progetto pilota  
-> **Data**: 2026-10-08  
-> **Riferimenti**: [Fondamenta](fondamenta.md), [Processo](processo-e2e.md), [Rischio](rischio.md), [RACI](raci.md)
+# DFD Kit – Coding harness integration
 
-## 1. Obiettivo e primo utilizzatore
+> **Status**: MVP 0.1 implemented; real pilot validation pending  
+> **Date**: 2026-10-08  
+> **References**: [Foundations](fondamenta.md), [Process](processo-e2e.md), [Risk](rischio.md), [RACI](raci.md).
 
-Aiutare un team ad applicare DFD nel proprio repository: definire la DoD del dominio, classificare una feature, produrre una specifica, derivare test e verifiche, preparare il rilascio e registrare i risultati.
+<a id="1-obiettivo-e-primo-utilizzatore"></a>
 
-Il primo utilizzatore ipotizzato è un Tech Lead o developer che introduce DFD in un progetto esistente. Il percorso deve funzionare anche quando una persona ricopre più ruoli, mantenendo esplicite le responsabilità del RACI.
+## 1. Objective and first user
 
-La distribuzione scelta è un toolkit installabile negli harness già usati dal team: Claude Code, OpenCode, GitHub Copilot e Codex. L’harness esegue il lavoro con i propri modelli, strumenti e permessi; DFD Kit fornisce workflow, template e verifiche. Non serve un runtime autonomo né un servizio LLM aggiuntivo.
+Help a team define domain DoD, classify/specify features, derive tests/checks, prepare release and record outcomes in its repository. Initial user: a Tech Lead/developer adopting DFD in an existing product, including solo developers combining clearly assigned RACI roles. Harnesses supply models/tools/permissions; DFD supplies shared skills/templates/deterministic checks, without a separate runtime or LLM service.
 
-## 2. Ipotesi di adozione
+<a id="2-ipotesi-di-adozione"></a>
 
-**Rischio di adozione: medio**, come valutazione preliminare del prodotto: mancano evidenze di utilizzo e il framework richiede nuove abitudini di review.
+## 2. Adoption hypothesis
 
-L'ipotesi principale è che un workflow guidato riduca il lavoro di coordinamento più di quanto aumenti il lavoro documentale. La validazione minima è accompagnare una feature reale, misurando tempo impiegato, interventi manuali, lacune individuate e uso effettivo degli artefatti in review.
+Preliminary adoption risk is Medium: actual use is unproven and reviews require new habits. Hypothesis: guided work reduces coordination more than it adds documentation. Validate one real feature, measuring time, manual intervention, detected gaps and artifacts actually used in review. Defer dashboards, ticket integrations, multi-agent orchestration and automated deployment until the core workflow proves useful.
 
-Rinviare dashboard, integrazioni con ticketing, orchestrazione multi-agente e deploy automatici finché il percorso base non dimostra utilità.
+<a id="3-esperienza-proposta"></a>
 
-## 3. Esperienza proposta
+## 3. Proposed experience
 
-La CLI 0.1 implementa init, install, setup, feature, assess, specify, review-design, decide, plan, verify, pre-release, review-release, status e doctor. Lo sviluppo TDD è guidato da `dfd-implement` nell’harness; rollout e learn descrivono l’evoluzione prevista. Ogni fase sarà una skill con nome stabile, per esempio `dfd-assess` e `dfd-specify`. L’invocazione esplicita segue la sintassi dell’harness; l’installer e il validatore potranno offrire una CLI distinta.
+CLI covers init/install/setup/feature/assess/specify/review-design/decide/plan/verify/pre-release/review-release/status/doctor, plus quick/promote/context and language selection. dfd-implement guides harness TDD; rollout execution and learn remain future work. Stable skill names use harness-specific invocation. Preserve business goals/KPIs/epic approval; repeated commands update/resume without losing decisions. See the [command contract](templates/contratto_toolkit.md).
 
-| Operazione | Risultato |
-|---|---|
-| `dfd init` | Installazione e scaffolding del dominio |
-| `dfd setup` | Fase 0: verifica DoD, guardrail, template e convenzioni del dominio |
-| `dfd feature` | Apertura della feature guidata dalla skill dedicata |
-| `dfd assess` | Rischio per dimensione, motivazioni, dati mancanti e percorso suggerito |
-| `dfd specify` | Specifica collegata ai criteri DoD applicabili |
-| `dfd review-design` | Controlli di coerenza, criticità e proposta di esito |
-| `dfd plan` | Task, test e osservabilità derivati dalla specifica approvata |
-| `dfd-implement` (skill) | Ciclo TDD, codice, refactor e raccolta delle evidenze |
-| `dfd verify` | Evidenze disponibili e criteri ancora scoperti |
-| `dfd pre-release` | Piano di rollout, soglie, rollback e preparazione operativa |
-| `dfd review-release` | Controlli e gate della review di release |
-| `dfd learn` | Risultati post-release e proposte di revisione della DoD |
-| `dfd status` | Fase corrente, condizioni aperte e prossima azione |
+<a id="4-nucleo-comune-e-adapter"></a>
 
-Il passaggio dall'idea al design conserva obiettivi, KPI e riferimento all'approvazione dell'epic. Le operazioni possono essere ripetute per aggiornare gli artefatti senza perdere decisioni precedenti.
+## 4. Shared core and adapters
 
-## 4. Nucleo comune e adapter
+One canonical SKILL.md workflow per phase feeds four adapters. Load only phase-relevant resources. Installer tracks managed files, rejects local conflicts and avoids duplicate compatibility-directory skills. One active adapter per repository; changing adapter preserves state. Discovery/invocation/resource access require real version/surface pilots, distinct from installation tests. Hooks/specialized packaging are future work.
 
-Il nucleo contiene skill `SKILL.md`, template versionati, regole di rischio, gestione degli artefatti e controlli deterministici. Una sola definizione di ogni workflow alimenta tutti gli adapter; nomi e descrizioni delle skill restano coerenti. Le risorse vengono caricate per fase, evitando di inserire tutto il framework nel contesto iniziale.
-
-L’installer colloca skill e risorse nei percorsi riconosciuti dall’harness, mantiene un manifest dei file gestiti e rileva conflitti durante gli aggiornamenti. La CLI installa e valida artefatti senza chiamare un modello. Le skill chiedono all’agente dell’harness di svolgere il lavoro.
-
-| Harness | Percorso di skill di progetto documentato | Fonte |
+| Harness | Project skill directory | Reference |
 |---|---|---|
-| Claude Code | `.claude/skills/<nome>/SKILL.md` | [Claude Code](https://code.claude.com/docs/en/skills) |
-| Codex | `.agents/skills/<nome>/SKILL.md` | [OpenAI](https://learn.chatgpt.com/docs/build-skills) |
-| OpenCode | `.opencode/skills/<nome>/SKILL.md`; supporta anche `.agents/skills` e `.claude/skills` | [OpenCode](https://docs.opencode.ai/docs/skills/) |
-| GitHub Copilot | `.github/skills/<nome>/SKILL.md`; supporta anche `.agents/skills` e `.claude/skills` | [GitHub](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills) |
+| Claude Code | .claude/skills/name/SKILL.md | [Skills](https://code.claude.com/docs/en/skills) |
+| Codex | .agents/skills/name/SKILL.md | [Skills](https://learn.chatgpt.com/docs/build-skills) |
+| OpenCode | .opencode/skills/name/SKILL.md, compatible .agents/.claude | [Skills](https://docs.opencode.ai/docs/skills/) |
+| GitHub Copilot | .github/skills/name/SKILL.md, compatible .agents/.claude | [Skills](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills) |
 
-Questi percorsi costituiscono una base documentata, non una certificazione dell’integrazione. L’installer deve evitare copie duplicate della stessa skill nei percorsi di compatibilità. Ogni adapter richiede prove di discovery, invocazione e accesso alle risorse nelle versioni e superfici supportate. La prima versione installa un adapter attivo per repository per evitare duplicazioni nelle directory di compatibilità. Il cambio di adapter preserva lo stato; hook e packaging specifico sono evoluzioni future.
+The Rust binary embeds skills/templates/documents. cli.rs defines adapters; model.rs defines versioned schemas; store.rs owns persistence. Preserve existing AGENTS.md/CLAUDE.md/Copilot policy. Agents propose/interpret, validators check structure/references/prerequisites, humans make RACI decisions. Agent reports do not approve work.
 
-La struttura proposta del toolkit è:
+The adopting .dfd/ contains config, common guardrails, domains with DoD/catalog/guardrails/process/templates/adoption/assessment, and separate feature folders with state, risk, specification, design review, plan, development evidence/review, rollout, release review/decisions/notes and eventual learning. Markdown carries readable context; versioned JSON carries verifiable references. See [contract](templates/contratto_toolkit.md).
 
-```text
-skills/dfd-feature/SKILL.md
-skills/dfd-assess/SKILL.md
-skills/dfd-specify/SKILL.md
-skills/dfd-review-design/SKILL.md
-src/cli.rs
-src/model.rs
-src/store.rs
-Cargo.toml
-templates/
-examples/
-```
+<a id="5-tracciabilità-e-gate"></a>
 
-La CLI è implementata in Rust e incorpora skill, template e documenti nel binario: l’utilizzatore non deve installare runtime o pacchetti aggiuntivi. Gli adapter sono descritti in `src/cli.rs`; gli schemi versionati sono tipi Rust in `src/model.rs`. Preservare `AGENTS.md`, `CLAUDE.md` e le istruzioni Copilot già presenti nel progetto adottante. Eventuali riferimenti di raccordo devono essere aggiunte circoscritte e riconoscibili, senza sostituire le policy del team.
+## 5. Traceability and gates
 
-L'agente propone contenuti e interpreta evidenze. Il validatore controlla identificatori, riferimenti, campi obbligatori e prerequisiti dei gate. I responsabili umani registrano le approvazioni previste dal RACI. Un report dell'agente non equivale a un'approvazione umana.
+DoD criterion → specification → task/test → evidence → release validation. Applicable criteria need checks or reviewed justified exclusions. Evidence records origin, command/procedure, result, date and revision; distinguish automatic/manual/missing. Links alone do not prove execution; checkmarks do not prove requirements. Changed specifications/revisions invalidate affected evidence/review. Conditions retain owner/due phase. MVP gates guide work; merge/deploy enforcement requires later CI integration.
 
-La struttura proposta nel repository adottante è:
+<a id="6-mvp-e-criteri-di-accettazione"></a>
 
-```text
-.dfd/
-  config.json
-  domains/checkout/
-    dod.md
-    criteria.json
-    guardrails.md
-    process.md
-    templates/
-    adoption.json
-    assessment.md
-  guardrails.md
-  features/001-paypal/
-    state.json
-    risk.md
-    spec.md
-    design-review.md
-    plan.md
-    plan.json
-    development-review.md
-    evidence.json
-    rollout.md
-    rollout.json
-    release-review.md
-    release-decisions.json
-    release-notes.md
-    learning.md
-```
+## 6. MVP acceptance
 
-Markdown conserva il contesto leggibile; JSON versionato rappresenta stato e riferimenti verificabili. Ogni feature identifica dominio, versione della DoD, percorso, fase e decisioni. Il formato della prima versione è descritto nel [contratto del toolkit](templates/contratto_toolkit.md).
+- Initialization preserves existing files/instructions and is repeatable.
+- Features have isolated artifacts/state and resume across harnesses from .dfd, without chat history.
+- Installer avoids duplicates and rejects modified managed files.
+- Risk classification is reproducible and leaves unknown data unresolved.
+- Specifications reference existing domain criteria.
+- Missing prerequisites prevent passing gates.
+- Human decisions remain distinguishable from agent proposals.
+- Pilot completes an actual review and records manual work.
 
-## 5. Tracciabilità e gate
+The initial milestone was design review; planning/TDD verification and pre-release/release review are implemented. Real harness pilot and portability remain to validate; rollout execution/learning follow later.
 
-La relazione centrale è **criterio DoD → specifica → task/test → evidenza → verifica del rilascio**. Ogni criterio applicabile deve avere una verifica, oppure un'esclusione motivata sottoposta alla review pertinente.
+<a id="7-chiarimenti-del-framework-prima-dellautomazione"></a>
 
-Un'evidenza registra origine, comando o procedura, esito, data e revisione verificata. Distinguere evidenze automatiche, manuali e assenti. Un collegamento a un test non dimostra che il test sia stato eseguito; una checklist compilata non dimostra che un requisito sia soddisfatto.
+## 7. Clarifications before automation
 
-Quando cambia la specifica o la revisione verificata, segnalare le evidenze e le review da riconfermare. Le condizioni di approvazione restano visibili e devono indicare responsabile e fase entro cui risolverle.
+Risk prose overlaps at one Medium. Ordered precedence is any High → full complete, at least two Medium → full proportionate, otherwise light. Team escalations are justified decisions, not automatic overrides. Transaction-cost growth 5% to below 10% needs clarification/policy before automatic classification. DoD links use templates/dod-estesa.md. Feature template and Checkout DoD are distinct; PayPal is illustrative, not test/production evidence.
 
-Nel primo MVP i gate guidano il workflow e producono esiti espliciti. Il blocco tecnico di merge o deploy richiede un'integrazione CI successiva: le sole istruzioni all'agente non lo garantiscono.
+<a id="8-riferimento-esterno"></a>
 
-## 6. MVP e criteri di accettazione
+## 8. External reference
 
-Prima iterazione: inizializzazione, assessment, specifica, review di design e stato. I quattro adapter condividono lo stesso percorso; il primo pilota operativo valida una singola combinazione di harness e progetto, poi si verifica la portabilità sugli altri. La review di design è il primo traguardo; piano, sviluppo TDD e verifica delle evidenze sono implementati. Pre-release e review di release sono implementate; esecuzione del rollout e apprendimento seguono nelle iterazioni successive.
-
-- L'inizializzazione preserva file e istruzioni esistenti e si può ripetere senza duplicazioni.
-- Due feature mantengono artefatti e stato separati.
-- La stessa feature si può riprendere in un altro harness leggendo `.dfd/`, senza dipendere dalla cronologia della chat.
-- L’installer non duplica le skill nei percorsi di compatibilità e segnala conflitti sui file modificati dal team.
-- La classificazione è riproducibile e tratta informazioni mancanti come da chiarire.
-- La specifica cita criteri esistenti nella DoD del dominio.
-- I prerequisiti mancanti impediscono al workflow di dichiarare un gate superato.
-- Le approvazioni umane e le proposte dell'agente sono distinguibili.
-- Il pilota completa una review usando gli artefatti prodotti e registra gli interventi manuali.
-
-## 7. Chiarimenti del framework prima dell'automazione
-
-In [rischio.md](rischio.md), una sola dimensione Medio e nessuna Alto soddisfa sia la regola Low sia la regola Medium. La CLI applica in ordine le regole: almeno una Alto → full completo; almeno due Medio → full proporzionato; altrimenti light. La regola esplicita Low prevale quindi sulla definizione generica Medium. Le escalation restano decisioni motivate del team; l’MVP non implementa override automatici.
-
-La fascia di aumento del costo per transazione tra 5% e meno del 10% non ha una classificazione esplicita. Definire una regola prima di automatizzarla; nel frattempo restituire “da chiarire”.
-
-I riferimenti alla DoD sono stati allineati a `templates/dod-estesa.md`. Il template di feature è stato corretto e separato dalla DoD Checkout; l’esempio PayPal è illustrativo e non costituisce un’evidenza reale di test o produzione.
-
-## 8. Riferimento esterno
-
-[Spec Kit](https://github.com/github/spec-kit) mostra un modello di toolkit con processi, template e integrazioni negli agenti. DFD Kit adotta come punto di partenza questa modalità di distribuzione e sviluppa la propria catena di DoD, rischio, evidenze e validazione post-release. Riuso diretto o estensione di Spec Kit restano opzioni da valutare rispetto ai requisiti DFD e alla manutenzione degli adapter.
+[Spec Kit](https://github.com/github/spec-kit) illustrates toolkit distribution through processes/templates/agent integrations. DFD develops its own DoD/risk/evidence/post-release chain; direct reuse/extension remains an option to evaluate against requirements and adapter maintenance.

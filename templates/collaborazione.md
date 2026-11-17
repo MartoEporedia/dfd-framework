@@ -1,18 +1,20 @@
-<!-- dfd-language --> [Italiano](collaborazione.md) | [English](../en/templates/collaborazione.md)
+<!-- dfd-language --> [English](collaborazione.md) | [Italiano](../it/templates/collaborazione.md)
 
-# Convenzioni facoltative per la collaborazione
+<a id="convenzioni-facoltative-per-la-collaborazione"></a>
 
-- Owner delle regole comuni:
-- Naming degli interventi e riferimenti a issue/branch/PR:
-- Ruoli delegati per intervento e policy di review indipendente:
-- Gestione dei conflitti fra cloni:
-- Verifica della revisione integrata prima della distribuzione:
-- Impatto delle modifiche al setup sulle feature aperte:
+# Optional collaboration conventions
 
-La policy team è facoltativa. Il singolo sviluppatore usa gli stessi percorsi senza riferimenti o review indipendente obbligatori. Esempio per un team, da adattare:
+- Shared-rule owner:
+- Change naming and issue/branch/PR references:
+- Delegated roles and independent review policy:
+- Conflict handling across clones:
+- Integrated revision verification before distribution:
+- Setup-change impact on open features:
+
+Team policy is optional. Solo developers use the same routes without mandatory references or independent reviews. Adapt this team example:
 
 ```json
 {"schema_version":1,"independent_review":true,"integrated_checks_required":true}
 ```
 
-Con la CLI salvarla in `.dfd/domains/<dominio>/team.json`; assenza equivale a entrambe false. Le prove integrate devono coprire i file verificati dell’intervento e la revisione dichiarata. Git coordina cloni e merge; il lock locale non sostituisce Git.
+Save as `.dfd/domains/<domain>/team.json`; absence means both false. Integrated evidence must cover verified change files and declared revision. Git coordinates clones/merges; a local lock does not replace Git.

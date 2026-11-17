@@ -1,65 +1,38 @@
-<!-- dfd-language --> [Italiano](checkout_dod.md) | [English](../en/examples/checkout_dod.md)
+<!-- dfd-language --> [English](checkout_dod.md) | [Italiano](../it/examples/checkout_dod.md)
 
-# DoD Estesa – Servizio Checkout (AWS ECS)
+<a id="dod-estesa--servizio-checkout-aws-ecs"></a>
 
-> **Stato**: draft  
-> **Ultimo aggiornamento**: 2026-10-08  
-> **Proprietari**: @team-checkout  
-> **Riferimenti**: [Architecture Guardrails], [ADR-001: Isolamento tenant], [Wiki: Osservabilità]
+# Extended DoD – Checkout service (AWS ECS)
 
-Questo documento definisce i criteri di **Definition of Done (DoD) estesa** per il servizio **Checkout**, eseguito su **AWS ECS** (Fargate), con ALB come load balancer e CloudWatch per monitoring.  
-I criteri qui definiti sono usati in tutto il ciclo di vita: specifica, test, rilascio e valutazione in produzione (DoD-First Driven).
+> **Status**: draft  
+> **Last updated**: 2026-10-08  
+> **Owners**: @team-checkout  
+> **References**: [Architecture Guardrails], [ADR-001: Tenant isolation], [Observability wiki].
 
----
+Worked example for Checkout on AWS ECS Fargate, ALB and CloudWatch. Checked items illustrate the example, not independently verified production evidence. Criteria guide specification, tests, release and production evaluation.
 
-## 1. Osservabilità
+<a id="1-osservabilità"></a>
 
-### 1.1 Metriche obbligatorie
+## 1. Observability
 
-Per ogni endpoint / flusso critico devono essere disponibili:
+<a id="11-metriche-obbligatorie"></a>
 
-- [x] Request count (per endpoint / operazione) – da ALB / ECS
-- [x] Error count (4xx, 5xx, per errorCode) – da ALB / CloudWatch Logs Insights
-- [x] Latency: p50, p95, p99 – da ALB Target Metrics
-- [x] Custom metric per flussi business critici:
-  - [x] `CheckoutCompleted` (conteggio ordini completati)
-  - [x] `CheckoutFailed` (conteggio fallimenti, con `errorCode`)
-  - [x] `PaymentProcessingTime` (durata elaborazione pagamento)
+### 1.1 Required metrics
 
-**Fonte delle metriche**:
+- [x] Requests per endpoint/operation: ALB/ECS.
+- [x] Errors: 4xx, 5xx and errorCode through ALB/CloudWatch Logs Insights.
+- [x] Latency p50/p95/p99: ALB Target Metrics.
+- [x] CloudWatch SDK custom metrics: CheckoutCompleted, CheckoutFailed with errorCode, PaymentProcessingTime.
+- [x] Infrastructure CPU/memory: ECS.
+- [x] Dimensions: service=checkout; operation=createOrder|processPayment|confirmOrder; env=prod|staging; tenantId for business metrics; outcome=success|failure for custom metrics.
 
-- Infrastruttura: ALB (request, error, latency), ECS (CPU, memory)
-- Codice: SDK CloudWatch (custom metric per checkout e pagamento)
+<a id="12-log-strutturati"></a>
 
-**Tag / dimensioni minime**:
+### 1.2 Structured logs
 
-- [x] `service = checkout`
-- [x] `operation = createOrder | processPayment | confirmOrder`
-- [x] `env = prod | staging`
-- [x] `tenantId` (per custom metric business)
-- [x] `outcome = success | failure` (per custom metric)
-
-### 1.2 Log strutturati
-
-Per ogni operazione critica devono essere prodotti log con:
-
-- [x] `tenantId`
-- [x] `userId` (pseudonimizzato se PII)
-- [x] `operation` (es. `createOrder`, `processPayment`)
-- [x] `outcome` (success / failure)
-- [x] `errorCode` (se failure, es. `PAYMENT_DECLINED`, `INVENTORY_UNAVAILABLE`)
-- [x] `traceId` (X-Ray Trace ID)
-
-**Vincoli**:
-
-- [x] Nessun dato PII / sensibile in chiaro nei log (no numeri di carta, no indirizzo completo)
-- [x] Formato: JSON
-- [x] Livelli di log minimi:
-  - `INFO` per operazioni completate (checkout successo)
-  - `ERROR` per fallimenti (pagamento rifiutato, errore inventory)
-  - `WARN` per situazioni anomale non bloccanti (retry pagamento)
-
-**Esempio log**:
+- [x] tenantId, userId (pseudonymous if PII), operation, outcome, errorCode on failure, X-Ray traceId.
+- [x] No plaintext sensitive data, card numbers or full address.
+- [x] JSON; INFO for completed operations, ERROR for failures, WARN for nonblocking anomalies such as retries.
 
 ```json
 {
@@ -72,227 +45,166 @@ Per ogni operazione critica devono essere prodotti log con:
   "outcome": "failure",
   "errorCode": "PAYMENT_DECLINED",
   "traceId": "1-65432109-abcdef0123456789",
-  "message": "Pagamento rifiutato dall'issuer"
+  "message": "Payment declined by issuer"
 }
 ```
 
-### 1.3 Trace e correlazione
+<a id="13-trace-e-correlazione"></a>
 
-- [x] Ogni richiesta HTTP ha un `traceId` (X-Ray) presente su log e metriche
-- [x] Span minimi tracciati:
-  - ALB → ECS (servizio checkout)
-  - Checkout → Payment Service
-  - Checkout → Inventory Service
-- [x] Sistema di tracing: AWS X-Ray
+### 1.3 Tracing and correlation
 
-### 1.4 Dashboard
+- [x] X-Ray traceId in HTTP logs/metrics.
+- [x] Spans ALB → ECS Checkout; Checkout → Payment Service; Checkout → Inventory Service.
+- [x] AWS X-Ray tracing.
 
-Dashboard minime richieste (CloudWatch):
+<a id="14-dashboard"></a>
 
-- [x] **Checkout – Servizio**:
-  - Request count (ALB)
-  - Error rate (4xx, 5xx)
-  - Latency p50/p95/p99 (ALB)
-  - CPU / memory ECS
-- [x] **Checkout – Flusso business**:
-  - `CheckoutCompleted` (conteggio)
-  - `CheckoutFailed` (conteggio, per `errorCode`)
-  - `PaymentProcessingTime` (p50/p95)
-- [x] Link alle dashboard:
-  - `cloudwatch://dashboard/checkout-service`
-  - `cloudwatch://dashboard/checkout-business`
+### 1.4 Dashboards
 
----
+- [x] Checkout service: requests, 4xx/5xx errors, p50/p95/p99 latency, ECS CPU/memory.
+- [x] Business: CheckoutCompleted; CheckoutFailed by errorCode; PaymentProcessingTime p50/p95.
+- [x] References: `cloudwatch://dashboard/checkout-service`, `cloudwatch://dashboard/checkout-business`.
 
-## 2. Sicurezza
+<a id="2-sicurezza"></a>
 
-### 2.1 Controlli di accesso
+## 2. Security
 
-- [x] Ogni endpoint ha ruoli / policy IAM definiti (per chiamate tra servizi)
-- [x] Accesso minimo privilegiato (least privilege) per task ECS e Lambda collegate
-- [x] Documentazione dei ruoli: [link a wiki IAM]
+<a id="21-controlli-di-accesso"></a>
 
-**Endpoint principali**:
+### 2.1 Access controls
 
-- `POST /checkout` – crea ordine e avvia pagamento
-- `POST /checkout/{orderId}/confirm` – conferma ordine dopo pagamento
-- `GET /checkout/{orderId}/status` – stato checkout
+- [x] IAM roles/policies per service endpoint; least privilege for ECS tasks/related Lambdas; [IAM wiki].
 
-### 2.2 Protezione dati
+Endpoints: `POST /checkout` creates order/starts payment; `POST /checkout/{orderId}/confirm` confirms after payment; `GET /checkout/{orderId}/status` reads state.
 
-- [x] Classificazione dati:
-  - PII: `userId`, indirizzo, email
-  - Sensibili: dati di pagamento (gestiti da Payment Service esterno)
-  - Interni: `orderId`, `tenantId`
-- [x] Encryption:
-  - In transito: TLS 1.2+ per tutte le chiamate (ALB, service-to-service)
-  - A riposo: RDS / DynamoDB con encryption abilitata
-- [x] Nessun dato sensibile in chiaro nei log (no PAN, no CVV, no indirizzo completo)
+<a id="22-protezione-dati"></a>
 
-### 2.3 Audit & logging di sicurezza
+### 2.2 Data protection
 
-Eventi minimi da loggare:
+- [x] PII: userId/address/email; sensitive payment data handled by external Payment Service; internal orderId/tenantId.
+- [x] TLS 1.2+ on ALB/service-to-service calls; RDS/DynamoDB encryption at rest.
+- [x] No PAN, CVV, full address or other plaintext sensitive log data.
 
-- [x] Creazione ordine (`createOrder`)
-- [x] Tentativo di pagamento (`processPayment`) con outcome
-- [x] Fallimenti di autorizzazione (403) su endpoint checkout
-- [x] Cambiamenti configurazione critica (es. feature flag di checkout)
+<a id="23-audit--logging-di-sicurezza"></a>
 
-**Retention**:
+### 2.3 Audit and security logging
 
-- [x] 12 mesi per log di audit (creazione ordine, pagamento)
-- [x] 30 giorni per log operativi dettagliati (debug)
+- [x] createOrder, processPayment with outcome, checkout authorization failures (403), critical configuration changes such as flags.
+- [x] Audit retention: 12 months for order/payment; detailed operational/debug retention: 30 days.
 
-### 2.4 Conformità
+<a id="24-conformità"></a>
 
-Riferimenti a standard / policy:
+### 2.4 Compliance
 
-- [x] GDPR (gestione PII, diritto alla cancellazione)
-- [x] PCI DSS (nessun dato di carta gestito direttamente da Checkout; delegato a Payment Service certificato)
-- [x] Policy interne: [link a Security Policy v3]
+- [x] GDPR: PII handling/erasure.
+- [x] PCI DSS: Checkout handles no card data directly, delegating to certified Payment Service.
+- [x] Internal Security Policy v3: [link].
 
----
+<a id="3-affidabilità--slo"></a>
 
-## 3. Affidabilità / SLO
+## 3. Reliability / SLOs
 
 ### 3.1 SLO / SLI
 
-- [x] Disponibilità: **99.9% mensile** (misurata su ALB target health)
-- [x] Latenza end-to-end (flusso completo checkout):
-  - p95 < **2.5 s** (da `POST /checkout` a risposta finale)
-  - p99 < **4 s**
-- [x] Error rate:
-  - < **0.5%** per errori 5xx su `POST /checkout`
-  - < **1%** per errori business (es. `PAYMENT_DECLINED` esclusi, perché attesi)
+- [x] Availability 99.9% monthly, measured on ALB target health.
+- [x] End-to-end checkout p95 < 2.5 s and p99 < 4 s, POST /checkout to final response.
+- [x] POST /checkout 5xx < 0.5%; business errors < 1%, excluding expected PAYMENT_DECLINED.
 
-### 3.2 Degradazione accettabile
+<a id="32-degradazione-accettabile"></a>
 
-- [x] In caso di failure del Payment Service:
-  - [x] Checkout ritorna errore chiaro (`PAYMENT_SERVICE_UNAVAILABLE`)
-  - [x] Nessun ordine creato in stato inconsistente
-- [x] In caso di failure dell'Inventory Service:
-  - [x] Checkout blocca la creazione ordine con errore `INVENTORY_UNAVAILABLE`
-  - [x] Log dell'evento con `errorCode`
+### 3.2 Acceptable degradation
 
-**Funzionalità degradate accettabili**:
+- [x] Payment failure: clear PAYMENT_SERVICE_UNAVAILABLE; no inconsistent order.
+- [x] Inventory failure: block creation with INVENTORY_UNAVAILABLE and log errorCode.
+- [ ] Noncritical email notification postponement is a possible degradation.
+- [x] Never create orders without inventory/payment confirmation.
 
-- [x] In modalità degradata, il checkout può:
-  - [ ] Posticipare aggiornamenti non critici (es. notifiche email)
-  - [x] Ma non può creare ordini senza conferma inventory / pagamento
+<a id="33-politiche-di-resilienza"></a>
 
-### 3.3 Politiche di resilienza
+### 3.3 Resilience policies
 
-- [x] Timeout:
-  - Payment Service: **3 s**
-  - Inventory Service: **2 s**
-- [x] Retry:
-  - Payment Service: max 1 retry con backoff esponenziale (solo per errori transienti 5xx)
-  - Inventory Service: nessun retry (fallimento = blocco checkout)
-- [x] Circuit breaker:
-  - [ ] Da implementare su Payment Service se error rate > 5% per 5 min
+- [x] Payment timeout 3 s; Inventory timeout 2 s.
+- [x] Payment: at most one retry with exponential backoff for transient 5xx only.
+- [x] Inventory: no retry; failure blocks checkout.
+- [ ] Payment circuit breaker to implement if errors > 5% for 5 min.
 
----
+<a id="4-costo"></a>
 
-## 4. Costo
+## 4. Cost
 
-### 4.1 Tagging risorse
+<a id="41-tagging-risorse"></a>
 
-- [x] Tutte le risorse hanno tag:
-  - [x] `service = checkout`
-  - [x] `team = checkout-team`
-  - [x] `env = prod | staging`
-  - [x] `costCenter = ecommerce`
+### 4.1 Resource tagging
 
-**Risorse interessate**:
+- [x] service=checkout, team=checkout-team, env=prod|staging, costCenter=ecommerce on ECS task definitions/clusters, ALB, RDS/DynamoDB and CloudWatch/X-Ray.
 
-- Task definition ECS
-- Cluster ECS
-- ALB
-- RDS / DynamoDB
-- CloudWatch Logs / X-Ray
+<a id="42-stima-impatto-sul-costo"></a>
 
-### 4.2 Stima impatto sul costo
+### 4.2 Cost impact estimate
 
-Per ogni cambiamento significativo (nuovo flusso, nuova integrazione, cambio architetturale):
+For significant flows/integrations/architecture changes:
 
-- [x] Stima variazione costo mensile del servizio:
-  - Metodo: [Cost Explorer per servizio + stima traffico aggiuntivo]
-  - Foglio / tool: [link a foglio stima costi checkout]
-- [x] Stima variazione costo per transazione:
-  - Metodo approssimativo:  
-    `costo mensile servizio / numero mensile di checkout completati`
+- [x] Monthly estimate: service-filtered Cost Explorer plus traffic forecast; [checkout cost sheet].
+- [x] Approximate transaction cost = monthly service cost / monthly completed checkouts.
 
-### 4.3 Soglie di allarme
+<a id="43-soglie-di-allarme"></a>
 
-- [x] Variazione > **15%** del costo mensile (su finestra 7 giorni) → review architetturale
-- [x] Variazione > **20%** del costo per transazione stimato → review
+### 4.3 Alarm thresholds
 
-**Fonte dati costo**:
+- [x] Monthly cost change > 15% over a 7-day window → architectural review.
+- [x] Estimated transaction cost change > 20% → review.
 
-- AWS Cost Explorer (filtrato per tag `service=checkout`)
-- Dashboard interna: [link]
+Sources: AWS Cost Explorer filtered service=checkout; [internal dashboard].
 
----
+<a id="5-altri-assi-opzionali"></a>
 
-## 5. Altri assi (opzionali)
+## 5. Other concerns (optional)
 
-### 5.1 Esperienza utente / business KPI
+<a id="51-esperienza-utente--business-kpi"></a>
 
-- [x] KPI da monitorare:
-  - Tasso di completamento checkout (`CheckoutCompleted / CheckoutInitiated`)
-  - Tasso di abbandono a step di pagamento
-- [x] Soglie di peggioramento accettabile:
-  - Nessuna riduzione > **5%** del tasso di completamento su rollout per tenant (rispetto a baseline 14 giorni)
+### 5.1 UX / business KPIs
 
-### 5.2 Compliance specifica
+- [x] Completion = CheckoutCompleted / CheckoutInitiated; abandonment at payment step.
+- [x] No > 5% completion decline during tenant rollout versus 14-day baseline.
 
-- [x] Requisiti normativi:
-  - Conservazione dati ordine: **10 anni** (fatturazione)
-  - Cancellazione PII su richiesta utente (entro 30 giorni)
-- [x] Controlli specifici:
-  - Audit trail per ogni ordine creato / modificato
+<a id="52-compliance-specifica"></a>
 
----
+### 5.2 Specific compliance
 
-## 6. Riferimenti ai criteri (codici)
+- [x] Order data retention: 10 years for invoicing in this example.
+- [x] PII erasure on request within 30 days in this example.
+- [x] Audit trail for every created/changed order.
 
-Per facilitare il riferimento nelle specifiche di feature, ogni criterio ha un codice:
+<a id="6-riferimenti-ai-criteri-codici"></a>
 
-- **Osservabilità**: OBS-01, OBS-02, …
-- **Sicurezza**: SEC-01, SEC-02, …
-- **Affidabilità / SLO**: SLO-01, SLO-02, …
-- **Costo**: COST-01, COST-02, …
-- **Esperienza utente**: UX-01, UX-02, …
+## 6. Criterion identifiers
 
-**Elenco criteri**:
+- OBS-01: per-endpoint requests/errors/latency.
+- OBS-02: tenantId/userId/operation/outcome/errorCode/traceId structured logs.
+- OBS-03: X-Ray trace ID in logs/metrics.
+- OBS-04: service/business dashboards.
+- SEC-01: IAM endpoint/ECS access controls.
+- SEC-02: no plaintext sensitive log data.
+- SEC-03: order/payment-attempt audit logs.
+- SLO-01: 99.9% monthly availability.
+- SLO-02: checkout p95 < 2.5 s.
+- SLO-03: POST /checkout 5xx < 0.5%.
+- COST-01: service/team/env/costCenter tagging.
+- COST-02: significant-change cost estimate.
+- COST-03: +15% monthly / +20% transaction alarms.
+- UX-01: checkout completion monitoring.
+- UX-02: no > 5% completion decline during rollout.
 
-- OBS-01: Metriche obbligatorie per endpoint (request, error, latency)
-- OBS-02: Log strutturati con tenantId, userId, operation, outcome, errorCode, traceId
-- OBS-03: Trace ID presente su log e metriche (X-Ray)
-- OBS-04: Dashboard servizio e business per checkout
-- SEC-01: Controlli di accesso IAM per endpoint e task ECS
-- SEC-02: Nessun dato sensibile in chiaro nei log
-- SEC-03: Audit log per creazione ordine e tentativo di pagamento
-- SLO-01: Disponibilità 99.9% mensile
-- SLO-02: Latenza p95 < 2.5 s per flusso checkout
-- SLO-03: Error rate 5xx < 0.5% su `POST /checkout`
-- COST-01: Tagging minimo (service, team, env, costCenter)
-- COST-02: Stima impatto sul costo per cambiamento significativo
-- COST-03: Soglie di allarme costo (+15% mensile, +20% per transazione)
-- UX-01: Monitoraggio tasso di completamento checkout
-- UX-02: Nessuna riduzione > 5% del tasso di completamento su rollout
+<a id="7-evoluzione-del-documento"></a>
 
----
+## 7. Document evolution
 
-## 7. Evoluzione del documento
+- 2026-10-08: initial ECS/AWS example.
+- [Add future revisions].
+- Feedback: PR/MR to checkout-dod or #checkout-team Slack channel.
 
-- **Revisioni**:
-  - 2026-10-08: versione iniziale (checkout su ECS, AWS)
-  - [future revisioni da aggiungere]
+<a id="modalità-dellesempio"></a>
 
-- **Feedback**:
-  - Inviare PR / MR su repo `checkout-dod` o ping su Slack `#checkout-team`
+## Example maturity mode
 
-## Modalità dell’esempio
-
-Questo esempio riguarda un servizio di checkout destinato alla produzione: usa la modalità preparazione al rilascio e mantiene verifiche CI e requisiti operativi pertinenti al rischio. In un prototipo locale, la modalità solo sviluppo può usare una suite finale locale tracciata; rollout e review di release vengono preparati quando si decide di distribuire, rivalutando prima i requisiti.
+This is an illustrative production-bound checkout service using release-preparation with risk-appropriate CI and operational requirements. A local prototype may use development-only and a traced final local suite; prepare rollout/release review when distribution is planned, reassessing requirements first.

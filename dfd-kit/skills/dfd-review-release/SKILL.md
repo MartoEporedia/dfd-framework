@@ -1,26 +1,26 @@
 ---
 name: dfd-review-release
-description: Revisionare la preparazione di una release DFD con checklist light o full e registrare la decisione umana su rollout, evidenze, soglie e condizioni.
+description: Review DFD release preparation with light/full checklists and record the expressed human decision on rollout, evidence, thresholds and conditions.
 ---
 
-<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-review-release/SKILL.md)
+<!-- dfd-language --> [English](SKILL.md) | [Italiano](../../it/skills/dfd-review-release/SKILL.md)
 
-# Review di release
+<a id="review-di-release"></a>
 
-Leggere `.dfd/kit/templates/contratto_toolkit.md`, `.dfd/kit/raci.md` e gli artefatti della feature. Usare la checklist locale `.dfd/domains/<dominio>/templates/review_release_light.md` per light oppure `review_release.md` per full.
+# Release review
 
-Eseguire `dfd review-release <id>`. Il report `release-review.md` è rigenerabile e contiene controlli strutturali, gate e attivazioni pianificate. Verificare semanticamente coerenza tra revisione da rilasciare, CI, test non funzionali, DoD, soglie, policy, rollback, on-call e comunicazioni. Controllare il contenuto delle evidenze: gli hash non ne autenticano l'origine. Salvare note e rilievi in `release-notes.md`, separatamente dal report automatico.
+Read `.dfd/kit/templates/contratto_toolkit.md`, `.dfd/kit/raci.md` and feature artifacts. Use domain review_release_light.md for light, review_release.md for full.
 
-Presentare al responsabile umano esito proposto e condizioni. Registrare una decisione solo quando espressa dal responsabile, senza chiedere di ripeterla se già presente nella conversazione:
+Run review-release; release-review.md is regenerable and shows structural checks/gate/planned activations. Semantically review revision, CI, nonfunctional tests, DoD, thresholds, policy, rollback, on-call and communications. Examine actual evidence content: hashes do not authenticate origin. Save findings in release-notes.md.
+
+Present proposed outcome/conditions. Record only an expressed human decision, reusing relevant existing conversation authorization:
 
 ```sh
 dfd decide <id> --stage release --decision approved --reviewer "..." --role tech-lead --note "..." --human-confirmed
 ```
 
-Per condizioni usare `approved-with-conditions` e ripetere `--condition "testo|responsabile|fase"`. Le risorse pianificate richiedono un'approvazione condizionata con attivazione assegnata; quelle dichiarate pronte richiedono evidenze. Risolvere le condizioni di design dovute entro la release e far registrare la decisione aggiornata prima dell'approvazione di release. Le decisioni di release hanno uno storico separato da quelle di design.
+Use approved-with-conditions and repeated `--condition "text|owner|stage"` for conditions. Planned resources require conditional approval with assigned activation; ready resources need evidence. Resolve design conditions due by release and record the updated human decision first. Release history is separate from design.
 
-Rieseguire `status`. Le modifiche a rollout, note, design, decisione di design o evidenze rendono la review da riconfermare; le lacune strutturali bloccano il gate. Con `stale-review` usare `release.changes` per vedere quali file e documenti sono cambiati dopo la decisione, compresi i file di codice dichiarati nelle evidenze. Le condizioni non sono chiuse automaticamente: ottenere una nuova decisione umana dopo la loro risoluzione. Riportare esito, condizioni e prossima azione. La CLI registra l'esito della review e non esegue il rollout.
+Rerun status. Changed rollout/notes/design/design decision/evidence invalidate review; structural gaps block it. With stale-review use release.changes to see which files and documents changed since the decision, including code files declared in the evidence. Conditions do not close automatically: obtain the updated human decision after resolution. Report outcome, conditions and next action. The CLI records review, never executes rollout.
 
-Valutare la policy CI in lifecycle.json rispetto a rischio e destinazione, incluse motivazione ed evidenze locali alternative quando ci_required false. La modalità development-only non ammette approvazione di release.
-
-Valutare origine e completezza delle prove integrate quando richieste, snapshot correnti e review della PR. La CLI verifica dichiarazioni e hash, senza autenticare identità o revisioni Git. Ogni bug grave sfuggito deve portare a una regressione utile e, se sistemico, a criteri aggiornati: non misurare la sicurezza del rilascio dal solo numero di test.
+Assess lifecycle CI policy against risk/target, including justified local alternatives when ci_required false. development-only cannot approve release. Evaluate origin/completeness of required integrated evidence, current snapshots and PR review. The CLI authenticates neither identities nor Git revisions. Serious escaped bugs need effective regression tests and systemic DoD updates; raw test counts do not prove release safety.

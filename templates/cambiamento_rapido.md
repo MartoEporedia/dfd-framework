@@ -1,22 +1,24 @@
-<!-- dfd-language --> [Italiano](cambiamento_rapido.md) | [English](../en/templates/cambiamento_rapido.md)
+<!-- dfd-language --> [English](cambiamento_rapido.md) | [Italiano](../it/templates/cambiamento_rapido.md)
 
-# Record di cambiamento rapido
+<a id="record-di-cambiamento-rapido"></a>
+
+# Quick change record
 
 - ID / owner:
-- Problema osservato:
-- Parole del richiedente, alla lettera:
-- Ambito circoscritto e no-go:
-- Tipo: fix comportamentale / editoriale.
-- Contratto noto ripristinato (riferimento al design/DoD approvato):
-- Rischio: cinque dimensioni con livello e motivazione; tutte low per il rapido.
-- Contratti o guardrail modificati: no; comportamento critico: no; dubbi aperti: nessuno.
-- Criteri DoD pertinenti:
-- Stati non previsti toccati dal fix: reazione esplicita e osservabile, oppure "nessuno".
-- Verifiche scelte e perimetro motivato:
-- Fix: regressione red pertinente prima del green, con comandi, date, esiti e log.
-- Editoriale: verifica pertinente green; nessun red artificiale.
-- File verificati e snapshot:
-- Contesto di collaborazione: issue / branch / PR / revisione, se utilizzato.
-- Review indipendente, solo quando richiesta: reviewer, riferimento, revisione e file esaminati.
+- Observed problem:
+- Requester's words, verbatim:
+- Bounded scope and no-go:
+- Type: behavior fix / editorial.
+- Known contract restored (reference to approved design/DoD):
+- Risk: level and rationale for all five dimensions; all Low for rapid.
+- Contracts/guardrails changed: no; critical behavior: no; open questions: none.
+- Relevant DoD criteria:
+- Unforeseen states touched by the fix: explicit, observable reaction, or "none".
+- Selected checks and justified scope:
+- Fix: relevant red regression before green, with commands, dates, results and logs.
+- Editorial: relevant green check, no artificial red.
+- Verified files and snapshot:
+- Collaboration context, if used: issue / branch / PR / revision.
+- Independent review only when required: reviewer, reference, revision and examined files.
 
-Il singolo sviluppatore non deve aprire una PR o ottenere un secondo reviewer per usare il rapido. La policy del dominio può richiedere CI o review indipendente. Non dichiarare test o review non eseguiti. Rischio maggiore o dubbi richiedono light/full; una distribuzione richiede il percorso di release pertinente.
+Solo developers need no PR or second reviewer for rapid. Domain policy may require CI or independence. Never declare unexecuted tests/reviews. Greater risk/questions require light/full; distribution requires the relevant release route.

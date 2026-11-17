@@ -1,92 +1,98 @@
-<!-- dfd-language --> [Italiano](review_release_light.md) | [English](../en/templates/review_release_light.md)
+<!-- dfd-language --> [English](review_release_light.md) | [Italiano](../it/templates/review_release_light.md)
 
-# Checklist di Review DFD – Release (Light)
+<a id="checklist-di-review-dfd--release-light"></a>
 
-> **Tipo di review**: release (feature piccola / basso rischio)  
-> **Data**: YYYY-MM-DD  
-> **Partecipanti**: [@team / @persone]  
-> **Riferimenti**:
-> - [Specifica di Feature]
-> - [DoD Estesa – Servizio X]
-> - [Configurazione Rollout (anche leggera)]
+# DFD review checklist – Release (Light)
 
-> **Quando usare questa versione**:  
-> Feature che **non toccano** pagamento, sicurezza, SLO critici o architettura core.  
-> Esempi: piccoli cambiamenti UI, testi, metriche interne, refactor non funzionali.
+> **Review type**: release, small low-risk feature  
+> **Date**: YYYY-MM-DD  
+> **Participants**: [@team / @people]  
+> **References**: [Feature specification], [Extended DoD], [Rollout configuration when releasing].
 
----
+Use for changes outside payments, security, critical SLOs and core architecture: small UI/text changes, internal metrics and nonfunctional refactoring.
 
 ## 0. DoR – Release (Light)
 
-- [ ] **Test verdi** (unitari / integrazione principali).  
-- [ ] **Nessun test non funzionale** richiesto (o già eseguito in passato per casi simili).  
-- [ ] **Piano di rilascio semplice**:
-  - [ ] rollout diretto o canary leggero;
-  - [ ] nessun feature flag complesso (o già esistente).
-- [ ] **Supporto / stakeholder** informati (almeno per awareness, se il cambiamento è visibile agli utenti).
+- [ ] Main unit/integration tests pass.
+- [ ] Nonfunctional tests unnecessary or already executed for similar cases.
+- [ ] Simple direct/light-canary plan; no complex flag, or existing one reused.
+- [ ] Support/stakeholders informed when needed.
 
----
+<a id="1-dod-estesa-verifica-leggera"></a>
 
-## 1. DoD Estesa (verifica leggera)
+## 1. Extended DoD essentials
 
-### 1.1 Osservabilità
+<a id="11-osservabilità"></a>
 
-- [ ] Nessun nuovo allarme critico richiesto.  
-- [ ] Log coerenti con lo standard del servizio (se ci sono nuovi log).  
-- [ ] Nessun impatto negativo su dashboard esistenti.
+### 1.1 Observability
 
-### 1.2 Sicurezza
+- [ ] No new critical endpoint, or base metrics already available.
+- [ ] New logs follow service standards.
+- [ ] Existing dashboards unaffected.
 
-- [ ] Nessun cambiamento su controlli di accesso / autorizzazioni.  
-- [ ] Nessun nuovo dato sensibile trattato o loggato.
+<a id="12-sicurezza"></a>
 
-### 1.3 Affidabilità / SLO
+### 1.2 Security
 
-- [ ] Nessun impatto atteso su latenza, error rate o disponibilità.  
-- [ ] Nessuna nuova dipendenza esterna critica.
+- [ ] Access/authorization unchanged.
+- [ ] No new sensitive data handled/logged.
 
-### 1.4 Costo
+<a id="13-affidabilità--slo"></a>
 
-- [ ] Nessun impatto significativo sul costo del servizio.
+### 1.3 Reliability / SLOs
 
----
+- [ ] No expected latency, error-rate or availability impact.
+- [ ] No new critical external dependency.
 
-## 2. Guardrail globali (verifica rapida)
+<a id="14-costo"></a>
 
-- [ ] La feature non viola i guardrail architetturali.  
-- [ ] La feature non viola i guardrail di sicurezza.  
-- [ ] La feature non viola i guardrail di osservabilità.  
-- [ ] La feature non viola i guardrail di costo.
+### 1.4 Cost
 
----
+- [ ] No significant service cost impact.
 
-## 3. Test e rilascio
+<a id="2-guardrail-globali-verifica-rapida"></a>
 
-- [ ] Test principali verdi e verificabili secondo la policy locale/CI del dominio.  
-- [ ] Piano di rilascio chiaro (diretto o canary leggero).  
-- [ ] Procedura di rollback chiara (anche semplice: “disabilita flag / revert PR”).
+## 2. Global guardrails
 
----
+- [ ] Architecture respected.
+- [ ] Security respected.
+- [ ] Observability respected.
+- [ ] Cost respected.
 
-## 4. Esito della review di release (Light)
+<a id="3-test-e-rilascio"></a>
 
-- [ ] **OK a rilasciare** (può procedere il rollout in produzione)  
-- [ ] **OK con condizioni**: [condizioni da soddisfare prima o durante il rollout]  
-- [ ] **Da rivedere**: [motivi, cosa manca]
+## 3. Tests and validation
 
-**Firme / approvazioni**:
+- [ ] New/changed logic covered by unit/integration tests that pass.
+- [ ] Load/resilience tests unnecessary or existing coverage adequate.
+- [ ] Production validation: direct rollout or light canary, according to team policy.
 
-- [@persona] – [ruolo]
+- [ ] Simple, clear rollback procedure.
+- [ ] Relevant existing alarms/dashboards sufficient.
 
-## Maturità e policy delle verifiche
+<a id="4-esito-della-review-di-release-light"></a>
 
-- Modalità del dominio: solo sviluppo / preparazione al rilascio.
-- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
-- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
-- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
+## 4. Release review outcome (Light)
 
-In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
+- [ ] Approved: rollout may proceed.
+- [ ] Approved with conditions: [conditions].
+- [ ] Changes requested: [reasons/gaps].
 
-## Proporzionalità e collaborazione
+Approval: [@person – role].
 
-Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.
+<a id="maturità-e-policy-delle-verifiche"></a>
+
+## Maturity and verification policy
+
+- Domain mode: development-only / release-preparation.
+- CI required: yes / no; rationale based on risk and target.
+- Final suite: command, environment, date, result and reference to the real log.
+- Questions/requirements deferred to pre-release: owner and activation condition.
+
+In development-only, finish design and proportionate checks without prematurely requiring CI, rollout, on-call or release communications. Release checklists apply when preparing distribution. Before release reassess risk/policy, reconfirm reviews and refresh evidence. Deferred work must not be marked executed.
+
+<a id="proporzionalità-e-collaborazione"></a>
+
+## Proportionality and collaboration
+
+First consider rapid for scoped noncritical fixes, using one [quick change record](cambiamento_rapido.md) rather than completing this entire template. Match light/full detail to risk. Owner and checks are required; PRs, independence and integrated checks depend on [optional team conventions](collaborazione.md). Solo developers do not simulate roles or communications. Reuse applicable reviews; test failure effects and important regressions.

@@ -1,4 +1,4 @@
-"""Release notes and release checks taken from CHANGELOG.md / en/CHANGELOG.md."""
+"""Release notes and release checks taken from CHANGELOG.md (English) / it/CHANGELOG.md (Italian)."""
 import importlib.util
 import subprocess
 import sys
@@ -44,19 +44,19 @@ EN = IT.replace("Aggiunto", "Added").replace("Lavoro non ancora rilasciato.", "U
 class ReleaseNotesTest(unittest.TestCase):
     def project(self, version="0.1.0", it=IT, en=EN):
         root = Path(tempfile.mkdtemp())
-        (root / "en").mkdir()
+        (root / "it").mkdir()
         (root / "Cargo.toml").write_text(f'[package]\nname = "dfd-kit"\nversion = "{version}"\n')
-        if it is not None:
-            (root / "CHANGELOG.md").write_text(it)
         if en is not None:
-            (root / "en" / "CHANGELOG.md").write_text(en)
+            (root / "CHANGELOG.md").write_text(en)
+        if it is not None:
+            (root / "it" / "CHANGELOG.md").write_text(it)
         return root
 
     def test_notes_take_the_section_in_both_languages(self):
         notes = load().notes(self.project(), "v0.1.0")
         self.assertIn("Prima release.", notes)
         self.assertIn("First release.", notes)
-        self.assertLess(notes.index("Prima release."), notes.index("First release."))
+        self.assertLess(notes.index("First release."), notes.index("Prima release."))
         self.assertNotIn("Casi di accettazione", notes)
         self.assertNotIn("## [0.1.0]", notes)
 
@@ -77,9 +77,9 @@ class ReleaseNotesTest(unittest.TestCase):
             (self.project(), "vUnreleased", "tag"),
             (self.project(), "v0.3.0", "Cargo.toml"),
             (self.project(version="0.3.0"), "v0.3.0", "CHANGELOG.md"),
-            (self.project(it=None), "v0.1.0", "CHANGELOG.md"),
-            (self.project(en=None), "v0.1.0", "en/CHANGELOG.md"),
-            (self.project(en=EN.replace("- First release.\n", "")), "v0.1.0", "en/CHANGELOG.md"),
+            (self.project(en=None), "v0.1.0", "CHANGELOG.md"),
+            (self.project(it=None), "v0.1.0", "it/CHANGELOG.md"),
+            (self.project(it=IT.replace("- Prima release.\n", "")), "v0.1.0", "it/CHANGELOG.md"),
         ]
         for root, tag, expected in cases:
             with self.subTest(tag=tag, expected=expected):

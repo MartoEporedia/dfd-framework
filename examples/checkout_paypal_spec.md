@@ -1,67 +1,81 @@
-<!-- dfd-language --> [Italiano](checkout_paypal_spec.md) | [English](../en/examples/checkout_paypal_spec.md)
+<!-- dfd-language --> [English](checkout_paypal_spec.md) | [Italiano](../it/examples/checkout_paypal_spec.md)
 
-# Specifica di Feature – PayPal sul Checkout
+<a id="specifica-di-feature--paypal-sul-checkout"></a>
 
-> **Stato**: esempio illustrativo, non approvato  
-> **Ultimo aggiornamento**: 2026-11-17  
-> **Dominio**: Checkout  
-> **Riferimenti**: [DoD Checkout](checkout_dod.md), [Rischio](../rischio.md), [Adozione](../adozione.md)
+# Feature specification – PayPal in Checkout
 
-Questo esempio mostra una feature pilota in un prodotto esistente. Le verifiche sono pianificate: non sono evidenze di test eseguiti né di risultati di produzione.
+> **Status**: illustrative example, not approved  
+> **Last updated**: 2026-11-17  
+> **Domain**: Checkout  
+> **References**: [Checkout DoD](checkout_dod.md), [Risk](../rischio.md), [Adoption](../adozione.md).
 
-## 1. Obiettivo e ambito
+This example illustrates a pilot in an existing product. Checks are planned, not evidence of executed tests or production outcomes.
 
-Aggiungere PayPal come opzione di pagamento, conservando gli altri metodi e il flusso Checkout esistente. Monitorare completamento del checkout, fallimenti e abbandoni nello step di pagamento.
+<a id="1-obiettivo-e-ambito"></a>
 
-L'intervento comprende avvio del pagamento, gestione della conferma, errori e timeout del nuovo provider. Non comprende una revisione completa dei flussi legacy o di tutti gli SLO del prodotto. La review DFD si aggiunge alla review tecnica del team.
+## 1. Objective and scope
 
-## 2. Classificazione del rischio
+Add PayPal while preserving other payment methods/existing checkout. Monitor completion, failures and payment abandonment. Scope includes payment initiation, confirmation, errors and provider timeouts; excludes wholesale legacy flow/SLO redesign. DFD review overlays the team's technical review.
 
-| Dimensione | Livello | Motivazione |
+<a id="2-classificazione-del-rischio"></a>
+
+## 2. Risk classification
+
+| Dimension | Level | Rationale |
 |---|---|---|
-| Sicurezza | Alto | Nuovi flussi di pagamento e callback da autorizzare |
-| Affidabilità / SLO | Alto | Nuova dipendenza esterna nel checkout |
-| Costo | Medio | Richiede stima delle commissioni e del costo operativo |
-| Utenti / business | Alto | Cambiamento di un flusso critico e dei KPI di conversione |
-| Architettura | Alto | Integrazione con un provider e gestione della conferma |
+| Security | High | New payment flows and authorized callbacks |
+| Reliability / SLOs | High | New external checkout dependency |
+| Cost | Medium | Estimate fees/operational cost |
+| User / business | High | Critical flow and conversion KPIs |
+| Architecture | High | Provider integration/confirmation |
 
-**Percorso**: DFD full completo. La stima dei costi deve essere completata nel pilota; non è una misura osservata.
+Route: full complete. Cost estimates remain to be completed; they are not observed measurements.
 
-## 3. Scenari e contratti
+<a id="3-scenari-e-contratti"></a>
 
-- Avvio: l'utente seleziona PayPal; il sistema associa la sessione di pagamento all'ordine e presenta l'azione successiva.
-- Conferma: il sistema verifica autenticità e correlazione della notifica prima di aggiornare lo stato dell'ordine.
-- Notifiche duplicate: la stessa conferma non deve produrre ordini o addebiti duplicati.
-- Fallimento o timeout: mostrare un errore comprensibile, conservare uno stato coerente e permettere una nuova scelta di pagamento.
-- Stato non previsto: una notifica del provider con uno stato di pagamento sconosciuto non aggiorna l'ordine. Il sistema registra l'evento con `errorCode` `PAYPAL_UNKNOWN_STATE` e lo segnala con un allarme (OBS-02); l'ordine resta in attesa di conferma, senza addebiti né annullamenti dedotti.
+## 3. Scenarios and contracts
 
-Definire nella specifica reale contratti, stati, idempotenza, timeout e policy di retry del provider scelto. I retry non devono duplicare effetti finanziari.
+- Initiation: user selects PayPal; associate payment session with order and present next action.
+- Confirmation: verify notification authenticity/correlation before updating order state.
+- Duplicates: repeated confirmation must not duplicate orders/charges.
+- Failure/timeout: understandable error, consistent state and another payment choice.
+- Unforeseen state: a provider notification with an unknown payment status does not update the order. The system logs the event with `errorCode` `PAYPAL_UNKNOWN_STATE` and raises an alarm (OBS-02); the order stays awaiting confirmation, with no inferred charge or cancellation.
 
-## 4. Criteri DoD e verifiche previste
+Define actual provider contracts, states, idempotency, timeouts and retry policies. Retries must not duplicate financial effects.
 
-| Criterio | Applicazione al cambiamento | Verifica prevista |
+<a id="4-criteri-dod-e-verifiche-previste"></a>
+
+## 4. DoD criteria and planned verification
+
+| Criterion | Change application | Planned verification |
 |---|---|---|
-| OBS-01 | Contare richieste, errori e latenza del nuovo flusso | Test dell'emissione delle metriche |
-| OBS-02 | Correlare ordine, operazione, outcome e trace nei log | Test di integrazione dei campi e redazione dei dati |
-| SEC-01 | Limitare l'accesso alle operazioni di pagamento | Test di autorizzazione e callback non valide |
-| SEC-02 | Evitare dati sensibili nei log | Controlli su log di successo ed errore |
-| SLO-02 | Valutare la latenza rispetto al criterio del dominio | Test di carico e dipendenza lenta |
-| SLO-03 | Monitorare regressioni del tasso di errori | Test di failure e piano di canary |
-| COST-02 | Stimare impatto mensile e per transazione | Stima documentata con volumi e ipotesi |
-| UX-02 | Confrontare completamento con la baseline | Analisi del rollout per segmento |
+| OBS-01 | Requests/errors/latency for new flow | Metric emission test |
+| OBS-02 | Correlate order/operation/outcome/trace | Integration fields/redaction test |
+| SEC-01 | Restrict payment operations | Authorization/invalid callback tests |
+| SEC-02 | No sensitive log data | Success/failure log checks |
+| SLO-02 | Evaluate domain latency target | Load/slow dependency tests |
+| SLO-03 | Observe error regressions | Failure tests/canary plan |
+| COST-02 | Monthly/transaction estimate | Documented volumes/assumptions |
+| UX-02 | Completion versus baseline | Segmented rollout analysis |
 
-La specifica reale deve valutare anche gli altri criteri richiesti dalla DoD, motivando le esclusioni. Le lacune legacy non coinvolte restano nel piano di adozione.
+The real specification must evaluate all other required domain criteria and justify exclusions. Unrelated legacy gaps stay in adoption planning.
 
-## 5. Review e rilascio previsti
+<a id="5-review-e-rilascio-previsti"></a>
 
-Richiedere contributi di QA, Security, Ops e Product secondo il RACI. Il Tech Lead registra la decisione di design dopo aver chiarito contratti, rischi e test. Pianificare feature flag, rollout graduale, allarmi e rollback coerenti con la DoD del dominio; il rilascio richiede una review distinta.
+## 5. Planned review and release
 
-**Punti aperti**: provider e contratti definitivi, costo stimato, soglie di allarme, responsabilità operative e approvazione dell'epic. Questo esempio non supera automaticamente un gate della CLI.
+Request QA, Security, Ops and Product input per RACI. Tech Lead records the design decision after clarifying contracts/risks/tests. Plan flag, gradual exposure, alarms and rollback aligned to domain DoD. Release requires a separate review.
 
-## Modalità dell’esempio
+Open questions: final provider/contracts, costs, alarm thresholds, operations responsibilities and epic approval. This example does not automatically pass a CLI gate.
 
-Questo esempio riguarda un servizio di checkout destinato alla produzione: usa la modalità preparazione al rilascio e mantiene verifiche CI e requisiti operativi pertinenti al rischio. In un prototipo locale, la modalità solo sviluppo può usare una suite finale locale tracciata; rollout e review di release vengono preparati quando si decide di distribuire, rivalutando prima i requisiti.
+<a id="modalità-dellesempio"></a>
 
-## Applicazione individuale o in team
+## Example maturity mode
 
-Questo esempio coinvolge un contratto di pagamento e conserva il percorso light/full anche se implementato da un solo sviluppatore. Le responsabilità possono coincidere nella stessa persona; PR e reviewer indipendente dipendono dalla policy del progetto. Un successivo fix circoscritto, con contratto invariato e rischio interamente low, può usare il [record rapido](../templates/cambiamento_rapido.md), con una regressione sul difetto.
+This is an illustrative production-bound checkout service using release-preparation with risk-appropriate CI and operational requirements. A local prototype may use development-only and a traced final local suite; prepare rollout/release review when distribution is planned, reassessing requirements first.
+
+<a id="applicazione-individuale-o-in-team"></a>
+
+## Solo or team application
+
+Payment contracts retain light/full even with a solo developer. Responsibilities may coincide; PRs/independence depend on project policy. A later bounded unchanged-contract fix with all Low risk may use the [quick record](../templates/cambiamento_rapido.md) and a defect regression.

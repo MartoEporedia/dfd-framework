@@ -1,23 +1,35 @@
-<!-- dfd-language --> [Italiano](guardrail_dominio.md) | [English](../en/templates/guardrail_dominio.md)
+<!-- dfd-language --> [English](guardrail_dominio.md) | [Italiano](../it/templates/guardrail_dominio.md)
 
-# Guardrail globali di dominio
+<a id="guardrail-globali-di-dominio"></a>
 
-## Principi architetturali e contratti
+<a id="principi-architetturali-e-contratti"></a>
 
-TODO: definire confini, dipendenze, API, eventi e schemi condivisi; collegare le policy del progetto pertinenti.
+<a id="sicurezza"></a>
 
-## Sicurezza
+<a id="affidabilità--slo"></a>
 
-TODO: definire vincoli su accesso, audit e protezione dati.
+<a id="osservabilità-e-costo"></a>
 
-## Affidabilità / SLO
+<a id="evoluzione-ed-eccezioni"></a>
 
-TODO: definire SLO trasversali e vincoli dei servizi critici.
+# Global domain guardrails
 
-## Osservabilità e costo
+## Architectural principles and contracts
 
-TODO: definire metriche, log, trace e vincoli di costo.
+TODO: define boundaries, dependencies, shared APIs/events/schemas; link relevant project policies.
 
-## Evoluzione ed eccezioni
+## Security
 
-TODO: indicare owner, gestione delle eccezioni e riferimenti alle decisioni.
+TODO: define access, audit and data-protection constraints.
+
+## Reliability / SLOs
+
+TODO: define shared SLOs and critical-service constraints.
+
+## Observability and cost
+
+TODO: define metrics, logs, traces and cost constraints.
+
+## Evolution and exceptions
+
+TODO: specify owners, exception handling and decision references.

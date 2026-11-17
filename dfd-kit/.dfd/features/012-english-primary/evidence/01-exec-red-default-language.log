@@ -1,0 +1,25 @@
+$ cargo test --locked --offline --test workflow default_language_is_english_without_preference
+# executed_at: 2026-11-17T23:24:32.145242Z
+
+running 1 test
+test default_language_is_english_without_preference ... FAILED
+
+failures:
+
+---- default_language_is_english_without_preference stdout ----
+
+thread 'default_language_is_english_without_preference' (65763040) panicked at tests/workflow.rs:3485:5:
+assertion failed: help.contains("adoption, risk and review")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    default_language_is_english_without_preference
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 90 filtered out; finished in 0.62s
+
+   Compiling dfd-kit v0.2.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.43s
+     Running tests/workflow.rs (target/debug/deps/workflow-ff3d4fc9eadea208)
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101

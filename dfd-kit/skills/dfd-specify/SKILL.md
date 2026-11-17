@@ -1,20 +1,22 @@
 ---
 name: dfd-specify
-description: Scrivere o aggiornare una specifica di feature DFD dopo l'assessment del rischio, collegando obiettivi, criteri DoD, test e guardrail.
+description: Write or update an iterative DFD feature specification after risk assessment, linking goals, DoD criteria, tests and guardrails.
 ---
 
-<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-specify/SKILL.md)
+<!-- dfd-language --> [English](SKILL.md) | [Italiano](../../it/skills/dfd-specify/SKILL.md)
 
-# Specifica guidata dalla DoD
+<a id="specifica-guidata-dalla-dod"></a>
 
-Leggere stato e rischio della feature, `.dfd/domains/<dominio>/dod.md`, `criteria.json`, `guardrails.md`, `process.md` e `templates/` dello stesso dominio. Usare `.dfd/kit/templates/contratto_toolkit.md` per il formato strutturato. Leggere `.dfd/kit/processo-e2e.md` solo per chiarire i prerequisiti del design.
+# DoD-driven specification
 
-1. Verificare con `dfd setup --domain <dominio>` che la Fase 0 sia pronta; completare le lacune con `dfd-setup`. Verificare che il rischio sia completo e attuale con `dfd status <id>`. Se cambia il rischio, aggiornare `risk.json` e rieseguire `assess`.
-2. Usare `dfd specify <id>` per creare o riprendere gli artefatti. La CLI non sovrascrive una specifica; restituisce i dubbi aperti se esiste già. Usare il template locale del dominio.
-3. Costruire la specifica iterativamente. Registrare dubbi, assunzioni e alternative in `design.json.open_questions`; formulare domande mirate, incorporare le risposte in entrambi gli artefatti e ripetere il ciclo. Procedere intanto sulle sezioni indipendenti. Non chiedere di riconfermare risposte già espresse e non trasformare assunzioni in fatti. Rimuovere un dubbio solo quando chiarito e conservarne l'esito nella specifica. La presenza di dubbi non impedisce di lavorare alla bozza; blocca il gate di approvazione.
-4. Compilare `spec.md` con contesto, obiettivo, ambito, scenari, contratti, rischi e piano di test. Per light usare il dettaglio necessario al cambiamento. Per full dettagliare dipendenze, failure mode, sicurezza, SLO, costo e validazione futura del rilascio. Restare proporzionati al rischio.
-5. Compilare `design.json` in coerenza con il Markdown: owner, obiettivo, metriche di successo, riferimento all'epic, criteri applicabili/esclusi, test e guardrail. Usare solo criteri presenti nella DoD del dominio. Ogni criterio `changes` deve essere valutato; ogni esclusione deve essere motivata. Le lacune `baseline` non coinvolte dal cambiamento restano nel piano di adozione.
-6. Per ogni criterio applicabile descrivere implementazione e verifica prevista. La verifica è un piano, non un test già eseguito. Se il progetto verifica il criterio con casi di accettazione (test come dati), scriverli ora, prima del codice, e dichiararli in `criteria[].acceptance`: sono parte del design e il responsabile li leggerà alla review. Conservare domande aperte come tali; non inventare approvazioni dell'epic, metriche di produzione o risultati CI.
-7. Eseguire `dfd review-design <id>` per rilevare lacune strutturali. Aggiornare entrambi gli artefatti quando cambia il design.
+Read feature state/risk and domain dod.md, criteria.json, guardrails.md, process.md and templates. Use `.dfd/kit/templates/contratto_toolkit.md` for structured formats and `.dfd/kit/processo-e2e.md` only to clarify prerequisites.
 
-Presentare la specifica e i punti aperti per la review. Non trasformare il completamento dei documenti in approvazione del design.
+1. Verify Phase 0 with `dfd setup --domain <domain>` and risk with `dfd status <id>`. Complete setup using dfd-setup; update risk.json/assess when risk changes.
+2. Run `dfd specify <id>` to create/resume without overwriting; existing questions are returned. Use the domain template.
+3. Iterate: record questions/assumptions/alternatives in design.json.open_questions; ask focused questions and update both artifacts. Continue independent sections, reuse existing answers, and never turn assumptions into facts. Remove questions only when clarified, preserving their resolution. Questions permit drafting but block approval.
+4. Complete spec.md with context, objective, scope, scenarios, contracts, risk and tests. Light needs proportionate detail; full covers dependencies, failures, security, SLOs, cost and future release validation within guardrails.
+5. Keep design.json coherent: owner, objective, metrics, epic reference, criteria applicability/exclusions, tests/guardrails. Use actual domain IDs, evaluate every changes criterion and justify exclusions. Unrelated baseline gaps stay in adoption planning.
+6. Describe implementation and planned verification per applicable criterion. Plans are not executed tests. When the project verifies the criterion with acceptance cases (tests as data), write them now, before the code, and declare them in criteria[].acceptance: they are part of the design and the owner reads them at review. Do not invent epic approval, production metrics or CI results.
+7. Run `dfd review-design <id>` for structural gaps; update both artifacts when design changes.
+
+Present specification/questions for review. Completed documents do not approve the design.

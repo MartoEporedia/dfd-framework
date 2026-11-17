@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-This repository documents the DoD-First Driven (DFD) framework, primarily in Italian.
+This repository documents the DoD-First Driven (DFD) framework, primarily in English, with a complete Italian translation.
 
 - `README.md` provides reading paths by contributor role.
 - `fondamenta.md`, `processo-e2e.md`, `rischio.md`, and `raci.md` define principles, lifecycle, risk classification, and responsibilities.
@@ -21,7 +21,7 @@ Framework documentation requires no build step or local server. Edit Markdown di
 
 ## Documentation Style & Naming Conventions
 
-Maintain complete Italian framework content in the existing paths and English counterparts in `en/` (also `dfd-kit/en/`). Preserve established DFD terminology and follow `glossario.md` for bilingual maintenance. Use one `#` title, hierarchical `##`/`###` headings, and numbered sections where neighboring documents use them. Indent nested bullets by two spaces; use `- [ ]` for checklist items and fenced blocks with language identifiers for examples.
+Maintain complete English framework content in the original paths and Italian counterparts in `it/` (also `dfd-kit/it/`). Preserve established DFD terminology and follow `glossario.md` for bilingual maintenance. Use one `#` title, hierarchical `##`/`###` headings, and numbered sections where neighboring documents use them. Indent nested bullets by two spaces; use `- [ ]` for checklist items and fenced blocks with language identifiers for examples.
 
 Follow existing lowercase filenames, such as `review_design_light.md` and `processo-e2e.md`. Preserve metadata blocks for status, dates (`YYYY-MM-DD`), owners, and references. Keep criterion identifiers stable, such as `OBS-01` and `SEC-02`. No formatter or linter is configured.
 

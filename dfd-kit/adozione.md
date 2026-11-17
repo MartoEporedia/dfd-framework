@@ -1,340 +1,163 @@
-<!-- dfd-language --> [Italiano](adozione.md) | [English](en/adozione.md)
+<!-- dfd-language --> [English](adozione.md) | [Italiano](it/adozione.md)
 
-# Guida all’integrazione di DFD su prodotti esistenti
+<a id="guida-allintegrazione-di-dfd-su-prodotti-esistenti"></a>
 
-> **Stato**: draft / stabile  
-> **Ultimo aggiornamento**: 2026-10-08  
-> **Proprietari**: [@team / @persona]  
-> **Riferimenti**:
-> - [Fondamenta DFD](fondamenta.md)
-> - [Processo End-to-End](processo-e2e.md)
-> - [Criteri di Rischio](rischio.md)
-> - [Modello RACI](raci.md)
+<a id="adozione-proporzionata-individuale-o-in-team"></a>
 
-Questa guida descrive come introdurre **DoD-First Driven (DFD)** in un prodotto o dominio **già esistente**, in modo graduale e sostenibile.
+# Introducing DFD into existing products
 
----
+> **Status**: draft / stable  
+> **Last updated**: 2026-10-08  
+> **Owners**: [@team / @person]  
+> **References**: [Foundations](fondamenta.md), [Process](processo-e2e.md), [Risk](rischio.md), [RACI](raci.md).
 
-## 1. Principi per l’integrazione su esistente
+Introduce DoD-First Driven gradually and sustainably into an existing product/domain.
 
-Partiamo da alcuni vincoli realistici:
+<a id="1-principi-per-lintegrazione-su-esistente"></a>
 
-- Il prodotto esiste già, con:
-  - codice, test, deploy, monitoring;
-  - processi (più o meno formali);
-  - team abituati a un certo modo di lavorare.
-- Non ha senso:
-  - riscrivere tutto;
-  - imporre DFD al 100% da subito;
-  - trattare feature piccole come se fossero greenfield.
+## 1. Principles for existing products
 
-Quindi:
+Existing products already have code, tests, deployment, monitoring, processes and established habits. Adopt DFD by layers and areas through suitable pilots. New features/services use full or light immediately; existing components improve incrementally through changes, refactoring and incident learning. Rewriting everything or imposing complete adoption at once is unnecessary.
 
-- DFD va introdotto **per strati** e **per aree**;  
-- Si parte da **pilot** su feature / servizi adatti;  
-- Si usa una distinzione esplicita tra:
-  - **Nuovo** (feature, servizi nuovi) → DFD full o light da subito;  
-  - **Esistente** → DFD applicato in modo incrementale (refactor, nuove feature, incidenti).
+<a id="2-fase-0--assessment-iniziale-dove-siete-ora"></a>
 
----
+## 2. Phase 0 – Initial assessment
 
-## 2. Fase 0 – Assessment iniziale (dove siete ora)
+<a id="21-cosa-valutare"></a>
 
-Prima di integrare DFD, fai un “snapshot” della situazione.
+### 2.1 What to assess
 
-### 2.1 Cosa valutare
+Capture an evidence-based snapshot per service/domain:
 
-Per ogni servizio / dominio, valuta:
+1. **Current process:** specifications, unit/integration/E2E tests, CI/CD, canaries and tenant rollout.
+2. **Observability:** requests/errors/latency metrics, structured logs and tracing.
+3. **Security:** explicit access, audit, sensitive-data criteria and applicable standards/policies.
+4. **Reliability/SLOs:** availability, latency, error-rate SLOs and matching alarms.
+5. **Cost:** service/transaction estimates or measurements, budgets and thresholds.
+6. **Culture/process:** willingness to add specifications/reviews/checklists and existing TDD, review and post-mortem practices.
 
-1. **Processo attuale**
-   - Come si scrivono le specifiche (se esistono)?
-   - Come si fanno i test (unitari, integrazione, E2E)?
-   - Come si rilascia (CI/CD, canary, rollout per tenant)?
+| Service | Process | Observability | Security | SLOs | Cost | Culture | Notes |
+|---|---|---|---|---|---|---|---|
+| Checkout | ... | ... | ... | ... | ... | ... | ... |
 
-2. **Osservabilità**
-   - Ci sono metriche (request, error, latency)?
-   - I log sono strutturati?
-   - C’è tracing?
+<a id="22-identificare-candidati-dfd"></a>
 
-3. **Sicurezza**
-   - Ci sono criteri espliciti di sicurezza (accesso, audit, dati sensibili)?
-   - Ci sono standard / policy di riferimento?
+### 2.2 Identify DFD candidates
 
-4. **Affidabilità / SLO**
-   - Ci sono SLO definiti (disponibilità, latenza, error rate)?
-   - Ci sono allarmi basati su questi SLO?
+Choose 1–2 technically mature, willing pilot domains where improvements (fewer incidents, better SLOs) can be observed. Candidate work includes medium/high-risk features, significant refactoring and incident follow-up that improves the DoD.
 
-5. **Costo**
-   - Si misura / stima il costo per servizio / transazione?
-   - Ci sono budget o soglie?
+<a id="3-fase-1--pilota-dfd-su-nuovo--modifiche-significative"></a>
 
-6. **Cultura / processi**
-   - Il team è aperto a introdurre più struttura (spec, review, checklist)?
-   - Ci sono già pratiche TDD / review / post-mortem?
+## 3. Phase 1 – Pilot on new or significantly changed work
 
-Puoi farlo con un semplice foglio o tabella:
+<a id="31-regola-pratica"></a>
 
-| Servizio | Processo | Osservabilità | Sicurezza | SLO | Costo | Cultura | Note |
-|----------|----------|---------------|-----------|-----|-------|---------|------|
-| Checkout | ...      | ...           | ...       | ... | ...   | ...     | ...  |
+### 3.1 Practical rule
 
-### 2.2 Identificare “candidati DFD”
+New/significantly changed work in pilot services follows DFD: medium/high-risk features and SLO/security refactoring use full; low-risk features use light. Other work continues, while the extended DoD starts guiding additional alarms, instrumentation and tests.
 
-Sulla base di questo assessment, identifica:
+<a id="32-cosa-introdurre-subito"></a>
 
-- **1–2 servizi / domini** dove:
-  - c’è abbastanza maturità tecnica;
-  - c’è volontà di sperimentare;
-  - l’impatto di DFD può essere visibile (es. riduzione incidenti, miglior SLO).
+### 3.2 Introduce immediately
 
-- **Tipologie di lavoro** su cui applicare DFD:
-  - nuove feature medium/high risk;
-  - refactor significativi;
-  - risposta a incidenti (post-mortem → nuova DoD).
+1. A usable domain DoD draft covering observability, security, SLOs and at least tagging/rough cost estimates. Adapt the template to observed reality.
+2. Feature specifications for medium/high-risk features and architectural changes.
+3. Design/release checklists as an overlay on existing reviews: assess DoD alignment, guardrails and production validation.
+4. Shift-right rollout for new features: canary/tenant percentages, DoD/SLO alarms and explicit rollback criteria.
 
----
+<a id="33-cosa-non-fare-in-questa-fase"></a>
 
-## 3. Fase 1 – Pilota DFD su nuovo / modifiche significative
+### 3.3 Keep the pilot focused
 
-In questa fase, l’obiettivo è **dimostrare valore** senza sconvolgere tutto.
+Focus on 1–2 services and 3–5 significant features. Demonstrate fewer regressions, clearer responsibilities and improved observability/incident handling. Avoid rewriting historical specifications or requiring a perfect DoD across every service.
 
-### 3.1 Regola pratica
-
-- **Tutto ciò che è nuovo o significativamente modificato** in un servizio pilota segue DFD:
-  - nuove feature medium/high risk → DFD full;
-  - feature low risk → DFD light;
-  - refactor che toccano SLO / sicurezza → DFD full.
-
-- **Il resto** continua come prima, ma:
-  - si inizia a usare la **DoD Estesa** come riferimento per:
-    - nuovi allarmi;
-    - nuovi log / metriche;
-    - nuovi test.
-
-### 3.2 Cosa introdurre subito
-
-Nel servizio pilota:
-
-1. **DoD Estesa (almeno bozza)**  
-   - Non serve perfetta: basta una versione “good enough” con:
-     - osservabilità (metriche, log, trace);
-     - sicurezza (accesso, audit, dati sensibili);
-     - SLO (disponibilità, latenza, error rate);
-     - costo (almeno tagging e stima grossolana).
-   - Usa il template DFD e adattalo alla realtà.
-
-2. **Specifica di Feature DFD** per:
-   - nuove feature medium/high risk;
-   - cambiamenti architetturali.
-
-3. **Review DFD (design + release)**  
-   - Usa le checklist DFD (full o light) come “overlay” sulle review che già fate.
-   - Non cambiare tutto il processo di review, aggiungi solo:
-     - verifica allineamento DoD;
-     - verifica guardrail;
-     - verifica piano di validazione in produzione.
-
-4. **Rollout shift-right**  
-   - Per le feature nuove:
-     - definisci fasi di rollout (canary, percentuali, tenant);
-     - allarmi basati su SLO e DoD;
-     - criteri di rollback espliciti.
-
-### 3.3 Cosa NON fare in questa fase
-
-- Non cercare di:
-  - riscrivere tutte le specifiche esistenti in formato DFD;
-  - imporre DFD a tutti i servizi;
-  - avere una DoD Estesa perfetta e completa per tutto.
-
-- Concentrati su:
-  - 1–2 servizi pilota;
-  - 3–5 feature significative;
-  - dimostrare che DFD aiuta a:
-    - ridurre regressioni;
-    - chiarire responsabilità;
-    - migliorare osservabilità e gestione incidenti.
-
----
-
-## 4. Fase 2 – Estensione graduale all’esistente
-
-Una volta che il pilota ha mostrato valore, puoi espandere DFD in modo graduale.
-
-### 4.1 Per servizio / dominio
-
-Per ogni servizio, definisci un **livello di adozione DFD**:
-
-- **Livello 0 – Nessuna adozione**  
-  - Nessuna DoD Estesa formale;  
-  - Specifiche informali o assenti;  
-  - Review e rollout come prima.
-
-- **Livello 1 – DoD Estesa + nuove feature**  
-  - DoD Estesa definita (almeno bozza);  
-  - Nuove feature medium/high risk usano specifica DFD e review DFD;  
-  - Rollout shift-right per feature nuove.
-
-- **Livello 2 – DoD + review sistematiche**  
-  - DoD Estesa stabile e usata;  
-  - Tutte le feature (anche low risk) usano almeno DFD light;  
-  - Review design e release usano checklist DFD;  
-  - Allarmi e dashboard allineati a DoD.
-
-- **Livello 3 – DFD “maturo”**  
-  - DoD Estesa evoluta con feedback di produzione;  
-  - Guardrail globali chiari e rispettati;  
-  - Metriche di efficacia DFD (riduzione incidenti, MTTR, ecc.);  
-  - DFD integrato nel flusso (CI, ticket, repo).
-
-Per ogni servizio, decidi:
-
-- qual è il livello attuale;  
-- qual è il livello target nei prossimi 3–6 mesi;  
-- quali passi concreti servono per salire di livello.
-
-### 4.2 Interventi sull’esistente
-
-Sul codice / servizi esistenti, DFD si integra in modo opportunistico:
-
-1. **Quando si tocca un componente**  
-   - Se stai modificando un endpoint / flusso:
-     - verifica se ci sono metriche / log coerenti con la DoD;
-     - se mancano, aggiungili come parte del lavoro;
-     - aggiorna la DoD Estesa se necessario.
-
-2. **Post-incidente / post-mortem**  
-   - Dopo un incidente:
-     - chiedi: “Quale criterio DoD avrebbe potuto prevenire / ridurre l’impatto?”;
-     - aggiungi quel criterio alla DoD;
-     - implementa allarmi / test derivati da quel criterio.
-
-3. **Refactor significativi**  
-   - Quando rifai una parte di architettura:
-     - scrivi una specifica DFD per il “to-be”;
-     - usa review DFD;
-     - definisci rollout shift-right per il nuovo design.
+<a id="4-fase-2--estensione-graduale-allesistente"></a>
 
-4. **Nuovi servizi / moduli**  
-   - Per nuovi servizi:
-     - parti con DFD full da subito;
-     - DoD Estesa definita prima di scrivere codice;
-     - specifica DFD per le prime feature.
+## 4. Phase 2 – Gradual extension
 
----
+<a id="41-per-servizio--dominio"></a>
 
-## 5. Fase 3 – Istituzionalizzazione (DFD come “modo di lavorare”)
+### 4.1 Per service / domain
 
-Qui DFD diventa parte del modo di lavorare dell’organizzazione.
+| Level | Adoption |
+|---|---|
+| 0 – None | No formal extended DoD, informal/missing specifications, existing review/rollout practices |
+| 1 – DoD and new features | At least a DoD draft, DFD specifications/reviews for medium/high-risk new features, shift-right rollout for new features |
+| 2 – Systematic review | Stable DoD in use, at least light for all features, design/release checklists, DoD-aligned alarms/dashboards |
+| 3 – Mature | DoD evolves from production feedback, clear respected guardrails, measured incident/MTTR improvements, integration into CI/tickets/repository |
 
-### 5.1 Integrazione con processi esistenti
+Record the current level, a 3–6 month target and concrete steps to reach it.
 
-- **Ticket / epic**:
-  - campo “Rischio DFD” (low/medium/high);
-  - link alla specifica DFD (se richiesta);
-  - link alla checklist di review.
+<a id="42-interventi-sullesistente"></a>
 
-- **CI / CD**:
-  - per feature medium/high risk:
-    - check che esista una specifica DFD;
-    - check che esista una checklist di review compilata;
-    - eventualmente, check che esista una configurazione rollout.
+### 4.2 Existing components
 
-- **Repo**:
-  - cartella `/dfd` per servizio con:
-    - DoD Estesa;
-    - specifiche di feature;
-    - configurazioni rollout;
-    - note di review.
+When modifying an endpoint/flow, check DoD-aligned metrics/logs and add missing instrumentation in scope; update the DoD if necessary. After incidents, ask which criterion could have prevented/reduced impact, then add the criterion and derived alarms/tests. Significant architectural refactoring needs a specification of the target design, review and controlled rollout. New services begin with full DFD, a DoD before code and specifications for initial features.
 
-### 5.2 Onboarding e formazione
+<a id="5-fase-3--istituzionalizzazione-dfd-come-modo-di-lavorare"></a>
 
-- Onboarding nuovi arrivati:
-  - sessione su DFD (fondamenta, processo, esempi);
-  - uso delle skill AI (context pack + skill stateless o tool come SpecKit).
+## 5. Phase 3 – DFD as the working practice
 
-- Gilda / community:
-  - sessioni periodiche su:
-    - casi d’uso DFD;
-    - incidenti dove DFD ha aiutato;
-    - miglioramenti al framework.
+<a id="51-integrazione-con-processi-esistenti"></a>
 
-### 5.3 Metriche di efficacia DFD
+### 5.1 Existing processes
 
-Per giustificare e affinare DFD, misura:
+Tickets/epics carry risk and specification/review links. For medium/high risk, CI/CD can check specification, completed checklist and relevant rollout configuration. Keep a versioned DFD folder per service containing DoD, feature specifications, rollout configuration and review notes.
 
-- riduzione di:
-  - incidenti in produzione;
-  - regressioni;
-  - MTTR (mean time to repair).
-- miglioramento di:
-  - tempo di onboarding nuovi sviluppatori;
-  - chiarezza nelle review (meno “ma questo era stato pensato?”);
-  - qualità dei rollout (meno rollback, meno hotfix).
+<a id="52-onboarding-e-formazione"></a>
 
----
+### 5.2 Onboarding and training
 
-## 6. Regole pratiche per non fallire
+Introduce newcomers through foundations, process and examples; optionally use AI skills/context packs or tools such as SpecKit. Guild/community sessions share use cases, incident learning and framework improvements.
 
-Per evitare che DFD diventi “un altro processo pesante”:
+<a id="53-metriche-di-efficacia-dfd"></a>
 
-- **Parti piccolo**: 1–2 servizi pilota, poche feature.  
-- **Usa DFD light** dove ha senso (feature low risk).  
-- **Non imporre DFD su tutto subito**: lascia che i team vedano valore e chiedano di più.  
-- **Tratta DFD come prodotto interno**:
-  - raccogli feedback;
-  - misura efficacia;
-  - adatta il framework.
+### 5.3 Effectiveness metrics
 
----
+Measure incidents, regressions, MTTR, developer onboarding time, review clarity and rollout quality (rollback/hotfix frequency). Use these observations to justify and improve DFD.
 
-## 7. Schema riassuntivo di integrazione
+<a id="6-regole-pratiche-per-non-fallire"></a>
 
-| Cosa                   | Nuovo (greenfield)                 | Esistente (brownfield)                        |
-|------------------------|------------------------------------|-----------------------------------------------|
-| DoD Estesa             | Definita da subito                 | Definita gradualmente (partendo da servizi pilota) |
-| Specifica di feature   | DFD full o light da subito         | Solo per feature medium/high risk o refactor significativi |
-| Review                 | DFD full/light da subito           | Overlay sulle review esistenti, poi sistematico |
-| Rollout                | Shift-right da subito              | Introdotto per feature nuove, poi esteso      |
-| Codice esistente       | N/A                                | DFD applicato quando si tocca (metriche, log, test) |
-| Post-incidente         | N/A                                | Usato per arricchire DoD e allarmi            |
+## 6. Practical adoption rules
 
----
+Start small; choose light for low risk; expand as teams observe value. Treat DFD as an internal product: collect feedback, measure usefulness and adapt.
 
-## 8. Prossimi passi concreti
+<a id="7-schema-riassuntivo-di-integrazione"></a>
 
-Per mettere in pratica questa guida:
+## 7. Adoption overview
 
-1. **Fai l’assessment** (Sezione 2) per i tuoi servizi principali.  
-2. **Scegli 1–2 servizi pilota** e 3–5 feature su cui applicare DFD.  
-3. **Definisci una DoD Estesa “good enough”** per ciascun servizio pilota.  
-4. **Usa le checklist DFD** (full / light) come overlay sulle review che già fate.  
-5. **Raccogli feedback** dopo 1–2 mesi e adatta il processo.
-
-Per supporto:
-
-- [Fondamenta DFD](fondamenta.md) – per rivedere principi e artefatti.  
-- [Processo End-to-End](processo-e2e.md) – per allineare fasi e gate.  
-- [Criteri di Rischio](rischio.md) – per classificare feature e scegliere full vs light.  
-- [Modello RACI](raci.md) – per chiarire ruoli e responsabilità.
-
-## Maturità del progetto: solo sviluppo e preparazione al rilascio
-
-La maturità del progetto è distinta dal livello di adozione DFD e dal rischio della feature. La Fase 0 dichiara una modalità, la scelta sulla CI e la relativa motivazione:
-
-| Modalità | Verifiche di sviluppo | Uscita |
+| Concern | Greenfield | Brownfield |
 |---|---|---|
-| Solo sviluppo (`development-only`) | Light/full: review di design, TDD e suite finale locale; rapido: verifiche pertinenti. CI facoltativa | Sviluppo completato; nessuna pre-release o autorizzazione a distribuire |
-| Preparazione al rilascio (`release-preparation`) | Stessi controlli, con CI richiesta per default; un’alternativa locale richiede motivazione rispetto a rischio e destinazione e review umana | Prontezza alla pre-release, poi review di release distinta |
+| Extended DoD | Defined from the start | Gradual, beginning with pilots |
+| Specification | Full/light from the start | Medium/high-risk features or significant refactoring initially |
+| Review | Full/light from the start | Overlay first, then systematic |
+| Rollout | Shift-right from the start | New features first, then extend |
+| Existing code | N/A | Improve metrics/logs/tests when touched |
+| Incident follow-up | N/A | Enrich DoD and alarms |
 
-L’assenza della CI non è una lacuna bloccante in solo sviluppo. Restano obbligatorie le verifiche applicabili e la tracciabilità di comando, data, risultato e log: un test locale non viene dichiarato CI. Quando prevista, la suite finale deve seguire i test green. Una CI dichiarata fallita continua a bloccare anche quando facoltativa.
+<a id="8-prossimi-passi-concreti"></a>
 
-Prima di distribuire, passare esplicitamente alla preparazione al rilascio: rivalutare rischio, criteri, policy CI e verifiche nell’ambiente di destinazione. Riconfermare review e aggiornare piano ed evidenze invalidati. La modalità solo sviluppo non attenua controlli di sicurezza o rischio; il completamento locale non sostituisce l’approvazione umana del rilascio. Il learning può provenire anche dagli esperimenti locali, prima di disporre di dati di produzione.
+## 8. Concrete next steps
 
-## Adozione proporzionata, individuale o in team
+Assess main services; select 1–2 pilots and 3–5 features; draft a useful DoD for each; overlay full/light checklists on existing reviews; collect feedback after 1–2 months and adapt. Use [foundations](fondamenta.md), [process](processo-e2e.md), [risk](rischio.md) and [RACI](raci.md) for support.
 
-DFD è utilizzabile da un singolo sviluppatore o da un team. Organizzazione del lavoro, maturità del progetto e rischio dell’intervento sono scelte indipendenti: non servono CI, PR o reviewer aggiuntivi solo per iniziare.
+## Proportionate adoption, solo or in a team
 
-Concordare nel setup i percorsi rapido/light/full. Un fix rapido usa un [solo record](templates/cambiamento_rapido.md), con rischio interamente low e verifiche pertinenti; dubbi o impatto maggiore richiedono light/full. Il lavoro individuale è il default della CLI: nessun team.json richiesto. Attivare le [policy di collaborazione](templates/collaborazione.md) quando servono, senza imporle ai progetti individuali.
+Organization, maturity and risk are independent. Starting DFD does not itself require CI, PRs or additional reviewers. Agree rapid/light/full routes in setup. A scoped, entirely low-risk fix uses [one record](templates/cambiamento_rapido.md); questions or greater impact require light/full. Solo is the CLI default; no team.json is required. Enable [team policy](templates/collaborazione.md) explicitly when useful.
 
-Conservare contratti normativi nei criteri e nei guardrail. Le nuove review selettive riaprono solo i design interessati da modifiche pertinenti; template descrittivi e lacune baseline estranee non richiedono da soli nuove approvazioni. Le feature legacy mantengono il comportamento conservativo. Vedere [fondamenta](fondamenta.md#percorsi-proporzionati-e-lavoro-individuale-o-in-team) per regole e limiti.
+Keep normative contracts in criteria/guardrails. New selective reviews reopen only designs affected by relevant changes; descriptive templates and unrelated baseline gaps alone do not require approval again. Legacy features retain conservative behavior. See [foundations](fondamenta.md#percorsi-proporzionati-e-lavoro-individuale-o-in-team).
+
+<a id="maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio"></a>
+
+## Project maturity: development only and release preparation
+
+Maturity is independent of DFD adoption level and feature risk. Phase 0 declares mode, CI policy and justification.
+
+| Mode | Development checks | Outcome |
+|---|---|---|
+| `development-only` | Light/full: design review, TDD and final local suite; rapid: relevant checks; optional CI | Development complete; no pre-release or distribution approval |
+| `release-preparation` | Same checks; CI required by default; a local alternative needs risk/target justification and human review | Ready for pre-release, followed by a separate release review |
+
+Missing CI does not block development-only. Applicable checks remain mandatory with command, date, result and real log; local tests are never labeled CI. The final suite, when required, follows green tests. Declared failed CI still blocks even when optional.
+
+Before distribution explicitly switch to release preparation; reassess risk, criteria, CI policy and target-environment checks. Reconfirm invalidated reviews and update plans/evidence. Development-only does not weaken security/risk controls, and local completion does not replace human release approval. Local experiments can produce learning before production data exists.

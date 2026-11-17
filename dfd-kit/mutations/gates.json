@@ -341,6 +341,36 @@
     "purpose": "Un cambio lingua non deve sovrascrivere skill modificate né cambiare la preferenza su conflitto."
   },
   {
+    "id": "language-default-english",
+    "file": "src/i18n.rs",
+    "before": "if !store.path(\".dfd/language.json\")?.exists() {\n        return Ok(Language::En);",
+    "after": "if !store.path(\".dfd/language.json\")?.exists() {\n        return Ok(Language::It);",
+    "tests": [
+      "default_language_is_english_without_preference"
+    ],
+    "purpose": "Un progetto senza language.json deve usare l'inglese, lingua principale."
+  },
+  {
+    "id": "language-init-saves-default",
+    "file": "src/lib.rs",
+    "before": "let output = init(&store, harness, &domain, mode)?;\n            if cli.lang.is_some() || !preference.exists() {",
+    "after": "let output = init(&store, harness, &domain, mode)?;\n            if cli.lang.is_some() {",
+    "tests": [
+      "default_language_is_english_without_preference"
+    ],
+    "purpose": "init senza --lang deve salvare il default quando manca una preferenza."
+  },
+  {
+    "id": "language-italian-bundle",
+    "file": "src/i18n.rs",
+    "before": "Language::It => crate::bundle::FILES,",
+    "after": "Language::It => crate::bundle::FILES_EN,",
+    "tests": [
+      "installed_bundles_follow_english_primary_layout"
+    ],
+    "purpose": "La scelta italiana deve installare le risorse di it/."
+  },
+  {
     "id": "status-blocked-exit",
     "file": "src/lib.rs",
     "before": "let exit = if output[\"blocking\"].as_array().is_some_and(|b| !b.is_empty()) {",

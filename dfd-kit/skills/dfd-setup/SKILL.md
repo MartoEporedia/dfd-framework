@@ -1,23 +1,21 @@
 ---
 name: dfd-setup
-description: Definire o aggiornare la Fase 0 DFD di un dominio: DoD, guardrail, template locali e convenzioni di processo, prima del design delle feature.
+description: Define or update domain DFD Phase 0: DoD, guardrails, local templates and process conventions before feature design.
 ---
 
-<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-setup/SKILL.md)
+<!-- dfd-language --> [English](SKILL.md) | [Italiano](../../it/skills/dfd-setup/SKILL.md)
 
-# Setup DFD di dominio
+<a id="setup-dfd-di-dominio"></a>
 
-Leggere `.dfd/kit/fondamenta.md`, `.dfd/kit/processo-e2e.md` e `.dfd/kit/templates/contratto_toolkit.md`. La Fase 0 costituisce il riferimento condiviso del dominio, paragonabile alla constitution di SDD, ed evolve con i learning di produzione.
+# Domain DFD setup
 
-1. Se il dominio non esiste, usare `dfd-init`. Se mancano gli artefatti della Fase 0 in un dominio esistente, rieseguire `dfd init` con harness e modalità del progetto: aggiunge i file mancanti preservando il lavoro locale.
-2. Leggere policy e decisioni esistenti e gli artefatti in `.dfd/domains/<dominio>/`. Definire iterativamente `dod.md` e `criteria.json`, preservando gli identificatori. Separare requisiti del nuovo lavoro e lacune baseline.
-3. Completare `guardrails.md` con principi architetturali, contratti, sicurezza, SLO, osservabilità e costo. Collegare anche i guardrail comuni del progetto quando pertinenti.
-4. Adattare i template in `templates/` oppure mantenerli invariati. Documentare la scelta e le differenze in `process.md`, insieme a naming, classificazione del rischio, checklist, collocazione degli artefatti e responsabilità.
-5. Chiarire i dubbi con domande mirate e aggiornamenti successivi. Non inventare soglie o decisioni. Eseguire `dfd setup --domain <dominio>` per rilevare lacune strutturali. `ready` indica completezza strutturale, non approvazione umana o qualità semantica.
-6. Usare lo stesso percorso per aggiornare il setup dopo cambiamenti architetturali, pattern ricorrenti o incidenti. Riconfermare le review interessate quando cambiano contratti, criteri selezionati, guardrail o policy di maturità; il testo descrittivo di template e processo non invalida le nuove review selettive. Le review legacy restano conservative.
+Read `.dfd/kit/fondamenta.md`, `.dfd/kit/processo-e2e.md` and `.dfd/kit/templates/contratto_toolkit.md`. Phase 0 is the shared domain reference, comparable to an SDD constitution, and evolves with learning.
 
-L'assessment di adozione resta distinto dal setup: un debito legacy fuori ambito non impedisce automaticamente la Fase 0. Quando il setup è pronto, proseguire con rischio e specifica delle feature.
+1. Use dfd-init for missing domains. For existing domains rerun init with the project's harness/mode to add missing setup files without overwriting local work.
+2. Read existing policies/decisions and `.dfd/domains/<domain>/`. Refine dod.md/criteria.json iteratively, preserving IDs and separating new-work requirements from baseline gaps.
+3. Complete guardrails.md: architecture/contracts, security, SLOs, observability and cost; link relevant common guardrails.
+4. Adapt or retain templates and record differences in process.md alongside naming, risk, checklists, artifact placement and responsibilities.
+5. Ask focused questions, never invent thresholds/decisions. Run `dfd setup --domain <domain>`. ready means structural completeness, not human approval or semantic quality.
+6. Update after architectural changes, recurring patterns or incidents. Reconfirm affected reviews when relevant contracts, criteria, guardrails or lifecycle change. Descriptive templates/process prose alone do not invalidate new selective reviews; legacy reviews stay conservative.
 
-Definire la maturità in lifecycle.json: development-only con ci_required false oppure release-preparation con scelta CI motivata. Leggere il contratto per schema e default legacy; non confondere maturità, adozione e rischio. In solo sviluppo la suite finale locale sostituisce il requisito di introdurre CI; la pre-release resta disabilitata. Dichiarare in `source_roots` le directory del codice e dei test, così la suite finale resta legata ai file su cui è stata eseguita, e in `suite_entrypoints` gli script che eseguono la suite, così una loro modifica richiede di riconfermare il design; adattare `log_markers` agli strumenti di test del dominio se la lista integrata non basta. Se il dominio usa casi di accettazione (test come dati), dichiararne il runner tra i `suite_entrypoints` e le directory in `acceptance_roots`, così un file di casi che nessun criterio dichiara viene segnalato.
-
-Concordare percorsi rapido/light/full e verifiche proporzionate. Team opzionale: assenza di team.json mantiene il lavoro individuale senza review indipendente o integrazione obbligatorie. Per un team definire policy, deleghe e gestione dei conflitti. Mantenere contratti normativi nel catalogo e nei guardrail: le nuove review sono selettive e template/processo descrittivi non devono introdurre vincoli nascosti.
+Adoption assessment is separate: unrelated legacy debt does not automatically block setup. Once ready, continue risk/specification. Declare lifecycle.json: development-only with ci_required false, or release-preparation with justified CI policy. Read the contract for schema/legacy defaults. A final local suite avoids premature CI in development-only; pre-release remains disabled. Declare code and test directories in source_roots so the final suite stays bound to the files it ran on, and the suite scripts in suite_entrypoints so changing them requires design reconfirmation; adapt log_markers to the domain's test tools when the built-in list is not enough. When the domain uses acceptance cases (tests as data), declare their runner among the suite_entrypoints and their directories in acceptance_roots, so that a case file no criterion declares is reported. Agree rapid/light/full and proportionate checks. Team policy is optional: no team.json means no independent/integrated checks required. Keep normative requirements in catalog/guardrails, not hidden in descriptive prose.

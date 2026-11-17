@@ -1,38 +1,52 @@
-<!-- dfd-language --> [Italiano](processo_dominio.md) | [English](../en/templates/processo_dominio.md)
+<!-- dfd-language --> [English](processo_dominio.md) | [Italiano](../it/templates/processo_dominio.md)
 
-# Convenzioni DFD di dominio
+<a id="convenzioni-dfd-di-dominio"></a>
 
-## Responsabilità e aggiornamenti
+<a id="responsabilità-e-aggiornamenti"></a>
 
-TODO: indicare owner e data di revisione. Aggiornare il setup dopo cambiamenti del dominio, pattern ricorrenti, incidenti e learning di produzione.
+<a id="dod-e-criteri"></a>
 
-## DoD e criteri
+<a id="classificazione-e-review"></a>
 
-TODO: documentare gli assi rilevanti e il naming stabile OBS-01, SEC-01, SLO-01, COST-01, UX-01; mantenere dod.md e criteria.json coerenti.
+<a id="template-locali"></a>
 
-## Classificazione e review
+<a id="collocazione-e-uso-degli-artefatti"></a>
 
-TODO: documentare l'applicazione delle regole di rischio centrali e la scelta delle checklist light / full.
+# Domain DFD conventions
 
-## Template locali
+## Responsibilities and updates
 
-TODO: dichiarare se i template in templates/ sono usati senza modifiche oppure adattati; documentare le differenze rispetto al framework centrale. I placeholder nei template sono intenzionali.
+TODO: owner and review date. Update setup after domain changes, recurring patterns, incidents and production learning.
 
-## Collocazione e uso degli artefatti
+## DoD and criteria
 
-TODO: indicare dove vivono gli artefatti del dominio e delle feature, come si svolgono le review e come si aggiornano le specifiche in modo iterativo per chiarire i dubbi.
+TODO: relevant concerns and stable OBS-01, SEC-01, SLO-01, COST-01, UX-01 IDs; align dod.md/criteria.json.
 
-## Maturità del progetto: solo sviluppo e preparazione al rilascio
+## Classification and review
 
-La maturità del progetto è distinta dal livello di adozione DFD e dal rischio della feature. La Fase 0 dichiara una modalità, la scelta sulla CI e la relativa motivazione:
+TODO: application of central risk rules and light/full checklists.
 
-| Modalità | Verifiche di sviluppo | Uscita |
+## Local templates
+
+TODO: unchanged/adapted templates and differences from the central framework. Template placeholders are intentional.
+
+## Artifact placement and use
+
+TODO: domain/feature artifact locations, review procedures and iterative question clarification.
+
+<a id="maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio"></a>
+
+## Project maturity: development only and release preparation
+
+Maturity is independent of DFD adoption level and feature risk. Phase 0 declares mode, CI policy and justification.
+
+| Mode | Development checks | Outcome |
 |---|---|---|
-| Solo sviluppo (`development-only`) | Review di design, TDD ed evidenze reali; suite finale locale o CI disponibile, senza obbligo di introdurre CI | Sviluppo completato; nessuna pre-release o autorizzazione a distribuire |
-| Preparazione al rilascio (`release-preparation`) | Stessi controlli, con CI richiesta per default; un’alternativa locale richiede motivazione rispetto a rischio e destinazione e review umana | Prontezza alla pre-release, poi review di release distinta |
+| `development-only` | Light/full: design review, TDD and final local suite; rapid: relevant checks; optional CI | Development complete; no pre-release or distribution approval |
+| `release-preparation` | Same checks; CI required by default; a local alternative needs risk/target justification and human review | Ready for pre-release, followed by a separate release review |
 
-L’assenza della CI non è una lacuna bloccante in solo sviluppo. Restano obbligatorie le verifiche applicabili e la tracciabilità di comando, data, risultato e log: un test locale non viene dichiarato CI. La suite finale deve seguire i test green. Una CI dichiarata fallita continua a bloccare anche quando facoltativa.
+Missing CI does not block development-only. Applicable checks remain mandatory with command, date, result and real log; local tests are never labeled CI. The final suite, when required, follows green tests. Declared failed CI still blocks even when optional.
 
-Prima di distribuire, passare esplicitamente alla preparazione al rilascio: rivalutare rischio, criteri, policy CI e verifiche nell’ambiente di destinazione. Riconfermare review e aggiornare piano ed evidenze invalidati. La modalità solo sviluppo non attenua controlli di sicurezza o rischio; il completamento locale non sostituisce l’approvazione umana del rilascio. Il learning può provenire anche dagli esperimenti locali, prima di disporre di dati di produzione.
+Before distribution explicitly switch to release preparation; reassess risk, criteria, CI policy and target-environment checks. Reconfirm invalidated reviews and update plans/evidence. Development-only does not weaken security/risk controls, and local completion does not replace human release approval. Local experiments can produce learning before production data exists.
 
-Dichiarare la policy in `lifecycle.json` secondo il contratto del toolkit; motivare la scelta CI e la transizione al rilascio.
+Declare lifecycle.json according to the toolkit contract; justify CI policy and the release transition.

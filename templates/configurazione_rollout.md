@@ -1,40 +1,36 @@
-<!-- dfd-language --> [Italiano](configurazione_rollout.md) | [English](../en/templates/configurazione_rollout.md)
+<!-- dfd-language --> [English](configurazione_rollout.md) | [Italiano](../it/templates/configurazione_rollout.md)
 
-# Configurazione Rollout – [Nome Feature]
+<a id="configurazione-rollout--nome-feature"></a>
 
-> **Stato**: draft / in review / attiva / completata  
-> **Data creazione**: YYYY-MM-DD  
-> **Proprietari**: [@team / @persona]  
-> **Servizio / Dominio**: [es. Checkout]  
-> **Riferimenti**:
-> - [Specifica di Feature – Nome Feature]
-> - [DoD Estesa – Servizio X]
-> - [Architecture Guardrails]
+# Rollout configuration – [Feature Name]
 
----
+> **Status**: draft / in review / active / completed  
+> **Created**: YYYY-MM-DD  
+> **Owners**: [@team / @person]  
+> **Service / Domain**: [Checkout]  
+> **References**: [Feature specification], [Extended DoD], [Architecture Guardrails].
 
-## 1. Panoramica
+<a id="1-panoramica"></a>
 
-**Feature**: [breve descrizione, es. “Nuovo metodo di pagamento PayPal”]  
-**Ambiente**: [staging / prod]  
-**Tipo di rollout**:  
-- [ ] Canary tecnico (frazione di traffico)  
-- [x] Rollout per tenant / segmento (feature flag)  
-- [ ] Combinato (canary + rollout per tenant)
+## 1. Overview
 
-**Dove la versione deve essere in uso**: [ambienti, tenant, dispositivi, client]. Il rollout è completato solo quando tutti eseguono la nuova versione; fino ad allora la feature indica il punto su cui è in attesa.
+Feature: [for example new PayPal payment method]. Environment: [staging / production].
 
-**Blocchi esterni**: [es. dispositivo offline, finestra di manutenzione]. Il rollout riprende da solo quando il blocco sparisce.
+- [ ] Technical canary (traffic fraction).
+- [x] Tenant/segment rollout (feature flag).
+- [ ] Combined canary and tenant rollout.
 
-**Passi che solo una persona può fare**: [azione esatta, chi la esegue]. Ogni passo diventa una sola richiesta, che si chiude quando il passo risulta fatto e non viene ripetuta mentre è in attesa.
+Where the version must be in use: [environments, tenants, devices, clients]. The rollout is complete only when all of them run the new version; until then the feature shows which one it is waiting on.
 
----
+External blockers: [e.g. offline device, maintenance window]. The rollout resumes by itself when the blocker clears.
 
-## 2. Feature flag / configurazione
+Steps only a person can take: [exact action, who performs it]. Each step becomes a single request that closes once the step is observed as done and is not repeated while pending.
 
-**Sistema**: [es. AWS AppConfig, LaunchDarkly, flag interno]
+<a id="2-feature-flag--configurazione"></a>
 
-**Flag**:
+## 2. Feature flag / configuration
+
+System: [AWS AppConfig, LaunchDarkly, internal flag]. Example:
 
 ```yaml
 flag:
@@ -42,11 +38,6 @@ flag:
   type: boolean
   scope: tenant
   default: false
-```
-
-**Configurazione per tenant** (esempio):
-
-```yaml
 tenants:
   - id: internal
     enabled: true
@@ -62,133 +53,107 @@ tenants:
     percentage: 0
 ```
 
----
+<a id="3-fasi-di-rollout"></a>
 
-## 3. Fasi di rollout
+## 3. Rollout stages
 
-| Fase | Descrizione                       | Tenant / Segmento       | % Traffico | Durata minima | Criteri di promozione                         |
-|------|-----------------------------------|--------------------------|------------|---------------|-----------------------------------------------|
-| 1    | Staging                           | tenant finti             | 100%       | 24h           | Nessun errore critico, test E2E verdi         |
-| 2    | Prod – tenant interni             | `internal`               | 5%         | 48h           | Vedi sezione 4                                |
-| 3    | Prod – mercato DE                 | `market-de`              | 20%        | 72h           | Vedi sezione 4                                |
-| 4    | Prod – mercato IT                 | `market-it`              | 50%        | 72h           | Vedi sezione 4                                |
-| 5    | Prod – tutti i tenant abilitati   | tutti con `enabled=true` | 100%       | –             | Vedi sezione 4                                |
+| Stage | Description | Tenant/segment | Traffic | Minimum duration | Promotion |
+|---|---|---|---|---|---|
+| 1 | Staging | Synthetic tenants | 100% | 24h | No critical errors; E2E passing |
+| 2 | Production, internal | internal | 5% | 48h | Section 4 |
+| 3 | Production, Germany | market-de | 20% | 72h | Section 4 |
+| 4 | Production, Italy | market-it | 50% | 72h | Section 4 |
+| 5 | Production, enabled tenants | All enabled=true | 100% | – | Section 4 |
 
----
+These are illustrative values. For structured CLI rollout stages, describe final-environment exposure; staging is separate evidence.
 
-## 4. Criteri di promozione / stop / rollback
+<a id="4-criteri-di-promozione--stop--rollback"></a>
 
-### 4.1 Criteri tecnici (canary)
+## 4. Promotion / stop / rollback criteria
 
-Monitorati su CloudWatch (o sistema equivalente):
+<a id="41-criteri-tecnici-canary"></a>
 
-- **Error rate 5xx** su `POST /checkout`:
-  - Soglia: < **1%** per 5 min
-- **Latenza p95** per `paymentMethod=PAYPAL`:
-  - Soglia: < **3 s** per 10 min
-- **CheckoutFailed** per `errorCode` PayPal:
-  - Soglia: < **10%** (fallimenti attesi inclusi)
+### 4.1 Technical criteria (canary)
 
-**Azioni**:
+Monitor CloudWatch/equivalent: `POST /checkout` 5xx < 1% for 5 min; paymentMethod=PAYPAL p95 < 3 s for 10 min; PayPal CheckoutFailed < 10%, including expected failures.
 
-- Se una soglia viene superata:
-  - [ ] Ferma il rollout (blocca promozione alla fase successiva)
-  - [ ] Se in fase avanzata, valuta rollback parziale (disabilita flag per tenant interessati)
+- [ ] On threshold breach stop promotion.
+- [ ] At advanced exposure consider partial rollback by disabling affected tenant flags.
 
-### 4.2 Criteri business / UX
+<a id="42-criteri-business--ux"></a>
 
-- **Tasso di completamento checkout** (globale e per `paymentMethod`):
-  - Baseline: ultimi 14 giorni senza PayPal
-  - Soglia: nessuna riduzione > **5%** rispetto alla baseline
-- **Ticket / segnalazioni supporto**:
-  - Soglia: nessun aumento significativo (> X% rispetto alla media) legato a PayPal
+### 4.2 Business / UX criteria
 
-**Azioni**:
+Completion globally and per paymentMethod: compare to the prior 14 days without PayPal; no > 5% decline. Support reports: no significant PayPal-related rise (> X% versus average).
 
-- Se il tasso di completamento peggiora > 5%:
-  - [ ] Ferma il rollout
-  - [ ] Analizza per `tenant` e `paymentMethod`
-  - [ ] Se necessario, rollback (disabilita flag per tenant interessati)
+- [ ] Stop rollout if completion drops > 5%.
+- [ ] Analyze by tenant/paymentMethod.
+- [ ] Roll back affected flags if necessary.
 
-### 4.3 Criteri di costo
+<a id="43-criteri-di-costo"></a>
 
-- **Costo mensile del servizio Checkout**:
-  - Soglia: variazione < **15%** su finestra 7 giorni (DoD COST-03)
-- **Costo per transazione stimato**:
-  - Soglia: variazione < **20%**
+### 4.3 Cost criteria
 
-**Azioni**:
+Monthly service cost variation < 15% on a 7-day window (COST-03); estimated transaction cost variation < 20%.
 
-- Se le soglie vengono superate:
-  - [ ] Ferma il rollout
-  - [ ] Apri review architetturale / economica
+- [ ] Stop rollout on breach.
+- [ ] Open architectural/economic review.
 
----
+<a id="5-allarmi-e-dashboard"></a>
 
-## 5. Allarmi e dashboard
+## 5. Alarms and dashboards
 
-**Dashboard**:
+- [ ] Checkout service: requests/errors/latency.
+- [ ] Checkout business: CheckoutCompleted/CheckoutFailed by paymentMethod.
+- [ ] Checkout cost: monthly/transaction cost.
+- [ ] Checkout-5xx-ErrorRate: 1% for 5 min.
+- [ ] Checkout-PayPal-Latency-p95: 3 s for 10 min.
+- [ ] Checkout-CompletionRate-Drop: > 5% versus baseline.
+- [ ] Checkout-Cost-Monthly-Increase: > 15% versus 30-day mean.
 
-- [ ] `Checkout – Servizio` (request, error, latency)
-- [ ] `Checkout – Flusso business` (CheckoutCompleted, CheckoutFailed per paymentMethod)
-- [ ] `Checkout – Costo` (costo mensile, costo per transazione)
+<a id="6-piano-di-rollback"></a>
 
-**Allarmi** (CloudWatch Alarms o equivalente):
+## 6. Rollback plan
 
-- [ ] `Checkout-5xx-ErrorRate` – soglia 1% per 5 min
-- [ ] `Checkout-PayPal-Latency-p95` – soglia 3 s per 10 min
-- [ ] `Checkout-CompletionRate-Drop` – riduzione > 5% vs baseline
-- [ ] `Checkout-Cost-Monthly-Increase` – aumento > 15% vs media 30 giorni
+Triggers: 5xx > 1% for 5 min; completion deterioration > 5%; COST-03 breach.
 
----
+1. Disable checkout.paypal.enabled for affected/all tenants.
+2. Verify errors return to normal and completion stabilizes.
+3. Document incident/post-mortem/internal note.
+4. Revise rollout plan when necessary.
 
-## 6. Piano di rollback
+<a id="7-responsabilità-e-comunicazione"></a>
 
-**Trigger di rollback**:
+## 7. Communication and support
 
-- Error rate 5xx > 1% per 5 min
-- Peggioramento tasso di completamento > 5%
-- Aumento costo oltre soglie DoD (COST-03)
+- [ ] Inform Support/Customer Success, Ops/SRE and relevant stakeholders before rollout.
+- [ ] Record operational contacts/on-call and escalation channels.
+- [ ] Communicate rollout status, pauses and rollback decisions.
+- [ ] Update [dashboard / status page].
 
-**Azioni**:
+<a id="8-storico-esecuzioni"></a>
 
-1. Disabilita flag `checkout.paypal.enabled` per i tenant interessati (o tutti).
-2. Verifica che:
-   - error rate torni nella norma
-   - tasso di completamento si stabilizzi
-3. Documenta l’incidente (post-mortem / nota interna).
-4. Ridefinisci piano di rollout (se necessario).
+## 8. Execution history
 
----
+| Date | Stage | Outcome | Notes |
+|---|---|---|---|
+| YYYY-MM-DD | 1 | completed | No critical errors |
+| YYYY-MM-DD | 2 | completed | Slight latency increase within threshold |
+| YYYY-MM-DD | 3 | in progress | Monitoring ongoing |
 
-## 7. Responsabilità e comunicazione
+<a id="maturità-e-policy-delle-verifiche"></a>
 
-- **Owner rollout**: [@persona]
-- **On-call durante rollout**: [@persona / @team]
-- **Comunicazione**:
-  - [ ] Avviso a Supporto / Customer Success prima di ogni fase
-  - [ ] Canale Slack / Teams dedicato: `#checkout-paypal-rollout`
-  - [ ] Aggiornamento stato su [dashboard / pagina di stato]
+## Maturity and verification policy
 
----
+- Domain mode: development-only / release-preparation.
+- CI required: yes / no; rationale based on risk and target.
+- Final suite: command, environment, date, result and reference to the real log.
+- Questions/requirements deferred to pre-release: owner and activation condition.
 
-## 8. Storico esecuzioni
+In development-only, finish design and proportionate checks without prematurely requiring CI, rollout, on-call or release communications. Release checklists apply when preparing distribution. Before release reassess risk/policy, reconfirm reviews and refresh evidence. Deferred work must not be marked executed.
 
-| Data       | Fase | Esito      | Note                                    |
-|------------|------|------------|-----------------------------------------|
-| YYYY-MM-DD | 1    | completata | Nessun errore critico                   |
-| YYYY-MM-DD | 2    | completata | Leggero aumento latenza, entro soglie   |
-| YYYY-MM-DD | 3    | in corso   | Monitoraggio in corso                   |
+<a id="proporzionalità-e-collaborazione"></a>
 
-## Maturità e policy delle verifiche
+## Proportionality and collaboration
 
-- Modalità del dominio: solo sviluppo / preparazione al rilascio.
-- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
-- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
-- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
-
-In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
-
-## Proporzionalità e collaborazione
-
-Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.
+First consider rapid for scoped noncritical fixes, using one [quick change record](cambiamento_rapido.md) rather than completing this entire template. Match light/full detail to risk. Owner and checks are required; PRs, independence and integrated checks depend on [optional team conventions](collaborazione.md). Solo developers do not simulate roles or communications. Reuse applicable reviews; test failure effects and important regressions.

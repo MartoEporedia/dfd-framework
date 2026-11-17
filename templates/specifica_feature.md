@@ -1,267 +1,208 @@
-<!-- dfd-language --> [Italiano](specifica_feature.md) | [English](../en/templates/specifica_feature.md)
+<!-- dfd-language --> [English](specifica_feature.md) | [Italiano](../it/templates/specifica_feature.md)
 
-# Specifica di Feature – [Nome Feature]
+<a id="specifica-di-feature--nome-feature"></a>
 
-> **Stato**: draft / in review / approvata / implementata  
-> **Data creazione**: YYYY-MM-DD  
-> **Proprietari**: [@team / @persona]  
-> **Servizio / Dominio**: [es. Checkout, Pagamenti, Catalogo]  
-> **Riferimenti**:
-> - [DoD Estesa – Servizio X]
-> - [Architecture Guardrails]
-> - [ADR correlati]
-> - [Ticket / Epic]
+# Feature specification – [Feature Name]
 
----
+> **Status**: draft / in review / approved / implemented  
+> **Created**: YYYY-MM-DD  
+> **Owners**: [@team / @person]  
+> **Service / Domain**: [Checkout, Payments, Catalog]  
+> **References**: [Extended DoD], [Architecture Guardrails], [Related ADRs], [Ticket / Epic].
 
-## 1. Contesto e obiettivo
+<a id="1-contesto-e-obiettivo"></a>
 
-**Contesto**:  
-[Breve descrizione del contesto: problema da risolvere, opportunità, richiesta business, ecc.]
+## 1. Context and objective
 
-**Obiettivo**:  
-[Cosa deve ottenere questa feature in termini di valore per l'utente / business]
+Context: [problem/opportunity/business request]. Objective: [user/business value]. Boundaries: [primary domain, involved Payment/Inventory/Notification services, explicit exclusions]. No-go: [what the feature must not do or add, even if it looks useful].
 
-**Confini**:  
-- Dominio / servizio interessato: [es. Checkout]
-- Servizi / sistemi coinvolti: [es. Payment Service, Inventory Service, Notification Service]
-- Fuori scope: [cosa esplicitamente non è incluso]
-- No-go: [cosa la feature non deve fare o aggiungere, anche se sembrerebbe utile]
+Appetite: [how much time the result is worth to the requester: a limit to respect, not an estimate. If the specification does not fit, reduce the scope or split the feature.]
 
-**Appetite**:  
-[Quanto tempo vale il risultato per chi lo chiede: un limite da rispettare, non una stima. Se la specifica non ci sta, si riduce l'ambito o si divide la feature.]
+Original request:
 
-**Richiesta originale**:
+- Requester's words, quoted verbatim with source and date: [quote]
+- Assumptions (choices made without asking, one per line, with rationale): [list]
 
-- Parole del richiedente, riportate alla lettera con fonte e data: [citazione]
-- Assunzioni (scelte fatte senza chiedere, una per riga, con motivazione): [elenco]
+The objective fits in one sentence. If it needs two objectives joined by "and", consider two separate features.
 
-L'obiettivo sta in una frase. Se servono due obiettivi collegati da "e", valutare due feature distinte.
+<a id="2-descrizione-funzionale"></a>
 
----
+## 2. Functional description
 
-## 2. Descrizione funzionale
+<a id="21-scenari-principali"></a>
 
-### 2.1 Scenari principali
+### 2.1 Main scenarios
 
-- **Scenario 1**: [nome scenario]
-  - Attori: [es. utente, sistema]
-  - Precondizioni: [es. utente autenticato, carrello non vuoto]
-  - Flusso:
-    1. [step 1]
-    2. [step 2]
-    3. [step 3]
-  - Postcondizioni: [es. ordine creato, notifica inviata]
+- Scenario 1: [name].
+  - Actors: [user/system].
+  - Preconditions: [authenticated user, nonempty cart].
+  - Flow: [steps 1–3].
+  - Postconditions: [order created, notification sent].
+- Scenario 2: [same structure].
 
-- **Scenario 2**: [nome scenario]
-  - ...
+<a id="22-casi-duso--user-story"></a>
 
-### 2.2 Casi d'uso / user story
+### 2.2 Use cases / user stories
 
-- Come [tipo di utente], voglio [obiettivo], in modo che [beneficio].
-- Come [tipo di utente], voglio [obiettivo], in modo che [beneficio].
+- As [user], I want [goal], so that [benefit].
+- As [user], I want [goal], so that [benefit].
 
-### 2.3 Interfacce e contratti
+<a id="23-interfacce-e-contratti"></a>
 
-**API esposte / modificate**:
+### 2.3 Interfaces and contracts
 
-- `METHOD /path` – [breve descrizione]
-  - Request: [campi principali]
-  - Response: [campi principali]
-  - Errori possibili: [codici e significato]
+API: `METHOD /path` – [description], request/response fields and error codes/meaning. Events: [name, producer, consumers, payload]. External dependencies: [Payment/Inventory/etc.]. Existing behavior extended, not replaced: [command / API / component the feature extends, and what stays unchanged].
 
-**Eventi pubblicati / consumati**:
+<a id="24-stati-e-casi-non-previsti"></a>
 
-- Evento: `[NomeEvento]`
-  - Pubblicato da: [servizio]
-  - Consumato da: [servizi]
-  - Payload (campi principali): [elenco]
+### 2.4 Unforeseen states and cases
 
-**Dipendenze esterne**:
+The specification cannot list every possible case. Instead it defines what happens when the system reaches a state the specification does not foresee:
 
-- [Payment Service, Inventory Service, ecc.]
+- [ ] Reaction: [e.g. "the process exits with an explicit error and the supervisor restarts it", "the request fails with a dedicated `errorCode`", "the feature degrades in a declared way"]
+- [ ] Observable signal: [log, metric or alarm that makes the event visible] (OBS-xx)
+- [ ] Recovery: [who or what returns the system to a foreseen state, without losing or duplicating work]
 
-**Comportamento esistente esteso, non sostituito**:
+Not allowed: continuing silently, replacing a missing value with an invented default, adding code the specification does not cover to hold the pieces together.
 
-- [Comando / API / componente che la feature estende, e cosa resta invariato]
+<a id="3-allineamento-alla-dod-estesa"></a>
 
-### 2.4 Stati e casi non previsti
+## 3. Extended DoD alignment
 
-La specifica non può elencare ogni caso possibile. Definisce invece cosa succede quando il sistema si trova in uno stato che la specifica non prevede:
+Evaluate relevant domain criteria; values below illustrate the Checkout/promotion example and must be adapted.
 
-- [ ] Reazione: [es. "il processo termina con errore esplicito e il supervisore lo riavvia", "la richiesta fallisce con `errorCode` dedicato", "la funzionalità degrada in modo dichiarato"]
-- [ ] Segnale osservabile: [log, metrica o allarme che rende visibile l'evento] (OBS-xx)
-- [ ] Recupero: [chi o cosa riporta il sistema in uno stato previsto, senza perdere né duplicare lavoro]
+<a id="31-osservabilità"></a>
 
-Non sono ammessi: proseguire in silenzio, sostituire un valore mancante con un default inventato, aggiungere codice non coperto dalla specifica per tenere insieme i pezzi.
+### 3.1 Observability
 
----
+- [ ] OBS-01: requests/errors/latency for endpoints, e.g. ALB metrics for `POST /checkout/promo`.
+- [ ] OBS-02: structured `tenantId`, `userId`, `operation`, `outcome`, `errorCode`, `traceId`; e.g. `PROMO_INVALID`, `PROMO_EXPIRED`.
+- [ ] OBS-03: trace ID in logs/metrics, propagated via X-Ray to Payment Service.
+- [ ] OBS-04: service/business dashboards, e.g. Promo Usage in checkout-business.
+- [ ] Custom `PromoApplied` count with `tenantId`, `promoCode`, `outcome`.
+- [ ] Custom `PromoFailed` count with `tenantId`, `errorCode`.
 
-## 3. Allineamento alla DoD Estesa
+<a id="32-sicurezza"></a>
 
-Questa feature soddisfa i seguenti criteri della **DoD Estesa** del servizio [Nome Servizio]:
+### 3.2 Security
 
-### 3.1 Osservabilità
+- [ ] SEC-01: IAM controls for endpoints/ECS tasks, e.g. restrict Promo table access.
+- [ ] SEC-02: no plaintext sensitive log data; no additional PII.
+- [ ] SEC-03: order/payment audit, e.g. PromoApplied with userId, tenantId, timestamp.
+- [ ] New audit events: `PromoApplied` (who, when, which promotion).
 
-- [ ] **OBS-01** – Metriche obbligatorie per endpoint  
-  Implementazione: [es. "nuovo endpoint `POST /checkout/promo` esposto su ALB, metriche request/error/latency già disponibili"]
-- [ ] **OBS-02** – Log strutturati con tenantId, userId, operation, outcome, errorCode, traceId  
-  Implementazione: [es. "log per applicazione promo con errorCode `PROMO_INVALID`, `PROMO_EXPIRED`"]
-- [ ] **OBS-03** – Trace ID presente su log e metriche  
-  Implementazione: [es. "traceId X-Ray propagato a Payment Service"]
-- [ ] **OBS-04** – Dashboard servizio e business  
-  Implementazione: [es. "nuovo pannello 'Promo Usage' nella dashboard checkout-business"]
+<a id="33-affidabilità--slo"></a>
 
-**Nuove metriche custom (se applicabile)**:
+### 3.3 Reliability / SLOs
 
-- [ ] `PromoApplied` (conteggio promo applicati con successo)
-  - Dimensioni: `tenantId`, `promoCode`, `outcome`
-- [ ] `PromoFailed` (conteggio fallimenti applicazione promo)
-  - Dimensioni: `tenantId`, `errorCode`
+- [ ] SLO-01: 99.9% monthly availability; [impact on existing ECS infrastructure].
+- [ ] SLO-02: checkout p95 < 2.5 s; [for example promotion overhead < 100 ms].
+- [ ] SLO-03: `POST /checkout` 5xx < 0.5%; expected 4xx PROMO_INVALID excluded.
+- [ ] New risks: [Promo Service failure degrades checkout].
+- [ ] Mitigation: [checkout without promotion, clear user error].
 
-### 3.2 Sicurezza
+<a id="34-costo"></a>
 
-- [ ] **SEC-01** – Controlli di accesso IAM per endpoint e task ECS  
-  Implementazione: [es. "nuova policy per ruolo ECS che limita accesso a tabella Promo"]
-- [ ] **SEC-02** – Nessun dato sensibile in chiaro nei log  
-  Implementazione: [es. "promoCode loggato, nessun dato PII aggiuntivo"]
-- [ ] **SEC-03** – Audit log per creazione ordine e tentativo di pagamento  
-  Implementazione: [es. "evento `PromoApplied` loggato con userId, tenantId, timestamp"]
+### 3.4 Cost
 
-**Nuovi eventi di audit (se applicabile)**:
+- [ ] COST-01: tags service/team/env/costCenter; [new resources or code only].
+- [ ] COST-02: significant-change estimate, e.g. +2% monthly CPU cost.
+- [ ] COST-03: +15% monthly/+20% transaction alarm thresholds; [expected impact].
+- Estimated monthly increase: [X EUR / %].
+- Estimated transaction increase: [Y EUR / %].
 
-- [ ] `PromoApplied` – loggato per audit (chi, quando, quale promo)
+<a id="35-esperienza-utente--business-kpi"></a>
 
-### 3.3 Affidabilità / SLO
+### 3.5 UX / business KPIs
 
-- [ ] **SLO-01** – Disponibilità 99.9% mensile  
-  Impatto: [es. "nessun impatto, usa stessa infrastruttura ECS esistente"]
-- [ ] **SLO-02** – Latenza p95 < 2.5 s per flusso checkout  
-  Impatto: [es. "latenza aggiuntiva stimata < 100 ms per applicazione promo"]
-- [ ] **SLO-03** – Error rate 5xx < 0.5% su `POST /checkout`  
-  Impatto: [es. "nuovi errorCode 4xx (PROMO_INVALID) non contano nel 5xx"]
+- [ ] UX-01: completion monitoring, including abandonment if promotion fails.
+- [ ] UX-02: no > 5% completion drop; compare tenant rollout to 14-day baseline.
 
-**Nuovi rischi per affidabilità**:
+<a id="4-guardrail-globali"></a>
 
-- [ ] [es. "dipendenza da Promo Service: se down, checkout degradato"]
+## 4. Global guardrails
 
-**Mitigazioni**:
+- [ ] Architecture: [Promo Service cannot access order DB directly].
+- [ ] Security: [no PII shared with unauthorized systems].
+- [ ] Observability: [standard JSON logs].
+- [ ] Cost: [no domain budget overrun without approval].
+- [ ] Exceptions: [description, rationale, approval].
 
-- [ ] [es. "fallback: checkout senza promo, errore chiaro all'utente"]
+<a id="5-test-e-validazione"></a>
 
-### 3.4 Costo
+## 5. Tests and validation
 
-- [ ] **COST-01** – Tagging minimo (service, team, env, costCenter)  
-  Implementazione: [es. "nessuna nuova risorsa, solo codice aggiuntivo"]
-- [ ] **COST-02** – Stima impatto sul costo per cambiamento significativo  
-  Stima: [es. "+2% costo mensile stimato per aumento CPU dovuto a logica promo"]
-- [ ] **COST-03** – Soglie di allarme costo (+15% mensile, +20% per transazione)  
-  Impatto: [es. "nessun superamento soglie atteso"]
+Every check states what is observed and how: a test, a command, or a manual check with the reason it cannot be automated. Terms such as "correctly", "works", "as expected", "fast" or "user-friendly" cannot be checked: use them only when quoting the requester, and translate them into an observable result.
 
-**Stima impatto economico**:
+<a id="51-test-funzionali"></a>
 
-- Costo mensile aggiuntivo stimato: [X EUR / %]
-- Costo per transazione aggiuntivo stimato: [Y EUR / %]
+### 5.1 Functional tests
 
-### 3.5 Esperienza utente / business KPI
+- [ ] Promotion logic unit tests.
+- [ ] `POST /checkout/promo` integration tests.
+- [ ] Cart → promotion → checkout E2E tests.
 
-- [ ] **UX-01** – Monitoraggio tasso di completamento checkout  
-  Impatto: [es. "da monitorare eventuale aumento abbandono se promo fallisce"]
-- [ ] **UX-02** – Nessuna riduzione > 5% del tasso di completamento su rollout  
-  Piano di validazione: [es. "rollout per tenant con confronto baseline 14 giorni"]
+<a id="52-test-non-funzionali"></a>
 
----
+### 5.2 Nonfunctional tests
 
-## 4. Guardrail globali
+- [ ] Load/latency (SLO-02).
+- [ ] Resilience: Promo Service down → fallback.
+- [ ] Security: unauthorized endpoint access.
 
-Questa feature opera entro i seguenti **guardrail globali**:
+<a id="53-validazione-in-produzione-shift-right"></a>
 
-- [ ] **Architetturali**: [es. "nessun accesso diretto al DB ordini da parte del Promo Service"]
-- [ ] **Sicurezza**: [es. "nessun dato PII condiviso con sistemi non autorizzati"]
-- [ ] **Osservabilità**: [es. "tutti i nuovi log seguono formato JSON standard"]
-- [ ] **Costo**: [es. "nessun superamento budget di dominio senza approvazione"]
+### 5.3 Production validation (shift-right)
 
-**Eccezioni ai guardrail (se applicabile)**:
+- [ ] Canary: errors, latency, PromoApplied/PromoFailed; [rollback, e.g. 5xx > 1% for 5 min].
+- [ ] Tenant rollout: UX-02 holds; [e.g. 10% → 50% → 100%].
 
-- [ ] [descrivere eccezione, motivazione, approvazione]
+<a id="6-piano-di-rilascio"></a>
 
----
+## 6. Release plan
 
-## 5. Test e validazione
+- [ ] Flag: [name/system, e.g. AppConfig].
+- [ ] Stages: staging → 10% production tenants → 50% → 100%.
+- [ ] Promotion: errors below threshold, no negative UX-02 impact.
+- [ ] Rollback: error threshold or UX-02 deterioration.
 
-Ogni verifica indica che cosa si osserva e come: test, comando, oppure controllo manuale con il motivo per cui non è automatizzabile. Termini come "correttamente", "funziona", "come previsto", "veloce" o "user-friendly" non sono verificabili: usarli solo citando il richiedente, e tradurli in un risultato osservabile.
+<a id="7-aperture-e-decisioni-da-prendere"></a>
 
-### 5.1 Test funzionali
+## 7. Open questions and decisions
 
-- [ ] Test unitari per logica applicazione promo
-- [ ] Test di integrazione per endpoint `POST /checkout/promo`
-- [ ] Test end-to-end per flusso completo (carrello → applicazione promo → checkout)
+- [ ] Decide whether Promo Service needs a circuit breaker.
+- [ ] Evaluate a promotion duration metric.
 
-### 5.2 Test non funzionali
+Criteria added during development:
 
-- [ ] Test di carico per verificare impatto su latenza (SLO-02)
-- [ ] Test di resilienza (Promo Service down → fallback)
-- [ ] Test di sicurezza (accesso non autorizzato a endpoint promo)
+- [ ] [criterion or scenario, who proposes it, date, requester's words it is consistent with, review outcome]
 
-### 5.3 Validazione in produzione (shift-right)
+<a id="8-riferimenti-e-allegati"></a>
 
-- [ ] Canary tecnico:
-  - Metriche monitorate: error rate, latency, custom metric `PromoApplied`, `PromoFailed`
-  - Soglie di rollback: [es. error rate 5xx > 1% per 5 min]
-- [ ] Rollout per tenant / segmento:
-  - Criteri di successo: nessun peggioramento > 5% del tasso di completamento (UX-02)
-  - Piano: [es. 10% tenant → 50% → 100%]
+## 8. References and attachments
 
----
+[Wireframes/mockups], [technical documents], [ticket/epic].
 
-## 6. Piano di rilascio
+<a id="9-storico-revisioni"></a>
 
-- [ ] Feature flag: [nome flag, sistema (es. AppConfig)]
-- [ ] Fasi di rollout:
-  1. [es. ambiente staging]
-  2. [es. 10% tenant prod]
-  3. [es. 50% tenant prod]
-  4. [es. 100% tenant prod]
-- [ ] Criteri di promozione:
-  - [es. error rate < soglia, nessun impatto negativo su UX-02]
-- [ ] Criteri di rollback:
-  - [es. error rate > soglia, peggioramento UX-02]
+## 9. Revision history
 
----
+- YYYY-MM-DD: initial draft.
+- YYYY-MM-DD: [change].
 
-## 7. Aperture e decisioni da prendere
+<a id="maturità-e-policy-delle-verifiche"></a>
 
-- [ ] [es. "decidere se implementare circuit breaker su Promo Service"]
-- [ ] [es. "valutare se aggiungere metrica per tempo medio applicazione promo"]
+## Maturity and verification policy
 
-**Criteri aggiunti durante lo sviluppo**:
+- Domain mode: development-only / release-preparation.
+- CI required: yes / no; rationale based on risk and target.
+- Final suite: command, environment, date, result and reference to the real log.
+- Questions/requirements deferred to pre-release: owner and activation condition.
 
-- [ ] [criterio o scenario, chi lo propone, data, parole del richiedente con cui è coerente, esito della review]
+In development-only, finish design and proportionate checks without prematurely requiring CI, rollout, on-call or release communications. Release checklists apply when preparing distribution. Before release reassess risk/policy, reconfirm reviews and refresh evidence. Deferred work must not be marked executed.
 
----
+<a id="proporzionalità-e-collaborazione"></a>
 
-## 8. Riferimenti e allegati
+## Proportionality and collaboration
 
-- [Link a wireframe / mockup]
-- [Link a documenti tecnici correlati]
-- [Link a ticket / epic]
-
----
-
-## 9. Storico revisioni
-
-- YYYY-MM-DD: versione iniziale (draft)
-- YYYY-MM-DD: [descrizione modifica]
-
-## Maturità e policy delle verifiche
-
-- Modalità del dominio: solo sviluppo / preparazione al rilascio.
-- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
-- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
-- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
-
-In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
-
-## Proporzionalità e collaborazione
-
-Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.
+First consider rapid for scoped noncritical fixes, using one [quick change record](cambiamento_rapido.md) rather than completing this entire template. Match light/full detail to risk. Owner and checks are required; PRs, independence and integrated checks depend on [optional team conventions](collaborazione.md). Solo developers do not simulate roles or communications. Reuse applicable reviews; test failure effects and important regressions.

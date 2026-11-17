@@ -1,74 +1,96 @@
-<!-- dfd-language --> [Italiano](specifica_feature.md) | [English](../en/templates/specifica_feature.md)
+<!-- dfd-language --> [English](specifica_feature.md) | [Italiano](../it/templates/specifica_feature.md)
 
-# Specifica di Feature – [Nome Feature]
+<a id="specifica-di-feature--nome-feature"></a>
 
-> **Stato**: draft  
-> **Data creazione**: YYYY-MM-DD  
-> **Proprietari**: TODO  
-> **Servizio / Dominio**: TODO  
+# Feature specification – [Feature Name]
+
+> **Status**: draft  
+> **Created**: YYYY-MM-DD  
+> **Owners**: TODO  
+> **Service / Domain**: TODO  
 > **Epic / Ticket**: TODO
 
-## 1. Contesto, obiettivo e ambito
+<a id="1-contesto-obiettivo-e-ambito"></a>
 
-- Problema e valore atteso: TODO
-- Metriche di successo: TODO
-- Componenti modificati: TODO
-- Fuori scope: TODO
-- Nel brownfield: processi esistenti da riusare e lacune baseline pertinenti: TODO
+## 1. Context, objective and scope
 
-## 2. Classificazione del rischio
+- Problem/expected value: TODO
+- Success metrics: TODO
+- Changed components: TODO
+- Out of scope: TODO
+- Brownfield processes to reuse and relevant baseline gaps: TODO
 
-- Riferimento all'assessment: TODO
-- Rischio e percorso light/full: TODO
-- Motivazioni e dati ancora mancanti: TODO
+<a id="2-classificazione-del-rischio"></a>
 
-## 3. Comportamenti e contratti
+## 2. Risk classification
 
-- Scenari principali e criteri di accettazione: TODO
-- Errori, failure mode e comportamenti degradati: TODO
-- API, eventi, dati e dipendenze coinvolti: TODO
-- Compatibilità e migrazioni, se necessarie: TODO
+- Assessment reference: TODO
+- Risk and light/full route: TODO
+- Rationale/missing facts: TODO
 
-## 4. Allineamento alla DoD del dominio
+<a id="3-comportamenti-e-contratti"></a>
 
-Usare gli identificatori reali della DoD. Valutare ogni criterio richiesto per i cambiamenti; motivare le esclusioni. Collegare le lacune baseline quando influenzano l'intervento.
+## 3. Behavior and contracts
 
-| Criterio DoD | Applicabilità | Implementazione o motivo di esclusione | Verifica prevista |
+- Main scenarios and acceptance criteria: TODO
+- Errors, failure modes and degradation: TODO
+- APIs, events, data and dependencies: TODO
+- Compatibility/migration if needed: TODO
+
+<a id="4-allineamento-alla-dod-del-dominio"></a>
+
+## 4. Domain DoD alignment
+
+Use actual domain IDs. Evaluate every changes criterion; justify exclusions. Link baseline gaps when they influence this change.
+
+| DoD criterion | Applicability | Implementation or exclusion rationale | Planned verification |
 |---|---|---|---|
 | TODO | TODO | TODO | TODO |
 
-## 5. Guardrail e decisioni
+<a id="5-guardrail-e-decisioni"></a>
 
-- Guardrail architetturali, di sicurezza, osservabilità e costo: TODO
-- Eccezioni motivate, responsabili e decisioni: TODO
-- Collegamenti a policy e ADR esistenti: TODO
+## 5. Guardrails and decisions
 
-## 6. Test e validazione prevista
+- Architecture/security/observability/cost guardrails: TODO
+- Justified exceptions, owners and decisions: TODO
+- Existing policies/ADRs: TODO
 
-- Test funzionali derivati dai criteri: TODO
-- Test non funzionali proporzionati al rischio: TODO
-- Verifiche manuali e loro evidenze attese: TODO
-- Piano di validazione in produzione, soglie e rollback: TODO
+<a id="6-test-e-validazione-prevista"></a>
 
-## 7. Domande aperte e review
+## 6. Planned tests and validation
 
-- Punti bloccanti da chiarire: TODO
-- Condizioni e responsabili: TODO
-- Riferimento alla review e alla decisione umana: TODO
+- Criterion-derived functional tests: TODO
+- Risk-proportionate nonfunctional tests: TODO
+- Manual checks/expected evidence: TODO
+- Production validation, thresholds and rollback: TODO
 
-## 8. Revisioni
+<a id="7-domande-aperte-e-review"></a>
 
-- YYYY-MM-DD: prima bozza
+## 7. Open questions and review
 
-## Maturità e policy delle verifiche
+- Blocking questions: TODO
+- Conditions/owners: TODO
+- Human review/decision reference: TODO
 
-- Modalità del dominio: solo sviluppo / preparazione al rilascio.
-- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
-- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
-- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
+<a id="8-revisioni"></a>
 
-In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
+## 8. Revisions
 
-## Proporzionalità e collaborazione
+- YYYY-MM-DD: initial draft.
 
-Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.
+<a id="maturità-e-policy-delle-verifiche"></a>
+
+## Maturity and verification policy
+
+- Domain mode: development-only / release-preparation.
+- CI required: yes / no; rationale based on risk and target.
+- Final suite: command, environment, date, result and reference to the real log.
+- Questions/requirements deferred to pre-release: owner and activation condition.
+
+In development-only, finish design and proportionate checks without prematurely requiring CI, rollout, on-call or release communications. Release checklists apply when preparing distribution. Before release reassess risk/policy, reconfirm reviews and refresh evidence. Deferred work must not be marked executed.
+
+<a id="proporzionalità-e-collaborazione"></a>
+
+## Proportionality and collaboration
+
+First consider rapid for scoped noncritical fixes, using one [quick change record](cambiamento_rapido.md) rather than completing this entire template. Match light/full detail to risk. Owner and checks are required; PRs, independence and integrated checks depend on [optional team conventions](collaborazione.md). Solo developers do not simulate roles or communications. Reuse applicable reviews; test failure effects and important regressions.

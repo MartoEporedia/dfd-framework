@@ -1,23 +1,23 @@
 ---
 name: dfd-init
-description: Introdurre DFD in un repository nuovo o esistente, scegliere domini pilota e costruire assessment di adozione, DoD e guardrail. Usare per onboarding DFD, non per classificare il rischio di una singola feature.
+description: Introduce DFD in a new or existing repository, choose pilot domains and build adoption assessment, DoD and guardrails. Use for onboarding, not individual feature risk classification.
 ---
 
-<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-init/SKILL.md)
+<!-- dfd-language --> [English](SKILL.md) | [Italiano](../../it/skills/dfd-init/SKILL.md)
 
-# Adozione di DFD
+<a id="adozione-di-dfd"></a>
 
-Le risorse del toolkit sono in `.dfd/kit/` nel repository adottante. Prima dell'installazione usare i corrispondenti file alla radice del toolkit. Leggere `.dfd/kit/adozione.md` solo se il prodotto esiste già, e `.dfd/kit/fondamenta.md` per definire la DoD.
+<a id="percorso"></a>
 
-## Percorso
+# Adopting DFD
 
-1. Rispettare le istruzioni del repository. Identificare harness, dominio e ambito; usare `brownfield` quando esistono già codice o processi. In un repository esistente riusare policy, test, CI, monitoring e review, indicando le fonti realmente lette.
-2. Scegliere la lingua del progetto: `--lang it` o `--lang en` su init; senza scelta esplicita riprendere la preferenza esistente, oppure italiano per un nuovo progetto. Non tradurre documenti già compilati. Eseguire `dfd init --harness <adapter> --domain <dominio> --mode brownfield`. Per un altro repository usare `dfd --project <repo> init ...`. Se il binario non è nel PATH, usare il percorso fornito dall’utente. Gli adapter sono `claude-code`, `opencode`, `copilot`, `codex`.
-3. Compilare `.dfd/domains/<dominio>/adoption.json`: processo, osservabilità, sicurezza, SLO, costo, cultura. `status` è `observed`, `gap` o `unknown`; `evidence` contiene riferimenti alle fonti, non supposizioni. Motivare livello attuale e target nel documento `assessment.md`.
-4. Nel brownfield proporre 1–2 domini pilota e 3–5 interventi, senza migrare tutto il legacy. Registrare lacune in `baseline_gaps` e passi incrementali in `next_steps`. Non dichiarare il livello target raggiunto solo perché sono stati creati i file.
-5. Adattare `dod.md` e `criteria.json` alla realtà del dominio. Ogni criterio ha `id`, `statement`, `scope`: `changes` per requisiti del nuovo lavoro, `baseline` per obiettivi di miglioramento dell'esistente. Usare identificatori `OBS-01`, `SEC-01`, `SLO-01`, `COST-01`, `UX-01`; conservare quelli già presenti. Non inventare SLO o soglie: marcare i punti da chiarire.
-6. Completare la Fase 0 con `dfd-setup`: collegare `.dfd/domains/<dominio>/guardrails.md` alle policy esistenti e agli eventuali guardrail comuni `.dfd/guardrails.md`; documentare convenzioni in `process.md` e adattamenti nei template locali. Separare fatti osservati, proposte e informazioni mancanti. Chiedere input mirati solo sui punti che impediscono di definire il pilota.
+Resources live in `.dfd/kit/` in the adopting repository; before installation use the corresponding toolkit-root files. Read `.dfd/kit/adozione.md` for existing products and `.dfd/kit/fondamenta.md` for DoD definition.
 
-Riferimento per formati e comandi: `.dfd/kit/templates/contratto_toolkit.md`. L'inizializzazione è ripetibile e preserva gli artefatti esistenti. Le review DFD si aggiungono alle review del team. Al termine indicare dominio pilota, lacune note e stato della Fase 0 verificato con `dfd setup --domain <dominio>` e prima feature da trattare con `dfd-assess`.
+1. Respect repository instructions. Identify harness, domain and scope; choose brownfield for existing code/processes. Reuse existing policy, tests, CI, monitoring and review, citing sources actually read.
+2. Run `dfd init --harness <adapter> --domain <domain> --mode brownfield`; for another repository use `dfd --project <repo> init ...`. Use the supplied binary path if outside PATH. Adapters: claude-code, opencode, copilot, codex. English is the default for a new project; select `--lang it` for an Italian one. Existing preferences are preserved unless explicitly changed.
+3. Complete `.dfd/domains/<domain>/adoption.json`: process, observability, security, reliability, cost and culture. Status is observed/gap/unknown; evidence references real sources. Explain current/target levels in assessment.md.
+4. For brownfield choose 1–2 pilot domains and 3–5 changes, keeping baseline_gaps/next_steps separate. Creating files does not demonstrate target adoption.
+5. Adapt dod.md and criteria.json. Each criterion has id, statement and scope: changes for new work, baseline for existing-system improvements. Preserve OBS-01, SEC-01, SLO-01, COST-01, UX-01 and existing IDs. Clarify unknown SLOs/thresholds rather than inventing them.
+6. Complete Phase 0 with dfd-setup: domain guardrails link relevant `.dfd/guardrails.md` and existing policies; process.md and local templates record conventions/adaptations. Distinguish observations, proposals and missing information; ask only what blocks a useful pilot.
 
-Concordare la maturità nel setup: solo sviluppo se CI e distribuzione sono premature, preparazione al rilascio quando si pianifica la distribuzione. Dichiarare lifecycle.json con motivazione tramite dfd-setup; init preserva i domini esistenti e non cambia implicitamente la policy.
+Use `.dfd/kit/templates/contratto_toolkit.md` for formats/commands. Initialization is repeatable and preserves artifacts. Reviews overlay team reviews. Report pilot domain, gaps, actual `dfd setup --domain <domain>` result and first feature for dfd-assess. Agree maturity: development-only while CI/distribution are premature, release-preparation when distributing. Declare justified lifecycle.json with dfd-setup; init never silently changes existing policy.

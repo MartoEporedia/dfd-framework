@@ -87,10 +87,5 @@
   ],
   "test_plan": "Red/green: default en senza language.json (status, help, init), it preservato con language.json o --lang, bundle en dai percorsi originali e it da it/; test esistenti aggiornati senza indebolire le asserzioni; test_release_notes.py sui nuovi percorsi; mutanti language-resource-selection, language-persistence e nuovo mutante sul default; check_translations con 0 errori; binario candidato su un progetto copiato senza language.json e su uno in it; CI reale sulla PR.",
   "guardrails": "Nessuna perdita di contenuto (git mv, testo invariato salvo link e navigazione); artefatti .dfd intatti; contratti JSON e forma del bundle installato invariati; nessuna dipendenza nuova.",
-  "open_questions": [
-    "Gli alias <a id> con slug italiani restano nei file inglesi (proposta: sì).",
-    "Il progetto dfd-kit stesso, senza language.json, passa ai messaggi inglesi mentre i suoi artefatti restano italiani (proposta: sì).",
-    "Il catalogo dei messaggi resta con sorgente italiana in Rust e i18n/en.json (proposta: sì, fuori scope).",
-    "La feature parte dal branch della PR #17 e va unita dopo di essa (proposta: sì)."
-  ]
+  "open_questions": []
 }
