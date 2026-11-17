@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "012-english-primary",
+  "title": "Inglese come lingua principale",
+  "domain": "dfd-kit",
+  "kind": "refactor",
+  "scope": "Inglese nei percorsi originali del framework e del toolkit, italiano spostato in it/ e dfd-kit/it/; link, navigazione, manifest delle traduzioni, build del bundle, script di release e AGENTS.md adattati; default della CLI en, anche per i progetti senza .dfd/language.json",
+  "phase": "design",
+  "created_at": "2026-11-17T22:31:41.813334Z",
+  "risk": "medium",
+  "route": "full-proportional",
+  "assessment_hash": "0aadd5dd867af6b7a94c1b2a35ec4e8284a372f24a6cff294d187e96edf67684",
+  "decisions": [],
+  "selective_review": true
+}
