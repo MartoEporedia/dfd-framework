@@ -13,7 +13,7 @@
 # End-to-end process – DoD-First Driven (DFD)
 
 > **Status**: draft / stable  
-> **Last updated**: 2026-10-08  
+> **Last updated**: 2026-11-17  
 > **Owners**: [@team / @person]  
 > **References**: [Foundations](fondamenta.md), [Extended DoD](templates/dod-estesa.md), [Review index](templates/review_indice.md).
 
@@ -27,7 +27,7 @@ Before feature work, establish a domain extended DoD, global guardrails, local t
 
 The setup establishes how domain DoDs and feature specifications are written, which global constraints apply and how templates/checklists are used. Adapt the [DoD template](templates/dod-estesa.md) to Checkout, Auth, Reporting or the actual domain, identifying observability, security, SLO, cost, UX and any standard service criteria. Keep stable IDs such as OBS-01, SEC-01, SLO-01 and COST-01.
 
-Domain guardrails specify architecture (tenant isolation/end-to-end traceability), security (no plaintext PII, minimum audit), shared SLOs and minimum metrics/logs. Choose unchanged or adapted templates explicitly; document domain-specific additions and review practices, ownership, artifact locations and how this setup evolves. The feature lifecycle assumes these shared artifacts already exist.
+Domain guardrails specify architecture (tenant isolation/end-to-end traceability), security (no plaintext PII, minimum audit), shared SLOs and minimum metrics/logs. Choose unchanged or adapted templates explicitly; document domain-specific additions and review practices, ownership, artifact locations and how this setup evolves. The feature lifecycle assumes these shared artifacts already exist. Update the setup also when the same kind of manual intervention keeps being needed to unblock work. Setup changes name categories of change, never past incidents: they must hold for features nobody has written yet.
 
 <a id="1-panoramica"></a>
 
@@ -55,9 +55,9 @@ Phase 0 is the domain prerequisite; eight feature phases follow: Idea/Epic, Desi
 
 **Objective:** turn the approved epic into a DoD-aligned feature specification. The specification itself is the design artifact; no separate “DFD Design” document is required.  
 **Inputs:** approved epic, domain/service extended DoD and architecture guardrails.  
-**Activities:** specify functional behavior, relevant OBS-xx, SEC-xx, SLO-xx, COST-xx and UX-xx criteria, guardrails and initial tests/validation.  
+**Activities:** record the requester's words verbatim, separate assumptions, appetite and no-go; specify functional behavior and the reaction to unforeseen states (explicit, observable failure, recovery); relevant OBS-xx, SEC-xx, SLO-xx, COST-xx and UX-xx criteria, guardrails and the DoD change-type constraints; initial tests/validation.  
 **Outputs:** draft specification and ADRs/architecture notes when decisions need recording.  
-**Exit:** main fields complete, relevant criteria referenced and guardrails checked with no known violation.
+**Exit:** main fields complete, relevant criteria referenced, reaction to unforeseen states defined and guardrails checked with no known violation.
 
 - [ ] Specification ready for design review.
 
@@ -79,9 +79,9 @@ Phase 0 is the domain prerequisite; eight feature phases follow: Idea/Epic, Desi
 
 **Objective:** implement through DoD-driven TDD.  
 **Inputs:** approved specification and extended DoD.  
-**Activities:** design unit/integration/E2E tests and relevant load/resilience/security tests; red → green code → refactor; implement structured logs, necessary custom metrics and trace IDs.  
+**Activities:** design unit/integration/E2E tests and relevant load/resilience/security tests; red → green code → refactor; implement structured logs, necessary custom metrics and trace IDs. Criteria that emerge during development: no code is added that no criterion or scenario of the specification justifies; when unspecified behavior is needed, the implementer proposes it as a criterion or scenario in the specification; review compares every added criterion with the requester's words. One that conflicts does not enter; a consistent one that changes the design invalidates the design review, which must be reconfirmed.  
 **Outputs:** code, test suite and observability instrumentation.  
-**Exit:** applicable tests pass, with a final local suite in development-only and CI according to justified domain release policy; coverage meets team standards; logs/metrics align with DoD.
+**Exit:** applicable tests pass, with a final local suite in development-only and CI according to justified domain release policy; coverage meets team standards; no code without a specification criterion or scenario that justifies it; logs/metrics align with DoD.
 
 - [ ] Development complete in development-only; ready for pre-release only in release-preparation.
 
@@ -115,9 +115,9 @@ Phase 0 is the domain prerequisite; eight feature phases follow: Idea/Epic, Desi
 
 **Objective:** release through controlled canary/tenant exposure.  
 **Inputs:** release review approval and rollout configuration.  
-**Activities:** execute technical canary and tenant/segment phases as planned; actively monitor errors/latency, completion/business KPIs and relevant cost; promote, stop or partially/fully roll back.  
+**Activities:** execute technical canary and tenant/segment phases as planned; actively monitor errors/latency, completion/business KPIs and relevant cost; promote, stop or partially/fully roll back. Check that the version is in use everywhere it is needed (environments, tenants, devices, clients): an external blocker, such as an offline device, resumes by itself once it clears; a step only a person can take becomes a single request with the exact action.  
 **Outputs:** completed/interrupted rollout, decision log and operational/incident notes.  
-**Exit:** success or documented interruption with mitigation plan.
+**Exit:** success, with the version in use at every planned place, or documented interruption with mitigation plan.
 
 - [ ] Feature considered released, including a documented rollback outcome.
 
@@ -127,7 +127,7 @@ Phase 0 is the domain prerequisite; eight feature phases follow: Idea/Epic, Desi
 
 **Objective:** consolidate learning and update DoD/guardrails.  
 **Inputs:** rollout outcome and post-release metrics/feedback.  
-**Activities:** compare business/SLO/cost/UX outcomes; identify successes, friction, incidents and near misses; propose DoD, guardrail and process improvements.  
+**Activities:** compare business/SLO/cost/UX outcomes; identify successes, friction, incidents and near misses; trace every issue to its cause (a mistake a check caught is normal operation and changes nothing; content missing from the specification means fixing the specification and the template or setup that did not ask for it; a wrong result nobody caught means clarifying why the specification allowed it, then fixing as above); measure the cost of the process (human interventions needed to unblock work, time and resources spent on verification) and consider a lighter route when the process costs more than it prevents; propose DoD, guardrail and process improvements.  
 **Outputs:** internal note/post-mortem where appropriate and proposed document changes.  
 **Exit:** learning documented/shared and improvement actions assigned.
 

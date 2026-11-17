@@ -3,7 +3,7 @@
 # Specifica di Feature – PayPal sul Checkout
 
 > **Stato**: esempio illustrativo, non approvato  
-> **Ultimo aggiornamento**: 2026-10-08  
+> **Ultimo aggiornamento**: 2026-11-17  
 > **Dominio**: Checkout  
 > **Riferimenti**: [DoD Checkout](checkout_dod.md), [Rischio](../rischio.md), [Adozione](../adozione.md)
 
@@ -33,6 +33,7 @@ L'intervento comprende avvio del pagamento, gestione della conferma, errori e ti
 - Conferma: il sistema verifica autenticità e correlazione della notifica prima di aggiornare lo stato dell'ordine.
 - Notifiche duplicate: la stessa conferma non deve produrre ordini o addebiti duplicati.
 - Fallimento o timeout: mostrare un errore comprensibile, conservare uno stato coerente e permettere una nuova scelta di pagamento.
+- Stato non previsto: una notifica del provider con uno stato di pagamento sconosciuto non aggiorna l'ordine. Il sistema registra l'evento con `errorCode` `PAYPAL_UNKNOWN_STATE` e lo segnala con un allarme (OBS-02); l'ordine resta in attesa di conferma, senza addebiti né annullamenti dedotti.
 
 Definire nella specifica reale contratti, stati, idempotenza, timeout e policy di retry del provider scelto. I retry non devono duplicare effetti finanziari.
 

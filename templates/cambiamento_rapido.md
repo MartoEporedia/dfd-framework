@@ -4,12 +4,14 @@
 
 - ID / owner:
 - Problema osservato:
-- Ambito circoscritto:
+- Parole del richiedente, alla lettera:
+- Ambito circoscritto e no-go:
 - Tipo: fix comportamentale / editoriale.
 - Contratto noto ripristinato (riferimento al design/DoD approvato):
 - Rischio: cinque dimensioni con livello e motivazione; tutte low per il rapido.
 - Contratti o guardrail modificati: no; comportamento critico: no; dubbi aperti: nessuno.
 - Criteri DoD pertinenti:
+- Stati non previsti toccati dal fix: reazione esplicita e osservabile, oppure "nessuno".
 - Verifiche scelte e perimetro motivato:
 - Fix: regressione red pertinente prima del green, con comandi, date, esiti e log.
 - Editoriale: verifica pertinente green; nessun red artificiale.

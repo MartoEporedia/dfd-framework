@@ -40,11 +40,18 @@
 ### 1.3 Affidabilità / SLO
 
 - [ ] Nessun impatto atteso su latenza, error rate o disponibilità.  
-- [ ] Nessuna nuova dipendenza esterna critica.
+- [ ] Nessuna nuova dipendenza esterna critica.  
+- [ ] Gli stati non previsti producono un fallimento esplicito e osservabile, mai una prosecuzione silenziosa.
 
 ### 1.4 Costo
 
 - [ ] Nessun impatto significativo sul costo del servizio.
+
+### 1.5 Qualità della specifica
+
+- [ ] Parole del richiedente alla lettera, assunzioni separate.  
+- [ ] Ogni verifica descrive un risultato osservabile, senza "correttamente", "funziona" o "come previsto" fuori da una citazione.  
+- [ ] Vincoli per tipo di cambiamento applicabili (DoD Estesa) rispettati.
 
 ---
 

@@ -5,7 +5,7 @@
 # DoD-First Driven (DFD) – Foundations
 
 > **Status**: draft / stable  
-> **Last updated**: 2026-10-08  
+> **Last updated**: 2026-11-17  
 > **Owners**: [@team / @person]  
 > **References**: [End-to-end process](processo-e2e.md), [Risk criteria](rischio.md), [RACI](raci.md), [Extended DoD](templates/dod-estesa.md), [Feature specification](templates/specifica_feature.md), [Rollout](templates/configurazione_rollout.md), [Checkout example](examples/checkout_dod.md), [PayPal example](examples/checkout_paypal_spec.md).
 
@@ -31,13 +31,13 @@ Done criteria are explicit, referenceable and used throughout every phase. Each 
 
 ### 2.2 Specification before code
 
-Start with a clear specification of behavior, interfaces and constraints. Reference applicable DoD criteria explicitly and stay within product guardrails for architecture, security, observability and cost.
+Start with a clear specification of behavior, interfaces and constraints. Reference applicable DoD criteria explicitly and stay within product guardrails for architecture, security, observability and cost. The specification cannot foresee every case: instead it defines what happens in unforeseen states, with an explicit, observable failure in place of silent continuation.
 
 <a id="23-test-derivati-dalla-dod"></a>
 
 ### 2.3 Tests derived from the DoD
 
-Every relevant criterion has at least one associated automated test. Tests verify compliance with the DoD as well as functional behavior. Criteria guide the test → code → refactor cycle.
+Every relevant criterion has at least one associated automated test. Tests verify compliance with the DoD as well as functional behavior. Criteria guide the test → code → refactor cycle. No code is written that no criterion or scenario justifies: behavior that emerges during development enters the specification first and is compared with the original request.
 
 <a id="24-validazione-continua-shift-right"></a>
 
