@@ -233,6 +233,137 @@
         "path": ".dfd/features/013-unforeseen-states-kit/evidence/06-ci.log",
         "sha256": "362fb6e0acdf2fb40af2817088f02b55e32931aad71f79751079bea967915bb0"
       }
+    },
+    {
+      "task": "kit-resources",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow kit_resources_adopt_unforeseen_states_revision",
+      "executed_at": "2026-11-18T13:26:45.750971Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/013-unforeseen-states-kit/evidence/07-exec-green-kit-resources.log",
+        "sha256": "48a9ec2ba7fc851ff4f2ce94f02c377d1c501c23087dd0bf083dbb3ce9dc4d78"
+      },
+      "snapshot": {
+        "fondamenta.md": "f2e075c90af95cdc56e405f16c1d8a0afc84aea22351dcaee094f617171dca7a",
+        "i18n/documents.json": "b657c86233dd6610f805d95ca1f17a9c04ed0bfab70b82d96926da354a37c31a",
+        "it/fondamenta.md": "4414f88e441a130f2cc10b2653d44a4a59cba80cae336220daa3f1bace390002",
+        "it/processo-e2e.md": "8b6a42af38663343fb05f914e6b49cfdd821e90306a24eef8764fa21d360064c",
+        "it/skills/dfd-implement/SKILL.md": "3d4400b59834682c19c1edad6832e4831d2792397d50be55fc4c8e81e47020b2",
+        "it/skills/dfd-review-design/SKILL.md": "3d563758ebf44ea5f76259b5cdac0cd5c2ed3b8fc3e4085691829d5efeb5c871",
+        "it/skills/dfd-specify/SKILL.md": "a982486b2a5a1d08b6969c1edfd9953542fd5f7194cc51324677884a0eafe6e7",
+        "it/skills/dfd-verify/SKILL.md": "89252e76a40a257a530b562bc6889cc002aab0abca05eb3c4d4a9a6f9418ab55",
+        "it/templates/cambiamento_rapido.md": "4fb34cbedf8aa0cc8a1f101d4d1524e71e0bcdffdd93e8fbe512be082ee962d3",
+        "it/templates/configurazione_rollout.md": "e7343b10f77c4a98b337e362c729224b3c9ec98875e69eb5bc8591731605c919",
+        "it/templates/dod-estesa.md": "312dc9f21de854d0a1722f7ce122cc019b8c1484c9ed25f0eadc4c031028f8a5",
+        "it/templates/review_design.md": "7febca97fee12fe9a16f5465575eed0befd13f2a97b1ee8037a67b39870a976c",
+        "it/templates/review_design_light.md": "5f0ab048ac058293e195c7e57ad04846e633decb0635c83385b8a54d0788a80e",
+        "it/templates/specifica_feature.md": "0be8c56e3151199dcaf66c489a768a21086ff2fc8a4c6bed7ef20a50b839ee5e",
+        "processo-e2e.md": "e3e1e61ce314ece6ac24d0f8222b2e3b21be80231ebedfd116b8796c0afe63ad",
+        "skills/dfd-implement/SKILL.md": "ca2f45210f01980c65335532571f084511ce77d4deb8b3a95e1e43a4c4174fb2",
+        "skills/dfd-review-design/SKILL.md": "e8484f3efe57623cd61728df7850aaecb958ce81556a257d4a1897ee9e4813d5",
+        "skills/dfd-specify/SKILL.md": "35070d12418187f0c8fcc5d06438d3a6a51cadde9c82814f3f05ff465e0607f2",
+        "skills/dfd-verify/SKILL.md": "f85e4df1e488c15b5d242b3be5164b15fe34a720deaa6c883c69479d8feba231",
+        "templates/cambiamento_rapido.md": "aad679c6b620789d9658cc5c3012e4419f24993920197134bed79dc14a948442",
+        "templates/configurazione_rollout.md": "d01c8736eb45bec00c5413b40409bd29e654f82e40c1c4099db600dbdd228a7b",
+        "templates/dod-estesa.md": "d2ef5baf7f7681ee47fc2c109c36710ac7173e048e82b4dee7c1312a8ed957fc",
+        "templates/review_design.md": "b398f0725090ea0e9391c537dfb60de51d9410722212ac71dc41e5c4fb4eb054",
+        "templates/review_design_light.md": "d664d658cdd5733690a3b81d586cbeb6cbe796a4453b7c410b0ee84eb51bdcac",
+        "templates/specifica_feature.md": "ca89857a5aef4c69692e880ca53947b87c2abd43681f8e1f5405122873ae11d7",
+        "tests/workflow.rs": "a246e1bd58c182923b3b7bdc175836bf35562dee7b2166be74ee8d9a0eae9d98"
+      },
+      "criteria_fingerprints": {
+        "SEC-02": "a6088c0f49bc39fd35c0b0c196084c98f08ab9e1fcb01e1082a4705677ba7bff",
+        "SLO-01": "77fa09b714cbd8a05cf248e1c5d5a6ef0c54dc6cabca20c6ae59d4589162a920",
+        "UX-01": "7e0699f4e4db98440d3004863b616a3ce3e02e1863bb92512fcd180bbc3b1b15"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "skills",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow skills_guide_unforeseen_states_and_added_criteria",
+      "executed_at": "2026-11-18T13:26:47.306850Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/013-unforeseen-states-kit/evidence/08-exec-green-skills.log",
+        "sha256": "5e0a2b7261a255fee45f85f4e18f1df08b90f11ad0590da8c0238b35ce065e7d"
+      },
+      "snapshot": {
+        "fondamenta.md": "f2e075c90af95cdc56e405f16c1d8a0afc84aea22351dcaee094f617171dca7a",
+        "i18n/documents.json": "b657c86233dd6610f805d95ca1f17a9c04ed0bfab70b82d96926da354a37c31a",
+        "it/fondamenta.md": "4414f88e441a130f2cc10b2653d44a4a59cba80cae336220daa3f1bace390002",
+        "it/processo-e2e.md": "8b6a42af38663343fb05f914e6b49cfdd821e90306a24eef8764fa21d360064c",
+        "it/skills/dfd-implement/SKILL.md": "3d4400b59834682c19c1edad6832e4831d2792397d50be55fc4c8e81e47020b2",
+        "it/skills/dfd-review-design/SKILL.md": "3d563758ebf44ea5f76259b5cdac0cd5c2ed3b8fc3e4085691829d5efeb5c871",
+        "it/skills/dfd-specify/SKILL.md": "a982486b2a5a1d08b6969c1edfd9953542fd5f7194cc51324677884a0eafe6e7",
+        "it/skills/dfd-verify/SKILL.md": "89252e76a40a257a530b562bc6889cc002aab0abca05eb3c4d4a9a6f9418ab55",
+        "it/templates/cambiamento_rapido.md": "4fb34cbedf8aa0cc8a1f101d4d1524e71e0bcdffdd93e8fbe512be082ee962d3",
+        "it/templates/configurazione_rollout.md": "e7343b10f77c4a98b337e362c729224b3c9ec98875e69eb5bc8591731605c919",
+        "it/templates/dod-estesa.md": "312dc9f21de854d0a1722f7ce122cc019b8c1484c9ed25f0eadc4c031028f8a5",
+        "it/templates/review_design.md": "7febca97fee12fe9a16f5465575eed0befd13f2a97b1ee8037a67b39870a976c",
+        "it/templates/review_design_light.md": "5f0ab048ac058293e195c7e57ad04846e633decb0635c83385b8a54d0788a80e",
+        "it/templates/specifica_feature.md": "0be8c56e3151199dcaf66c489a768a21086ff2fc8a4c6bed7ef20a50b839ee5e",
+        "processo-e2e.md": "e3e1e61ce314ece6ac24d0f8222b2e3b21be80231ebedfd116b8796c0afe63ad",
+        "skills/dfd-implement/SKILL.md": "ca2f45210f01980c65335532571f084511ce77d4deb8b3a95e1e43a4c4174fb2",
+        "skills/dfd-review-design/SKILL.md": "e8484f3efe57623cd61728df7850aaecb958ce81556a257d4a1897ee9e4813d5",
+        "skills/dfd-specify/SKILL.md": "35070d12418187f0c8fcc5d06438d3a6a51cadde9c82814f3f05ff465e0607f2",
+        "skills/dfd-verify/SKILL.md": "f85e4df1e488c15b5d242b3be5164b15fe34a720deaa6c883c69479d8feba231",
+        "templates/cambiamento_rapido.md": "aad679c6b620789d9658cc5c3012e4419f24993920197134bed79dc14a948442",
+        "templates/configurazione_rollout.md": "d01c8736eb45bec00c5413b40409bd29e654f82e40c1c4099db600dbdd228a7b",
+        "templates/dod-estesa.md": "d2ef5baf7f7681ee47fc2c109c36710ac7173e048e82b4dee7c1312a8ed957fc",
+        "templates/review_design.md": "b398f0725090ea0e9391c537dfb60de51d9410722212ac71dc41e5c4fb4eb054",
+        "templates/review_design_light.md": "d664d658cdd5733690a3b81d586cbeb6cbe796a4453b7c410b0ee84eb51bdcac",
+        "templates/specifica_feature.md": "ca89857a5aef4c69692e880ca53947b87c2abd43681f8e1f5405122873ae11d7",
+        "tests/workflow.rs": "a246e1bd58c182923b3b7bdc175836bf35562dee7b2166be74ee8d9a0eae9d98"
+      },
+      "criteria_fingerprints": {
+        "COST-02": "49aaaf20c1cd6829c636580d8db9f887f17261c953781998f42b437befe9eb72",
+        "SEC-03": "cc0b58c3e4b8b612d5b4b35bd41e3a3a26e3df4a59a947da17e3f5ebaf81359b",
+        "SLO-02": "0dfba22b30f5dfbb1116413d932dc845c058346fa7b35b102147954bba3c46f8",
+        "UX-02": "97d86321c42232fa2eb05d45a5d806eae4d89a3832bdb7af8d935cbe4830dd21"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "sh -c cargo fmt --all --check && cargo clippy --locked --offline --all-targets -- -D warnings && cargo test --locked --offline && cargo build --locked --offline --release && ./target/release/dfd doctor && python3 -m unittest discover -s tests -p 'test_*.py' && python3 scripts/check_translations.py",
+      "executed_at": "2026-11-18T13:27:30.455957Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/013-unforeseen-states-kit/evidence/09-exec-suite.log",
+        "sha256": "dfff0042ba287eb59b7315826ab5a3f4c4ad09b91fbe51ff166322017ec210c7"
+      },
+      "snapshot": {
+        "fondamenta.md": "f2e075c90af95cdc56e405f16c1d8a0afc84aea22351dcaee094f617171dca7a",
+        "i18n/documents.json": "b657c86233dd6610f805d95ca1f17a9c04ed0bfab70b82d96926da354a37c31a",
+        "it/fondamenta.md": "4414f88e441a130f2cc10b2653d44a4a59cba80cae336220daa3f1bace390002",
+        "it/processo-e2e.md": "8b6a42af38663343fb05f914e6b49cfdd821e90306a24eef8764fa21d360064c",
+        "it/skills/dfd-implement/SKILL.md": "3d4400b59834682c19c1edad6832e4831d2792397d50be55fc4c8e81e47020b2",
+        "it/skills/dfd-review-design/SKILL.md": "3d563758ebf44ea5f76259b5cdac0cd5c2ed3b8fc3e4085691829d5efeb5c871",
+        "it/skills/dfd-specify/SKILL.md": "a982486b2a5a1d08b6969c1edfd9953542fd5f7194cc51324677884a0eafe6e7",
+        "it/skills/dfd-verify/SKILL.md": "89252e76a40a257a530b562bc6889cc002aab0abca05eb3c4d4a9a6f9418ab55",
+        "it/templates/cambiamento_rapido.md": "4fb34cbedf8aa0cc8a1f101d4d1524e71e0bcdffdd93e8fbe512be082ee962d3",
+        "it/templates/configurazione_rollout.md": "e7343b10f77c4a98b337e362c729224b3c9ec98875e69eb5bc8591731605c919",
+        "it/templates/dod-estesa.md": "312dc9f21de854d0a1722f7ce122cc019b8c1484c9ed25f0eadc4c031028f8a5",
+        "it/templates/review_design.md": "7febca97fee12fe9a16f5465575eed0befd13f2a97b1ee8037a67b39870a976c",
+        "it/templates/review_design_light.md": "5f0ab048ac058293e195c7e57ad04846e633decb0635c83385b8a54d0788a80e",
+        "it/templates/specifica_feature.md": "0be8c56e3151199dcaf66c489a768a21086ff2fc8a4c6bed7ef20a50b839ee5e",
+        "processo-e2e.md": "e3e1e61ce314ece6ac24d0f8222b2e3b21be80231ebedfd116b8796c0afe63ad",
+        "skills/dfd-implement/SKILL.md": "ca2f45210f01980c65335532571f084511ce77d4deb8b3a95e1e43a4c4174fb2",
+        "skills/dfd-review-design/SKILL.md": "e8484f3efe57623cd61728df7850aaecb958ce81556a257d4a1897ee9e4813d5",
+        "skills/dfd-specify/SKILL.md": "35070d12418187f0c8fcc5d06438d3a6a51cadde9c82814f3f05ff465e0607f2",
+        "skills/dfd-verify/SKILL.md": "f85e4df1e488c15b5d242b3be5164b15fe34a720deaa6c883c69479d8feba231",
+        "templates/cambiamento_rapido.md": "aad679c6b620789d9658cc5c3012e4419f24993920197134bed79dc14a948442",
+        "templates/configurazione_rollout.md": "d01c8736eb45bec00c5413b40409bd29e654f82e40c1c4099db600dbdd228a7b",
+        "templates/dod-estesa.md": "d2ef5baf7f7681ee47fc2c109c36710ac7173e048e82b4dee7c1312a8ed957fc",
+        "templates/review_design.md": "b398f0725090ea0e9391c537dfb60de51d9410722212ac71dc41e5c4fb4eb054",
+        "templates/review_design_light.md": "d664d658cdd5733690a3b81d586cbeb6cbe796a4453b7c410b0ee84eb51bdcac",
+        "templates/specifica_feature.md": "ca89857a5aef4c69692e880ca53947b87c2abd43681f8e1f5405122873ae11d7",
+        "tests/workflow.rs": "a246e1bd58c182923b3b7bdc175836bf35562dee7b2166be74ee8d9a0eae9d98"
+      },
+      "recorded_by": "dfd"
     }
   ],
   "refactor_notes": "Le sette copie del kit (fondamenta, processo, cinque template) sono state allineate alla radice copiando il corpo dei file e conservando la riga di navigazione del kit; dopo la copia il confronto senza la prima riga è vuoto per tutte le 14 coppie di file. Il template di specifica del kit resta distinto da quello della radice e riceve i campi nuovi come voci dell'elenco con segnaposto, così la regola esistente sui segnaposto li rende obbligatori senza un gate nuovo; i criteri aggiunti in sviluppo partono da 'none so far'/'nessuno finora'. Le skill ricevono le istruzioni in coda ai passi esistenti, in inglese e italiano. I test nuovi sono regressioni sul contenuto installato: proteggono da una sincronizzazione che perda la revisione, non verificano il comportamento dell'agente. Osservabilità: nessuna strumentazione necessaria, la CLI non cambia. Avviso 'skipped' nel log CI, se presente: viene dal passo interno condizionale dell'azione dtolnay/rust-toolchain, come nelle feature 011 e 012; nessun test saltato."
