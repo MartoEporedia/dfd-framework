@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "013-unforeseen-states-kit",
+  "title": "Ondata 2: stati non previsti e qualità della specifica nel kit",
+  "domain": "dfd-kit",
+  "kind": "feature",
+  "scope": "Copie del kit di fondamenta, processo e template allineate alla revisione del framework (PR #17), template di specifica del kit e skill dfd-specify, dfd-implement, dfd-review-design e dfd-verify aggiornati in inglese e italiano",
+  "phase": "assessed",
+  "created_at": "2026-11-18T00:04:02.754081Z",
+  "risk": "low",
+  "route": "light",
+  "assessment_hash": "5695fccd1d0463f1c226ebbb88877d1fbd48d5e76d85ecf3b1985fae94d579b1",
+  "decisions": [],
+  "selective_review": true
+}
