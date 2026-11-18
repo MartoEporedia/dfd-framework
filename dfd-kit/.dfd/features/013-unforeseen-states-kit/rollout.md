@@ -35,7 +35,7 @@ Diretta, in una sola fase al 100%, come per le versioni precedenti: l'esposizion
 
 ## 4. Risorse
 
-- **Allarme** (planned): notifica GitHub di workflow fallito, come per le versioni precedenti.
+- **Allarme** (ready): notifica GitHub di workflow fallito, attiva su GitHub ed email per i workflow falliti (verificata il 2026-11-18, `evidence/11-actions-notifications.log`).
 - **Dashboard** (ready): pagine Actions e Releases; evidenza nel log CI della PR #20.
 - **Controllo dell'esposizione**: il tag.
 

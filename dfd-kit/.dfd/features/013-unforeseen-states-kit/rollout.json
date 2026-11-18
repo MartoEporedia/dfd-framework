@@ -65,11 +65,16 @@
     {
       "name": "Notifica di fallimento del workflow Release",
       "owner": "Marco Martorana",
-      "status": "planned",
+      "status": "ready",
       "reference": "Notifiche GitHub Actions per i workflow falliti avviati dal proprio push (impostazioni di notifica dell'account)",
-      "activation_plan": "Attiva al push del tag v0.3.0; verificare dopo il run che le notifiche Actions dell'account siano abilitate",
+      "activation_plan": "",
       "justification": "",
-      "evidence": []
+      "evidence": [
+        {
+          "path": ".dfd/features/013-unforeseen-states-kit/evidence/11-actions-notifications.log",
+          "sha256": "3bc3b71c1dc6fe736b8efb3ec8f2b88d4b3f115d6c4024806de9fe1f895624f3"
+        }
+      ]
     }
   ],
   "dashboards": [
