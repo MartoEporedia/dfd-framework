@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "development_fingerprint": "37cddf036737d0d16aed5bcc0557fa45927b807f4ce609648c779c211046f636",
+  "owner": "manutentore del repository",
+  "artifact": "Release GitHub v0.3.0 di dfd-kit: dfd-linux-x86_64.tar.gz, dfd-macos-arm64.tar.gz, dfd-macos-x86_64.tar.gz, dfd-windows-x86_64.tar.gz e SHA256SUMS, costruiti da .github/workflows/release.yml",
+  "revision": "Commit di merge della PR #20 su main, con il contenuto verificato al commit 40cd5bba6e94d15bad41c1a4a8b097e8247a480c (CI run 44313937009); il workflow di release riesegue tutta la CI sul commit del tag",
+  "environment": "GitHub Releases del repository pubblico MartoEporedia/dfd-framework",
+  "strategy": "direct",
+  "strategy_rationale": "Un binario scaricabile non ha traffico da frazionare: l'esposizione è la pubblicazione della release al push del tag, preceduta dai controlli e dalla CI completa nello stesso run; il rollback elimina release e tag.",
+  "steps": [
+    {
+      "id": "release-v0-3-0",
+      "audience": "chi scarica dfd-kit dall'ultima release, compreso il prompt di installazione",
+      "percentage": 100,
+      "duration_minutes": 60,
+      "promotion": "workflow Release verde; quattro archivi e SHA256SUMS nella release; dfd-macos-arm64 scaricato, checksum verificato, dfd --version 0.3.0 e dfd doctor riuscito; note con le sezioni EN e IT della 0.3.0",
+      "stop": "workflow Release fallito, archivio mancante, checksum non corrispondente o doctor fallito sul binario scaricato"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "SEC-02",
+      "signal": "template dei domini esistenti dopo l'aggiornamento al binario 0.3.0",
+      "threshold": "test di preservazione verdi; dfd language e install non riscrivono i template del dominio",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SEC-03",
+      "signal": "istruzioni delle skill sui criteri aggiunti",
+      "threshold": "test skills_guide_unforeseen_states_and_added_criteria verde in en e it",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SLO-01",
+      "signal": "comandi e contratti sui progetti esistenti",
+      "threshold": "suite completa verde; i progetti senza .dfd/language.json passano all'inglese come documentato (cambiamento incompatibile, migrazione: dfd language it)",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SLO-02",
+      "signal": "job quality, mutations, binaries",
+      "threshold": "tutti success nella CI della PR #20 e nel workflow Release",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "COST-02",
+      "signal": "durata e costo delle verifiche",
+      "threshold": "nessun mutante nuovo; CI nei tempi abituali",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "UX-01",
+      "signal": "note della release e documentazione",
+      "threshold": "sezioni EN e IT della 0.3.0 presenti; check_translations 0 errori",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "UX-02",
+      "signal": "skill installate per adapter",
+      "threshold": "dfd doctor riesce sul binario scaricato",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    }
+  ],
+  "alarms": [
+    {
+      "name": "Notifica di fallimento del workflow Release",
+      "owner": "Marco Martorana",
+      "status": "planned",
+      "reference": "Notifiche GitHub Actions per i workflow falliti avviati dal proprio push (impostazioni di notifica dell'account)",
+      "activation_plan": "Attiva al push del tag v0.3.0; verificare dopo il run che le notifiche Actions dell'account siano abilitate",
+      "justification": "",
+      "evidence": []
+    }
+  ],
+  "dashboards": [
+    {
+      "name": "Pagine Actions e Releases del repository",
+      "owner": "Marco Martorana",
+      "status": "ready",
+      "reference": "https://github.com/MartoEporedia/dfd-framework/actions e https://github.com/MartoEporedia/dfd-framework/releases",
+      "activation_plan": "",
+      "justification": "",
+      "evidence": [
+        {
+          "path": ".dfd/features/013-unforeseen-states-kit/evidence/10-ci.log",
+          "sha256": "80e7bb03a204d6f4ba79d0b78a8bd372cfea937d64f2d33434bd1d79e095be2c"
+        }
+      ]
+    }
+  ],
+  "feature_flag": {
+    "name": "Controllo dell'esposizione tramite tag",
+    "owner": "Marco Martorana",
+    "status": "excluded",
+    "reference": "",
+    "activation_plan": "",
+    "justification": "Senza tag v0.3.0 non esiste release: il push del tag è il controllo dell'esposizione e il rollback è eliminare release e tag.",
+    "evidence": []
+  },
+  "rollback_trigger": "Workflow Release fallito dopo la creazione della release, archivio mancante, checksum non corrispondente o doctor fallito sul binario scaricato",
+  "rollback_procedure": "gh release delete v0.3.0 --cleanup-tag --yes; correggere sul ramo; pubblicare v0.3.1 con la sua sezione nel changelog. La v0.2.0 resta disponibile.",
+  "rollback_verification": "gh release view v0.3.0 fallisce e la pagina Releases non mostra la v0.3.0; la release successiva supera la promozione",
+  "on_call": "Marco Martorana",
+  "communications": [
+    {
+      "audience": "manutentore e chi segue il repository",
+      "owner": "Marco Martorana",
+      "informed_at": "2026-11-18T13:33:44Z",
+      "reference": "https://github.com/MartoEporedia/dfd-framework/pull/20"
+    }
+  ],
+  "non_functional_tests": [
+    {
+      "area": "load",
+      "applicability": "excluded",
+      "justification": "Nessun servizio: la CLI installa risorse locali; GitHub serve i file della release.",
+      "execution": null
+    },
+    {
+      "area": "resilience",
+      "applicability": "applicable",
+      "justification": "",
+      "execution": {
+        "command": "cargo test --locked --offline --test workflow kit_resources_adopt_unforeseen_states_revision",
+        "executed_at": "2026-11-18T13:26:45.750971Z",
+        "exit_code": 0,
+        "log": {
+          "path": ".dfd/features/013-unforeseen-states-kit/evidence/07-exec-green-kit-resources.log",
+          "sha256": "48a9ec2ba7fc851ff4f2ce94f02c377d1c501c23087dd0bf083dbb3ce9dc4d78"
+        }
+      }
+    },
+    {
+      "area": "security",
+      "applicability": "applicable",
+      "justification": "",
+      "execution": {
+        "command": "cargo test --locked --offline --test workflow skills_guide_unforeseen_states_and_added_criteria",
+        "executed_at": "2026-11-18T13:26:47.306850Z",
+        "exit_code": 0,
+        "log": {
+          "path": ".dfd/features/013-unforeseen-states-kit/evidence/08-exec-green-skills.log",
+          "sha256": "5e0a2b7261a255fee45f85f4e18f1df08b90f11ad0590da8c0238b35ce065e7d"
+        }
+      }
+    }
+  ],
+  "open_questions": []
+}

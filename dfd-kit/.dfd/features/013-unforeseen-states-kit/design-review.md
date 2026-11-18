@@ -1,9 +1,9 @@
-# Review di design DFD
+# DFD design review
 
 Gate: approved
 
-## Controlli strutturali
+## Structural checks
 
-Nessuna lacuna strutturale rilevata. Serve la review semantica del responsabile.
+No structural gaps found. Semantic review by the responsible person is required.
 
-I controlli non provano la qualità del design e non attribuiscono approvazioni umane.
+Checks do not prove design quality or confer human approvals.

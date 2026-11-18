@@ -1,10 +1,11 @@
-# Verifica sviluppo DFD
+# DFD development verification
 
 Gate: "ready-for-pre-release"
 
 
-## Avvisi
+## Warnings
 
-- Log .dfd/features/013-unforeseen-states-kit/evidence/06-ci.log (ci, exit 0) contiene il marcatore «skipped».
+- Log .dfd/features/013-unforeseen-states-kit/evidence/06-ci.log (ci, exit 0) contains the marker “skipped”.
+- Log .dfd/features/013-unforeseen-states-kit/evidence/10-ci.log (ci, exit 0) contains the marker “skipped”.
 
-Controlli strutturali su evidenze dichiarate e hash locali; non certificano autenticità dei log, qualità del codice o approvazione del rilascio.
+Structural checks of declared evidence and local hashes do not certify log authenticity, code quality or release approval.

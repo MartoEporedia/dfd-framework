@@ -1,0 +1,12 @@
+$ cargo test --locked --offline --test workflow kit_resources_adopt_unforeseen_states_revision
+# executed_at: 2026-11-18T13:26:45.750971Z
+
+running 1 test
+test kit_resources_adopt_unforeseen_states_revision ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 93 filtered out; finished in 1.08s
+
+   Compiling dfd-kit v0.3.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.12s
+     Running tests/workflow.rs (target/debug/deps/workflow-75bc23d7b33a9a1f)
+# exit_code: 0

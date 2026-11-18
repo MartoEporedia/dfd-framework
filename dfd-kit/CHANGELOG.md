@@ -6,6 +6,8 @@ All notable changes to DFD Kit. The format follows [Keep a Changelog](https://ke
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-18
+
 ### Added
 
 - Unforeseen states and specification quality in the kit: the kit's copies of the foundations, process and five templates adopt the framework revision (unforeseen states, change-type constraints, criteria added during development, observable checks); the kit's specification template adds requester's words, assumptions, appetite, no-go, extended behavior and unforeseen states; `dfd-specify`, `dfd-implement`, `dfd-review-design` and `dfd-verify` apply them. Existing domain templates are not rewritten.

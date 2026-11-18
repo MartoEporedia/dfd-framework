@@ -78,6 +78,7 @@
 - Test non funzionali: nessuno; nessun gate o percorso di codice cambia.
 - Verifiche manuali: lettura delle skill nelle due lingue.
 - Validazione: un pilota reale nell'harness resta la lacuna baseline UX-03.
+- Validazione in produzione: release GitHub `v0.3.0`, che contiene anche la feature 012 (inglese primario, cambiamento incompatibile). Il dominio è in `release-preparation`, quindi servono CI reale sulla PR, pre-release e review di release; la versione in `Cargo.toml` e la sezione `0.3.0` di `CHANGELOG.md` e `it/CHANGELOG.md` fanno parte di questa feature.
 
 ## 7. Domande aperte e review
 
@@ -88,3 +89,4 @@
 ## 8. Revisioni
 
 - 2026-11-18: prima bozza
+- 2026-11-18: su richiesta del manutentore ("Rilascia il lavoro fatto fino ad ora") la feature porta la release `v0.3.0` (versione e changelog).
