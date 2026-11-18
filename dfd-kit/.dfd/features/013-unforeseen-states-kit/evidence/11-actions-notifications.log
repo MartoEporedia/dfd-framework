@@ -1,0 +1,7 @@
+Verifica post-release della condizione "Notifica di fallimento del workflow Release" (v0.3.0)
+Data: 2026-11-18T20:05:34Z
+Fonte: https://github.com/settings/notifications (account MartoEporedia), letta dall'agente nel browser del manutentore.
+Sezione System > Actions: "Notifications for workflow runs on repositories set up with GitHub Actions."
+Valore: "Notify me: on GitHub, Email. (Failed workflows only)"
+Esito: le notifiche per i workflow falliti sono attive su GitHub e via email.
+Workflow Release v0.3.0: run 44367353949, success (nessun fallimento da notificare in questo run).
