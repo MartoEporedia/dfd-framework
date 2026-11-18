@@ -5,7 +5,8 @@
   "business_metrics": [
     "init in en e it installa le copie e i template con la revisione",
     "Le quattro skill installate contengono le istruzioni nuove in entrambe le lingue",
-    "Suite, doctor, check_translations e CI verdi"
+    "Suite, doctor, check_translations e CI verdi",
+    "Release GitHub v0.3.0 (con la feature 012, inglese primario) pubblicata dal workflow di release con CI verde, archivi e checksum verificati"
   ],
   "epic": {
     "reference": "Richiesta del manutentore in chat il 2026-11-18 ('Ondata 2'), sul piano concordato in chat il 2026-11-16/17",

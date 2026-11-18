@@ -6,6 +6,8 @@ Tutte le modifiche rilevanti di DFD Kit. Il formato segue [Keep a Changelog](htt
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-18
+
 ### Aggiunto
 
 - Stati non previsti e qualità della specifica nel kit: le copie del kit di fondamenta, processo e cinque template adottano la revisione del framework (stati non previsti, vincoli per tipo di cambiamento, criteri aggiunti durante lo sviluppo, verifiche osservabili); il template di specifica del kit aggiunge parole del richiedente, assunzioni, appetite, no-go, comportamento esteso e stati non previsti; `dfd-specify`, `dfd-implement`, `dfd-review-design` e `dfd-verify` li applicano. I template dei domini esistenti non vengono riscritti.
