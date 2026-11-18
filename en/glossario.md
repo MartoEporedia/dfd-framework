@@ -30,6 +30,11 @@ The framework has complete Italian and English reading paths. Original Italian f
 | Review | Review | Required human decision remains necessary |
 | Guardrail | Guardrail | Normative constraint |
 | Da riconfermare | Stale review | stale-review enum |
+| Stato non previsto | Unforeseen state | Explicit, observable failure, never silent continuation |
+| Parole del richiedente | Requester's words | Quoted verbatim, separate from assumptions |
+| Appetite | Appetite | Time limit the result is worth, not an estimate |
+| No-go | No-go | What the feature must not do or add |
+| Vincolo per tipo di cambiamento | Change-type constraint | A category, never a past incident |
 
 ## Maintenance rules
 

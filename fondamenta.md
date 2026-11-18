@@ -3,7 +3,7 @@
 # DoD-First Driven (DFD) – Fondamenta
 
 > **Stato**: draft / stabile  
-> **Ultimo aggiornamento**: 2026-10-08  
+> **Ultimo aggiornamento**: 2026-11-17  
 > **Proprietari**: [@team / @persona]  
 > **Riferimenti**:
 > - [Processo End-to-End](processo-e2e.md)
@@ -61,12 +61,14 @@ Per il processo dettagliato, vedi [Processo End-to-End](processo-e2e.md).
 - Si parte da una **specifica chiara** (comportamenti, interfacce, vincoli).
 - La specifica cita esplicitamente i **criteri DoD** che intende soddisfare.
 - La specifica opera entro i **guardrail globali** del prodotto (architettura, sicurezza, osservabilità, costo).
+- La specifica non può prevedere ogni caso: definisce invece cosa succede negli **stati non previsti**, con un fallimento esplicito e osservabile al posto di una prosecuzione silenziosa.
 
 ### 2.3 Test derivati dalla DoD
 
 - Ogni criterio DoD rilevante ha almeno un **test automatico** associato.
 - I test non verificano solo “funziona”, ma “rispetta la DoD”.
 - Il ciclo TDD (test → codice → refactor) è guidato dai criteri DoD.
+- Non si scrive codice che nessun criterio o scenario giustifica: un comportamento emerso durante lo sviluppo entra prima nella specifica e viene confrontato con la richiesta originale.
 
 ### 2.4 Validazione continua (shift-right)
 

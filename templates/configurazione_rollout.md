@@ -22,6 +22,12 @@
 - [x] Rollout per tenant / segmento (feature flag)  
 - [ ] Combinato (canary + rollout per tenant)
 
+**Dove la versione deve essere in uso**: [ambienti, tenant, dispositivi, client]. Il rollout è completato solo quando tutti eseguono la nuova versione; fino ad allora la feature indica il punto su cui è in attesa.
+
+**Blocchi esterni**: [es. dispositivo offline, finestra di manutenzione]. Il rollout riprende da solo quando il blocco sparisce.
+
+**Passi che solo una persona può fare**: [azione esatta, chi la esegue]. Ogni passo diventa una sola richiesta, che si chiude quando il passo risulta fatto e non viene ripetuta mentre è in attesa.
+
 ---
 
 ## 2. Feature flag / configurazione

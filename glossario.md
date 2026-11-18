@@ -24,6 +24,11 @@ Il framework offre due percorsi completi: italiano nei file originali e inglese 
 | Review | Review | Richiede la decisione umana prevista |
 | Guardrail | Guardrail | Vincolo normativo |
 | Da riconfermare | Stale review | Enum stale-review |
+| Stato non previsto | Unforeseen state | Fallimento esplicito e osservabile, mai prosecuzione silenziosa |
+| Parole del richiedente | Requester's words | Riportate alla lettera, separate dalle assunzioni |
+| Appetite | Appetite | Limite di tempo che il risultato vale, non una stima |
+| No-go | No-go | Ciò che la feature non deve fare o aggiungere |
+| Vincolo per tipo di cambiamento | Change-type constraint | Categoria, mai incidente passato |
 
 ## Regole di manutenzione
 

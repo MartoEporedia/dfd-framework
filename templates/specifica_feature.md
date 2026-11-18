@@ -26,6 +26,17 @@
 - Dominio / servizio interessato: [es. Checkout]
 - Servizi / sistemi coinvolti: [es. Payment Service, Inventory Service, Notification Service]
 - Fuori scope: [cosa esplicitamente non è incluso]
+- No-go: [cosa la feature non deve fare o aggiungere, anche se sembrerebbe utile]
+
+**Appetite**:  
+[Quanto tempo vale il risultato per chi lo chiede: un limite da rispettare, non una stima. Se la specifica non ci sta, si riduce l'ambito o si divide la feature.]
+
+**Richiesta originale**:
+
+- Parole del richiedente, riportate alla lettera con fonte e data: [citazione]
+- Assunzioni (scelte fatte senza chiedere, una per riga, con motivazione): [elenco]
+
+L'obiettivo sta in una frase. Se servono due obiettivi collegati da "e", valutare due feature distinte.
 
 ---
 
@@ -69,6 +80,20 @@
 **Dipendenze esterne**:
 
 - [Payment Service, Inventory Service, ecc.]
+
+**Comportamento esistente esteso, non sostituito**:
+
+- [Comando / API / componente che la feature estende, e cosa resta invariato]
+
+### 2.4 Stati e casi non previsti
+
+La specifica non può elencare ogni caso possibile. Definisce invece cosa succede quando il sistema si trova in uno stato che la specifica non prevede:
+
+- [ ] Reazione: [es. "il processo termina con errore esplicito e il supervisore lo riavvia", "la richiesta fallisce con `errorCode` dedicato", "la funzionalità degrada in modo dichiarato"]
+- [ ] Segnale osservabile: [log, metrica o allarme che rende visibile l'evento] (OBS-xx)
+- [ ] Recupero: [chi o cosa riporta il sistema in uno stato previsto, senza perdere né duplicare lavoro]
+
+Non sono ammessi: proseguire in silenzio, sostituire un valore mancante con un default inventato, aggiungere codice non coperto dalla specifica per tenere insieme i pezzi.
 
 ---
 
@@ -164,6 +189,8 @@ Questa feature opera entro i seguenti **guardrail globali**:
 
 ## 5. Test e validazione
 
+Ogni verifica indica che cosa si osserva e come: test, comando, oppure controllo manuale con il motivo per cui non è automatizzabile. Termini come "correttamente", "funziona", "come previsto", "veloce" o "user-friendly" non sono verificabili: usarli solo citando il richiedente, e tradurli in un risultato osservabile.
+
 ### 5.1 Test funzionali
 
 - [ ] Test unitari per logica applicazione promo
@@ -206,6 +233,10 @@ Questa feature opera entro i seguenti **guardrail globali**:
 
 - [ ] [es. "decidere se implementare circuit breaker su Promo Service"]
 - [ ] [es. "valutare se aggiungere metrica per tempo medio applicazione promo"]
+
+**Criteri aggiunti durante lo sviluppo**:
+
+- [ ] [criterio o scenario, chi lo propone, data, parole del richiedente con cui è coerente, esito della review]
 
 ---
 

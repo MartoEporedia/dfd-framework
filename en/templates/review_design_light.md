@@ -43,12 +43,21 @@ Use for changes outside payments, security, critical SLOs and core architecture:
 
 - [ ] No expected latency, error-rate or availability impact.
 - [ ] No new critical external dependency.
+- [ ] Unforeseen states produce an explicit, observable failure, never silent continuation.
 
 <a id="14-costo"></a>
 
 ### 1.4 Cost
 
 - [ ] No significant service cost impact.
+
+<a id="15-qualità-della-specifica"></a>
+
+### 1.5 Specification quality
+
+- [ ] Requester's words verbatim, assumptions separate.
+- [ ] Every check describes an observable result, without "correctly", "works" or "as expected" outside a quote.
+- [ ] Applicable change-type constraints (Extended DoD) hold.
 
 <a id="2-guardrail-globali"></a>
 

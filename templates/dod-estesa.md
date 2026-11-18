@@ -125,6 +125,13 @@ Riferimenti a standard / policy:
 - [ ] Retry: [politiche, backoff]
 - [ ] Circuit breaker: [dove applicato]
 
+### 3.4 Stati non previsti
+
+- [ ] Uno stato che la specifica non prevede produce un fallimento esplicito e osservabile, mai una prosecuzione silenziosa: [es. "il processo termina con errore e viene riavviato", "la richiesta fallisce con `errorCode` dedicato"]
+- [ ] Il fallimento è visibile: [log, metrica o allarme associato] (OBS-xx)
+- [ ] Il recupero non richiede intervento umano, salvo eccezioni dichiarate: [supervisore, retry idempotente, rollback]
+- [ ] Dove un fallimento immediato non è accettabile (es. flussi di pagamento), la degradazione è dichiarata e collegata alla sezione 3.2.
+
 ---
 
 ## 4. Costo
@@ -167,7 +174,28 @@ Per ogni cambiamento significativo:
 
 ---
 
-## 6. Riferimenti ai criteri (codici)
+## 6. Vincoli per tipo di cambiamento
+
+Ogni riga è un vincolo da rispettare, non un caso da elencare nella specifica. In review si verifica che i vincoli applicabili valgano anche nelle situazioni che la specifica non descrive.
+
+| Il cambiamento… | Vincolo | Assi |
+|---|---|---|
+| introduce un formato di file, messaggio o dato | la forma completa è definita; i campi sconosciuti hanno un comportamento dichiarato | OBS, SLO |
+| comunica con uno strumento o servizio esterno | almeno una verifica usa quello reale; i suoi errori sono riportati con il messaggio originale | SLO, OBS |
+| decide a partire da un input | un input che non permette di decidere produce un rifiuto esplicito, mai una scelta inventata | SLO |
+| mostra un valore che può mancare | il valore mancante appare come sconosciuto, mai come zero o segnaposto | OBS, UX |
+| conserva lavoro o stato che deve sopravvivere a un crash | dopo un'interruzione a metà, l'esecuzione successiva riprende senza perdere né ripetere lavoro | SLO |
+| tratta un segreto | il segreto non compare in output, log o errori, anche quando qualcosa fallisce | SEC |
+| rende qualcosa raggiungibile in rete | è dichiarato chi può raggiungerlo, ed è verificato che gli altri non possono | SEC |
+| esegue un setup o una migrazione | ripeterlo su un setup già fatto o fatto a metà non danneggia nulla | SLO |
+| gira a lungo | se si blocca o termina, qualcosa lo riporta in funzione senza intervento umano e l'evento è osservabile | SLO, OBS |
+| aggiunge uno stato o una fase | esistono un modo per entrarci e uno per uscirne | SLO |
+
+Adattare la tabella al dominio: le righe nominano categorie di cambiamento, mai incidenti passati.
+
+---
+
+## 7. Riferimenti ai criteri (codici)
 
 Per facilitare il riferimento nelle specifiche di feature, ogni criterio ha un codice:
 
@@ -188,7 +216,7 @@ Per facilitare il riferimento nelle specifiche di feature, ogni criterio ha un c
 
 ---
 
-## 7. Evoluzione del documento
+## 8. Evoluzione del documento
 
 - **Revisioni**:
   - YYYY-MM-DD: [descrizione modifica, es. "aggiunti criteri di costo per transazione"]

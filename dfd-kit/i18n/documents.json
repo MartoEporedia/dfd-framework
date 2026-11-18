@@ -18,23 +18,23 @@
     },
     "examples/checkout_paypal_spec.md": {
       "english": "en/examples/checkout_paypal_spec.md",
-      "it_sha256": "8cd7b68810544ab960b005d2f2be6bda97508237250f348b490c18dd18f26e5a",
-      "en_sha256": "f3ee5c11bbc67efa359f59f8b908fc5e25cf2b2d4080c7ce682370da779cc064"
+      "it_sha256": "e036e80968e5d194f53f388f8af673afcfa28effc301e41d3f37a50fbc02fad1",
+      "en_sha256": "2d0ca461d4b092ddca53ee5f00c3243b9658478c48b1f6006e2912c5a25b5fa8"
     },
     "fondamenta.md": {
       "english": "en/fondamenta.md",
-      "it_sha256": "0221c153e66b2d43ae4b04da98a5a73581589bf461b2ed4d0c1a498be78e352f",
-      "en_sha256": "35ec9fdf490a97fd96b890988f5977d7e705333f1144477593e5de77f94664b8"
+      "it_sha256": "faadd576f9cb5ed38c7cba1791f5384fa65f3ac22ef37fe2e64708385b3d0501",
+      "en_sha256": "fa1183e02d8d94a27df0f88f40214e6d5b71e42bd8ae7d04875ce4a207eb5d19"
     },
     "glossario.md": {
       "english": "en/glossario.md",
-      "it_sha256": "d62fdd2eeea7d73a19e4cda81dc743a5bb581794d300737725af64da11da119d",
-      "en_sha256": "0a0d8bad3c86b9da2492f0c62d06eae7a41e6908c6bed05bea4abc2282e3987d"
+      "it_sha256": "3b8a66e5f0cb922b9174e01321a3baad71e2812be052e37fd4a90c9ac67d2b70",
+      "en_sha256": "1243291925fb143c725a65e4e7b543ba80b61241522cc9dca2a46209efab12e3"
     },
     "processo-e2e.md": {
       "english": "en/processo-e2e.md",
-      "it_sha256": "1a335c1bb3de78b15c6f400a3bf2d602481c77bc5dcee06f00b16154871f0b4c",
-      "en_sha256": "6d433a3af9d98ea018de18290a3c0a6e0d261f0740d45b85270401874cc1488d"
+      "it_sha256": "1a6dcd8392e423719101b84796cc6e15de90cc9343acbfd2a80a22cb89a1cd0a",
+      "en_sha256": "348b9cabeaa4b09ba883eb10c72c78956ee5d9dad8e1b0bebef537260e04a09f"
     },
     "raci.md": {
       "english": "en/raci.md",
@@ -48,8 +48,8 @@
     },
     "templates/cambiamento_rapido.md": {
       "english": "en/templates/cambiamento_rapido.md",
-      "it_sha256": "fcaa55f7ae4023507ae72db19749937266abbe533d5930041ea925aa49c0ea87",
-      "en_sha256": "3b2bbf3e42dc69b1cbee0291137a98b6ed5700a77165463f3bd5cc70146b2f53"
+      "it_sha256": "4215bee61053f64a640d30c8ed71c0e0bb0574b644170df0a34a7a82aeb729e2",
+      "en_sha256": "3198e8c2b8a455e093d7c449697b23922e49cd440fc9f500413b36705e48f612"
     },
     "templates/collaborazione.md": {
       "english": "en/templates/collaborazione.md",
@@ -58,23 +58,23 @@
     },
     "templates/configurazione_rollout.md": {
       "english": "en/templates/configurazione_rollout.md",
-      "it_sha256": "f61a2f389dac33f5a7cc36f7bc7867acd4c83b693c9cc253e729f7f3d0568b92",
-      "en_sha256": "ca13c90dab8d4b1d17ee59721a29b21ea714132d2d3981f413d531f1fd335b80"
+      "it_sha256": "7feb8bb6a40c30bb64e689591a2a9f0b444d38090a5ac4e0ab6ce9fa005f3e47",
+      "en_sha256": "fb9afaeb07adb3eadbdec1ff384fcfee16f6e461b14dac7bbdb59d9e8beff842"
     },
     "templates/dod-estesa.md": {
       "english": "en/templates/dod-estesa.md",
-      "it_sha256": "b2474be6b73634c18d214fb4d914ddd702347bacacaba30640d2736aad75179b",
-      "en_sha256": "dbe27f6bdcb660857af47f28d8be245a0cf5d35003df3369426096f8e267698f"
+      "it_sha256": "a4ee261153b1959f27f04d9955b6f1acd7d231e44d1aad284c26ec3aad235d88",
+      "en_sha256": "7277e50f7377f4b5314215c887e10298d3ba32b1267ece4cb7238b573b38fc4a"
     },
     "templates/review_design.md": {
       "english": "en/templates/review_design.md",
-      "it_sha256": "a269cfb1876e96596c59a53cab6e33e5f0b8340666a7e6adbd9df16951c843dd",
-      "en_sha256": "315a3e4b0fd8bf4089ac17f2ed840899d67daba494bcb5e01f5738e6b5095b7b"
+      "it_sha256": "23ca5e1b05fc041d5fc7ea397034b3cbf21dbf266acf63c567857d887f521772",
+      "en_sha256": "9741d7353703b84b81014b6cdfcda1c8f83fb34a4c1dea7054b29cc197244a7c"
     },
     "templates/review_design_light.md": {
       "english": "en/templates/review_design_light.md",
-      "it_sha256": "ffd86af009eff8992b0ea9b5a7a31388c89723b59d16719ede6937413e2c273a",
-      "en_sha256": "f9d67b1462fb294e8d63facd738733dba2db87ecc06c9f7493404cff283e2798"
+      "it_sha256": "12bff5deb07bf415c85796e63039296c460fd138ffa1697943d4e9c9662e1ef0",
+      "en_sha256": "2ced3bccef30766138020d49d752c637dc556edb57de1b6bf65ffbbaf9281eee"
     },
     "templates/review_indice.md": {
       "english": "en/templates/review_indice.md",
@@ -93,8 +93,8 @@
     },
     "templates/specifica_feature.md": {
       "english": "en/templates/specifica_feature.md",
-      "it_sha256": "c702732ebf8b35b5194d1801e9a226b919820f857d60fd57b9d8b5606b05a90d",
-      "en_sha256": "2f84f4e51d7a054938405b0e9bf02a9a109243eee589543ca854ce4a3608c859"
+      "it_sha256": "d26b89de88c420f73cdc4d8482c946d9f348291c7552168bd1cf8fd9be239e04",
+      "en_sha256": "f9b5978ccc45d552a89641c12a8d0ad79310a9c3438a3489351efd4caa568c60"
     },
     "dfd-kit/CHANGELOG.md": {
       "english": "dfd-kit/en/CHANGELOG.md",

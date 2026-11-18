@@ -14,7 +14,16 @@
 
 ## 1. Context and objective
 
-Context: [problem/opportunity/business request]. Objective: [user/business value]. Boundaries: [primary domain, involved Payment/Inventory/Notification services, explicit exclusions].
+Context: [problem/opportunity/business request]. Objective: [user/business value]. Boundaries: [primary domain, involved Payment/Inventory/Notification services, explicit exclusions]. No-go: [what the feature must not do or add, even if it looks useful].
+
+Appetite: [how much time the result is worth to the requester: a limit to respect, not an estimate. If the specification does not fit, reduce the scope or split the feature.]
+
+Original request:
+
+- Requester's words, quoted verbatim with source and date: [quote]
+- Assumptions (choices made without asking, one per line, with rationale): [list]
+
+The objective fits in one sentence. If it needs two objectives joined by "and", consider two separate features.
 
 <a id="2-descrizione-funzionale"></a>
 
@@ -42,7 +51,19 @@ Context: [problem/opportunity/business request]. Objective: [user/business value
 
 ### 2.3 Interfaces and contracts
 
-API: `METHOD /path` – [description], request/response fields and error codes/meaning. Events: [name, producer, consumers, payload]. External dependencies: [Payment/Inventory/etc.].
+API: `METHOD /path` – [description], request/response fields and error codes/meaning. Events: [name, producer, consumers, payload]. External dependencies: [Payment/Inventory/etc.]. Existing behavior extended, not replaced: [command / API / component the feature extends, and what stays unchanged].
+
+<a id="24-stati-e-casi-non-previsti"></a>
+
+### 2.4 Unforeseen states and cases
+
+The specification cannot list every possible case. Instead it defines what happens when the system reaches a state the specification does not foresee:
+
+- [ ] Reaction: [e.g. "the process exits with an explicit error and the supervisor restarts it", "the request fails with a dedicated `errorCode`", "the feature degrades in a declared way"]
+- [ ] Observable signal: [log, metric or alarm that makes the event visible] (OBS-xx)
+- [ ] Recovery: [who or what returns the system to a foreseen state, without losing or duplicating work]
+
+Not allowed: continuing silently, replacing a missing value with an invented default, adding code the specification does not cover to hold the pieces together.
 
 <a id="3-allineamento-alla-dod-estesa"></a>
 
@@ -111,6 +132,8 @@ Evaluate relevant domain criteria; values below illustrate the Checkout/promotio
 
 ## 5. Tests and validation
 
+Every check states what is observed and how: a test, a command, or a manual check with the reason it cannot be automated. Terms such as "correctly", "works", "as expected", "fast" or "user-friendly" cannot be checked: use them only when quoting the requester, and translate them into an observable result.
+
 <a id="51-test-funzionali"></a>
 
 ### 5.1 Functional tests
@@ -149,6 +172,10 @@ Evaluate relevant domain criteria; values below illustrate the Checkout/promotio
 
 - [ ] Decide whether Promo Service needs a circuit breaker.
 - [ ] Evaluate a promotion duration metric.
+
+Criteria added during development:
+
+- [ ] [criterion or scenario, who proposes it, date, requester's words it is consistent with, review outcome]
 
 <a id="8-riferimenti-e-allegati"></a>
 

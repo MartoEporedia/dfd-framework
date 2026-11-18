@@ -3,7 +3,7 @@
 # Processo End-to-End – DoD-First Driven (DFD)
 
 > **Stato**: draft / stabile  
-> **Ultimo aggiornamento**: 2026-10-08  
+> **Ultimo aggiornamento**: 2026-11-17  
 > **Proprietari**: [@team / @persona]  
 > **Riferimenti**:
 > - [Documento “vivo” DFD]
@@ -63,8 +63,11 @@ Il setup non è un documento “una tantum”. Va aggiornato quando:
 
 - cambi il dominio / architettura in modo significativo;  
 - emergono pattern ricorrenti non coperti;  
-- incidenti / learning mostrano che alcuni criteri DoD mancano o sono sbagliati;  
+- incidenti / learning mostrano che alcuni criteri DoD mancano o sono sbagliati;
+- lo stesso tipo di intervento manuale si ripete per sbloccare il lavoro;  
 - il team vuole semplificare / rafforzare il processo.
+
+Le modifiche al setup nominano categorie di cambiamento, mai incidenti passati: devono valere anche per feature non ancora scritte.
 
 ### Relazione con il processo end-to-end
 
@@ -152,9 +155,11 @@ Ogni fase ha:
 **Attività**:
 
 - Scrittura della **Specifica di Feature** (template DFD):
+  - parole del richiedente alla lettera, assunzioni separate, appetite e no-go;
   - descrizione funzionale;
+  - reazione agli stati non previsti (fallimento esplicito e osservabile, recupero);
   - allineamento ai criteri DoD (OBS-xx, SEC-xx, SLO-xx, COST-xx, UX-xx);
-  - identificazione di guardrail coinvolti;
+  - identificazione di guardrail coinvolti e dei vincoli per tipo di cambiamento della DoD;
   - primi abbozzi di test e validazione.
 
 **Output**:
@@ -166,6 +171,7 @@ Ogni fase ha:
 
 - Specifica completa nei campi principali.
 - Criteri DoD rilevanti identificati e citati.
+- Reazione agli stati non previsti definita.
 - Guardrail verificati (nessuna violazione nota).
 
 **Gate**:
@@ -232,6 +238,10 @@ Ogni fase ha:
   - log strutturati;
   - metriche custom (se necessarie);
   - trace ID.
+- Criteri emersi durante lo sviluppo:
+  - non si aggiunge codice che nessun criterio o scenario della specifica giustifica;
+  - se serve un comportamento non specificato, chi implementa lo propone come criterio o scenario nella specifica;
+  - la review confronta ogni criterio aggiunto con le parole del richiedente: uno in conflitto non entra; uno coerente che cambia il design invalida la review di design, da riconfermare.
 
 **Output**:
 
@@ -243,6 +253,7 @@ Ogni fase ha:
 
 - Tutti i test applicabili verdi, con suite finale locale in solo sviluppo e CI secondo la policy motivata del dominio in preparazione al rilascio.
 - Copertura test adeguata (secondo standard del team).
+- Nessun codice senza un criterio o scenario della specifica che lo giustifichi.
 - Log e metriche allineati alla DoD.
 
 **Gate**:
@@ -353,6 +364,9 @@ Ogni fase ha:
   - promozione alla fase successiva;
   - stop;
   - rollback parziale o totale.
+- Verifica che la versione sia in uso ovunque serva (ambienti, tenant, dispositivi, client):
+  - un blocco esterno, come un dispositivo offline, si riprende da solo quando sparisce;
+  - un passo che solo una persona può fare diventa una sola richiesta con l'azione esatta.
 
 **Output**:
 
@@ -362,7 +376,7 @@ Ogni fase ha:
 
 **Criteri di uscita**:
 
-- Rollout completato con successo **oppure**
+- Rollout completato con successo, con la versione in uso in tutti i punti previsti, **oppure**
 - Rollout interrotto con decisione documentata e piano di mitigazione.
 
 **Gate**:
@@ -389,6 +403,11 @@ Ogni fase ha:
   - cosa ha funzionato bene;
   - cosa ha creato attrito;
   - eventuali incidenti / near-miss.
+- Riconduzione di ogni problema alla sua causa:
+  - errore intercettato da una verifica: è il funzionamento normale, nessuna modifica;
+  - contenuto mancante nella specifica: correggere la specifica e il template o setup che non lo chiedeva;
+  - risultato sbagliato non intercettato: chiarire perché la specifica lo permetteva, poi correggere come sopra.
+- Misura del costo del processo: interventi umani necessari per sbloccare il lavoro, tempo e risorse spesi in verifica. Se il processo costa più di quanto previene, valutare un percorso più leggero.
 - Proposte di:
   - aggiornamento della DoD Estesa;
   - nuovi guardrail;

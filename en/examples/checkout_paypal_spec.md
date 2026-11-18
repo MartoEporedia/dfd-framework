@@ -5,7 +5,7 @@
 # Feature specification – PayPal in Checkout
 
 > **Status**: illustrative example, not approved  
-> **Last updated**: 2026-10-08  
+> **Last updated**: 2026-11-17  
 > **Domain**: Checkout  
 > **References**: [Checkout DoD](checkout_dod.md), [Risk](../rischio.md), [Adoption](../adozione.md).
 
@@ -39,6 +39,7 @@ Route: full complete. Cost estimates remain to be completed; they are not observ
 - Confirmation: verify notification authenticity/correlation before updating order state.
 - Duplicates: repeated confirmation must not duplicate orders/charges.
 - Failure/timeout: understandable error, consistent state and another payment choice.
+- Unforeseen state: a provider notification with an unknown payment status does not update the order. The system logs the event with `errorCode` `PAYPAL_UNKNOWN_STATE` and raises an alarm (OBS-02); the order stays awaiting confirmation, with no inferred charge or cancellation.
 
 Define actual provider contracts, states, idempotency, timeouts and retry policies. Retries must not duplicate financial effects.
 
