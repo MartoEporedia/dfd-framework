@@ -3578,3 +3578,170 @@ fn installed_bundles_follow_english_primary_layout() {
         }
     }
 }
+
+#[test]
+fn kit_resources_adopt_unforeseen_states_revision() {
+    let cases = [
+        (
+            "en",
+            [
+                (".dfd/kit/fondamenta.md", "unforeseen states"),
+                (
+                    ".dfd/kit/processo-e2e.md",
+                    "Criteria that emerge during development",
+                ),
+                (
+                    ".dfd/kit/templates/dod-estesa.md",
+                    "### 3.4 Unforeseen states",
+                ),
+                (
+                    ".dfd/kit/templates/dod-estesa.md",
+                    "## 6. Change-type constraints",
+                ),
+                (
+                    ".dfd/kit/templates/review_design.md",
+                    "### 1.6 Specification quality",
+                ),
+                (
+                    ".dfd/kit/templates/review_design_light.md",
+                    "### 1.5 Specification quality",
+                ),
+                (
+                    ".dfd/kit/templates/configurazione_rollout.md",
+                    "Where the version must be in use",
+                ),
+                (
+                    ".dfd/kit/templates/cambiamento_rapido.md",
+                    "Requester's words, verbatim",
+                ),
+                (
+                    ".dfd/domains/checkout/templates/specifica_feature.md",
+                    "Unforeseen states",
+                ),
+                (
+                    ".dfd/domains/checkout/templates/specifica_feature.md",
+                    "Requester's words",
+                ),
+            ],
+        ),
+        (
+            "it",
+            [
+                (".dfd/kit/fondamenta.md", "stati non previsti"),
+                (
+                    ".dfd/kit/processo-e2e.md",
+                    "Criteri emersi durante lo sviluppo",
+                ),
+                (
+                    ".dfd/kit/templates/dod-estesa.md",
+                    "### 3.4 Stati non previsti",
+                ),
+                (
+                    ".dfd/kit/templates/dod-estesa.md",
+                    "## 6. Vincoli per tipo di cambiamento",
+                ),
+                (
+                    ".dfd/kit/templates/review_design.md",
+                    "### 1.6 Qualità della specifica",
+                ),
+                (
+                    ".dfd/kit/templates/review_design_light.md",
+                    "### 1.5 Qualità della specifica",
+                ),
+                (
+                    ".dfd/kit/templates/configurazione_rollout.md",
+                    "Dove la versione deve essere in uso",
+                ),
+                (
+                    ".dfd/kit/templates/cambiamento_rapido.md",
+                    "Parole del richiedente, alla lettera",
+                ),
+                (
+                    ".dfd/domains/checkout/templates/specifica_feature.md",
+                    "Stati e casi non previsti",
+                ),
+                (
+                    ".dfd/domains/checkout/templates/specifica_feature.md",
+                    "Parole del richiedente",
+                ),
+            ],
+        ),
+    ];
+    for (language, expected) in cases {
+        let p = Project::new();
+        p.run(
+            &[
+                "--lang",
+                language,
+                "init",
+                "--harness",
+                "codex",
+                "--domain",
+                "checkout",
+            ],
+            0,
+        );
+        for (file, text) in expected {
+            assert!(
+                fs::read_to_string(p.path(file)).unwrap().contains(text),
+                "{language}: {file} lacks {text:?}"
+            );
+        }
+    }
+}
+
+#[test]
+fn skills_guide_unforeseen_states_and_added_criteria() {
+    let cases = [
+        (
+            "en",
+            [
+                ("dfd-specify", "requester's words verbatim"),
+                ("dfd-specify", "unforeseen states"),
+                ("dfd-specify", "change-type constraints"),
+                ("dfd-implement", "no criterion or scenario justifies"),
+                ("dfd-review-design", "against the requester's words"),
+                ("dfd-verify", "no criterion or scenario justifies"),
+            ],
+        ),
+        (
+            "it",
+            [
+                ("dfd-specify", "parole del richiedente alla lettera"),
+                ("dfd-specify", "stati non previsti"),
+                ("dfd-specify", "vincoli per tipo di cambiamento"),
+                ("dfd-implement", "nessun criterio o scenario giustifica"),
+                ("dfd-review-design", "con le parole del richiedente"),
+                ("dfd-verify", "nessun criterio o scenario giustifica"),
+            ],
+        ),
+    ];
+    for (adapter, directory) in [
+        ("codex", ".agents/skills"),
+        ("claude-code", ".claude/skills"),
+    ] {
+        for (language, expected) in &cases {
+            let p = Project::new();
+            p.run(
+                &[
+                    "--lang",
+                    language,
+                    "init",
+                    "--harness",
+                    adapter,
+                    "--domain",
+                    "checkout",
+                ],
+                0,
+            );
+            for (skill, text) in expected {
+                let body =
+                    fs::read_to_string(p.path(&format!("{directory}/{skill}/SKILL.md"))).unwrap();
+                assert!(
+                    body.contains(text),
+                    "{adapter}/{language}: {skill} lacks {text:?}"
+                );
+            }
+        }
+    }
+}

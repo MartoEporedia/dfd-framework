@@ -6,6 +6,10 @@ Tutte le modifiche rilevanti di DFD Kit. Il formato segue [Keep a Changelog](htt
 
 ## [Unreleased]
 
+### Aggiunto
+
+- Stati non previsti e qualità della specifica nel kit: le copie del kit di fondamenta, processo e cinque template adottano la revisione del framework (stati non previsti, vincoli per tipo di cambiamento, criteri aggiunti durante lo sviluppo, verifiche osservabili); il template di specifica del kit aggiunge parole del richiedente, assunzioni, appetite, no-go, comportamento esteso e stati non previsti; `dfd-specify`, `dfd-implement`, `dfd-review-design` e `dfd-verify` li applicano. I template dei domini esistenti non vengono riscritti.
+
 ### Modificato
 
 - **Incompatibile:** l'inglese è la lingua principale. I documenti inglesi stanno nei percorsi originali e quelli italiani in `it/` e `dfd-kit/it/`; la CLI usa l'inglese quando manca `.dfd/language.json`, e `init`/`install` salvano questo default se non esiste una preferenza. Per restare in italiano in un progetto esistente eseguire `dfd language it`. Le note di release mostrano prima l'inglese.

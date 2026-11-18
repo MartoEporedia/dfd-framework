@@ -6,6 +6,10 @@ All notable changes to DFD Kit. The format follows [Keep a Changelog](https://ke
 
 ## [Unreleased]
 
+### Added
+
+- Unforeseen states and specification quality in the kit: the kit's copies of the foundations, process and five templates adopt the framework revision (unforeseen states, change-type constraints, criteria added during development, observable checks); the kit's specification template adds requester's words, assumptions, appetite, no-go, extended behavior and unforeseen states; `dfd-specify`, `dfd-implement`, `dfd-review-design` and `dfd-verify` apply them. Existing domain templates are not rewritten.
+
 ### Changed
 
 - **Breaking:** English is the primary language. English documents live in the original paths and Italian ones under `it/` and `dfd-kit/it/`; the CLI uses English when `.dfd/language.json` is missing, and `init`/`install` save that default when no preference exists. To keep Italian in an existing project, run `dfd language it`. Release notes show English first.

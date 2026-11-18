@@ -14,6 +14,10 @@
 - Metriche di successo: TODO
 - Componenti modificati: TODO
 - Fuori scope: TODO
+- No-go (cosa il cambiamento non deve fare o aggiungere): TODO
+- Appetite (quanto tempo vale il risultato per chi lo chiede: un limite, non una stima): TODO
+- Parole del richiedente, alla lettera con fonte e data: TODO
+- Assunzioni (scelte fatte senza chiedere, una per riga, con motivazione): TODO
 - Nel brownfield: processi esistenti da riusare e lacune baseline pertinenti: TODO
 
 ## 2. Classificazione del rischio
@@ -26,6 +30,8 @@
 
 - Scenari principali e criteri di accettazione: TODO
 - Errori, failure mode e comportamenti degradati: TODO
+- Stati e casi non previsti: reazione esplicita e osservabile e recupero; mai prosecuzione silenziosa, default inventati o codice non coperto: TODO
+- Comportamento esistente esteso, non sostituito (e cosa resta invariato): TODO
 - API, eventi, dati e dipendenze coinvolti: TODO
 - Compatibilità e migrazioni, se necessarie: TODO
 
@@ -45,6 +51,8 @@ Usare gli identificatori reali della DoD. Valutare ogni criterio richiesto per i
 
 ## 6. Test e validazione prevista
 
+Ogni verifica indica un risultato osservabile e come si osserva. Termini come "correttamente", "funziona", "come previsto" o "veloce" non sono verificabili: usarli solo citando il richiedente. Applicare i vincoli per tipo di cambiamento della DoD di dominio pertinenti.
+
 - Test funzionali derivati dai criteri: TODO
 - Test non funzionali proporzionati al rischio: TODO
 - Verifiche manuali e loro evidenze attese: TODO
@@ -54,6 +62,7 @@ Usare gli identificatori reali della DoD. Valutare ogni criterio richiesto per i
 
 - Punti bloccanti da chiarire: TODO
 - Condizioni e responsabili: TODO
+- Criteri aggiunti durante lo sviluppo, ciascuno con le parole del richiedente con cui è coerente e l'esito della review: nessuno finora
 - Riferimento alla review e alla decisione umana: TODO
 
 ## 8. Revisioni

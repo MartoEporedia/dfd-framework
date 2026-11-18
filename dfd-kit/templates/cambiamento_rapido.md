@@ -6,12 +6,14 @@
 
 - ID / owner:
 - Observed problem:
-- Bounded scope:
+- Requester's words, verbatim:
+- Bounded scope and no-go:
 - Type: behavior fix / editorial.
 - Known contract restored (reference to approved design/DoD):
 - Risk: level and rationale for all five dimensions; all Low for rapid.
 - Contracts/guardrails changed: no; critical behavior: no; open questions: none.
 - Relevant DoD criteria:
+- Unforeseen states touched by the fix: explicit, observable reaction, or "none".
 - Selected checks and justified scope:
 - Fix: relevant red regression before green, with commands, dates, results and logs.
 - Editorial: relevant green check, no artificial red.

@@ -98,8 +98,8 @@
     },
     "dfd-kit/CHANGELOG.md": {
       "italian": "dfd-kit/it/CHANGELOG.md",
-      "en_sha256": "3bff831e70f1cc5b9a0578cdaf67db91791790cf7cf4ad5f8a7c9cdbc605deda",
-      "it_sha256": "490d40f84f7084ff1c931ff027151b85448a94ff9ad7b4b9df9ead30f85d1271"
+      "en_sha256": "0db2f1fa3e66a4632cd7b8c894c4451472d6d4ea0ae92e44a7dcd999de53896f",
+      "it_sha256": "2ea5400bc9be324776664dc21366c9749af09f6fd79f53c4983cfb3bd7385019"
     },
     "dfd-kit/CONTRIBUTING.md": {
       "italian": "dfd-kit/it/CONTRIBUTING.md",
@@ -128,8 +128,8 @@
     },
     "dfd-kit/fondamenta.md": {
       "italian": "dfd-kit/it/fondamenta.md",
-      "en_sha256": "cee0b23f6e259de6356e5409ecefb1851d587282db1fee55f2757c4cf42eb194",
-      "it_sha256": "7df9d599ad996bbfad0a395f8871e074165291a3fb0b26d77e84e681ba62f0d0"
+      "en_sha256": "f2e075c90af95cdc56e405f16c1d8a0afc84aea22351dcaee094f617171dca7a",
+      "it_sha256": "4414f88e441a130f2cc10b2653d44a4a59cba80cae336220daa3f1bace390002"
     },
     "dfd-kit/harness-proposta.md": {
       "italian": "dfd-kit/it/harness-proposta.md",
@@ -138,8 +138,8 @@
     },
     "dfd-kit/processo-e2e.md": {
       "italian": "dfd-kit/it/processo-e2e.md",
-      "en_sha256": "fc6b7f675ef2aced70175f3702cb15dc69ec5c171384ba47bdcbcafedb2ec5f0",
-      "it_sha256": "6886aca3fce3afa601f7051d0044f74b65e4e0a3ed36b3d0bdfc4e57cb4e0c4d"
+      "en_sha256": "e3e1e61ce314ece6ac24d0f8222b2e3b21be80231ebedfd116b8796c0afe63ad",
+      "it_sha256": "8b6a42af38663343fb05f914e6b49cfdd821e90306a24eef8764fa21d360064c"
     },
     "dfd-kit/raci.md": {
       "italian": "dfd-kit/it/raci.md",
@@ -163,8 +163,8 @@
     },
     "dfd-kit/skills/dfd-implement/SKILL.md": {
       "italian": "dfd-kit/it/skills/dfd-implement/SKILL.md",
-      "en_sha256": "3c8459ddd646f71f0d4c851050b3b13a96fc1bd2c3766d79fc946d1456573dee",
-      "it_sha256": "76defbea159d685da17302e090e468f871b75c7f4387f04640f2b96867bb7b03"
+      "en_sha256": "ca2f45210f01980c65335532571f084511ce77d4deb8b3a95e1e43a4c4174fb2",
+      "it_sha256": "3d4400b59834682c19c1edad6832e4831d2792397d50be55fc4c8e81e47020b2"
     },
     "dfd-kit/skills/dfd-init/SKILL.md": {
       "italian": "dfd-kit/it/skills/dfd-init/SKILL.md",
@@ -183,8 +183,8 @@
     },
     "dfd-kit/skills/dfd-review-design/SKILL.md": {
       "italian": "dfd-kit/it/skills/dfd-review-design/SKILL.md",
-      "en_sha256": "52480debc8fa851fb39371f64292d55c01e305fa30eac5246c09027c266105a1",
-      "it_sha256": "bb00e50e9139c265a89c410ec087e3e82b0782c3d291d4cedce6d2ac9145d87b"
+      "en_sha256": "e8484f3efe57623cd61728df7850aaecb958ce81556a257d4a1897ee9e4813d5",
+      "it_sha256": "3d563758ebf44ea5f76259b5cdac0cd5c2ed3b8fc3e4085691829d5efeb5c871"
     },
     "dfd-kit/skills/dfd-review-release/SKILL.md": {
       "italian": "dfd-kit/it/skills/dfd-review-release/SKILL.md",
@@ -198,8 +198,8 @@
     },
     "dfd-kit/skills/dfd-specify/SKILL.md": {
       "italian": "dfd-kit/it/skills/dfd-specify/SKILL.md",
-      "en_sha256": "59c6464c3fbbbb50cb020bf5a40fe2eb247946498fc5361ab9609953fb8d23e4",
-      "it_sha256": "78a969172865e103e81b35f399f0671073aea56ba09291b5350cbc794be9d83a"
+      "en_sha256": "35070d12418187f0c8fcc5d06438d3a6a51cadde9c82814f3f05ff465e0607f2",
+      "it_sha256": "a982486b2a5a1d08b6969c1edfd9953542fd5f7194cc51324677884a0eafe6e7"
     },
     "dfd-kit/skills/dfd-status/SKILL.md": {
       "italian": "dfd-kit/it/skills/dfd-status/SKILL.md",
@@ -208,8 +208,8 @@
     },
     "dfd-kit/skills/dfd-verify/SKILL.md": {
       "italian": "dfd-kit/it/skills/dfd-verify/SKILL.md",
-      "en_sha256": "9cbef5ee4285014a04127902ef523682c273d5e735ae22bda2389ca5ddba5e5e",
-      "it_sha256": "02bc0a7eec96e5e73ff2eee962ac1c9a5d00f6fcf9788f53e908e76095fb5331"
+      "en_sha256": "f85e4df1e488c15b5d242b3be5164b15fe34a720deaa6c883c69479d8feba231",
+      "it_sha256": "89252e76a40a257a530b562bc6889cc002aab0abca05eb3c4d4a9a6f9418ab55"
     },
     "dfd-kit/templates/assessment_adozione.md": {
       "italian": "dfd-kit/it/templates/assessment_adozione.md",
@@ -218,8 +218,8 @@
     },
     "dfd-kit/templates/cambiamento_rapido.md": {
       "italian": "dfd-kit/it/templates/cambiamento_rapido.md",
-      "en_sha256": "30c21646d1d2d2b6be5466dc8d70520424a7940c580e9f47319ae6e2850fb167",
-      "it_sha256": "a9069607771877aa9403ca884d550121b3cd4d2cded6586a16d07e488192b718"
+      "en_sha256": "aad679c6b620789d9658cc5c3012e4419f24993920197134bed79dc14a948442",
+      "it_sha256": "4fb34cbedf8aa0cc8a1f101d4d1524e71e0bcdffdd93e8fbe512be082ee962d3"
     },
     "dfd-kit/templates/collaborazione.md": {
       "italian": "dfd-kit/it/templates/collaborazione.md",
@@ -228,8 +228,8 @@
     },
     "dfd-kit/templates/configurazione_rollout.md": {
       "italian": "dfd-kit/it/templates/configurazione_rollout.md",
-      "en_sha256": "11cbcf5ab9328827b6455c2a6ec9a66942faff7a24a987c19f718db16a5c79b0",
-      "it_sha256": "5c638395ba9addf8b1497f7d5ead2106e6e950fb67646f30e582b632cdbfdacb"
+      "en_sha256": "d01c8736eb45bec00c5413b40409bd29e654f82e40c1c4099db600dbdd228a7b",
+      "it_sha256": "e7343b10f77c4a98b337e362c729224b3c9ec98875e69eb5bc8591731605c919"
     },
     "dfd-kit/templates/contratto_toolkit.md": {
       "italian": "dfd-kit/it/templates/contratto_toolkit.md",
@@ -238,8 +238,8 @@
     },
     "dfd-kit/templates/dod-estesa.md": {
       "italian": "dfd-kit/it/templates/dod-estesa.md",
-      "en_sha256": "1ebe0c61befb793bc35788a2c5090edabd94ffc5a31abf78fd5e797873f7f62b",
-      "it_sha256": "92c9bc495ef5865798a57459bcea5795e5b87d8b462a0c5fcc2f7c48669974dc"
+      "en_sha256": "d2ef5baf7f7681ee47fc2c109c36710ac7173e048e82b4dee7c1312a8ed957fc",
+      "it_sha256": "312dc9f21de854d0a1722f7ce122cc019b8c1484c9ed25f0eadc4c031028f8a5"
     },
     "dfd-kit/templates/guardrail_dominio.md": {
       "italian": "dfd-kit/it/templates/guardrail_dominio.md",
@@ -253,13 +253,13 @@
     },
     "dfd-kit/templates/review_design.md": {
       "italian": "dfd-kit/it/templates/review_design.md",
-      "en_sha256": "a075e1780e979f716ac548b43f2fcf0d2360ea1e126cf8320d933409c8fd7089",
-      "it_sha256": "732a8c1f4fa15f553331992eb6536e662150a9cf7b845bd1a9f893b47014ae36"
+      "en_sha256": "b398f0725090ea0e9391c537dfb60de51d9410722212ac71dc41e5c4fb4eb054",
+      "it_sha256": "7febca97fee12fe9a16f5465575eed0befd13f2a97b1ee8037a67b39870a976c"
     },
     "dfd-kit/templates/review_design_light.md": {
       "italian": "dfd-kit/it/templates/review_design_light.md",
-      "en_sha256": "d6893878f15780de61f6ee025b22b2d3c2c9d2f9d6137b0f20dfe20c78488b2b",
-      "it_sha256": "96e3c754b987a68c63e30902d20614a572e1bd215b4fb92cdac4883fa49d39bb"
+      "en_sha256": "d664d658cdd5733690a3b81d586cbeb6cbe796a4453b7c410b0ee84eb51bdcac",
+      "it_sha256": "5f0ab048ac058293e195c7e57ad04846e633decb0635c83385b8a54d0788a80e"
     },
     "dfd-kit/templates/review_indice.md": {
       "italian": "dfd-kit/it/templates/review_indice.md",
@@ -278,8 +278,8 @@
     },
     "dfd-kit/templates/specifica_feature.md": {
       "italian": "dfd-kit/it/templates/specifica_feature.md",
-      "en_sha256": "fae642a8a360e2c2ea60165ef3c55ba2fb718b2593eab2392bc019cc773880ad",
-      "it_sha256": "77f775af56e09944f07ce371f30d7b3ceb058507235c6703a51e1f0a60988edc"
+      "en_sha256": "ca89857a5aef4c69692e880ca53947b87c2abd43681f8e1f5405122873ae11d7",
+      "it_sha256": "0be8c56e3151199dcaf66c489a768a21086ff2fc8a4c6bed7ef20a50b839ee5e"
     }
   }
 }

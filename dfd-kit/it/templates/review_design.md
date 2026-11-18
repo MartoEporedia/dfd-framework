@@ -53,6 +53,7 @@ Se questi criteri non sono soddisfatti, la review di design non dovrebbe procede
 - [ ] È stimato l’impatto su latenza, error rate, disponibilità.
 - [ ] Sono definite le mitigazioni per dipendenze esterne (timeout, retry, fallback).
 - [ ] Sono identificati i nuovi rischi per affidabilità e le relative contromisure.
+- [ ] È definita la reazione agli stati non previsti: fallimento esplicito e osservabile, recupero, nessuna prosecuzione silenziosa.
 
 ### 1.4 Costo
 
@@ -66,6 +67,14 @@ Se questi criteri non sono soddisfatti, la review di design non dovrebbe procede
 - [ ] Sono identificati i KPI business impattati (es. tasso di completamento).
 - [ ] Sono definite le soglie di peggioramento accettabile (UX-02).
 - [ ] È definito un piano di validazione in produzione (rollout per tenant, esperimento).
+
+### 1.6 Qualità della specifica
+
+- [ ] Le parole del richiedente sono riportate alla lettera; le assunzioni sono separate e motivate.
+- [ ] Obiettivo in una frase; appetite e no-go dichiarati.
+- [ ] Ogni verifica descrive un risultato osservabile; nessun "correttamente", "funziona", "come previsto" o "veloce" fuori da una citazione.
+- [ ] I vincoli per tipo di cambiamento applicabili (DoD Estesa) sono rispettati, anche nei casi che la specifica non descrive.
+- [ ] Il comportamento esistente esteso è indicato, con ciò che resta invariato.
 
 ---
 

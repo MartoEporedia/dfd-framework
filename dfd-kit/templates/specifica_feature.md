@@ -18,6 +18,10 @@
 - Success metrics: TODO
 - Changed components: TODO
 - Out of scope: TODO
+- No-go (what the change must not do or add): TODO
+- Appetite (time the result is worth to the requester: a limit, not an estimate): TODO
+- Requester's words, verbatim with source and date: TODO
+- Assumptions (choices made without asking, one per line, with rationale): TODO
 - Brownfield processes to reuse and relevant baseline gaps: TODO
 
 <a id="2-classificazione-del-rischio"></a>
@@ -34,6 +38,8 @@
 
 - Main scenarios and acceptance criteria: TODO
 - Errors, failure modes and degradation: TODO
+- Unforeseen states: explicit, observable reaction and recovery; never silent continuation, invented defaults or uncovered code: TODO
+- Existing behavior extended, not replaced (and what stays unchanged): TODO
 - APIs, events, data and dependencies: TODO
 - Compatibility/migration if needed: TODO
 
@@ -59,6 +65,8 @@ Use actual domain IDs. Evaluate every changes criterion; justify exclusions. Lin
 
 ## 6. Planned tests and validation
 
+Every check names an observable result and how it is observed. Words such as "correctly", "works", "as expected" or "fast" are not checkable: use them only when quoting the requester. Apply the change-type constraints of the domain DoD that fit this change.
+
 - Criterion-derived functional tests: TODO
 - Risk-proportionate nonfunctional tests: TODO
 - Manual checks/expected evidence: TODO
@@ -70,6 +78,7 @@ Use actual domain IDs. Evaluate every changes criterion; justify exclusions. Lin
 
 - Blocking questions: TODO
 - Conditions/owners: TODO
+- Criteria added during development, each with the requester's words it is consistent with and its review outcome: none so far
 - Human review/decision reference: TODO
 
 <a id="8-revisioni"></a>

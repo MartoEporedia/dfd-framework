@@ -1,0 +1,25 @@
+$ cargo test --locked --offline --test workflow skills_guide_unforeseen_states_and_added_criteria
+# executed_at: 2026-11-18T00:12:43.126890Z
+
+running 1 test
+test skills_guide_unforeseen_states_and_added_criteria ... FAILED
+
+failures:
+
+---- skills_guide_unforeseen_states_and_added_criteria stdout ----
+
+thread 'skills_guide_unforeseen_states_and_added_criteria' (65928504) panicked at tests/workflow.rs:3740:17:
+codex/en: dfd-specify lacks "requester's words verbatim"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    skills_guide_unforeseen_states_and_added_criteria
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 93 filtered out; finished in 0.68s
+
+   Compiling dfd-kit v0.2.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.47s
+     Running tests/workflow.rs (target/debug/deps/workflow-ff3d4fc9eadea208)
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101

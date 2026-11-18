@@ -1,0 +1,25 @@
+$ cargo test --locked --offline --test workflow kit_resources_adopt_unforeseen_states_revision
+# executed_at: 2026-11-18T00:11:49.866503Z
+
+running 1 test
+test kit_resources_adopt_unforeseen_states_revision ... FAILED
+
+failures:
+
+---- kit_resources_adopt_unforeseen_states_revision stdout ----
+
+thread 'kit_resources_adopt_unforeseen_states_revision' (65918563) panicked at tests/workflow.rs:3685:13:
+en: .dfd/kit/fondamenta.md lacks "unforeseen states"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    kit_resources_adopt_unforeseen_states_revision
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 92 filtered out; finished in 0.78s
+
+   Compiling dfd-kit v0.2.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.20s
+     Running tests/workflow.rs (target/debug/deps/workflow-ff3d4fc9eadea208)
+error: test failed, to rerun pass `--test workflow`
+# exit_code: 101

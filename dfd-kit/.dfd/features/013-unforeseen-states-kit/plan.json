@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "0ab60ee2a52ef98a507c08e5e19bebfdbc89db9aad63590310cf264263abef46",
+  "tasks": [
+    {
+      "id": "kit-resources",
+      "owner": "manutentore del repository",
+      "description": "Copie del kit e template di specifica con la revisione dell'ondata 1",
+      "criteria": [
+        "SEC-02",
+        "SLO-01",
+        "UX-01"
+      ],
+      "implementation": "fondamenta.md, processo-e2e.md e cinque template del kit allineati alla radice in en e it (riga di navigazione del kit invariata); templates/specifica_feature.md del kit con i campi nuovi; i template dei domini esistenti non vengono riscritti.",
+      "verification": "Red/green di cargo test kit_resources_adopt_unforeseen_states_revision (init in en e it); test di preservazione esistenti."
+    },
+    {
+      "id": "skills",
+      "owner": "manutentore del repository",
+      "description": "Skill dfd-specify, dfd-implement, dfd-review-design e dfd-verify",
+      "criteria": [
+        "SEC-03",
+        "UX-02",
+        "SLO-02",
+        "COST-02"
+      ],
+      "implementation": "Istruzioni su parole del richiedente, assunzioni, domande con opzioni, stati non previsti, vincoli per tipo di cambiamento, nessun codice senza criterio, criteri aggiunti confrontati con la richiesta, verifiche osservabili; in en e it.",
+      "verification": "Red/green di cargo test skills_guide_unforeseen_states_and_added_criteria (skill installate in en e it); suite locale, doctor, check_translations e CI reale sulla PR."
+    }
+  ],
+  "open_questions": []
+}

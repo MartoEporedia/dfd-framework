@@ -20,6 +20,12 @@ Feature: [for example new PayPal payment method]. Environment: [staging / produc
 - [x] Tenant/segment rollout (feature flag).
 - [ ] Combined canary and tenant rollout.
 
+Where the version must be in use: [environments, tenants, devices, clients]. The rollout is complete only when all of them run the new version; until then the feature shows which one it is waiting on.
+
+External blockers: [e.g. offline device, maintenance window]. The rollout resumes by itself when the blocker clears.
+
+Steps only a person can take: [exact action, who performs it]. Each step becomes a single request that closes once the step is observed as done and is not repeated while pending.
+
 <a id="2-feature-flag--configurazione"></a>
 
 ## 2. Feature flag / configuration

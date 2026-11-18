@@ -1,6 +1,6 @@
 # Review di design DFD
 
-Gate: awaiting-human-review
+Gate: approved
 
 ## Controlli strutturali
 
