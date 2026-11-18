@@ -1,0 +1,12 @@
+# Assessment del rischio DFD
+
+Rischio: "low"
+Percorso: "light"
+
+- security: "low" — Nessun nuovo permesso, percorso o input; nessuna modifica alla registrazione delle decisioni umane.
+- reliability: "low" — La CLI non cambia; i campi nuovi del template di specifica seguono le regole esistenti sui segnaposto (TODO va risolto prima della review), quindi nessun gate nuovo.
+- cost: "low" — Nessuna dipendenza o servizio nuovo; i template aggiungono pochi campi da compilare.
+- business: "medium" — Le skill guidano gli agenti negli harness degli utilizzatori: diventano più restrittive (nessun codice senza criterio, criteri aggiunti in sviluppo confrontati con le parole del richiedente, reazione agli stati non previsti obbligatoria nella specifica). Un'istruzione ambigua potrebbe bloccare lavoro legittimo o essere ignorata.
+- architecture: "low" — Nessun cambiamento a codice, contratti JSON o comandi: cambiano risorse incorporate nel binario (copie di framework e template, skill) con la stessa struttura e gli stessi percorsi installati.
+
+Una sola dimensione Medium segue light; nuovi servizi seguono full completo.

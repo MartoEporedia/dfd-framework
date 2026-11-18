@@ -134,6 +134,15 @@ Retention: [for example 12 months audit, 30 days operational logs].
 - [ ] Retries: [policy/backoff].
 - [ ] Circuit breaker: [where applied].
 
+<a id="34-stati-non-previsti"></a>
+
+### 3.4 Unforeseen states
+
+- [ ] A state the specification does not foresee produces an explicit, observable failure, never silent continuation: [e.g. "the process exits with an error and is restarted", "the request fails with a dedicated `errorCode`"]
+- [ ] The failure is visible: [associated log, metric or alarm] (OBS-xx)
+- [ ] Recovery needs no human intervention, except declared exceptions: [supervisor, idempotent retry, rollback]
+- [ ] Where an immediate failure is not acceptable (e.g. payment flows), the degradation is declared and linked to section 3.2.
+
 <a id="4-costo"></a>
 
 ## 4. Cost
@@ -180,9 +189,30 @@ Source: [Cost Explorer, internal dashboards, other].
 - [ ] Regulatory requirements: [describe].
 - [ ] Specific controls: [describe].
 
-<a id="6-riferimenti-ai-criteri-codici"></a>
+<a id="6-vincoli-per-tipo-di-cambiamento"></a>
 
-## 6. Criterion identifiers
+## 6. Change-type constraints
+
+Each row is a constraint to respect, not a case to list in the specification. Review checks that the applicable constraints also hold in situations the specification does not describe.
+
+| The change… | Constraint | Concerns |
+|---|---|---|
+| introduces a file, message or data format | the complete shape is defined; unknown fields have a declared behavior | OBS, SLO |
+| talks to an outside tool or service | at least one check uses the real one; its errors are reported with the original message | SLO, OBS |
+| decides from input | input that does not allow a decision produces an explicit refusal, never an invented choice | SLO |
+| shows a value that can be missing | the missing value appears as unknown, never as zero or a placeholder | OBS, UX |
+| keeps work or state that must survive a crash | after an interruption midway, the next run resumes without losing or repeating work | SLO |
+| handles a secret | the secret appears in no output, log or error, even when something fails | SEC |
+| makes something reachable over a network | who can reach it is declared, and it is checked that others cannot | SEC |
+| runs a setup or migration | repeating it on a setup already done or half done damages nothing | SLO |
+| runs for a long time | if it stalls or exits, something brings it back without human intervention and the event is observable | SLO, OBS |
+| adds a state or stage | there is a way into it and a way out of it | SLO |
+
+Adapt the table to the domain: rows name categories of change, never past incidents.
+
+<a id="7-riferimenti-ai-criteri-codici"></a>
+
+## 7. Criterion identifiers
 
 Stable identifiers allow references from feature specifications: OBS-01, OBS-02; SEC-01, SEC-02; SLO-01, SLO-02; COST-01, COST-02; UX-01, COMP-01, and subsequent IDs.
 
@@ -192,9 +222,9 @@ Stable identifiers allow references from feature specifications: OBS-01, OBS-02;
 - SLO-01: [short description].
 - COST-01: [short description].
 
-<a id="7-evoluzione-del-documento"></a>
+<a id="8-evoluzione-del-documento"></a>
 
-## 7. Document evolution
+## 8. Document evolution
 
 - YYYY-MM-DD: [revision, such as adding transaction cost criteria].
 - YYYY-MM-DD: [revision].

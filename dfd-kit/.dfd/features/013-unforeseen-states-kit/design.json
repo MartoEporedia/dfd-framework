@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "Il kit installa la revisione dell'ondata 1 (stati non previsti, vincoli per tipo di cambiamento, criteri aggiunti in sviluppo, qualità della specifica) e le skill dfd-specify, dfd-implement, dfd-review-design e dfd-verify la applicano, in inglese e italiano.",
+  "business_metrics": [
+    "init in en e it installa le copie e i template con la revisione",
+    "Le quattro skill installate contengono le istruzioni nuove in entrambe le lingue",
+    "Suite, doctor, check_translations e CI verdi"
+  ],
+  "epic": {
+    "reference": "Richiesta del manutentore in chat il 2026-11-18 ('Ondata 2'), sul piano concordato in chat il 2026-11-16/17",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-11-18T00:04:09Z"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "excluded",
+      "justification": "Nessuna diagnostica, exit code o stato cambiato."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "excluded",
+      "justification": "Meccanismo delle evidenze invariato."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "excluded",
+      "justification": "Nessun percorso o input nuovo."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "applicable",
+      "implementation": "Le risorse nuove non sovrascrivono i template dei domini esistenti.",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Le skill confrontano i criteri aggiunti con le parole del richiedente; nessuna approvazione implicita.",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Comandi e contratti invariati; template nuovi solo per i domini nuovi.",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Suite, doctor, check_translations e CI verdi.",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Scritture atomiche e lock invariati."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "excluded",
+      "justification": "Binario offline invariato."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "applicable",
+      "implementation": "Verifiche proporzionate: test sul contenuto installato, nessun mutante nuovo perché nessun gate cambia.",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Copie, template e skill coerenti con il framework in entrambe le lingue.",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "applicable",
+      "implementation": "Le quattro skill hanno le stesse istruzioni in tutti gli adapter e in entrambe le lingue.",
+      "verification": "Red/green dei test sulle risorse e sulle skill installate in en e it; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    }
+  ],
+  "test_plan": "Red/green di kit_resources_adopt_unforeseen_states_revision e skills_guide_unforeseen_states_and_added_criteria (risorse e skill installate in en e it); test di preservazione esistenti; suite locale con fmt, Clippy, test, doctor, check_translations e test Python; CI reale sulla PR.",
+  "guardrails": "Testo delle copie identico alla radice salvo la riga di navigazione del kit; nessuna riscrittura dei template dei domini esistenti; nessun gate nuovo nella CLI.",
+  "open_questions": []
+}

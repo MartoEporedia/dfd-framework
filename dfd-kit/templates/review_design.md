@@ -55,6 +55,7 @@ Otherwise complete the epic first.
 - [ ] Latency/error-rate/availability impact assessed for the proposed design.
 - [ ] Dependency timeout/retry/fallback mitigations defined in the specification.
 - [ ] New reliability risks and countermeasures identified.
+- [ ] Reaction to unforeseen states defined: explicit, observable failure, recovery, no silent continuation.
 
 <a id="14-costo"></a>
 
@@ -72,6 +73,16 @@ Otherwise complete the epic first.
 - [ ] Affected business KPIs identified for the design.
 - [ ] Acceptable UX-02 deterioration thresholds clear and measurable.
 - [ ] Production validation plan outlined.
+
+<a id="16-qualità-della-specifica"></a>
+
+### 1.6 Specification quality
+
+- [ ] Requester's words quoted verbatim; assumptions separate and justified.
+- [ ] Objective in one sentence; appetite and no-go declared.
+- [ ] Every check describes an observable result; no "correctly", "works", "as expected" or "fast" outside a quote.
+- [ ] Applicable change-type constraints (Extended DoD) hold, including in cases the specification does not describe.
+- [ ] Extended existing behavior identified, with what stays unchanged.
 
 <a id="2-guardrail-globali"></a>
 
