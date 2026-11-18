@@ -5,7 +5,7 @@
   "domain": "dfd-kit",
   "kind": "feature",
   "scope": "Copie del kit di fondamenta, processo e template allineate alla revisione del framework (PR #17), template di specifica del kit e skill dfd-specify, dfd-implement, dfd-review-design e dfd-verify aggiornati in inglese e italiano",
-  "phase": "pre-release",
+  "phase": "release-reviewed",
   "created_at": "2026-11-18T00:04:02.754081Z",
   "risk": "low",
   "route": "light",
