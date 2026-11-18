@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "design_fingerprint": "0ab60ee2a52ef98a507c08e5e19bebfdbc89db9aad63590310cf264263abef46",
-  "plan_hash": "681fe4cc9ba82bd992e54b82c460d089a31f91682cc3354af7945cdb84a64f15",
+  "design_fingerprint": "1885025e26eddac0f3414fb010df862b545b167b53f007611f8deb176cc1fd6d",
+  "plan_hash": "0561b0847a67d2efe522a8dc62858e4e78b5d7d8a3f83096834bf10453f34b42",
   "files": [
     {
       "path": "tests/workflow.rs",
@@ -9,7 +9,7 @@
     },
     {
       "path": "i18n/documents.json",
-      "sha256": "8eb727f4b14301a402bac7ab3df4a12dce3e07d9f687e7128384eb2c00b6ffe7"
+      "sha256": "b657c86233dd6610f805d95ca1f17a9c04ed0bfab70b82d96926da354a37c31a"
     },
     {
       "path": "fondamenta.md",
@@ -364,6 +364,17 @@
         "tests/workflow.rs": "a246e1bd58c182923b3b7bdc175836bf35562dee7b2166be74ee8d9a0eae9d98"
       },
       "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "ci",
+      "command": "GitHub Actions DFD Kit run 44313937009 (pull_request #20, commit 40cd5bba6e94d15bad41c1a4a8b097e8247a480c): quality, mutations, binaries x4",
+      "executed_at": "2026-11-18T13:33:16Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/013-unforeseen-states-kit/evidence/10-ci.log",
+        "sha256": "80e7bb03a204d6f4ba79d0b78a8bd372cfea937d64f2d33434bd1d79e095be2c"
+      }
     }
   ],
   "refactor_notes": "Le sette copie del kit (fondamenta, processo, cinque template) sono state allineate alla radice copiando il corpo dei file e conservando la riga di navigazione del kit; dopo la copia il confronto senza la prima riga è vuoto per tutte le 14 coppie di file. Il template di specifica del kit resta distinto da quello della radice e riceve i campi nuovi come voci dell'elenco con segnaposto, così la regola esistente sui segnaposto li rende obbligatori senza un gate nuovo; i criteri aggiunti in sviluppo partono da 'none so far'/'nessuno finora'. Le skill ricevono le istruzioni in coda ai passi esistenti, in inglese e italiano. I test nuovi sono regressioni sul contenuto installato: proteggono da una sincronizzazione che perda la revisione, non verificano il comportamento dell'agente. Osservabilità: nessuna strumentazione necessaria, la CLI non cambia. Avviso 'skipped' nel log CI, se presente: viene dal passo interno condizionale dell'azione dtolnay/rust-toolchain, come nelle feature 011 e 012; nessun test saltato."
