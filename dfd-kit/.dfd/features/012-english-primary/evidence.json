@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "34548683dd140618e13d4de95d6b277330aa2c5548c4c046b7d0cc46a3906532",
+  "plan_hash": "b65e569bdd9ddf592133f0ed5fe663610475d3fc5a86a54453c0af0e4afa7b7f",
+  "files": [
+    {
+      "path": "src/i18n.rs",
+      "sha256": "4487f79cf0e89839a377b19a654d11589cffea831ecab2627ad103aed6f9d68f"
+    },
+    {
+      "path": "src/lib.rs",
+      "sha256": "18292c669f0b55cac59f250197943c4e66e61f30c387f9ce0bfd033a5a1dbbf9"
+    },
+    {
+      "path": "build.rs",
+      "sha256": "bc26853d8904a899468de1234f52523ae7cf348bbdaa015489fe9caa0b67eb1d"
+    },
+    {
+      "path": "tests/workflow.rs",
+      "sha256": "0d9a87081adcd65dbe91e3bedb35dcb2249db743541ad1977b0a35717f83856f"
+    },
+    {
+      "path": "tests/test_release_notes.py",
+      "sha256": "262a83bc9644c6fb7b586957ceee2c07532574d0879c605cd3ce2f8968af6711"
+    },
+    {
+      "path": "scripts/check_translations.py",
+      "sha256": "183aedc867b6890f6db51100999bd72c8c43c3a8a9c55ccbb0b3544774dfafff"
+    },
+    {
+      "path": "scripts/release_notes.py",
+      "sha256": "cc935a45d4e323f836e4dca5ae50c251788af6b48413953234b6c5f8cf77af4b"
+    },
+    {
+      "path": "scripts/mutation_test.py",
+      "sha256": "c317ecaa3213d8304651ff6a756c3cb60dfa25315bee25c4c4544c236e88a30c"
+    },
+    {
+      "path": "mutations/gates.json",
+      "sha256": "5322bc97aad8837c073e29c6d8e57895f29dcf4132aa64b09a13e3a3a928294f"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "b924488faaf1361a6f4c2a2a41e5e13c5cbc6983cd682b3a0b93682c3cde78a0"
+    }
+  ],
+  "checks": [
+    {
+      "task": "default-language",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow default_language_is_english_without_preference",
+      "executed_at": "2026-11-17T23:24:32.145242Z",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/01-exec-red-default-language.log",
+        "sha256": "b160d483e79f3161e92ce42c9e2b250a342d6e4d613443ab36adf37cf758ef2b"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "OBS-01": "f4c44662fcbc3d302d2b7e210e372a6b56933f5276fc034d0a706ce8d8a391ec",
+        "SEC-02": "2d3c835a1bd58e505be7ce9f00f642e52c82122402c938d9d5199636fe5c5028",
+        "SLO-01": "d84c1cc92f9b8113749aa80c2146e1ef0595bb659b655e49b4122f1c22ab6374"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "default-language",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow default_language_is_english_without_preference",
+      "executed_at": "2026-11-17T23:24:57.815096Z",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/02-exec-green-default-language.log",
+        "sha256": "0eda6710b0bddfaccceba1553e8a8f82304f88b9cc34ede5ebf294a899f4f957"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "OBS-01": "f4c44662fcbc3d302d2b7e210e372a6b56933f5276fc034d0a706ce8d8a391ec",
+        "SEC-02": "2d3c835a1bd58e505be7ce9f00f642e52c82122402c938d9d5199636fe5c5028",
+        "SLO-01": "d84c1cc92f9b8113749aa80c2146e1ef0595bb659b655e49b4122f1c22ab6374"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "default-language",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow default_language_is_english_without_preference",
+      "executed_at": "2026-11-17T23:25:20.093927Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/03-exec-green-default-language.log",
+        "sha256": "5772232811227dea7fddd140e81b916f679e08843d2e2a8422cbc3fa9c322e42"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "OBS-01": "f4c44662fcbc3d302d2b7e210e372a6b56933f5276fc034d0a706ce8d8a391ec",
+        "SEC-02": "2d3c835a1bd58e505be7ce9f00f642e52c82122402c938d9d5199636fe5c5028",
+        "SLO-01": "d84c1cc92f9b8113749aa80c2146e1ef0595bb659b655e49b4122f1c22ab6374"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "bundle-layout",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow installed_bundles_follow_english_primary_layout",
+      "executed_at": "2026-11-17T23:26:43.898139Z",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/04-exec-red-bundle-layout.log",
+        "sha256": "d647343f77de1ac53ce335f1e0147725344f07ac18f0aeeacdd82f43667a0bb0"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-01": "0c06f1642e1dbf018fa2c4db5e732d785cd071aa828373c331cbcdcced92a26a",
+        "SEC-01": "6962a41e88ff9f88fe0a898734a6142efcbad9422efe655e0e83fc4937caab57",
+        "UX-02": "ed6620ecdccb4aab2b523672937428d2c039991145e2b5a601796fbb4fc23a98"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "bundle-layout",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow installed_bundles_follow_english_primary_layout",
+      "executed_at": "2026-11-17T23:28:09.157447Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/06-exec-green-bundle-layout.log",
+        "sha256": "de267ed1989438f4ba8309ba70402ee30a50ea964f03b6b885f59b8a65caadd8"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-01": "0c06f1642e1dbf018fa2c4db5e732d785cd071aa828373c331cbcdcced92a26a",
+        "SEC-01": "6962a41e88ff9f88fe0a898734a6142efcbad9422efe655e0e83fc4937caab57",
+        "UX-02": "ed6620ecdccb4aab2b523672937428d2c039991145e2b5a601796fbb4fc23a98"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "docs-layout",
+      "kind": "red",
+      "command": "python3 scripts/check_translations.py",
+      "executed_at": "2026-11-17T23:28:14.832280Z",
+      "exit_code": 1,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/07-exec-red-docs-layout.log",
+        "sha256": "4ccae4c81a334dfb0959bc0371ea9601794f4ed0c8927703c4125d7d10bf0000"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "OBS-02": "17797fdfd6373cd994b443621a27178509a18e4a77b3d38d9a763b32ecc3c989",
+        "SEC-03": "e322b8a82b46189b8d3e05e1537b537f5a4959a1f8af95d6ea72446f341dd58f",
+        "UX-01": "a6419ff888b18a3ba841539d1f12737db09f9829e6c53696a604d86aff9fd89f"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "release-notes",
+      "kind": "red",
+      "command": "python3 -m unittest tests.test_release_notes",
+      "executed_at": "2026-11-17T23:29:33.261368Z",
+      "exit_code": 1,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/08-exec-red-release-notes.log",
+        "sha256": "8633f3790f216e58b9ad8ed64721ede71e52912cd3beb7810a4538c7eaacf3c9"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-02": "7b78f79381dc3f37d0160200a7f999194bc3e4a5626122eb51fcf68c1d0abc8f",
+        "SLO-02": "4a323ab3e13ffd177086522ea07c44b85a9e54dc626245ddd5ad689b0aeac763"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "release-notes",
+      "kind": "green",
+      "command": "python3 -m unittest tests.test_release_notes",
+      "executed_at": "2026-11-17T23:29:40.304467Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/09-exec-green-release-notes.log",
+        "sha256": "b3367edb02252ea20bb4b8a9b336d13f866742ef27d777f314fd9e497d779551"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-02": "7b78f79381dc3f37d0160200a7f999194bc3e4a5626122eb51fcf68c1d0abc8f",
+        "SLO-02": "4a323ab3e13ffd177086522ea07c44b85a9e54dc626245ddd5ad689b0aeac763"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "docs-layout",
+      "kind": "green",
+      "command": "python3 scripts/check_translations.py",
+      "executed_at": "2026-11-17T23:29:50.465217Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/10-exec-green-docs-layout.log",
+        "sha256": "67d8ef2d8a58a9b401d1501fee4d7c33b838af5160fda0efdc54c9e68bce8a43"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "OBS-02": "17797fdfd6373cd994b443621a27178509a18e4a77b3d38d9a763b32ecc3c989",
+        "SEC-03": "e322b8a82b46189b8d3e05e1537b537f5a4959a1f8af95d6ea72446f341dd58f",
+        "UX-01": "a6419ff888b18a3ba841539d1f12737db09f9829e6c53696a604d86aff9fd89f"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "sh -c cargo fmt --all --check && cargo clippy --locked --offline --all-targets -- -D warnings && cargo test --locked --offline && cargo build --locked --offline --release && ./target/release/dfd doctor && python3 -m unittest discover -s tests -p 'test_*.py' && python3 scripts/check_translations.py",
+      "executed_at": "2026-11-17T23:34:07.236798Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/11-exec-suite.log",
+        "sha256": "387f9a84336c8e97334bf2bd88917384bc930522a4d95236ddc757b705292fbb"
+      },
+      "snapshot": {
+        "build.rs": "bc26853d8904a899468de1234f52523ae7cf348bbdaa015489fe9caa0b67eb1d",
+        "i18n/documents.json": "b924488faaf1361a6f4c2a2a41e5e13c5cbc6983cd682b3a0b93682c3cde78a0",
+        "mutations/gates.json": "5322bc97aad8837c073e29c6d8e57895f29dcf4132aa64b09a13e3a3a928294f",
+        "scripts/check_translations.py": "183aedc867b6890f6db51100999bd72c8c43c3a8a9c55ccbb0b3544774dfafff",
+        "scripts/mutation_test.py": "c317ecaa3213d8304651ff6a756c3cb60dfa25315bee25c4c4544c236e88a30c",
+        "scripts/release_notes.py": "cc935a45d4e323f836e4dca5ae50c251788af6b48413953234b6c5f8cf77af4b",
+        "src/i18n.rs": "4487f79cf0e89839a377b19a654d11589cffea831ecab2627ad103aed6f9d68f",
+        "src/lib.rs": "18292c669f0b55cac59f250197943c4e66e61f30c387f9ce0bfd033a5a1dbbf9",
+        "tests/test_release_notes.py": "262a83bc9644c6fb7b586957ceee2c07532574d0879c605cd3ce2f8968af6711",
+        "tests/workflow.rs": "0d9a87081adcd65dbe91e3bedb35dcb2249db743541ad1977b0a35717f83856f"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "ci",
+      "command": "GitHub Actions DFD Kit run 44200728266 (pull_request #18, commit c9e33ba6068b0e818cea88d8ea69c7e29f0ab64f): quality, mutations, binaries x4",
+      "executed_at": "2026-11-17T23:41:38Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/012-english-primary/evidence/12-ci.log",
+        "sha256": "8ad9bad48d36aa3f6ce1f7bc5cee4ddf841100f5d4fa7535149ee7e7aada2e1d"
+      }
+    }
+  ],
+  "refactor_notes": "Refactor: in i18n.rs il test di scope parte ora dall'inglese e verifica il ripristino passando per l'italiano; init/install salvano il default solo se manca language.json, senza mai sovrascrivere una preferenza. La normalizzazione del test sui bundle replica quella di build.rs (riga di navigazione e riga vuota successiva). Lo spostamento dei 112 file (56 coppie) è avvenuto con git mv tramite uno script temporaneo fuori dal repository, che ha ricalcolato i link relativi e messo l'inglese per primo nella navigazione; il testo è invariato salvo link, navigazione e le frasi sulla struttura aggiornate in entrambe le lingue. Il runner dei mutanti copia ora it/ invece di en/. Mutanti mirati: 6/6 killed (evidence/mutations/report.json). Osservabilità: nessuna strumentazione nuova necessaria; gli errori di lingua restano messaggi espliciti della CLI e check_translations nomina percorso e tipo di errore. Correzioni alle evidenze: il run 02 (registrato come green) è fallito per il requisito, perché init senza --lang non salvava ancora language.json; è riclassificato come red. Il run 05 (green di bundle-layout) è fallito per un errore del test, non del requisito: la normalizzazione non toglieva la riga vuota dopo la navigazione. È escluso dai check; il log resta in evidence/05-exec-green-bundle-layout.log. Avviso 'skipped' nel log CI (evidence/12-ci.log): proviene dal passo interno condizionale __run_3 dell'azione dtolnay/rust-toolchain (outcome=skipped), presente anche nel log CI della feature 011; nessun test è stato saltato."
+}

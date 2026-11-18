@@ -103,7 +103,7 @@ def execute(args, output):
     # Copy only build inputs; never mutate the user's sources or binary artifacts.
     with tempfile.TemporaryDirectory(prefix="dfd-mutants-", dir=PACKAGE / "target") as directory:
         workspace = Path(directory)
-        for folder in ["src", "tests", "skills", "templates", "examples", "en", "i18n"]:
+        for folder in ["src", "tests", "skills", "templates", "examples", "it", "i18n"]:
             shutil.copytree(PACKAGE / folder, workspace / folder)
         for file in ["Cargo.toml", "Cargo.lock", "build.rs"]:
             shutil.copy2(PACKAGE / file, workspace / file)
@@ -115,7 +115,7 @@ def execute(args, output):
             if copied.is_file():
                 os.utime(copied, None)
         inputs = SOURCES | {"tests/workflow.rs", "Cargo.toml", "Cargo.lock", "build.rs"}
-        for folder in ("src", "en", "i18n", "templates", "skills", "examples"):
+        for folder in ("src", "it", "i18n", "templates", "skills", "examples"):
             inputs.update(str(path.relative_to(workspace)) for path in (workspace / folder).rglob("*") if path.is_file())
         report["source_sha256"] = {name: hashlib.sha256((workspace / name).read_bytes()).hexdigest()
                                    for name in sorted(inputs)}

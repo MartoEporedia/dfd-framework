@@ -1,0 +1,116 @@
+$ python3 scripts/check_translations.py
+# executed_at: 2026-11-17T23:28:14.832280Z
+56 document pairs; 279 messages; 112 errors
+Missing English counterpart: en/README.md
+Missing English counterpart: en/adozione.md
+Missing English counterpart: en/examples/checkout_dod.md
+Missing English counterpart: en/examples/checkout_paypal_spec.md
+Missing English counterpart: en/fondamenta.md
+Missing English counterpart: en/glossario.md
+Missing English counterpart: en/processo-e2e.md
+Missing English counterpart: en/raci.md
+Missing English counterpart: en/rischio.md
+Missing English counterpart: en/templates/cambiamento_rapido.md
+Missing English counterpart: en/templates/collaborazione.md
+Missing English counterpart: en/templates/configurazione_rollout.md
+Missing English counterpart: en/templates/dod-estesa.md
+Missing English counterpart: en/templates/review_design.md
+Missing English counterpart: en/templates/review_design_light.md
+Missing English counterpart: en/templates/review_indice.md
+Missing English counterpart: en/templates/review_release.md
+Missing English counterpart: en/templates/review_release_light.md
+Missing English counterpart: en/templates/specifica_feature.md
+Missing English counterpart: dfd-kit/en/CHANGELOG.md
+Missing English counterpart: dfd-kit/en/CONTRIBUTING.md
+Missing English counterpart: dfd-kit/en/README.md
+Missing English counterpart: dfd-kit/en/adozione.md
+Missing English counterpart: dfd-kit/en/examples/checkout_dod.md
+Missing English counterpart: dfd-kit/en/examples/checkout_paypal_spec.md
+Missing English counterpart: dfd-kit/en/fondamenta.md
+Missing English counterpart: dfd-kit/en/harness-proposta.md
+Missing English counterpart: dfd-kit/en/processo-e2e.md
+Missing English counterpart: dfd-kit/en/raci.md
+Missing English counterpart: dfd-kit/en/rischio.md
+Missing English counterpart: dfd-kit/en/skills/dfd-assess/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-feature/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-implement/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-init/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-plan/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-pre-release/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-review-design/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-review-release/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-setup/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-specify/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-status/SKILL.md
+Missing English counterpart: dfd-kit/en/skills/dfd-verify/SKILL.md
+Missing English counterpart: dfd-kit/en/templates/assessment_adozione.md
+Missing English counterpart: dfd-kit/en/templates/cambiamento_rapido.md
+Missing English counterpart: dfd-kit/en/templates/collaborazione.md
+Missing English counterpart: dfd-kit/en/templates/configurazione_rollout.md
+Missing English counterpart: dfd-kit/en/templates/contratto_toolkit.md
+Missing English counterpart: dfd-kit/en/templates/dod-estesa.md
+Missing English counterpart: dfd-kit/en/templates/guardrail_dominio.md
+Missing English counterpart: dfd-kit/en/templates/processo_dominio.md
+Missing English counterpart: dfd-kit/en/templates/review_design.md
+Missing English counterpart: dfd-kit/en/templates/review_design_light.md
+Missing English counterpart: dfd-kit/en/templates/review_indice.md
+Missing English counterpart: dfd-kit/en/templates/review_release.md
+Missing English counterpart: dfd-kit/en/templates/review_release_light.md
+Missing English counterpart: dfd-kit/en/templates/specifica_feature.md
+Pair needs semantic review / manifest refresh: README.md
+Pair needs semantic review / manifest refresh: adozione.md
+Pair needs semantic review / manifest refresh: dfd-kit/CHANGELOG.md
+Pair needs semantic review / manifest refresh: dfd-kit/CONTRIBUTING.md
+Pair needs semantic review / manifest refresh: dfd-kit/README.md
+Pair needs semantic review / manifest refresh: dfd-kit/adozione.md
+Pair needs semantic review / manifest refresh: dfd-kit/examples/checkout_dod.md
+Pair needs semantic review / manifest refresh: dfd-kit/examples/checkout_paypal_spec.md
+Pair needs semantic review / manifest refresh: dfd-kit/fondamenta.md
+Pair needs semantic review / manifest refresh: dfd-kit/harness-proposta.md
+Pair needs semantic review / manifest refresh: dfd-kit/processo-e2e.md
+Pair needs semantic review / manifest refresh: dfd-kit/raci.md
+Pair needs semantic review / manifest refresh: dfd-kit/rischio.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-assess/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-feature/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-implement/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-init/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-plan/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-pre-release/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-review-design/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-review-release/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-setup/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-specify/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-status/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/skills/dfd-verify/SKILL.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/assessment_adozione.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/cambiamento_rapido.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/collaborazione.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/configurazione_rollout.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/contratto_toolkit.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/dod-estesa.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/guardrail_dominio.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/processo_dominio.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/review_design.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/review_design_light.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/review_indice.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/review_release.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/review_release_light.md
+Pair needs semantic review / manifest refresh: dfd-kit/templates/specifica_feature.md
+Pair needs semantic review / manifest refresh: examples/checkout_dod.md
+Pair needs semantic review / manifest refresh: examples/checkout_paypal_spec.md
+Pair needs semantic review / manifest refresh: fondamenta.md
+Pair needs semantic review / manifest refresh: glossario.md
+Pair needs semantic review / manifest refresh: processo-e2e.md
+Pair needs semantic review / manifest refresh: raci.md
+Pair needs semantic review / manifest refresh: rischio.md
+Pair needs semantic review / manifest refresh: templates/cambiamento_rapido.md
+Pair needs semantic review / manifest refresh: templates/collaborazione.md
+Pair needs semantic review / manifest refresh: templates/configurazione_rollout.md
+Pair needs semantic review / manifest refresh: templates/dod-estesa.md
+Pair needs semantic review / manifest refresh: templates/review_design.md
+Pair needs semantic review / manifest refresh: templates/review_design_light.md
+Pair needs semantic review / manifest refresh: templates/review_indice.md
+Pair needs semantic review / manifest refresh: templates/review_release.md
+Pair needs semantic review / manifest refresh: templates/review_release_light.md
+Pair needs semantic review / manifest refresh: templates/specifica_feature.md
+# exit_code: 1

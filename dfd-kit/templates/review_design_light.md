@@ -1,90 +1,95 @@
-<!-- dfd-language --> [Italiano](review_design_light.md) | [English](../en/templates/review_design_light.md)
+<!-- dfd-language --> [English](review_design_light.md) | [Italiano](../it/templates/review_design_light.md)
 
-# Checklist di Review DFD – Design (Light)
+<a id="checklist-di-review-dfd--design-light"></a>
 
-> **Tipo di review**: design (feature piccola / basso rischio)  
-> **Data**: YYYY-MM-DD  
-> **Partecipanti**: [@team / @persone]  
-> **Riferimenti**:
-> - [Specifica di Feature (anche leggera)]
-> - [DoD Estesa – Servizio X]
+# DFD review checklist – Design (Light)
 
-> **Quando usare questa versione**:  
-> Feature che **non toccano** pagamento, sicurezza, SLO critici o architettura core.  
-> Esempi: piccoli cambiamenti UI, testi, metriche interne, refactor non funzionali.
+> **Review type**: design, small low-risk feature  
+> **Date**: YYYY-MM-DD  
+> **Participants**: [@team / @people]  
+> **References**: [Feature specification], [Extended DoD], [Rollout configuration when releasing].
 
----
+Use for changes outside payments, security, critical SLOs and core architecture: small UI/text changes, internal metrics and nonfunctional refactoring.
 
 ## 0. DoR – Design (Light)
 
-- [ ] **Obiettivo chiaro** (1 frase: cosa cambia e perché).  
-- [ ] **Servizio / dominio** identificato.  
-- [ ] **Nessun impatto atteso** su sicurezza, SLO critici o costo significativo.  
-- [ ] **OK informale** del Tech Lead per procedere con design leggero.
+- [ ] Clear one-sentence objective: what changes and why.
+- [ ] Domain/service identified.
+- [ ] No expected security, critical SLO or significant cost impact.
+- [ ] Informal Tech Lead agreement on light design.
 
----
+<a id="1-dod-estesa-punti-essenziali"></a>
 
-## 1. DoD Estesa (punti essenziali)
+## 1. Extended DoD essentials
 
-### 1.1 Osservabilità
+<a id="11-osservabilità"></a>
 
-- [ ] Nessun nuovo endpoint critico introdotto (o, se introdotto, metriche base già disponibili).  
-- [ ] Log coerenti con lo standard del servizio (se ci sono nuovi log).  
-- [ ] Nessun impatto negativo su dashboard esistenti.
+### 1.1 Observability
 
-### 1.2 Sicurezza
+- [ ] No new critical endpoint, or base metrics already available.
+- [ ] New logs follow service standards.
+- [ ] Existing dashboards unaffected.
 
-- [ ] Nessun cambiamento su controlli di accesso / autorizzazioni.  
-- [ ] Nessun nuovo dato sensibile trattato o loggato.
+<a id="12-sicurezza"></a>
 
-### 1.3 Affidabilità / SLO
+### 1.2 Security
 
-- [ ] Nessun impatto atteso su latenza, error rate o disponibilità.  
-- [ ] Nessuna nuova dipendenza esterna critica.
+- [ ] Access/authorization unchanged.
+- [ ] No new sensitive data handled/logged.
 
-### 1.4 Costo
+<a id="13-affidabilità--slo"></a>
 
-- [ ] Nessun impatto significativo sul costo del servizio.
+### 1.3 Reliability / SLOs
 
----
+- [ ] No expected latency, error-rate or availability impact.
+- [ ] No new critical external dependency.
 
-## 2. Guardrail globali
+<a id="14-costo"></a>
 
-- [ ] La feature non viola i guardrail architetturali.  
-- [ ] La feature non viola i guardrail di sicurezza.  
-- [ ] La feature non viola i guardrail di osservabilità.  
-- [ ] La feature non viola i guardrail di costo.
+### 1.4 Cost
 
----
+- [ ] No significant service cost impact.
 
-## 3. Test e validazione
+<a id="2-guardrail-globali"></a>
 
-- [ ] Test unitari / di integrazione previsti (almeno per la logica nuova / modificata).  
-- [ ] Nessun test di carico / resilienza richiesto (o già coperto da test esistenti).  
-- [ ] Validazione in produzione:  
-  - [ ] rollout diretto o canary leggero (se il team lo prevede).
+## 2. Global guardrails
 
----
+- [ ] Architecture respected.
+- [ ] Security respected.
+- [ ] Observability respected.
+- [ ] Cost respected.
 
-## 4. Esito della review di design (Light)
+<a id="3-test-e-validazione"></a>
 
-- [ ] **Approvata** (può procedere allo sviluppo)  
-- [ ] **Approvata con condizioni**: [condizioni da soddisfare]  
-- [ ] **Da rivedere**: [motivi, cosa manca]
+## 3. Tests and validation
 
-**Firme / approvazioni**:
+- [ ] New/changed logic covered by unit/integration tests in the plan.
+- [ ] Load/resilience tests unnecessary or existing coverage adequate.
+- [ ] Production validation: direct rollout or light canary, according to team policy.
 
-- [@persona] – [ruolo]
+<a id="4-esito-della-review-di-design-light"></a>
 
-## Maturità e policy delle verifiche
+## 4. Design review outcome (Light)
 
-- Modalità del dominio: solo sviluppo / preparazione al rilascio.
-- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
-- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
-- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
+- [ ] Approved: development may proceed.
+- [ ] Approved with conditions: [conditions].
+- [ ] Changes requested: [reasons/gaps].
 
-In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
+Approval: [@person – role].
 
-## Proporzionalità e collaborazione
+<a id="maturità-e-policy-delle-verifiche"></a>
 
-Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.
+## Maturity and verification policy
+
+- Domain mode: development-only / release-preparation.
+- CI required: yes / no; rationale based on risk and target.
+- Final suite: command, environment, date, result and reference to the real log.
+- Questions/requirements deferred to pre-release: owner and activation condition.
+
+In development-only, finish design and proportionate checks without prematurely requiring CI, rollout, on-call or release communications. Release checklists apply when preparing distribution. Before release reassess risk/policy, reconfirm reviews and refresh evidence. Deferred work must not be marked executed.
+
+<a id="proporzionalità-e-collaborazione"></a>
+
+## Proportionality and collaboration
+
+First consider rapid for scoped noncritical fixes, using one [quick change record](cambiamento_rapido.md) rather than completing this entire template. Match light/full detail to risk. Owner and checks are required; PRs, independence and integrated checks depend on [optional team conventions](collaborazione.md). Solo developers do not simulate roles or communications. Reuse applicable reviews; test failure effects and important regressions.

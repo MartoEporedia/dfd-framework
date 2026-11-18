@@ -1,136 +1,104 @@
-<!-- dfd-language --> [Italiano](raci.md) | [English](en/raci.md)
+<!-- dfd-language --> [English](raci.md) | [Italiano](it/raci.md)
 
-# Modello RACI – DoD-First Driven (DFD)
+<a id="modello-raci--dod-first-driven-dfd"></a>
 
-> **Stato**: draft / stabile  
-> **Ultimo aggiornamento**: YYYY-MM-DD  
-> **Proprietari**: [@team / @persona]  
-> **Riferimenti**:
-> - [Documento “vivo” DFD]
-> - [Processo End-to-End DFD]
+# RACI model – DoD-First Driven (DFD)
 
-Questo documento definisce **ruoli e responsabilità** per le fasi del processo DFD, usando una matrice RACI:
+> **Status**: draft / stable  
+> **Last updated**: YYYY-MM-DD  
+> **Owners**: [@team / @person]  
+> **References**: [Foundations](fondamenta.md), [Process](processo-e2e.md).
 
-- **R (Responsible)**: chi esegue il lavoro.  
-- **A (Accountable)**: chi ha la responsabilità finale (uno solo per attività).  
-- **C (Consulted)**: chi viene consultato (input richiesti).  
-- **I (Informed)**: chi viene informato (per trasparenza).
+R = Responsible (does the work); A = Accountable (one final owner per activity); C = Consulted (input requested); I = Informed (kept aware).
 
-**Ruoli considerati**:
+Roles: PM Product Manager/Owner; TL Tech Lead/Architect; DEV Developer; QA QA/SDET; OPS Ops/SRE; SEC Security Engineer; SUP Support/Customer Success.
 
-- **PM** – Product Manager / Product Owner  
-- **TL** – Tech Lead / Architect  
-- **DEV** – Developer  
-- **QA** – QA / SDET  
-- **OPS** – Ops / SRE  
-- **SEC** – Security Engineer  
-- **SUP** – Support / Customer Success  
+<a id="1-matrice-raci-per-fase"></a>
 
----
+## 1. Responsibility matrix by phase
 
-## 1. Matrice RACI per fase
-
-| Fase                        | Attività principale                         | PM   | TL   | DEV  | QA   | OPS  | SEC  | SUP  |
+| Phase                        | Main activity                         | PM   | TL   | DEV  | QA   | OPS  | SEC  | SUP  |
 |-----------------------------|---------------------------------------------|------|------|------|------|------|------|------|
-| **Idea / Epic**             | Definizione epic e obiettivi business       | A/R  | C    | I    | I    | I    | I    | I    |
-|                             | Approvazione epic                           | A    | C    | I    | I    | I    | I    | I    |
-| **Design DFD**              | Scrittura Specifica di Feature              | C    | A/R  | R    | C    | C    | C    | I    |
-|                             | Identificazione criteri DoD                 | C    | A/R  | R    | C    | C    | C    | I    |
-| **Review DFD (design)**     | Review specifica e checklist DFD            | C    | A/R  | R    | R    | C    | C    | I    |
-|                             | Decisione approvazione design               | C    | A    | R    | R    | C    | C    | I    |
-| **Sviluppo (TDD DFD)**      | Progettazione test                          | I    | C    | A/R  | R    | I    | C    | I    |
-|                             | Implementazione codice + test               | I    | C    | A/R  | C    | I    | I    | I    |
-|                             | Strumentazione osservabilità                | I    | C    | A/R  | I    | C    | I    | I    |
-| **Pre-release DFD**         | Definizione Configurazione Rollout          | I    | A/R  | R    | C    | R    | I    | I    |
-|                             | Configurazione allarmi / dashboard          | I    | C    | R    | I    | A/R  | I    | I    |
-|                             | Comunicazione a Supporto / stakeholder      | C    | C    | I    | I    | I    | I    | A/R  |
-| **Review DFD (release)**    | Review rollout e checklist DFD              | C    | A/R  | R    | R    | R    | C    | C    |
-|                             | Decisione OK a rilasciare                   | C    | A    | R    | R    | R    | C    | I    |
-| **Rilascio shift-right**    | Esecuzione rollout (fasi, canary, flag)     | I    | C    | R    | I    | A/R  | I    | I    |
-|                             | Monitoraggio metriche tecniche e business   | I    | C    | R    | R    | A/R  | I    | I    |
-|                             | Decisioni promozione / stop / rollback      | C    | A/R  | R    | R    | R    | I    | I    |
-| **Post-release DFD**        | Analisi risultati e learning                | A/R  | R    | R    | R    | R    | I    | C    |
-|                             | Proposte aggiornamento DoD / guardrail      | C    | A/R  | R    | R    | R    | C    | I    |
-|                             | Documentazione post-mortem / note interne   | A/R  | R    | R    | R    | R    | I    | I    |
+| **Idea / Epic**             | Define epic and business goals       | A/R  | C    | I    | I    | I    | I    | I    |
+|                             | Approve epic                           | A    | C    | I    | I    | I    | I    | I    |
+| **DFD Design**              | Write feature specification              | C    | A/R  | R    | C    | C    | C    | I    |
+|                             | Identify DoD criteria                 | C    | A/R  | R    | C    | C    | C    | I    |
+| **DFD Review (design)**     | Review specification and checklist            | C    | A/R  | R    | R    | C    | C    | I    |
+|                             | Design approval decision               | C    | A    | R    | R    | C    | C    | I    |
+| **Development (DFD TDD)**      | Design tests                          | I    | C    | A/R  | R    | I    | C    | I    |
+|                             | Implement code and tests               | I    | C    | A/R  | C    | I    | I    | I    |
+|                             | Observability instrumentation                | I    | C    | A/R  | I    | C    | I    | I    |
+| **DFD Pre-release**         | Define rollout configuration          | I    | A/R  | R    | C    | R    | I    | I    |
+|                             | Configure alarms / dashboards          | I    | C    | R    | I    | A/R  | I    | I    |
+|                             | Communicate to Support / stakeholders      | C    | C    | I    | I    | I    | I    | A/R  |
+| **DFD Review (release)**    | Review rollout and checklist              | C    | A/R  | R    | R    | R    | C    | C    |
+|                             | Release approval decision                   | C    | A    | R    | R    | R    | C    | I    |
+| **Shift-right release**    | Execute rollout (stages, canary, flags)     | I    | C    | R    | I    | A/R  | I    | I    |
+|                             | Monitor technical/business metrics   | I    | C    | R    | R    | A/R  | I    | I    |
+|                             | Promotion / stop / rollback decisions      | C    | A/R  | R    | R    | R    | I    | I    |
+| **DFD Post-release**        | Analyze outcomes and learning                | A/R  | R    | R    | R    | R    | I    | C    |
+|                             | Propose DoD / guardrail updates      | C    | A/R  | R    | R    | R    | C    | I    |
+|                             | Post-mortem / internal notes   | A/R  | R    | R    | R    | R    | I    | I    |
 
----
+<a id="2-descrizione-ruoli"></a>
 
-## 2. Descrizione ruoli
+## 2. Role descriptions
 
 ### PM (Product Manager / Product Owner)
 
-- Responsabile di:
-  - definire obiettivi business e KPI;
-  - approvare epic e priorità;
-  - valutare impatto su UX e business KPI post-release.
+Define business goals/KPIs, approve epics/priorities and evaluate post-release UX/business impact.
 
 ### TL (Tech Lead / Architect)
 
-- Responsabile di:
-  - coerenza architetturale della specifica;
-  - rispetto dei guardrail globali;
-  - approvazione finale di design e release in ottica DFD.
+Own specification architectural consistency, global guardrail compliance and final DFD design/release approval.
 
 ### DEV (Developer)
 
-- Responsabile di:
-  - scrivere specifica (in collaborazione con TL e PM);
-  - implementare codice e test (TDD DFD);
-  - strumentare osservabilità (log, metriche, trace).
+Write specifications with TL/PM, implement code/tests through TDD and instrument logs, metrics and traces.
 
 ### QA (QA / SDET)
 
-- Responsabile di:
-  - progettare test non funzionali (carico, resilienza, sicurezza);
-  - supportare la definizione dei criteri di validazione in produzione;
-  - partecipare attivamente alle review DFD.
+Design nonfunctional load/resilience/security tests, support production validation criteria and actively participate in reviews.
 
 ### OPS (Ops / SRE)
 
-- Responsabile di:
-  - definire soglie di allarme coerenti con la DoD;
-  - configurare e mantenere dashboard e allarmi;
-  - gestire il rollout operativo in produzione.
+Define DoD-aligned alarm thresholds, configure/maintain dashboards/alarms and manage operational production rollout.
 
 ### SEC (Security Engineer)
 
-- Responsabile di:
-  - review dei criteri di sicurezza (SEC-xx);
-  - validazione di audit e protezione dati;
-  - supporto in caso di incidenti di sicurezza.
+Review SEC-xx criteria, validate audit/data protection and support security incident response.
 
 ### SUP (Support / Customer Success)
 
-- Responsabile di:
-  - essere informato sui cambiamenti che impattano gli utenti;
-  - raccogliere feedback e segnalazioni post-release;
-  - contribuire all’analisi di impatto su UX / business KPI.
+Stay informed about user-facing changes, collect post-release feedback/reports and contribute to UX/business KPI impact analysis.
 
----
+<a id="3-note-sulluso-del-raci"></a>
 
-## 3. Note sull’uso del RACI
+## 3. Using RACI
 
-- Per ogni attività, **c’è un solo Accountable (A)**.  
-- I ruoli possono essere ricoperti dalla stessa persona in team piccoli (es. TL + DEV), ma la responsabilità resta distinta.  
-- Il RACI va adattato al contesto del team, ma senza eliminare le responsabilità chiave (specialmente A su design, release e post-release).
+Each activity has one Accountable person. Small teams may combine roles (TL and DEV, for example) while keeping responsibilities distinct. Adapt the matrix without removing key accountability, especially for design, release and post-release.
 
-## Maturità del progetto: solo sviluppo e preparazione al rilascio
+<a id="maturità-del-progetto-solo-sviluppo-e-preparazione-al-rilascio"></a>
 
-La maturità del progetto è distinta dal livello di adozione DFD e dal rischio della feature. La Fase 0 dichiara una modalità, la scelta sulla CI e la relativa motivazione:
+## Project maturity: development only and release preparation
 
-| Modalità | Verifiche di sviluppo | Uscita |
+Maturity is independent of DFD adoption level and feature risk. Phase 0 declares mode, CI policy and justification.
+
+| Mode | Development checks | Outcome |
 |---|---|---|
-| Solo sviluppo (`development-only`) | Light/full: review di design, TDD e suite finale locale; rapido: verifiche pertinenti. CI facoltativa | Sviluppo completato; nessuna pre-release o autorizzazione a distribuire |
-| Preparazione al rilascio (`release-preparation`) | Stessi controlli, con CI richiesta per default; un’alternativa locale richiede motivazione rispetto a rischio e destinazione e review umana | Prontezza alla pre-release, poi review di release distinta |
+| `development-only` | Light/full: design review, TDD and final local suite; rapid: relevant checks; optional CI | Development complete; no pre-release or distribution approval |
+| `release-preparation` | Same checks; CI required by default; a local alternative needs risk/target justification and human review | Ready for pre-release, followed by a separate release review |
 
-L’assenza della CI non è una lacuna bloccante in solo sviluppo. Restano obbligatorie le verifiche applicabili e la tracciabilità di comando, data, risultato e log: un test locale non viene dichiarato CI. Quando prevista, la suite finale deve seguire i test green. Una CI dichiarata fallita continua a bloccare anche quando facoltativa.
+Missing CI does not block development-only. Applicable checks remain mandatory with command, date, result and real log; local tests are never labeled CI. The final suite, when required, follows green tests. Declared failed CI still blocks even when optional.
 
-Prima di distribuire, passare esplicitamente alla preparazione al rilascio: rivalutare rischio, criteri, policy CI e verifiche nell’ambiente di destinazione. Riconfermare review e aggiornare piano ed evidenze invalidati. La modalità solo sviluppo non attenua controlli di sicurezza o rischio; il completamento locale non sostituisce l’approvazione umana del rilascio. Il learning può provenire anche dagli esperimenti locali, prima di disporre di dati di produzione.
+Before distribution explicitly switch to release preparation; reassess risk, criteria, CI policy and target-environment checks. Reconfirm invalidated reviews and update plans/evidence. Development-only does not weaken security/risk controls, and local completion does not replace human release approval. Local experiments can produce learning before production data exists.
 
-## Responsabilità individuali e collaborazione facoltativa
+<a id="responsabilità-individuali-e-collaborazione-facoltativa"></a>
 
-DFD vale anche per il singolo sviluppatore: i ruoli possono coincidere nella stessa persona. Il rapido individuale richiede record ed evidenze pertinenti, senza PR o secondo reviewer obbligatori. Light/full mantengono le decisioni umane previste; non richiedono di creare un team artificiale.
+## Solo responsibilities and optional collaboration
 
-In un team assegnare owner per intervento e reviewer delegati secondo policy; la review ordinaria della PR può soddisfare il gate DFD pertinente senza un secondo giro equivalente. Riferire decisioni a PR, revisione e snapshot esaminato. La policy può richiedere indipendenza dall’owner e prove della versione integrata corrente prima della distribuzione. La CLI controlla dichiarazioni e hash, senza autenticare identità o commit.
+Roles may belong to one person. Solo rapid work requires a record and relevant evidence, without mandatory PRs or a second reviewer. Light/full retain required human decisions without requiring an artificial team.
 
-Usare ID distinti, Git e gestione esplicita dei conflitti. Il lock locale non coordina cloni diversi; non risolvere conflitti fra decisioni o evidenze scegliendo automaticamente l’ultima scrittura. Chi cambia le regole comuni identifica feature coinvolte e review da riconfermare. Vedere le [convenzioni facoltative](templates/collaborazione.md) e le [review selettive](fondamenta.md#review-selettive-ed-evoluzione-del-setup).
+Assign per-change owners and delegated reviewers according to team policy. An ordinary PR review may satisfy the relevant DFD gate once, linked to PR, revision and examined snapshot. Policy may require reviewer independence and current integrated checks before distribution. The CLI checks declarations/hashes, not identities or commits.
+
+Use distinct IDs, Git and explicit conflict resolution. Local locks do not coordinate clones. Never resolve decision/evidence conflicts automatically by last write. Shared-rule changes identify affected features and reviews to reconfirm. See [optional conventions](templates/collaborazione.md) and [selective reviews](fondamenta.md#review-selettive-ed-evoluzione-del-setup).

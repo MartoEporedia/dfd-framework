@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "34548683dd140618e13d4de95d6b277330aa2c5548c4c046b7d0cc46a3906532",
+  "tasks": [
+    {
+      "id": "default-language",
+      "owner": "manutentore del repository",
+      "description": "Default della CLI en senza language.json, fuori da un progetto e per init/install senza --lang",
+      "criteria": [
+        "OBS-01",
+        "SLO-01",
+        "SEC-02"
+      ],
+      "implementation": "src/i18n.rs: Language::En come default, project_language e from_args restituiscono En senza preferenza; messaggio di errore della lingua invariato nel catalogo. Le risorse già installate non vengono riscritte.",
+      "verification": "Red/green di cargo test default_language_is_english (status/help/init senza language.json in inglese; language.json it e --lang it restano italiani; nessun file riscritto)."
+    },
+    {
+      "id": "bundle-layout",
+      "owner": "manutentore del repository",
+      "description": "Inglese nei percorsi originali, italiano in it/ e dfd-kit/it/, bundle costruiti dai nuovi percorsi",
+      "criteria": [
+        "UX-02",
+        "COST-01",
+        "SEC-01"
+      ],
+      "implementation": "git mv delle 56 coppie con uno script che opera solo dentro il repository e ricalcola link e navigazione (inglese per primo); build.rs legge l'inglese dai percorsi originali e l'italiano da it/; stessi percorsi installati.",
+      "verification": "Red/green di cargo test installed_bundles_follow_english_primary_layout (risorse installate in en uguali ai file dei percorsi originali, in it uguali a quelli di it/, senza riga di navigazione); doctor."
+    },
+    {
+      "id": "docs-layout",
+      "owner": "manutentore del repository",
+      "description": "Controllo delle traduzioni, manifest e documentazione della nuova struttura",
+      "criteria": [
+        "UX-01",
+        "OBS-02",
+        "SEC-03"
+      ],
+      "implementation": "scripts/check_translations.py con coppie inglese→it/, controllo dei file italiani non accoppiati, manifest rigenerato; AGENTS.md, glossario, CONTRIBUTING, README (prompt con en di default) e CHANGELOG con la migrazione 'dfd language it'.",
+      "verification": "Red: check_translations.py fallisce sulla nuova struttura con lo script precedente; green: 56 coppie e 0 errori dopo l'aggiornamento."
+    },
+    {
+      "id": "release-notes",
+      "owner": "manutentore del repository",
+      "description": "Note di release dai nuovi percorsi del changelog, inglese per primo",
+      "criteria": [
+        "SLO-02",
+        "COST-02"
+      ],
+      "implementation": "scripts/release_notes.py legge CHANGELOG.md (inglese) e it/CHANGELOG.md (italiano); mutante sul default della lingua in mutations/gates.json; suite e mutanti mirati.",
+      "verification": "Red/green di python3 -m unittest tests.test_release_notes; mutanti language-*; suite finale locale e CI reale sulla PR."
+    }
+  ],
+  "open_questions": []
+}

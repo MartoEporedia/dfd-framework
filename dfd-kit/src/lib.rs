@@ -1843,9 +1843,10 @@ fn execute_inner(cli: Cli) -> Result<(Value, i32)> {
             ))
         }
         Command::Install { harness } => {
-            store.path(".dfd/language.json")?;
+            let preference = store.path(".dfd/language.json")?;
             let output = install(&store, harness)?;
-            if cli.lang.is_some() {
+            // An explicit choice, or the default when no preference exists yet; never overwrite.
+            if cli.lang.is_some() || !preference.exists() {
                 i18n::save(&store, i18n::current())?;
             }
             Ok((output, 0))
@@ -1855,9 +1856,9 @@ fn execute_inner(cli: Cli) -> Result<(Value, i32)> {
             domain,
             mode,
         } => {
-            store.path(".dfd/language.json")?;
+            let preference = store.path(".dfd/language.json")?;
             let output = init(&store, harness, &domain, mode)?;
-            if cli.lang.is_some() {
+            if cli.lang.is_some() || !preference.exists() {
                 i18n::save(&store, i18n::current())?;
             }
             Ok((output, 0))

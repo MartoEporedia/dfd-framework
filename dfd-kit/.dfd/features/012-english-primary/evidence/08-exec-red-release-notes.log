@@ -1,0 +1,86 @@
+$ python3 -m unittest tests.test_release_notes
+# executed_at: 2026-11-17T23:29:33.261368Z
+FFFFEE
+======================================================================
+ERROR: test_notes_take_the_section_in_both_languages (tests.test_release_notes.ReleaseNotesTest.test_notes_take_the_section_in_both_languages)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 56, in test_notes_take_the_section_in_both_languages
+    notes = load().notes(self.project(), "v0.1.0")
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/release_notes.py", line 62, in notes
+    parts.append(f"## {language}\n\n{section((root / name).read_text(), version)}")
+                                             ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 787, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/var/folders/g4/42bf619d7b5dypmclnnb5k540000gn/T/tmpt25jpzi0/en/CHANGELOG.md'
+
+======================================================================
+ERROR: test_section_stops_at_the_next_version (tests.test_release_notes.ReleaseNotesTest.test_section_stops_at_the_next_version)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 64, in test_section_stops_at_the_next_version
+    notes = load().notes(self.project(version="0.2.0"), "v0.2.0")
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/scripts/release_notes.py", line 62, in notes
+    parts.append(f"## {language}\n\n{section((root / name).read_text(), version)}")
+                                             ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 787, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/var/folders/g4/42bf619d7b5dypmclnnb5k540000gn/T/tmpcyr17eee/en/CHANGELOG.md'
+
+======================================================================
+FAIL: test_check_accepts_a_consistent_tag (tests.test_release_notes.ReleaseNotesTest.test_check_accepts_a_consistent_tag)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 70, in test_check_accepts_a_consistent_tag
+    self.assertEqual(load().check(self.project(), "v0.1.0"), [])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['en/CHANGELOG.md assente'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'en/CHANGELOG.md assente'
+
+- ['en/CHANGELOG.md assente']
++ []
+
+======================================================================
+FAIL: test_check_rejects_bad_tags_versions_and_sections (tests.test_release_notes.ReleaseNotesTest.test_check_rejects_bad_tags_versions_and_sections) (tag='v0.1.0', expected='it/CHANGELOG.md')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 88, in test_check_rejects_bad_tags_versions_and_sections
+    self.assertIn(expected, " ".join(errors))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'it/CHANGELOG.md' not found in 'en/CHANGELOG.md assente'
+
+======================================================================
+FAIL: test_check_rejects_bad_tags_versions_and_sections (tests.test_release_notes.ReleaseNotesTest.test_check_rejects_bad_tags_versions_and_sections) (tag='v0.1.0', expected='it/CHANGELOG.md')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 88, in test_check_rejects_bad_tags_versions_and_sections
+    self.assertIn(expected, " ".join(errors))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'it/CHANGELOG.md' not found in 'en/CHANGELOG.md assente'
+
+======================================================================
+FAIL: test_command_line_exit_codes (tests.test_release_notes.ReleaseNotesTest.test_command_line_exit_codes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/martoeporedia/lavori/dfd-framework/dfd-kit/tests/test_release_notes.py", line 93, in test_command_line_exit_codes
+    self.assertEqual(ok.returncode, 0, ok.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : release: en/CHANGELOG.md assente
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.052s
+
+FAILED (failures=4, errors=2)
+# exit_code: 1

@@ -1,18 +1,18 @@
 ---
 name: dfd-verify
-description: Verificare le evidenze dello sviluppo DFD, la copertura dei task e la validità dei log e dei file prima di passare alla pre-release.
+description: Verify DFD development evidence, task coverage and current file/log integrity before pre-release.
 ---
 
-<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-verify/SKILL.md)
+<!-- dfd-language --> [English](SKILL.md) | [Italiano](../../it/skills/dfd-verify/SKILL.md)
 
-# Verifica dello sviluppo
+<a id="verifica-dello-sviluppo"></a>
 
-Leggere `.dfd/kit/templates/contratto_toolkit.md`, specifica, piano ed `evidence.json`. Eseguire `dfd verify <id>`: produce `development-review.md` e aggiorna la fase solo se gli artefatti verificati sono completi e attuali.
+# Development verification
 
-Valutare anche il contenuto: i test red devono fallire per il requisito atteso, i green devono verificare i criteri associati; il log della suite finale locale/CI secondo lifecycle.json deve riferirsi alla versione finale con refactor e strumentazione. Gli hash verificano l'integrità locale dei riferimenti, non autenticità dei log, copertura semantica o qualità del codice. Con `source_roots`, un errore “Suite eseguita su una versione diversa dei file” o “criterio cambiato dopo il green” si risolve rieseguendo davvero i comandi, preferibilmente con `dfd exec`, mai ricalcolando hash o snapshot. Esaminare ogni voce di `development.warnings`: un test saltato o un `FAILED` con exit 0 vanno spiegati o corretti prima di dichiarare lo sviluppo concluso.
+Read `.dfd/kit/templates/contratto_toolkit.md`, specification, plan and evidence.json. Run `dfd verify <id>`: development-review.md is generated; phase advances only for complete/current artifacts.
 
-Se mancano test o strumentazione proseguire con `dfd-implement`; se il piano è incompleto usare `dfd-plan`; se cambia il design, riconfermare la review pertinente. Conservare i risultati già validi, rieseguendo quelli invalidati. Non dichiarare verde una CI non eseguita.
+Review semantics too: red must fail for the expected requirement; green tests the associated criteria; final local/CI suite per lifecycle.json must cover the final refactored/instrumented version. Hashes check local integrity, not log authenticity, semantic coverage or code quality. With source_roots, “Suite run on a different version of the files” or “criterion changed after the green” is resolved by actually rerunning the commands, preferably with dfd exec, never by recomputing hashes or snapshots. Examine every development.warnings entry: a skipped test or FAILED with exit 0 must be explained or fixed before declaring development complete.
 
-Riportare `blocked-plan`, `blocked-evidence`, `development-complete` o `ready-for-pre-release` con lacune e condizioni. Con development-complete fermarsi allo sviluppo verificato; con ready-for-pre-release il prossimo passo è `dfd-pre-release`, seguita da `dfd-review-release`; l’esecuzione del rollout resta una fase successiva.
+Missing tests/instrumentation → dfd-implement; incomplete plan → dfd-plan; changed design → reconfirm review. Preserve valid results and rerun invalidated checks. Never declare unexecuted CI passing. Report blocked-plan, blocked-evidence, development-complete or ready-for-pre-release and relevant conditions. Stop at verified development for development-complete. Otherwise prepare pre-release then review-release; rollout execution comes later.
 
-verify supporta anche i record rapidi: con policy individuale le evidenze pertinenti valide danno change-verified senza nuovo gate umano. Con review indipendente serve la decisione PR reale e attuale. Controllare che il red riproduca il bug, non problemi di ambiente; non imporre red artificiale alle modifiche editoriali. Il completamento rapido non approva distribuzioni.
+Quick records with valid relevant evidence yield change-verified without a new human gate under solo policy; independence requires the real current PR decision. Verify behavioral red reproduces the bug, not environment problems. Editorial changes need no artificial red. Quick completion never approves distribution.

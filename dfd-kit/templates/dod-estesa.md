@@ -1,211 +1,218 @@
-<!-- dfd-language --> [Italiano](dod-estesa.md) | [English](../en/templates/dod-estesa.md)
+<!-- dfd-language --> [English](dod-estesa.md) | [Italiano](../it/templates/dod-estesa.md)
 
-# DoD Estesa – [Prodotto / Dominio / Servizio]
+<a id="dod-estesa--prodotto--dominio--servizio"></a>
 
-> **Stato**: draft / stabile / in revisione  
-> **Ultimo aggiornamento**: YYYY-MM-DD  
-> **Proprietari**: [@team / @persona]  
-> **Riferimenti**: [link a Architecture Guardrails, ADR, wiki, ecc.]
+# Extended Definition of Done – [Product / Domain / Service]
 
-Questo documento definisce i criteri di **Definition of Done (DoD) estesa** per [prodotto / dominio / servizio].  
-I criteri qui definiti sono usati in tutto il ciclo di vita: specifica, test, rilascio e valutazione in produzione (DoD-First Driven).
+> **Status**: draft / stable / under review  
+> **Last updated**: YYYY-MM-DD  
+> **Owners**: [@team / @person]  
+> **References**: [Architecture Guardrails, ADRs, wiki]
 
----
+These extended DoD criteria apply throughout specification, testing, release and production evaluation.
 
-## 1. Osservabilità
+<a id="1-osservabilità"></a>
 
-### 1.1 Metriche obbligatorie
+## 1. Observability
 
-Per ogni endpoint / flusso critico devono essere disponibili:
+<a id="11-metriche-obbligatorie"></a>
 
-- [ ] Request count (per endpoint / operazione)
-- [ ] Error count (4xx, 5xx, per errorCode)
-- [ ] Latency: p50, p95, p99
-- [ ] Custom metric per flussi business critici:
-  - [ ] [es. ordini completati]
-  - [ ] [es. fallimenti per motivo X]
+### 1.1 Required metrics
 
-**Fonte delle metriche**: [infrastruttura (ALB, API Gateway, service mesh), codice (SDK CloudWatch, OpenTelemetry), altro]
+For each critical endpoint/flow:
 
-**Tag / dimensioni minime**:
+- [ ] Requests per endpoint/operation.
+- [ ] Errors: 4xx, 5xx and errorCode.
+- [ ] Latency: p50, p95, p99.
+- [ ] Critical business metrics: [completed orders, failures by reason].
+
+Metric source: [ALB, API Gateway, service mesh, CloudWatch SDK, OpenTelemetry, other].
+
+Minimum tags/dimensions:
 
 - [ ] `service`
 - [ ] `operation`
 - [ ] `env`
-- [ ] `tenantId` (se rilevante)
-- [ ] Altri: [specificare]
+- [ ] `tenantId`, when relevant.
+- [ ] Others: [specify].
 
-### 1.2 Log strutturati
+<a id="12-log-strutturati"></a>
 
-Per ogni operazione critica devono essere prodotti log con:
+### 1.2 Structured logs
+
+Every critical operation emits:
 
 - [ ] `tenantId`
-- [ ] `userId` (o anonimo / pseudonimo, se richiesto)
+- [ ] `userId`, anonymous/pseudonymous when required.
 - [ ] `operation`
-- [ ] `outcome` (success / failure)
-- [ ] `errorCode` (se failure)
-- [ ] `traceId` / correlation ID
+- [ ] `outcome`: success/failure.
+- [ ] `errorCode` on failure.
+- [ ] `traceId` / correlation ID.
+- [ ] No plaintext PII/sensitive data.
+- [ ] Format: [JSON/other].
+- [ ] Minimum levels: [INFO success, ERROR failure, other].
 
-**Vincoli**:
+<a id="13-trace-e-correlazione"></a>
 
-- [ ] Nessun dato PII / sensibile in chiaro nei log
-- [ ] Formato: [JSON / altro]
-- [ ] Livelli di log minimi: [INFO per operazioni completate, ERROR per fallimenti, ecc.]
+### 1.3 Tracing and correlation
 
-### 1.3 Trace e correlazione
+- [ ] Each request has a traceId in logs/metrics.
+- [ ] Minimum spans: [gateway → service → database].
+- [ ] Tracing system: [X-Ray, Jaeger, other].
 
-- [ ] Ogni richiesta deve avere un `traceId` presente su log e metriche
-- [ ] Span minimi tracciati: [es. gateway → servizio → DB]
-- [ ] Sistema di tracing: [X-Ray, Jaeger, altro]
+<a id="14-dashboard"></a>
 
-### 1.4 Dashboard
+### 1.4 Dashboards
 
-Dashboard minime richieste:
+- [ ] Service view: requests, errors, latency, critical custom metrics.
+- [ ] Business flow view: [order/payment funnel].
+- [ ] Dashboard links: [insert].
 
-- [ ] Vista per servizio: request, error, latency, custom metric critiche
-- [ ] Vista per flusso business: [es. funnel ordini, pagamenti]
-- [ ] Link alle dashboard: [inserire link]
+<a id="2-sicurezza"></a>
 
----
+## 2. Security
 
-## 2. Sicurezza
+<a id="21-controlli-di-accesso"></a>
 
-### 2.1 Controlli di accesso
+### 2.1 Access controls
 
-- [ ] Ogni endpoint / operazione ha ruoli / policy definiti
-- [ ] Accesso minimo privilegiato (least privilege)
-- [ ] Documentazione dei ruoli: [link]
+- [ ] Roles/policies defined per endpoint/operation.
+- [ ] Least privilege.
+- [ ] Role documentation: [link].
 
-### 2.2 Protezione dati
+<a id="22-protezione-dati"></a>
 
-- [ ] Classificazione dati: [PII, sensibili, interni, pubblici]
-- [ ] Encryption:
-  - [ ] In transito (TLS)
-  - [ ] A riposo (DB, storage)
-- [ ] Nessun dato sensibile in chiaro nei log
+### 2.2 Data protection
 
-### 2.3 Audit & logging di sicurezza
+- [ ] Classification: [PII, sensitive, internal, public].
+- [ ] Encryption in transit (TLS).
+- [ ] Encryption at rest (database/storage).
+- [ ] No plaintext sensitive data in logs.
 
-Eventi minimi da loggare:
+<a id="23-audit--logging-di-sicurezza"></a>
 
-- [ ] Login / logout
-- [ ] Cambiamenti configurazione
-- [ ] Accessi a dati sensibili
-- [ ] Fallimenti di accesso / autorizzazione
+### 2.3 Audit and security logging
 
-**Retention**: [es. 12 mesi per audit, 30 giorni per log operativi]
+- [ ] Login/logout.
+- [ ] Configuration changes.
+- [ ] Sensitive-data access.
+- [ ] Authentication/authorization failures.
 
-### 2.4 Conformità
+Retention: [for example 12 months audit, 30 days operational logs].
 
-Riferimenti a standard / policy:
+<a id="24-conformità"></a>
 
-- [ ] ISO [numero]
-- [ ] SOC2
-- [ ] GDPR
-- [ ] Policy interne: [link]
+### 2.4 Compliance
 
----
+- [ ] ISO [number].
+- [ ] SOC2.
+- [ ] GDPR.
+- [ ] Internal policies: [links].
 
-## 3. Affidabilità / SLO
+<a id="3-affidabilità--slo"></a>
+
+## 3. Reliability / SLOs
 
 ### 3.1 SLO / SLI
 
-- [ ] Disponibilità: [es. 99.9% mensile]
-- [ ] Latenza end-to-end: [es. p95 < X ms per il flusso Y]
-- [ ] Error rate: [es. < 0.1% per endpoint critici]
+- [ ] Availability: [for example 99.9% monthly].
+- [ ] End-to-end latency: [p95 < X ms for flow Y].
+- [ ] Error rate: [< 0.1% for critical endpoints].
 
-### 3.2 Degradazione accettabile
+<a id="32-degradazione-accettabile"></a>
 
-- [ ] Comportamento in caso di failure di dependency: [fallback, retry, circuit breaker]
-- [ ] Funzionalità degradate accettabili: [descrivere]
+### 3.2 Acceptable degradation
 
-### 3.3 Politiche di resilienza
+- [ ] Dependency failure behavior: [fallback/retry/circuit breaker].
+- [ ] Acceptable degraded functionality: [describe].
 
-- [ ] Timeout: [valori per tipo di chiamata]
-- [ ] Retry: [politiche, backoff]
-- [ ] Circuit breaker: [dove applicato]
+<a id="33-politiche-di-resilienza"></a>
 
----
+### 3.3 Resilience policies
 
-## 4. Costo
+- [ ] Timeouts: [per call type].
+- [ ] Retries: [policy/backoff].
+- [ ] Circuit breaker: [where applied].
 
-### 4.1 Tagging risorse
+<a id="4-costo"></a>
 
-- [ ] Tutte le risorse hanno tag:
-  - [ ] `service`
-  - [ ] `team`
-  - [ ] `env`
-  - [ ] Altri: [specificare]
+## 4. Cost
 
-### 4.2 Stima impatto sul costo
+<a id="41-tagging-risorse"></a>
 
-Per ogni cambiamento significativo:
+### 4.1 Resource tagging
 
-- [ ] Stima variazione costo mensile del servizio: [metodo / foglio / tool]
-- [ ] Stima variazione costo per transazione: [metodo approssimativo]
+- [ ] Every resource has `service`, `team`, `env` and [other] tags.
 
-### 4.3 Soglie di allarme
+<a id="42-stima-impatto-sul-costo"></a>
 
-- [ ] Variazione > [X]% del costo mensile → review
-- [ ] Variazione > [Y]% del costo per transazione stimato → review
+### 4.2 Cost impact estimate
 
-**Fonte dati costo**: [Cost Explorer, dashboard interne, altro]
+For every significant change:
 
----
+- [ ] Estimated monthly service cost variation: [method/sheet/tool].
+- [ ] Estimated transaction cost variation: [approximate method].
 
-## 5. Altri assi (opzionali)
+<a id="43-soglie-di-allarme"></a>
 
-### 5.1 Esperienza utente / business KPI
+### 4.3 Alarm thresholds
 
-- [ ] KPI da monitorare: [conversione, churn, usage, ecc.]
-- [ ] Soglie di peggioramento accettabile: [descrivere]
+- [ ] Monthly cost variation > [X]% triggers review.
+- [ ] Estimated transaction cost variation > [Y]% triggers review.
 
-### 5.2 Compliance specifica
+Source: [Cost Explorer, internal dashboards, other].
 
-- [ ] Requisiti normativi: [descrivere]
-- [ ] Controlli specifici: [descrivere]
+<a id="5-altri-assi-opzionali"></a>
 
----
+## 5. Other concerns (optional)
 
-## 6. Riferimenti ai criteri (codici)
+<a id="51-esperienza-utente--business-kpi"></a>
 
-Per facilitare il riferimento nelle specifiche di feature, ogni criterio ha un codice:
+### 5.1 UX / business KPIs
 
-- **Osservabilità**: OBS-01, OBS-02, …
-- **Sicurezza**: SEC-01, SEC-02, …
-- **Affidabilità / SLO**: SLO-01, SLO-02, …
-- **Costo**: COST-01, COST-02, …
-- **Altro**: UX-01, COMP-01, …
+- [ ] KPIs: [conversion/churn/usage].
+- [ ] Acceptable deterioration thresholds: [describe].
 
-**Elenco criteri**:
+<a id="52-compliance-specifica"></a>
 
-- OBS-01: [descrizione breve]
-- OBS-02: [descrizione breve]
-- SEC-01: [descrizione breve]
-- SLO-01: [descrizione breve]
-- COST-01: [descrizione breve]
-- …
+### 5.2 Specific compliance
 
----
+- [ ] Regulatory requirements: [describe].
+- [ ] Specific controls: [describe].
 
-## 7. Evoluzione del documento
+<a id="6-riferimenti-ai-criteri-codici"></a>
 
-- **Revisioni**:
-  - YYYY-MM-DD: [descrizione modifica, es. "aggiunti criteri di costo per transazione"]
-  - YYYY-MM-DD: [descrizione modifica]
+## 6. Criterion identifiers
 
-- **Feedback**:
-  - [Come inviare feedback / proposte di modifica]
+Stable identifiers allow references from feature specifications: OBS-01, OBS-02; SEC-01, SEC-02; SLO-01, SLO-02; COST-01, COST-02; UX-01, COMP-01, and subsequent IDs.
 
-## Maturità e policy delle verifiche
+- OBS-01: [short description].
+- OBS-02: [short description].
+- SEC-01: [short description].
+- SLO-01: [short description].
+- COST-01: [short description].
 
-- Modalità del dominio: solo sviluppo / preparazione al rilascio.
-- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
-- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
-- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
+<a id="7-evoluzione-del-documento"></a>
 
-In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
+## 7. Document evolution
 
-## Proporzionalità e collaborazione
+- YYYY-MM-DD: [revision, such as adding transaction cost criteria].
+- YYYY-MM-DD: [revision].
+- Feedback/proposals: [how to submit].
 
-Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.
+<a id="maturità-e-policy-delle-verifiche"></a>
+
+## Maturity and verification policy
+
+- Domain mode: development-only / release-preparation.
+- CI required: yes / no; rationale based on risk and target.
+- Final suite: command, environment, date, result and reference to the real log.
+- Questions/requirements deferred to pre-release: owner and activation condition.
+
+In development-only, finish design and proportionate checks without prematurely requiring CI, rollout, on-call or release communications. Release checklists apply when preparing distribution. Before release reassess risk/policy, reconfirm reviews and refresh evidence. Deferred work must not be marked executed.
+
+<a id="proporzionalità-e-collaborazione"></a>
+
+## Proportionality and collaboration
+
+First consider rapid for scoped noncritical fixes, using one [quick change record](cambiamento_rapido.md) rather than completing this entire template. Match light/full detail to risk. Owner and checks are required; PRs, independence and integrated checks depend on [optional team conventions](collaborazione.md). Solo developers do not simulate roles or communications. Reuse applicable reviews; test failure effects and important regressions.

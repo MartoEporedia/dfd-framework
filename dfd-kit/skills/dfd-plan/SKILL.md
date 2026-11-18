@@ -1,20 +1,18 @@
 ---
 name: dfd-plan
-description: Derivare un piano di sviluppo TDD dalla specifica DFD approvata, mappando task, criteri DoD, test e strumentazione prima dell'implementazione.
+description: Derive a TDD development plan from the current approved DFD specification, mapping tasks, criteria, tests and instrumentation before implementation.
 ---
 
-<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-plan/SKILL.md)
+<!-- dfd-language --> [English](SKILL.md) | [Italiano](../../it/skills/dfd-plan/SKILL.md)
 
-# Piano di sviluppo DFD
+<a id="piano-di-sviluppo-dfd"></a>
 
-Leggere `.dfd/kit/templates/contratto_toolkit.md`, il setup del dominio e gli artefatti della feature. Eseguire `dfd status <id>`: serve una review di design approvata o approvata con condizioni, ancora attuale. Chiarire eventuali condizioni che impediscono l'avvio; non autoapprovare il design.
+# DFD development plan
 
-Usare `dfd plan <id>`. Crea `plan.md`, `plan.json` ed `evidence.json` oppure riprende il lavoro esistente senza sovrascriverlo. I task iniziali provengono dai criteri applicabili del design: raffinarli in passi eseguibili, con owner, implementazione e verifica. Tutti i criteri applicabili devono essere coperti; non reintrodurre criteri esclusi. Allineare JSON e Markdown, includendo test funzionali, non funzionali e strumentazione pertinenti al rischio.
+Read `.dfd/kit/templates/contratto_toolkit.md`, domain setup and feature artifacts. Run status: design must be approved or approved-with-conditions and current. Resolve conditions blocking start; never self-approve.
 
-Registrare dubbi in `plan.json.open_questions`, chiarirli iterativamente e conservarne l'esito nel piano. Se cambiano ambito, criteri o decisioni del design, aggiornare prima la specifica e riconfermare la review pertinente. Dopo una nuova approvazione usare `dfd plan <id> --refresh`: aggiorna il riferimento al design preservando i task; rivederli e rigenerare le evidenze coinvolte.
+Run `dfd plan <id>` to create/resume plan.md, plan.json and evidence.json without overwriting. Refine criterion-derived tasks into executable steps with owner/implementation/verification. Cover every applicable criterion, without reintroducing exclusions. Align JSON/Markdown with functional/nonfunctional tests and risk-appropriate instrumentation.
 
-Presentare task e condizioni aperte, poi proseguire con `dfd-implement`. Il piano è un artefatto di lavoro, non prova dell'esecuzione dei test.
+Keep questions in plan.json.open_questions, clarify iteratively and preserve resolutions. If scope/criteria/design decisions change, update specification and reconfirm review first. After approval use `dfd plan <id> --refresh`, preserving tasks and regenerating affected evidence. Present tasks/conditions, then dfd-implement. A plan is not execution evidence.
 
-Leggere lifecycle.json del dominio e includere la suite finale locale o CI richiesta nel piano; una transizione di modalità invalida review, piano ed evidenze e richiede rivalutazione.
-
-Il percorso rapido usa il solo record del cambiamento: non generare un piano separato. Il lavoro individuale non richiede PR o review indipendente; applicare tali vincoli solo se configurati.
+Read lifecycle.json and plan the required final local/CI suite. Mode transitions invalidate review/plan/evidence. Rapid uses one record and no separate plan. PRs/independent review apply only under explicit policy.

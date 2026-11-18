@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "Rendere l'inglese la lingua principale: inglese nei percorsi originali del framework e del toolkit, italiano completo in it/ e dfd-kit/it/, default della CLI en anche per i progetti senza .dfd/language.json.",
+  "business_metrics": [
+    "check_translations.py: 56 coppie, 0 errori, inglese nei percorsi originali e italiano in it/",
+    "Senza language.json: status, help e init in inglese; con it o --lang it tutto resta italiano",
+    "fmt, Clippy, test, doctor, mutanti e CI verdi"
+  ],
+  "epic": {
+    "reference": "Richiesta del manutentore in chat il 2026-11-17 ('Fai in modo che l'inglese diventi la lingua principale'); scelte 'Inversione completa dei percorsi' e 'Passano all'inglese' espresse lo stesso giorno",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-11-17T12:00:00Z"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "applicable",
+      "implementation": "Errori di lingua e di setup espliciti; forma di status invariata.",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "applicable",
+      "implementation": "Evidenze con snapshot e log reali tramite dfd exec.",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "applicable",
+      "implementation": "Nessun nuovo percorso scritto dalla CLI; lo script di spostamento opera solo dentro il repository.",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "applicable",
+      "implementation": "Il nuovo default non riscrive file; language preserva gli artefatti compilati.",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Scelte del manutentore citate; nessuna approvazione inventata.",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Comandi e schemi invariati; cambio di default documentato con la migrazione (dfd language it).",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Suite completa, check_translations e test Python verdi; mutanti sulla lingua.",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Scritture atomiche e lock invariati; coperti dalla suite esistente."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "applicable",
+      "implementation": "Binario offline con le stesse due lingue incorporate.",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "applicable",
+      "implementation": "Verifiche proporzionate: mutanti mirati alla selezione e al default della lingua.",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Help, README, CONTRIBUTING, glossario e skill coerenti con la nuova struttura e il nuovo default.",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "applicable",
+      "implementation": "Skill reperibili in entrambe le lingue con gli stessi percorsi installati.",
+      "verification": "Test red/green sul default di lingua e sui bundle, suite locale (fmt, Clippy, test, doctor, check_translations, test Python), mutanti sulla lingua, CI reale sulla PR."
+    }
+  ],
+  "test_plan": "Red/green: default en senza language.json (status, help, init), it preservato con language.json o --lang, bundle en dai percorsi originali e it da it/; test esistenti aggiornati senza indebolire le asserzioni; test_release_notes.py sui nuovi percorsi; mutanti language-resource-selection, language-persistence e nuovo mutante sul default; check_translations con 0 errori; binario candidato su un progetto copiato senza language.json e su uno in it; CI reale sulla PR.",
+  "guardrails": "Nessuna perdita di contenuto (git mv, testo invariato salvo link e navigazione); artefatti .dfd intatti; contratti JSON e forma del bundle installato invariati; nessuna dipendenza nuova.",
+  "open_questions": []
+}

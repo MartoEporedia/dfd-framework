@@ -7,12 +7,12 @@ use std::{cell::Cell, collections::BTreeMap, sync::OnceLock};
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, ValueEnum)]
 #[serde(rename_all = "lowercase")]
 pub enum Language {
-    #[default]
     It,
+    #[default]
     En,
 }
 
-thread_local! { static CURRENT: Cell<Language> = const { Cell::new(Language::It) }; }
+thread_local! { static CURRENT: Cell<Language> = const { Cell::new(Language::En) }; }
 
 pub struct Scope(Language);
 impl Scope {
@@ -38,7 +38,7 @@ struct Preference {
 
 pub fn project_language(store: &Store) -> Result<Language> {
     if !store.path(".dfd/language.json")?.exists() {
-        return Ok(Language::It);
+        return Ok(Language::En);
     }
     Ok(store.json::<Preference>(".dfd/language.json")?.language)
 }
@@ -124,7 +124,7 @@ pub fn from_args(args: &[std::ffi::OsString]) -> Result<Language> {
     }
     // Help and doctor remain usable outside a project.
     if !project.exists() {
-        return Ok(Language::It);
+        return Ok(Language::En);
     }
     project_language(&Store::new(&project)?)
 }
@@ -135,35 +135,35 @@ mod tests {
 
     #[test]
     fn formatting_preserves_user_values_and_restores_language_scope() {
-        assert_eq!(current(), Language::It);
+        assert_eq!(current(), Language::En);
         {
-            let _scope = Scope::enter(Language::En);
-            let user_text = "Soddisfare OBS-01\n{value}\n## Ambito e test";
-            assert_eq!(
-                crate::localized_format!(
-                    "Evidenza assente: {}.",
-                    "Missing evidence: {}.",
-                    user_text
-                ),
-                format!("Missing evidence: {user_text}.")
-            );
+            let _italian = Scope::enter(Language::It);
             assert_eq!(
                 text("Titolo e ambito sono obbligatori."),
-                "Title and scope are required."
-            );
-            assert_eq!(
-                text("Testo utente non presente nel catalogo"),
-                "Testo utente non presente nel catalogo"
+                "Titolo e ambito sono obbligatori."
             );
             {
-                let _italian = Scope::enter(Language::It);
+                let _scope = Scope::enter(Language::En);
+                let user_text = "Soddisfare OBS-01\n{value}\n## Ambito e test";
+                assert_eq!(
+                    crate::localized_format!(
+                        "Evidenza assente: {}.",
+                        "Missing evidence: {}.",
+                        user_text
+                    ),
+                    format!("Missing evidence: {user_text}.")
+                );
                 assert_eq!(
                     text("Titolo e ambito sono obbligatori."),
-                    "Titolo e ambito sono obbligatori."
+                    "Title and scope are required."
+                );
+                assert_eq!(
+                    text("Testo utente non presente nel catalogo"),
+                    "Testo utente non presente nel catalogo"
                 );
             }
-            assert_eq!(current(), Language::En);
+            assert_eq!(current(), Language::It);
         }
-        assert_eq!(current(), Language::It);
+        assert_eq!(current(), Language::En);
     }
 }

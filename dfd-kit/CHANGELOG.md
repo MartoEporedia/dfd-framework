@@ -1,50 +1,54 @@
-<!-- dfd-language --> [Italiano](CHANGELOG.md) | [English](en/CHANGELOG.md)
+<!-- dfd-language --> [English](CHANGELOG.md) | [Italiano](it/CHANGELOG.md)
 
 # Changelog
 
-Tutte le modifiche rilevanti di DFD Kit. Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) e le versioni seguono il [versionamento semantico](https://semver.org/lang/it/). Ogni versione è pubblicata come [release GitHub](https://github.com/MartoEporedia/dfd-framework/releases) con i binari e i checksum.
+All notable changes to DFD Kit. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/). Each version is published as a [GitHub release](https://github.com/MartoEporedia/dfd-framework/releases) with binaries and checksums.
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking:** English is the primary language. English documents live in the original paths and Italian ones under `it/` and `dfd-kit/it/`; the CLI uses English when `.dfd/language.json` is missing, and `init`/`install` save that default when no preference exists. To keep Italian in an existing project, run `dfd language it`. Release notes show English first.
+
 ## [0.2.0] - 2026-11-12
 
-### Aggiunto
+### Added
 
-- `criteria[].acceptance` in `design.json`: ogni criterio applicabile dichiara i suoi file di casi di accettazione (test come dati). I file entrano nel fingerprint di design, così un caso cambiato manda in `stale-review` la sola feature che lo dichiara e `changes` lo nomina, e nel fingerprint del criterio, così con `source_roots` servono nuovi red/green (#15).
-- `acceptance_roots` in `lifecycle.json`: avviso per i file di casi che nessun criterio del dominio dichiara (#15).
+- `criteria[].acceptance` in `design.json`: each applicable criterion declares its acceptance case files (tests as data). The files enter the design fingerprint, so a changed case makes only the declaring feature `stale-review` and `changes` names it, and the criterion fingerprint, so with `source_roots` new red/green are required (#15).
+- `acceptance_roots` in `lifecycle.json`: warning for case files that no criterion of the domain declares (#15).
 
-### Modificato
+### Changed
 
-- Contratto e skill `dfd-setup`, `dfd-specify`, `dfd-review-design`, `dfd-implement` descrivono i casi di accettazione (#15).
+- The contract and the `dfd-setup`, `dfd-specify`, `dfd-review-design`, `dfd-implement` skills describe acceptance cases (#15).
 
 ## [0.1.0] - 2026-11-12
 
-Prima release pubblicata.
+First published release.
 
-### Aggiunto
+### Added
 
-- Framework DFD in italiano e inglese e CLI `dfd` con dodici skill per gli adapter Claude Code, OpenCode, Copilot e Codex: Fase 0 di dominio, rischio e percorso rapido/light/full, specifica iterativa, review di design, piano TDD, evidenze, pre-release, rollout e review di release (#1).
-- Collaborazione di team facoltativa con policy esplicita (#1).
-- Prompt di installazione con un agente in qualunque harness (#2).
-- `status` espone `effective_phase` e `blocking` (#8).
-- Con `stale-review`, `changes` elenca ciò che è cambiato dopo l'ultima decisione: ogni decisione salva lo snapshot degli input del fingerprint (#11).
-- `log_markers` in `lifecycle.json`: avvisi per marcatori come `FAILED` o `skipped` nei log di check verdi (#12).
-- `suite_entrypoints` in `lifecycle.json`: gli script della suite entrano nel fingerprint di design (#12).
-- `source_roots` e `source_excludes` in `lifecycle.json`: la suite finale resta legata ai file su cui è stata eseguita (#13).
-- Fingerprint di design per criterio: un criterio cambiato dopo il green richiede nuovi red/green (#13).
-- Comando `dfd exec`, che esegue un comando del progetto senza shell e registra il check con log e snapshot (#13).
-- CI GitHub Actions attiva e workflow di release al push di un tag `v*`: binari per Linux x86_64 (musl), macOS arm64 e x86_64, Windows x86_64, `SHA256SUMS` e note prese da questo changelog.
-- Mutation test curati per i gate.
+- DFD framework in Italian and English and the `dfd` CLI with twelve skills for the Claude Code, OpenCode, Copilot and Codex adapters: domain Phase 0, risk and rapid/light/full route, iterative specification, design review, TDD plan, evidence, pre-release, rollout and release review (#1).
+- Optional team collaboration with an explicit policy (#1).
+- Installation prompt for an agent in any harness (#2).
+- `status` exposes `effective_phase` and `blocking` (#8).
+- With `stale-review`, `changes` lists what changed since the last decision: every decision stores the snapshot of the fingerprint inputs (#11).
+- `log_markers` in `lifecycle.json`: warnings for markers such as `FAILED` or `skipped` in the logs of passing checks (#12).
+- `suite_entrypoints` in `lifecycle.json`: suite scripts are part of the design fingerprint (#12).
+- `source_roots` and `source_excludes` in `lifecycle.json`: the final suite stays bound to the files it ran on (#13).
+- Per-criterion design fingerprints: a criterion changed after the green requires new red/green (#13).
+- `dfd exec` command, which runs a project command without a shell and records the check with log and snapshot (#13).
+- Active GitHub Actions CI and a release workflow on push of a `v*` tag: binaries for Linux x86_64 (musl), macOS arm64 and x86_64, Windows x86_64, `SHA256SUMS` and notes taken from this changelog.
+- Curated mutation tests for the gates.
 
-### Modificato
+### Changed
 
-- `status` esce con codice 2 quando un gate mostrato è bloccato (#8).
-- Le review selettive includono il testo di `dod.md` dei criteri selezionati (#9), letto con un parser CommonMark (#10).
-- Il dominio `dfd-kit` passa da `development-only` a `release-preparation` con CI richiesta.
-- Il prompt di installazione scarica il binario dalla release invece di cercarlo in `dfd-kit/dist/`, che non è nel repository.
-- README e CONTRIBUTING descrivono segnali di `status`, `dfd exec` e mutanti (#14).
+- `status` exits with code 2 when a shown gate is blocked (#8).
+- Selective reviews include the `dod.md` text of the selected criteria (#9), read with a CommonMark parser (#10).
+- The `dfd-kit` domain moves from `development-only` to `release-preparation` with CI required.
+- The installation prompt downloads the binary from the release instead of looking for it in `dfd-kit/dist/`, which is not in the repository.
+- README and CONTRIBUTING describe `status` signals, `dfd exec` and mutants (#14).
 
-### Corretto
+### Fixed
 
-- `verify` non riporta più indietro le fasi `pre-release` e `release-reviewed` quando riesce (#8).
-- Modifiche al testo DoD dei criteri selezionati non passavano inosservate nelle review selettive (#9, #10).
+- `verify` no longer moves the `pre-release` and `release-reviewed` phases back when it succeeds (#8).
+- Changes to the DoD text of selected criteria no longer go unnoticed in selective reviews (#9, #10).

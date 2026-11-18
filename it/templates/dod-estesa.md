@@ -1,0 +1,239 @@
+<!-- dfd-language --> [English](../../templates/dod-estesa.md) | [Italiano](dod-estesa.md)
+
+# DoD Estesa – [Prodotto / Dominio / Servizio]
+
+> **Stato**: draft / stabile / in revisione  
+> **Ultimo aggiornamento**: YYYY-MM-DD  
+> **Proprietari**: [@team / @persona]  
+> **Riferimenti**: [link a Architecture Guardrails, ADR, wiki, ecc.]
+
+Questo documento definisce i criteri di **Definition of Done (DoD) estesa** per [prodotto / dominio / servizio].  
+I criteri qui definiti sono usati in tutto il ciclo di vita: specifica, test, rilascio e valutazione in produzione (DoD-First Driven).
+
+---
+
+## 1. Osservabilità
+
+### 1.1 Metriche obbligatorie
+
+Per ogni endpoint / flusso critico devono essere disponibili:
+
+- [ ] Request count (per endpoint / operazione)
+- [ ] Error count (4xx, 5xx, per errorCode)
+- [ ] Latency: p50, p95, p99
+- [ ] Custom metric per flussi business critici:
+  - [ ] [es. ordini completati]
+  - [ ] [es. fallimenti per motivo X]
+
+**Fonte delle metriche**: [infrastruttura (ALB, API Gateway, service mesh), codice (SDK CloudWatch, OpenTelemetry), altro]
+
+**Tag / dimensioni minime**:
+
+- [ ] `service`
+- [ ] `operation`
+- [ ] `env`
+- [ ] `tenantId` (se rilevante)
+- [ ] Altri: [specificare]
+
+### 1.2 Log strutturati
+
+Per ogni operazione critica devono essere prodotti log con:
+
+- [ ] `tenantId`
+- [ ] `userId` (o anonimo / pseudonimo, se richiesto)
+- [ ] `operation`
+- [ ] `outcome` (success / failure)
+- [ ] `errorCode` (se failure)
+- [ ] `traceId` / correlation ID
+
+**Vincoli**:
+
+- [ ] Nessun dato PII / sensibile in chiaro nei log
+- [ ] Formato: [JSON / altro]
+- [ ] Livelli di log minimi: [INFO per operazioni completate, ERROR per fallimenti, ecc.]
+
+### 1.3 Trace e correlazione
+
+- [ ] Ogni richiesta deve avere un `traceId` presente su log e metriche
+- [ ] Span minimi tracciati: [es. gateway → servizio → DB]
+- [ ] Sistema di tracing: [X-Ray, Jaeger, altro]
+
+### 1.4 Dashboard
+
+Dashboard minime richieste:
+
+- [ ] Vista per servizio: request, error, latency, custom metric critiche
+- [ ] Vista per flusso business: [es. funnel ordini, pagamenti]
+- [ ] Link alle dashboard: [inserire link]
+
+---
+
+## 2. Sicurezza
+
+### 2.1 Controlli di accesso
+
+- [ ] Ogni endpoint / operazione ha ruoli / policy definiti
+- [ ] Accesso minimo privilegiato (least privilege)
+- [ ] Documentazione dei ruoli: [link]
+
+### 2.2 Protezione dati
+
+- [ ] Classificazione dati: [PII, sensibili, interni, pubblici]
+- [ ] Encryption:
+  - [ ] In transito (TLS)
+  - [ ] A riposo (DB, storage)
+- [ ] Nessun dato sensibile in chiaro nei log
+
+### 2.3 Audit & logging di sicurezza
+
+Eventi minimi da loggare:
+
+- [ ] Login / logout
+- [ ] Cambiamenti configurazione
+- [ ] Accessi a dati sensibili
+- [ ] Fallimenti di accesso / autorizzazione
+
+**Retention**: [es. 12 mesi per audit, 30 giorni per log operativi]
+
+### 2.4 Conformità
+
+Riferimenti a standard / policy:
+
+- [ ] ISO [numero]
+- [ ] SOC2
+- [ ] GDPR
+- [ ] Policy interne: [link]
+
+---
+
+## 3. Affidabilità / SLO
+
+### 3.1 SLO / SLI
+
+- [ ] Disponibilità: [es. 99.9% mensile]
+- [ ] Latenza end-to-end: [es. p95 < X ms per il flusso Y]
+- [ ] Error rate: [es. < 0.1% per endpoint critici]
+
+### 3.2 Degradazione accettabile
+
+- [ ] Comportamento in caso di failure di dependency: [fallback, retry, circuit breaker]
+- [ ] Funzionalità degradate accettabili: [descrivere]
+
+### 3.3 Politiche di resilienza
+
+- [ ] Timeout: [valori per tipo di chiamata]
+- [ ] Retry: [politiche, backoff]
+- [ ] Circuit breaker: [dove applicato]
+
+### 3.4 Stati non previsti
+
+- [ ] Uno stato che la specifica non prevede produce un fallimento esplicito e osservabile, mai una prosecuzione silenziosa: [es. "il processo termina con errore e viene riavviato", "la richiesta fallisce con `errorCode` dedicato"]
+- [ ] Il fallimento è visibile: [log, metrica o allarme associato] (OBS-xx)
+- [ ] Il recupero non richiede intervento umano, salvo eccezioni dichiarate: [supervisore, retry idempotente, rollback]
+- [ ] Dove un fallimento immediato non è accettabile (es. flussi di pagamento), la degradazione è dichiarata e collegata alla sezione 3.2.
+
+---
+
+## 4. Costo
+
+### 4.1 Tagging risorse
+
+- [ ] Tutte le risorse hanno tag:
+  - [ ] `service`
+  - [ ] `team`
+  - [ ] `env`
+  - [ ] Altri: [specificare]
+
+### 4.2 Stima impatto sul costo
+
+Per ogni cambiamento significativo:
+
+- [ ] Stima variazione costo mensile del servizio: [metodo / foglio / tool]
+- [ ] Stima variazione costo per transazione: [metodo approssimativo]
+
+### 4.3 Soglie di allarme
+
+- [ ] Variazione > [X]% del costo mensile → review
+- [ ] Variazione > [Y]% del costo per transazione stimato → review
+
+**Fonte dati costo**: [Cost Explorer, dashboard interne, altro]
+
+---
+
+## 5. Altri assi (opzionali)
+
+### 5.1 Esperienza utente / business KPI
+
+- [ ] KPI da monitorare: [conversione, churn, usage, ecc.]
+- [ ] Soglie di peggioramento accettabile: [descrivere]
+
+### 5.2 Compliance specifica
+
+- [ ] Requisiti normativi: [descrivere]
+- [ ] Controlli specifici: [descrivere]
+
+---
+
+## 6. Vincoli per tipo di cambiamento
+
+Ogni riga è un vincolo da rispettare, non un caso da elencare nella specifica. In review si verifica che i vincoli applicabili valgano anche nelle situazioni che la specifica non descrive.
+
+| Il cambiamento… | Vincolo | Assi |
+|---|---|---|
+| introduce un formato di file, messaggio o dato | la forma completa è definita; i campi sconosciuti hanno un comportamento dichiarato | OBS, SLO |
+| comunica con uno strumento o servizio esterno | almeno una verifica usa quello reale; i suoi errori sono riportati con il messaggio originale | SLO, OBS |
+| decide a partire da un input | un input che non permette di decidere produce un rifiuto esplicito, mai una scelta inventata | SLO |
+| mostra un valore che può mancare | il valore mancante appare come sconosciuto, mai come zero o segnaposto | OBS, UX |
+| conserva lavoro o stato che deve sopravvivere a un crash | dopo un'interruzione a metà, l'esecuzione successiva riprende senza perdere né ripetere lavoro | SLO |
+| tratta un segreto | il segreto non compare in output, log o errori, anche quando qualcosa fallisce | SEC |
+| rende qualcosa raggiungibile in rete | è dichiarato chi può raggiungerlo, ed è verificato che gli altri non possono | SEC |
+| esegue un setup o una migrazione | ripeterlo su un setup già fatto o fatto a metà non danneggia nulla | SLO |
+| gira a lungo | se si blocca o termina, qualcosa lo riporta in funzione senza intervento umano e l'evento è osservabile | SLO, OBS |
+| aggiunge uno stato o una fase | esistono un modo per entrarci e uno per uscirne | SLO |
+
+Adattare la tabella al dominio: le righe nominano categorie di cambiamento, mai incidenti passati.
+
+---
+
+## 7. Riferimenti ai criteri (codici)
+
+Per facilitare il riferimento nelle specifiche di feature, ogni criterio ha un codice:
+
+- **Osservabilità**: OBS-01, OBS-02, …
+- **Sicurezza**: SEC-01, SEC-02, …
+- **Affidabilità / SLO**: SLO-01, SLO-02, …
+- **Costo**: COST-01, COST-02, …
+- **Altro**: UX-01, COMP-01, …
+
+**Elenco criteri**:
+
+- OBS-01: [descrizione breve]
+- OBS-02: [descrizione breve]
+- SEC-01: [descrizione breve]
+- SLO-01: [descrizione breve]
+- COST-01: [descrizione breve]
+- …
+
+---
+
+## 8. Evoluzione del documento
+
+- **Revisioni**:
+  - YYYY-MM-DD: [descrizione modifica, es. "aggiunti criteri di costo per transazione"]
+  - YYYY-MM-DD: [descrizione modifica]
+
+- **Feedback**:
+  - [Come inviare feedback / proposte di modifica]
+
+## Maturità e policy delle verifiche
+
+- Modalità del dominio: solo sviluppo / preparazione al rilascio.
+- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
+- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
+- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
+
+In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
+
+## Proporzionalità e collaborazione
+
+Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.

@@ -2087,6 +2087,11 @@ fn individual_defaults_need_no_team_context_or_second_reviewer() {
 #[test]
 fn feature_spec_template_and_paypal_example_are_not_swapped() {
     let p = Project::new();
+    // Italian content is checked, so the project chooses Italian explicitly.
+    p.save(
+        ".dfd/language.json",
+        &json!({"schema_version": 1, "language": "it"}),
+    );
     p.ready();
     let template =
         fs::read_to_string(p.path(".dfd/domains/checkout/templates/specifica_feature.md")).unwrap();
@@ -2167,15 +2172,13 @@ fn bilingual_conflicts_do_not_change_language_or_files() {
     p.init();
     p.write(".agents/skills/dfd-init/SKILL.md", "custom skill");
     let before = fs::read(p.path(".dfd/install.json")).unwrap();
-    p.run(&["language", "en"], 1);
+    p.run(&["language", "it"], 1);
     assert_eq!(
         fs::read_to_string(p.path(".agents/skills/dfd-init/SKILL.md")).unwrap(),
         "custom skill"
     );
     assert_eq!(fs::read(p.path(".dfd/install.json")).unwrap(), before);
-    assert!(
-        !p.path(".dfd/language.json").exists() || p.read(".dfd/language.json")["language"] == "it"
-    );
+    assert_eq!(p.read(".dfd/language.json")["language"], "en");
     p.run(&["--lang", "fr", "status"], 2);
 }
 
@@ -3468,5 +3471,110 @@ fn undeclared_acceptance_files_are_warned() {
             "blocked",
             "{roots}"
         );
+    }
+}
+
+#[test]
+fn default_language_is_english_without_preference() {
+    // Outside a project, help is English by default.
+    let help = Command::new(env!("CARGO_BIN_EXE_dfd"))
+        .env_clear()
+        .env("PATH", "/dfd-no-external-tools")
+        .arg("--help")
+        .output()
+        .unwrap();
+    assert!(help.status.success());
+    let help = String::from_utf8(help.stdout).unwrap();
+    assert!(help.contains("adoption, risk and review"));
+    assert!(!help.contains("Inizializza"));
+
+    // init without --lang installs English resources and saves the preference.
+    let p = Project::new();
+    let first = p.run(&["init", "--harness", "codex", "--domain", "checkout"], 0);
+    assert!(first["next"].as_str().unwrap().contains("Phase 0"));
+    assert_eq!(p.read(".dfd/language.json")["language"], "en");
+    let skill = fs::read_to_string(p.path(".agents/skills/dfd-init/SKILL.md")).unwrap();
+    assert!(skill.contains("# Adopting DFD"));
+
+    // A project without language.json answers in English and writes nothing.
+    fs::remove_file(p.path(".dfd/language.json")).unwrap();
+    let installed = fs::read(p.path(".agents/skills/dfd-init/SKILL.md")).unwrap();
+    let blocked = p.run(&["setup", "--domain", "checkout"], 2);
+    assert!(blocked["errors"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|s| s.as_str().unwrap().starts_with("Phase 0:")));
+    assert!(!p.path(".dfd/language.json").exists());
+    assert_eq!(
+        fs::read(p.path(".agents/skills/dfd-init/SKILL.md")).unwrap(),
+        installed
+    );
+
+    // An explicit Italian choice is preserved.
+    p.run(&["--lang", "it", "language", "it"], 0);
+    let italian = p.run(&["setup", "--domain", "checkout"], 2);
+    assert!(italian["errors"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|s| s.as_str().unwrap().starts_with("Fase 0:")));
+}
+
+#[test]
+fn installed_bundles_follow_english_primary_layout() {
+    let source = |relative: &str| {
+        let body =
+            fs::read_to_string(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(relative))
+                .unwrap();
+        // Same rule as build.rs: drop the navigation line and the blank line after it.
+        let mut result = String::new();
+        let mut skip_blank = false;
+        for line in body.lines() {
+            if line.starts_with("<!-- dfd-language -->") {
+                skip_blank = true;
+                continue;
+            }
+            if skip_blank && line.is_empty() {
+                skip_blank = false;
+                continue;
+            }
+            skip_blank = false;
+            result.push_str(line);
+            result.push('\n');
+        }
+        result
+    };
+    for (language, prefix) in [("en", ""), ("it", "it/")] {
+        let p = Project::new();
+        p.run(
+            &[
+                "--lang",
+                language,
+                "init",
+                "--harness",
+                "codex",
+                "--domain",
+                "checkout",
+            ],
+            0,
+        );
+        for (installed, relative) in [
+            (".dfd/kit/fondamenta.md", "fondamenta.md"),
+            (
+                ".dfd/kit/templates/specifica_feature.md",
+                "templates/specifica_feature.md",
+            ),
+            (
+                ".agents/skills/dfd-init/SKILL.md",
+                "skills/dfd-init/SKILL.md",
+            ),
+        ] {
+            assert_eq!(
+                fs::read_to_string(p.path(installed)).unwrap(),
+                source(&format!("{prefix}{relative}")),
+                "{language}: {installed}"
+            );
+        }
     }
 }

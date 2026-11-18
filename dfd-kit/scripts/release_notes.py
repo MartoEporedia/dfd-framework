@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Release notes for a tag from CHANGELOG.md and en/CHANGELOG.md, and the release checks.
+"""Release notes for a tag from CHANGELOG.md (English) and it/CHANGELOG.md (Italian), and the release checks.
 
-  release_notes.py [--root DIR] vX.Y.Z           print the notes (Italian, then English)
+  release_notes.py [--root DIR] vX.Y.Z           print the notes (English, then Italian)
   release_notes.py [--root DIR] --check vX.Y.Z   exit 1 when the tag cannot be released
 
 The tag must be v<major>.<minor>.<patch>, equal to the version in Cargo.toml, and both
@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 TAG = re.compile(r"^v(\d+\.\d+\.\d+)$")
-CHANGELOGS = (("CHANGELOG.md", "Italiano"), ("en/CHANGELOG.md", "English"))
+CHANGELOGS = (("CHANGELOG.md", "English"), ("it/CHANGELOG.md", "Italiano"))
 
 
 def section(text: str, version: str) -> str | None:

@@ -1,141 +1,154 @@
-<!-- dfd-language --> [Italiano](review_release.md) | [English](../en/templates/review_release.md)
+<!-- dfd-language --> [English](review_release.md) | [Italiano](../it/templates/review_release.md)
 
-# Checklist di Review DFD – Release
+<a id="checklist-di-review-dfd--release"></a>
 
-> **Tipo di review**: release  
-> **Data**: YYYY-MM-DD  
-> **Partecipanti**: [@team / @persone]  
-> **Riferimenti**:
-> - [Specifica di Feature]
-> - [DoD Estesa – Servizio X]
-> - [Configurazione Rollout]
-> - [Processo End-to-End DFD – Definition of Ready]
+# DFD review checklist – Release
 
----
+> **Review type**: release  
+> **Date**: YYYY-MM-DD  
+> **Participants**: [@team / @people]  
+> **References**: [Feature specification], [Extended DoD], [Architecture Guardrails], [Process / DoR], [Rollout configuration].
 
-## 0. Verifica Definition of Ready (DoR) – Release
+<a id="0-verifica-definition-of-ready-dor--release"></a>
 
-Prima di procedere con la review di release, verificare che la feature soddisfi i seguenti criteri:
+## 0. Definition of Ready – Release
 
-- [ ] **Tutti i test applicabili verdi** secondo la policy locale/CI del dominio (unitari, integrazione, E2E).  
-- [ ] **Test non funzionali** eseguiti (se rilevanti: carico, resilienza, sicurezza).  
-- [ ] **Configurazione Rollout** definita:
-  - fasi di rollout;
-  - criteri di promozione / stop / rollback;
-  - allarmi e dashboard.
-- [ ] **Allarmi e dashboard** configurati (o piano chiaro per attivarli).  
-- [ ] **Supporto / stakeholder** informati (almeno i team chiave: Support, Ops, Security se rilevante).  
-- [ ] **Review DFD (design)** almeno “approvata con condizioni” (nessun blocco architetturale / di sicurezza aperto).
+- [ ] Applicable unit/integration/E2E tests pass according to domain local/CI policy.
+- [ ] Relevant load/resilience/security tests executed.
+- [ ] Rollout stages, promotion/stop/rollback, alarms/dashboards defined.
+- [ ] Operational resources configured or activation plan clear.
+- [ ] Support/stakeholders informed, including Ops/Security when relevant.
+- [ ] Design review at least approved with conditions; no architecture/security blocker.
 
-Se questi criteri non sono soddisfatti, la review di release non dovrebbe procedere; si completa prima la pre-release.
+Otherwise complete pre-release first.
 
----
+<a id="1-allineamento-alla-dod-estesa-verifica-implementazione"></a>
 
-## 1. Allineamento alla DoD Estesa (verifica implementazione)
+## 1. Extended DoD alignment
 
-### 1.1 Osservabilità
+<a id="11-osservabilità"></a>
 
-- [ ] I criteri **OBS-xx** citati nella specifica sono effettivamente implementati.
-- [ ] Le metriche obbligatorie (request, error, latency) sono presenti per ogni nuovo endpoint.
-- [ ] Le custom metric business (se previste) sono definite e visibili.
-- [ ] I log includono: `tenantId`, `userId`, `operation`, `outcome`, `errorCode`, `traceId`.
-- [ ] Il trace ID è presente su log e metriche.
-- [ ] Le dashboard sono aggiornate / create e mostrano le metriche rilevanti.
+### 1.1 Observability
 
-### 1.2 Sicurezza
+- [ ] Relevant OBS-xx criteria explicitly referenced implemented and verified.
+- [ ] Requests/errors/latency for each new endpoint implemented and verified.
+- [ ] Business custom metrics, when applicable, implemented and verified.
+- [ ] Logs include tenantId, userId, operation, outcome, errorCode, traceId.
+- [ ] Trace ID in logs/metrics implemented and verified.
+- [ ] Relevant dashboards implemented and verified.
 
-- [ ] I criteri **SEC-xx** citati nella specifica sono effettivamente implementati.
-- [ ] I controlli di accesso (ruoli, policy) sono configurati.
-- [ ] La protezione dati è verificata (nessun dato sensibile in chiaro nei log).
-- [ ] Gli eventi di audit sono loggati come previsto.
+<a id="12-sicurezza"></a>
 
-### 1.3 Affidabilità / SLO
+### 1.2 Security
 
-- [ ] I criteri **SLO-xx** citati nella specifica sono rispettati.
-- [ ] L’impatto su latenza, error rate, disponibilità è entro le stime.
-- [ ] Le mitigazioni per dipendenze esterne (timeout, retry, fallback) sono implementate.
+- [ ] Relevant SEC-xx criteria implemented and verified.
+- [ ] Access roles/policies implemented and verified.
+- [ ] Data protection verified: no plaintext sensitive log data.
+- [ ] Audit events implemented and verified.
+- [ ] DoD standards/policies respected.
 
-### 1.4 Costo
+<a id="13-affidabilità--slo"></a>
 
-- [ ] I criteri **COST-xx** citati nella specifica sono rispettati.
-- [ ] La stima di impatto sul costo è coerente con l’implementazione.
-- [ ] Le soglie di allarme costo sono configurate (se rilevanti).
+### 1.3 Reliability / SLOs
 
-### 1.5 Esperienza utente / business KPI
+- [ ] Relevant SLO-xx criteria implemented and verified.
+- [ ] Latency/error-rate/availability impact assessed and within estimates.
+- [ ] Dependency timeout/retry/fallback mitigations implemented and verified.
+- [ ] New reliability risks and countermeasures identified.
 
-- [ ] I KPI business impattati sono monitorabili (dashboard, metriche).
-- [ ] Le soglie di peggioramento accettabile (UX-02) sono chiare e misurabili.
-- [ ] Il piano di validazione in produzione è pronto per essere eseguito.
+<a id="14-costo"></a>
 
----
+### 1.4 Cost
 
-## 2. Guardrail globali (verifica finale)
+- [ ] Relevant COST-xx criteria implemented and verified.
+- [ ] Monthly cost impact assessed and within estimates.
+- [ ] Transaction cost impact assessed when applicable and within estimates.
+- [ ] Cost alarm thresholds configured when relevant.
 
-- [ ] La feature non viola i guardrail architetturali.
-- [ ] La feature non viola i guardrail di sicurezza.
-- [ ] La feature non viola i guardrail di osservabilità.
-- [ ] La feature non viola i guardrail di costo.
-- [ ] Eventuali eccezioni sono esplicite, motivate e approvate.
+<a id="15-esperienza-utente--business-kpi"></a>
 
----
+### 1.5 UX / business KPIs
 
-## 3. Test e validazione (stato attuale)
+- [ ] Affected business KPIs identified and monitorable in metrics/dashboards.
+- [ ] Acceptable UX-02 deterioration thresholds clear and measurable.
+- [ ] Production validation plan ready to execute.
 
-### 3.1 Test funzionali
+<a id="2-guardrail-globali-verifica-finale"></a>
 
-- [ ] Tutti i test unitari verdi.
-- [ ] Tutti i test di integrazione verdi.
-- [ ] Tutti i test end-to-end verdi.
+## 2. Global guardrails
 
-### 3.2 Test non funzionali
+- [ ] Architectural guardrails respected.
+- [ ] Security guardrails respected.
+- [ ] Observability guardrails respected.
+- [ ] Cost guardrails respected.
+- [ ] Exceptions explicit, justified and approved.
 
-- [ ] Test di carico eseguiti (se rilevante per SLO) – esito: [ok / problemi].
-- [ ] Test di resilienza eseguiti – esito: [ok / problemi].
-- [ ] Test di sicurezza eseguiti – esito: [ok / problemi].
+<a id="3-test-e-validazione-stato-attuale"></a>
 
-### 3.3 Validazione in produzione (shift-right)
+## 3. Tests and validation
 
-- [ ] Piano di canary tecnico definito (metriche, soglie, rollback).
-- [ ] Piano di rollout per tenant / segmento definito.
-- [ ] Criteri di promozione / stop / rollback chiari e configurati.
+<a id="31-test-funzionali"></a>
 
----
+### 3.1 Functional tests
 
-## 4. Operatività e supporto
+- [ ] Unit tests for new/changed logic passing.
+- [ ] Integration tests for new/changed APIs passing.
+- [ ] E2E tests for main flows passing.
 
-- [ ] Il supporto / customer success è informato della feature.
-- [ ] Gli alert operativi sono configurati (chi viene notificato, su quali soglie).
-- [ ] La procedura di rollback è chiara e testata (almeno a livello di “walkthrough”).
+<a id="32-test-non-funzionali"></a>
 
----
+### 3.2 Nonfunctional tests
 
-## 5. Decisioni e aperture
+- [ ] Relevant load tests executed; result: [OK / issues].
+- [ ] Resilience tests for failures/timeouts/fallback executed; result: [OK / issues].
+- [ ] Security tests for unauthorized access/malicious input executed; result: [OK / issues].
 
-- [ ] Decisioni prese in review: [elenco sintetico]
-- [ ] Aperture residue (da decidere / investigare): [elenco]
+<a id="33-validazione-in-produzione-shift-right"></a>
 
----
+### 3.3 Production validation (shift-right)
 
-## 6. Esito della review di release
+- [ ] Technical canary plan: metrics, thresholds and rollback ready to execute.
+- [ ] Tenant/segment rollout plan ready to execute.
 
-- [ ] **OK a rilasciare** (può procedere il rollout in produzione)
-- [ ] **OK con condizioni**: [condizioni da soddisfare prima o durante il rollout]
-- [ ] **Da rivedere**: [motivi, cosa manca]
+<a id="4-operatività-e-supporto"></a>
 
-**Firme / approvazioni**:
+## 4. Operations and support
 
-- [@persona1] – [ruolo]
-- [@persona2] – [ruolo]
+- [ ] Support/Customer Success informed.
+- [ ] Operational alerts configured: recipients and thresholds.
+- [ ] Rollback clear and tested at least through a walkthrough.
+- [ ] Promotion/stop/rollback criteria clear and configured.
 
-## Maturità e policy delle verifiche
+<a id="5-decisioni-e-aperture"></a>
 
-- Modalità del dominio: solo sviluppo / preparazione al rilascio.
-- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
-- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
-- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
+## 5. Decisions and open questions
 
-In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
+- [ ] Decisions: [list].
+- [ ] Remaining questions/investigations: [list].
 
-## Proporzionalità e collaborazione
+<a id="6-esito-della-review-di-release"></a>
 
-Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.
+## 6. Review outcome
+
+- [ ] Release approved: production rollout may proceed.
+- [ ] Approved with conditions: [conditions and owners].
+- [ ] Changes requested: [reasons/gaps].
+
+Approvals: [@person1 – role], [@person2 – role].
+
+<a id="maturità-e-policy-delle-verifiche"></a>
+
+## Maturity and verification policy
+
+- Domain mode: development-only / release-preparation.
+- CI required: yes / no; rationale based on risk and target.
+- Final suite: command, environment, date, result and reference to the real log.
+- Questions/requirements deferred to pre-release: owner and activation condition.
+
+In development-only, finish design and proportionate checks without prematurely requiring CI, rollout, on-call or release communications. Release checklists apply when preparing distribution. Before release reassess risk/policy, reconfirm reviews and refresh evidence. Deferred work must not be marked executed.
+
+<a id="proporzionalità-e-collaborazione"></a>
+
+## Proportionality and collaboration
+
+First consider rapid for scoped noncritical fixes, using one [quick change record](cambiamento_rapido.md) rather than completing this entire template. Match light/full detail to risk. Owner and checks are required; PRs, independence and integrated checks depend on [optional team conventions](collaborazione.md). Solo developers do not simulate roles or communications. Reuse applicable reviews; test failure effects and important regressions.

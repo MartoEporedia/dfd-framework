@@ -1,24 +1,22 @@
 ---
 name: dfd-pre-release
-description: Preparare il rilascio di una feature DFD verificata, definendo rollout, soglie, rollback, allarmi, dashboard, test non funzionali e comunicazioni prima della review di release.
+description: Prepare a verified DFD feature for release: rollout, thresholds, rollback, alarms, dashboards, nonfunctional tests and real communications.
 ---
 
-<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-pre-release/SKILL.md)
+<!-- dfd-language --> [English](SKILL.md) | [Italiano](../../it/skills/dfd-pre-release/SKILL.md)
 
-# Preparazione del rilascio
+<a id="preparazione-del-rilascio"></a>
 
-Leggere `.dfd/kit/processo-e2e.md` (Pre-release e DoR Rilascio), `.dfd/kit/templates/contratto_toolkit.md`, gli artefatti della feature e il setup del dominio. Eseguire `dfd status <id>`: lo sviluppo deve essere verificato e attuale, cioè `development` assente da `blocking` (exit `2` indica un gate bloccato, non un errore del comando).
+# Release preparation
 
-Usare `dfd pre-release <id>` per creare o riprendere `rollout.md` e `rollout.json` senza sovrascriverli. Il Markdown proviene dal template locale del dominio; sostituire esempi e placeholder con dati reali. Affinare il piano iterativamente, registrando e chiarendo i dubbi in `open_questions`.
+Read `.dfd/kit/processo-e2e.md` (Pre-release/Release DoR), `.dfd/kit/templates/contratto_toolkit.md`, feature/domain artifacts and status. Development must be verified/current: development absent from blocking (exit 2 means a blocked gate, not a command error). Domain must be release-preparation (legacy default without lifecycle.json). In development-only stop; explicitly update policy/reassess risk/CI and reconfirm invalidated artifacts before distribution.
 
-Definire artefatto e revisione da rilasciare, ambiente, owner e on-call; motivare rollout diretto, canary o segmentato. Le fasi strutturate descrivono l'esposizione nell'ambiente finale, fino al 100% dell'audience prevista; le prove staging restano evidenze separate. Collegare ogni criterio DoD applicabile a segnale, soglia e verifica in produzione. Non inventare soglie o baseline: riprendere quelle del dominio oppure chiarirle.
+Run pre-release to create/resume rollout.md/json without overwriting. Markdown uses the domain template; replace placeholders/examples with real values. Iterate with open_questions.
 
-Definire trigger, procedura e verifica del rollback; predisporre allarmi, dashboard e controllo dell'esposizione. Per risorse pronte registrare evidenze locali con hash; per risorse pianificate indicare owner, riferimento e piano di attivazione. Nel light motivare eventuali esclusioni; il full richiede allarmi e dashboard. Un flag può essere escluso motivando il meccanismo alternativo. Dichiarare eseguiti oppure esclusi con motivazione test di carico, resilienza e sicurezza.
+Define artifact/revision, environment, owner/on-call and justified direct/canary/segmented strategy. Stages describe final-environment exposure to 100% of intended audience; staging tests are separate evidence. Map every applicable criterion to production signal/threshold/verification from domain/review, never invented baselines.
 
-Registrare solo comunicazioni realmente effettuate con audience, owner, data e riferimento. Non inviare messaggi o configurare servizi esterni senza l'autorizzazione pertinente; predisporre il contenuto e riportare l'attività ancora necessaria. L'installazione della skill non costituisce una dichiarazione che gli stakeholder siano informati.
+Define rollback trigger/procedure/verification and alarms/dashboards/exposure control. Ready resources need local hashed evidence; planned resources need owner/reference/activation plan. Light exclusions require justification; full requires alarms/dashboards. A flag may be excluded with an alternative exposure mechanism. Evaluate load/resilience/security as executed or justified exclusions.
 
-Se cambiano design, piano o evidenze, completare le verifiche precedenti e usare `dfd pre-release <id> --refresh`, rivalutando artefatto, soglie e preparazione. Il comando aggiorna il riferimento allo sviluppo preservando i contenuti. Eseguire `dfd review-release <id>`, correggere le lacune e proseguire con `dfd-review-release`. Non dichiarare il rilascio effettuato.
+Record only communications actually made: audience, owner, date, reference. Prepare content and report pending work; never send messages/configure external services without relevant authorization. Installing a skill does not inform stakeholders.
 
-Prima di avviare la preparazione verificare che il dominio sia in release-preparation (default legacy in assenza di lifecycle.json). In development-only fermarsi allo sviluppo verificato; per distribuire aggiornare esplicitamente la policy, rivalutare rischio/CI e riconfermare gli artefatti invalidati.
-
-Quando team.json richiede verifiche integrate, collegare collaboration.json alla revisione integrata e registrare snapshot/files/checks reali. I test dei branch isolati non bastano. La review PR deve corrispondere alla revisione/file esaminati. Questi obblighi non vengono imposti automaticamente al singolo dev; un record rapido va prima promosso a feature per la distribuzione.
+After design/plan/evidence changes, reverify then use pre-release --refresh, reassessing artifact/thresholds/preparation. Run review-release, fix gaps and use dfd-review-release. Do not claim release execution. If team.json requires integrated checks, link collaboration.json to current revision and real snapshots/files/checks; isolated branches are insufficient and PR review must match examined files/revision. Do not impose team obligations on solo developers. Promote a quick record before distribution.

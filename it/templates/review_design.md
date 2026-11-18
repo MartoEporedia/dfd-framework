@@ -1,0 +1,148 @@
+<!-- dfd-language --> [English](../../templates/review_design.md) | [Italiano](review_design.md)
+
+# Checklist di Review DFD – Design
+
+> **Tipo di review**: design  
+> **Data**: YYYY-MM-DD  
+> **Partecipanti**: [@team / @persone]  
+> **Riferimenti**:
+> - [Specifica di Feature]
+> - [DoD Estesa – Servizio X]
+> - [Architecture Guardrails]
+> - [Processo End-to-End DFD – Definition of Ready]
+
+---
+
+## 0. Verifica Definition of Ready (DoR) – Design
+
+Prima di procedere con la review di design, verificare che l’epic soddisfi i seguenti criteri:
+
+- [ ] **Obiettivo business chiaro** (1–2 frasi: che problema risolve / che opportunità sfrutta).  
+- [ ] **KPI / metriche di successo** almeno ad alto livello (es. “aumento conversione checkout”, “riduzione ticket supporto”).  
+- [ ] **Dominio / servizio principale** identificato (es. Checkout, Pagamenti, Catalogo).  
+- [ ] **Stima ad alto livello** di complessità (T-shirt size o simile).  
+- [ ] **Priorità** definita nel backlog di prodotto.  
+- [ ] **Epic approvata** dal Product Manager / Product Owner.
+
+Se questi criteri non sono soddisfatti, la review di design non dovrebbe procedere; si completa prima l’epic.
+
+---
+
+## 1. Allineamento alla DoD Estesa
+
+### 1.1 Osservabilità
+
+- [ ] La feature cita esplicitamente i criteri **OBS-xx** rilevanti.
+- [ ] Sono definite le metriche obbligatorie (request, error, latency) per ogni nuovo endpoint.
+- [ ] Sono definite le custom metric business (se applicabile).
+- [ ] I log includono: `tenantId`, `userId`, `operation`, `outcome`, `errorCode`, `traceId`.
+- [ ] È previsto l’uso del trace ID su log e metriche.
+- [ ] Sono identificate le dashboard da aggiornare / creare.
+
+### 1.2 Sicurezza
+
+- [ ] La feature cita esplicitamente i criteri **SEC-xx** rilevanti.
+- [ ] Sono definiti i controlli di accesso (ruoli, policy).
+- [ ] È verificata la protezione dati (nessun dato sensibile in chiaro nei log).
+- [ ] Sono definiti gli eventi di audit da loggare.
+- [ ] Sono rispettati gli standard / policy indicati nella DoD.
+
+### 1.3 Affidabilità / SLO
+
+- [ ] La feature cita esplicitamente i criteri **SLO-xx** rilevanti.
+- [ ] È stimato l’impatto su latenza, error rate, disponibilità.
+- [ ] Sono definite le mitigazioni per dipendenze esterne (timeout, retry, fallback).
+- [ ] Sono identificati i nuovi rischi per affidabilità e le relative contromisure.
+- [ ] È definita la reazione agli stati non previsti: fallimento esplicito e osservabile, recupero, nessuna prosecuzione silenziosa.
+
+### 1.4 Costo
+
+- [ ] La feature cita esplicitamente i criteri **COST-xx** rilevanti.
+- [ ] È stimato l’impatto sul costo mensile del servizio.
+- [ ] È stimato l’impatto sul costo per transazione (se applicabile).
+- [ ] È verificato il rispetto delle soglie di allarme (COST-03).
+
+### 1.5 Esperienza utente / business KPI
+
+- [ ] Sono identificati i KPI business impattati (es. tasso di completamento).
+- [ ] Sono definite le soglie di peggioramento accettabile (UX-02).
+- [ ] È definito un piano di validazione in produzione (rollout per tenant, esperimento).
+
+### 1.6 Qualità della specifica
+
+- [ ] Le parole del richiedente sono riportate alla lettera; le assunzioni sono separate e motivate.
+- [ ] Obiettivo in una frase; appetite e no-go dichiarati.
+- [ ] Ogni verifica descrive un risultato osservabile; nessun "correttamente", "funziona", "come previsto" o "veloce" fuori da una citazione.
+- [ ] I vincoli per tipo di cambiamento applicabili (DoD Estesa) sono rispettati, anche nei casi che la specifica non descrive.
+- [ ] Il comportamento esistente esteso è indicato, con ciò che resta invariato.
+
+---
+
+## 2. Guardrail globali
+
+- [ ] La feature non viola i guardrail architetturali.
+- [ ] La feature non viola i guardrail di sicurezza.
+- [ ] La feature non viola i guardrail di osservabilità.
+- [ ] La feature non viola i guardrail di costo.
+- [ ] Eventuali eccezioni sono esplicite, motivate e approvate.
+
+---
+
+## 3. Test e validazione
+
+### 3.1 Test funzionali
+
+- [ ] Piano di test unitari per la logica nuova / modificata.
+- [ ] Piano di test di integrazione per le nuove / modificate API.
+- [ ] Piano di test end-to-end per i flussi principali.
+
+### 3.2 Test non funzionali
+
+- [ ] Piano di test di carico (se rilevante per SLO).
+- [ ] Piano di test di resilienza (dipendenze down, timeout, fallback).
+- [ ] Piano di test di sicurezza (accesso non autorizzato, input malevoli).
+
+### 3.3 Validazione in produzione (shift-right)
+
+- [ ] È definita un’idea di piano di canary tecnico (metriche, soglie, rollback).
+- [ ] È definita un’idea di piano di rollout per tenant / segmento.
+
+---
+
+## 4. Operatività e supporto
+
+- [ ] Sono stati identificati i team da informare prima del rilascio (Support, Ops, Security).
+- [ ] Sono stati identificati gli alert operativi principali da configurare in pre-release.
+
+---
+
+## 5. Decisioni e aperture
+
+- [ ] Decisioni prese in review: [elenco sintetico]
+- [ ] Aperture residue (da decidere / investigare): [elenco]
+
+---
+
+## 6. Esito della review di design
+
+- [ ] **Approvata** (può procedere allo sviluppo)
+- [ ] **Approvata con condizioni**: [condizioni da soddisfare]
+- [ ] **Da rivedere**: [motivi, cosa manca]
+
+**Firme / approvazioni**:
+
+- [@persona1] – [ruolo]
+- [@persona2] – [ruolo]
+
+## Maturità e policy delle verifiche
+
+- Modalità del dominio: solo sviluppo / preparazione al rilascio.
+- CI richiesta: sì / no; motivazione rispetto a rischio e destinazione.
+- Suite finale: comando, ambiente, data, esito e riferimento al log reale.
+- Dubbi o requisiti rinviati alla pre-release: owner e condizione di attivazione.
+
+In solo sviluppo, completare design e verifiche proporzionate senza richiedere CI, rollout, on-call o comunicazioni di rilascio anticipatamente. Le checklist di release si applicano quando si prepara una distribuzione. Per passare al rilascio rivalutare rischio e policy, riconfermare review e aggiornare evidenze; non segnare come eseguite attività rinviate.
+
+## Proporzionalità e collaborazione
+
+Valutare prima il percorso rapido per fix circoscritti e non critici: in quel caso usare un solo [record rapido](cambiamento_rapido.md), senza compilare questo template integralmente. Per light/full mantenere il dettaglio utile al rischio. Owner e verifiche sono necessari; PR, reviewer indipendente e prove integrate dipendono dalle [convenzioni facoltative del team](collaborazione.md). Il singolo dev non deve simulare ruoli o comunicazioni. Riutilizzare review già pertinenti; testare gli effetti del fallimento e le regressioni importanti.

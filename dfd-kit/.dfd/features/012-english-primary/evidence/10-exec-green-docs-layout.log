@@ -1,0 +1,4 @@
+$ python3 scripts/check_translations.py
+# executed_at: 2026-11-17T23:29:50.465217Z
+56 document pairs; 279 messages; 0 errors
+# exit_code: 0

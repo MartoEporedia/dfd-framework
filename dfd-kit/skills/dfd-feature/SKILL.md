@@ -1,22 +1,24 @@
 ---
 name: dfd-feature
-description: Aprire o riprendere una feature DFD da un'idea, definendo dominio, titolo, ambito e tipo di intervento prima dell'assessment e della specifica.
+description: Open or resume a DFD feature from an idea, establishing domain, title, scope and change kind before risk assessment and specification.
 ---
 
-<!-- dfd-language --> [Italiano](SKILL.md) | [English](../../en/skills/dfd-feature/SKILL.md)
+<!-- dfd-language --> [English](SKILL.md) | [Italiano](../../it/skills/dfd-feature/SKILL.md)
 
-# Apertura di una feature
+<a id="apertura-di-una-feature"></a>
 
-Valutare prima il percorso rapido: per fix di contratto noto o editoriali circoscritti usare `quick`, evitando di creare una feature con documenti separati. Per gli altri casi seguire il flusso qui sotto.
+# Opening a feature
 
-Leggere `.dfd/config.json` e `.dfd/kit/templates/contratto_toolkit.md`. Identificare dominio, problema, titolo, ambito e tipo (`feature`, `refactor`, `incident`, `new-service`). Chiarire solo i dati necessari per distinguere l'intervento; KPI, scenari e dubbi possono essere raffinati nella specifica iterativa.
+First consider rapid for scoped known-contract fixes or editorial changes: use quick and one record instead of separate feature documents.
 
-Usare `dfd status` per cercare un intervento già aperto. Se esiste, riprenderlo senza creare duplicati o modificare manualmente `state.json`. Se nuovo, scegliere un ID lowercase con trattini ed eseguire:
+Read `.dfd/config.json` and `.dfd/kit/templates/contratto_toolkit.md`. Identify domain, problem, title, scope and kind (feature, refactor, incident, new-service). Clarify only what distinguishes the change; refine KPIs/scenarios/questions in the iterative specification.
+
+Use `dfd status` to find existing work. Resume without duplicates or manual state.json changes. For new work choose a lowercase hyphenated ID:
 
 ```sh
-dfd feature <id> --domain <dominio> --title "..." --scope "..." --kind feature
+dfd feature <id> --domain <domain> --title "..." --scope "..." --kind feature
 ```
 
-La CLI crea stato e rischio iniziale senza attribuire approvazioni o classificare dati ignoti. Il dominio deve essere registrato; se manca, inizializzarlo con `dfd init`. La Fase 0 può essere completata mentre si raffina l'idea e diventa necessaria prima del design. Mostrare ID, dominio, ambito e prossimo passo `dfd-assess`. Non chiedere di riconfermare informazioni già fornite.
+The CLI creates initial state/risk without approvals or classifying unknown data. Register the domain with init if missing; Phase 0 may evolve during idea refinement but is required before design. Report ID/domain/scope and dfd-assess next. Do not reconfirm supplied information.
 
-Valutare prima rapido/light/full. Per fix circoscritti che ripristinano un contratto noto o modifiche editoriali usare dfd quick con ID, dominio, titolo, owner e kind behavior-fix/editorial; leggere il contratto del toolkit per il solo change.json. Non creare specifica o piano separati. In caso di escalation usare dfd promote con un nuovo ID, preservando l’origine. Il singolo dev non richiede PR o secondo reviewer; context e team.json sono facoltativi.
+For rapid use `dfd quick` with ID/domain/title/owner and behavior-fix/editorial. Follow the contract for `.dfd/changes/<id>.json`, without separate specification/plan. Escalate via `dfd promote` to a new ID, preserving origin. Solo work needs no PR/second reviewer; context/team.json are optional.
