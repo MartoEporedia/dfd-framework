@@ -327,6 +327,28 @@ fn changes_criteria_require_coverage_or_justified_exclusion() {
 }
 
 #[test]
+fn quoted_placeholders_do_not_block_review() {
+    let p = Project::new();
+    p.ready();
+    let spec = fs::read_to_string(p.path(".dfd/features/001-paypal/spec.md")).unwrap();
+    let quoted = format!(
+        "{spec}\n- Requester's words: \"TODO design: images served from `/wp`\" (README, 2026-09-10).\n- Quoted as “TODO” in the issue; inline `TODO` and `YYYY-MM-DD`.\n\n```text\nTODO: legacy note\n```\n"
+    );
+    p.write(".dfd/features/001-paypal/spec.md", &quoted);
+    assert_eq!(
+        p.run(&["review-design", "001-paypal"], 0)["gate"],
+        "awaiting-human-review"
+    );
+    p.write(
+        ".dfd/features/001-paypal/spec.md",
+        &format!("{quoted}\n- Owner: TODO\n"),
+    );
+    let blocked = p.run(&["review-design", "001-paypal"], 2);
+    assert_eq!(blocked["gate"], "blocked");
+    assert!(blocked["errors"].to_string().contains("placeholder"));
+}
+
+#[test]
 fn placeholder_design_blocks_approval() {
     let p = Project::new();
     p.ready();

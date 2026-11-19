@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "id": "fix-todo-in-quotes",
+  "domain": "dfd-kit",
+  "title": "Non trattare come segnaposto TODO dentro citazioni e codice della specifica",
+  "owner": "manutentore del repository",
+  "kind": "behavior-fix",
+  "problem": "review-design blocca la specifica con 'Specifica con placeholder da completare.' quando la parola TODO (o YYYY-MM-DD, [Nome Feature], [Feature Name]) compare dentro una citazione o nel codice. Dalla 0.3.0 la specifica chiede le parole del richiedente alla lettera: nel pilota su martoranamarco-site (2026-11-19) la citazione del README \"TODO design\" ha bloccato la review e l'agente ha dovuto riformularla, perdendo la lettera.",
+  "scope": "Funzione di controllo dei segnaposto della specifica in src/lib.rs (validate_design): il testo tra virgolette doppie (\"...\" o “...”) su una riga, il codice inline tra backtick e i blocchi di codice recintati non contano come segnaposto. Test di regressione in tests/workflow.rs e voce nei CHANGELOG. Nessuna modifica ai template, alle skill, agli schemi JSON o agli altri controlli TODO (piano, rollout, setup).",
+  "known_contract": "Contratto e skill: i segnaposto del template (TODO, YYYY-MM-DD, [Nome Feature]) vanno risolti prima della review; dfd-specify (0.3.0) chiede di riportare alla lettera le parole del richiedente con fonte e data. I segnaposto del template sono sempre testo libero, mai tra virgolette o backtick.",
+  "scope_bounded": true,
+  "changes_contract": false,
+  "critical": false,
+  "open_questions": [],
+  "risk": {
+    "schema_version": 1,
+    "dimensions": {
+      "architecture": {
+        "level": "low",
+        "rationale": "Una funzione di filtro del testo prima di un controllo esistente; nessun contratto o schema cambia."
+      },
+      "business": {
+        "level": "low",
+        "rationale": "Sblocca citazioni letterali richieste dalle skill; nessun effetto su progetti senza citazioni."
+      },
+      "cost": {
+        "level": "low",
+        "rationale": "Nessuna dipendenza nuova; regex già usata nel crate."
+      },
+      "reliability": {
+        "level": "low",
+        "rationale": "Il controllo resta attivo sul testo libero: un TODO del template non citato blocca come prima; coperto da test e mutante."
+      },
+      "security": {
+        "level": "low",
+        "rationale": "Allentamento limitato: un segnaposto nascosto tra virgolette passerebbe, ma resta la review umana del design (SEC-03)."
+      }
+    }
+  },
+  "criteria": [
+    "SEC-03",
+    "SLO-01",
+    "SLO-02",
+    "UX-01"
+  ],
+  "files": [
+    {
+      "path": "src/lib.rs",
+      "sha256": "ccae2b5fa7b630eaa56bbc593d36bfae999b8b37b68e7448a27a28f9002e9a17"
+    },
+    {
+      "path": "tests/workflow.rs",
+      "sha256": "bf3ea395fee497c35fcaa2a535770f19eb54e66bce4e8410d39b54932a48e33d"
+    },
+    {
+      "path": "mutations/gates.json",
+      "sha256": "7a46c7b1d2569bad94abf0c9899351c6668031959038f4477796bb2ea755acce"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "32c0a0066016487b92f798195f3fde06db99645c61ff198938b8367f1ef95fc4"
+    },
+    {
+      "path": "it/CHANGELOG.md",
+      "sha256": "72c948a1c1f5b760fe1c6beb0522501addd3c688a8105e5e16319573f8f9ee93"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "ecdbecf5b3a26dec82cd0f68ff21cef6bfca86ff75f203e2560a4de16cb4e947"
+    }
+  ],
+  "checks": [
+    {
+      "task": null,
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow quoted_placeholders_do_not_block_review",
+      "executed_at": "2026-11-19T00:22:22Z",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/changes/fix-todo-in-quotes/red.log",
+        "sha256": "d02506bf6264b3c39d7c6769b256344fdb2e9bd708f858f25830f095d2c3f613"
+      }
+    },
+    {
+      "task": null,
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow quoted_placeholders_do_not_block_review",
+      "executed_at": "2026-11-19T00:22:34Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/changes/fix-todo-in-quotes/green.log",
+        "sha256": "970b0a9fb0f5bb82da2e35230e967ab943063d5befb7b968d2012f705cf2a7e4"
+      }
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "sh -c cargo fmt --all --check && cargo clippy --locked --offline --all-targets -- -D warnings && cargo test --locked --offline && cargo build --locked --offline --release && ./target/release/dfd doctor && python3 -m unittest discover -s tests -p 'test_*.py' && python3 scripts/check_translations.py",
+      "executed_at": "2026-11-19T00:25:08Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/changes/fix-todo-in-quotes/suite.log",
+        "sha256": "6798255aa64b606f48b051c55230d73fe2cf522e1d887c7d67e765c3a2393497"
+      }
+    }
+  ],
+  "verification_notes": "Red prima della correzione: la specifica con le parole del richiedente tra virgolette (\"TODO design: ...\"), “TODO”, codice inline e un blocco di codice con TODO veniva bloccata (exit 2 invece di 0). Green dopo without_quotations in validate_design. Lo stesso test verifica che un 'Owner: TODO' nel testo libero continui a bloccare. Mutanti spec-placeholder-quotes-ignored e spec-placeholder-free-text-blocks uccisi (2/2). Il test esistente placeholder_design_blocks_approval resta verde.",
+  "collaboration": null,
+  "decisions": []
+}

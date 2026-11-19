@@ -1023,6 +1023,25 @@ fn valid_criterion(value: &str) -> bool {
     RE.get_or_init(|| Regex::new(r"^(?:OBS|SEC|SLO|COST|UX)-[0-9]{2,}$").unwrap())
         .is_match(value)
 }
+/// Specification text without quotations and code: requester's words quoted
+/// verbatim may contain "TODO", template placeholders never sit in quotes.
+fn without_quotations(markdown: &str) -> String {
+    static RE: OnceLock<Regex> = OnceLock::new();
+    let quoted = RE.get_or_init(|| Regex::new(r#"`[^`\n]*`|"[^"\n]*"|“[^”\n]*”"#).unwrap());
+    let mut fenced = false;
+    markdown
+        .lines()
+        .filter(|line| {
+            if line.trim_start().starts_with("```") {
+                fenced = !fenced;
+                return false;
+            }
+            !fenced
+        })
+        .map(|line| quoted.replace_all(line, ""))
+        .collect::<Vec<_>>()
+        .join("\n")
+}
 fn validate_design(store: &Store, state: &State) -> Result<Vec<String>> {
     let mut errors = setup_errors(store, &state.domain)?;
     if let Err(error) = current_risk(store, state) {
@@ -1037,8 +1056,9 @@ fn validate_design(store: &Store, state: &State) -> Result<Vec<String>> {
     }
     let design: Design = store.json(&format!("{root}/design.json"))?;
     let spec = store.read(&format!("{root}/spec.md"))?;
+    let unquoted = without_quotations(&spec);
     for placeholder in ["TODO", "[Nome Feature]", "[Feature Name]", "YYYY-MM-DD"] {
-        if spec.contains(placeholder) {
+        if unquoted.contains(placeholder) {
             errors.push(crate::i18n::text(
                 "Specifica con placeholder da completare.",
             ));

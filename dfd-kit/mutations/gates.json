@@ -739,5 +739,26 @@
       "undeclared_acceptance_files_are_warned"
     ],
     "purpose": "Una radice dei casi assente o fuori dal progetto blocca la Fase 0."
+  },
+  {
+    "id": "spec-placeholder-quotes-ignored",
+    "file": "src/lib.rs",
+    "before": "        if unquoted.contains(placeholder) {",
+    "after": "        if spec.contains(placeholder) {",
+    "tests": [
+      "quoted_placeholders_do_not_block_review"
+    ],
+    "purpose": "Un segnaposto dentro una citazione o nel codice non blocca la review di design."
+  },
+  {
+    "id": "spec-placeholder-free-text-blocks",
+    "file": "src/lib.rs",
+    "before": "        .map(|line| quoted.replace_all(line, \"\"))",
+    "after": "        .map(|_| std::borrow::Cow::Borrowed(\"\"))",
+    "tests": [
+      "quoted_placeholders_do_not_block_review",
+      "placeholder_design_blocks_approval"
+    ],
+    "purpose": "Un segnaposto nel testo libero della specifica continua a bloccare la review."
   }
 ]

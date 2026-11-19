@@ -1,0 +1,35 @@
+   Compiling dfd-kit v0.3.0 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.55s
+     Running tests/workflow.rs (target/debug/deps/workflow-75bc23d7b33a9a1f)
+
+running 1 test
+test quoted_placeholders_do_not_block_review ... FAILED
+
+failures:
+
+---- quoted_placeholders_do_not_block_review stdout ----
+
+thread 'quoted_placeholders_do_not_block_review' (68148141) panicked at tests/workflow.rs:339:11:
+assertion `left == right` failed: args: ["review-design", "001-paypal"]
+stdout: {
+  "decisions": [],
+  "errors": [
+    "Specification has unresolved placeholders."
+  ],
+  "feature": "001-paypal",
+  "gate": "blocked",
+  "route": "light"
+}
+
+stderr: 
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    quoted_placeholders_do_not_block_review
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 94 filtered out; finished in 1.91s
+
+error: test failed, to rerun pass `--test workflow`
