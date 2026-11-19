@@ -1,0 +1,12 @@
+$ cargo test --locked --offline --test workflow quoted_placeholders_do_not_block_review
+# executed_at: 2026-11-19T00:43:40.923310Z
+
+running 1 test
+test quoted_placeholders_do_not_block_review ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 94 filtered out; finished in 0.83s
+
+   Compiling dfd-kit v0.3.1 (/Users/martoeporedia/lavori/dfd-framework/dfd-kit)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.74s
+     Running tests/workflow.rs (target/debug/deps/workflow-20bf132b2332c5af)
+# exit_code: 0

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "architecture": {
+      "level": "low",
+      "rationale": "Una funzione di filtro del testo prima di un controllo esistente; nessun contratto o schema cambia."
+    },
+    "business": {
+      "level": "low",
+      "rationale": "Sblocca citazioni letterali richieste dalle skill; nessun effetto su progetti senza citazioni."
+    },
+    "cost": {
+      "level": "low",
+      "rationale": "Nessuna dipendenza nuova; regex già usata nel crate."
+    },
+    "reliability": {
+      "level": "low",
+      "rationale": "Il controllo resta attivo sul testo libero: un TODO del template non citato blocca come prima; coperto da test e mutante."
+    },
+    "security": {
+      "level": "low",
+      "rationale": "Allentamento limitato: un segnaposto nascosto tra virgolette passerebbe, ma resta la review umana del design (SEC-03)."
+    }
+  }
+}

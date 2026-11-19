@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "development_fingerprint": "3129b3410f99dc9956881a227cbf666932fb91974e96f3e377f51efbcc3963e5",
+  "owner": "manutentore del repository",
+  "artifact": "Release GitHub v0.3.1 di dfd-kit: dfd-linux-x86_64.tar.gz, dfd-macos-arm64.tar.gz, dfd-macos-x86_64.tar.gz, dfd-windows-x86_64.tar.gz e SHA256SUMS, costruiti da .github/workflows/release.yml",
+  "revision": "Commit di merge della PR #23 su main, con il contenuto verificato al commit c04612ede4ec65cad0be118b51c6d56e2954f790 (CI run 44431507465); il workflow di release riesegue tutta la CI sul commit del tag",
+  "environment": "GitHub Releases del repository pubblico MartoEporedia/dfd-framework",
+  "strategy": "direct",
+  "strategy_rationale": "Un binario scaricabile non ha traffico da frazionare: l'esposizione è la pubblicazione della release al push del tag, preceduta dai controlli e dalla CI completa nello stesso run; il rollback elimina release e tag.",
+  "steps": [
+    {
+      "id": "release-v0-3-1",
+      "audience": "chi scarica dfd-kit dall'ultima release, compreso il prompt di installazione",
+      "percentage": 100,
+      "duration_minutes": 60,
+      "promotion": "workflow Release verde; quattro archivi e SHA256SUMS nella release; dfd-macos-arm64 scaricato, checksum verificato, dfd --version 0.3.1 e dfd doctor riuscito; note con le sezioni EN e IT della 0.3.1",
+      "stop": "workflow Release fallito, archivio mancante, checksum non corrispondente o doctor fallito sul binario scaricato"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "SEC-03",
+      "signal": "controllo dei segnaposto nella review di design",
+      "threshold": "citazioni e codice non bloccano; testo libero blocca; mutanti spec-placeholder-* intercettati",
+      "verification": "Red/green di quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SLO-01",
+      "signal": "comandi e contratti sui progetti esistenti",
+      "threshold": "suite completa verde; gate delle specifiche già approvate invariati",
+      "verification": "Red/green di quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SLO-02",
+      "signal": "job quality, mutations, binaries",
+      "threshold": "tutti success nella CI della PR #23 e nel workflow Release",
+      "verification": "Red/green di quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "COST-02",
+      "signal": "costo delle verifiche",
+      "threshold": "due mutanti nuovi; CI nei tempi abituali",
+      "verification": "Red/green di quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "UX-01",
+      "signal": "note della release",
+      "threshold": "sezioni EN e IT della 0.3.1 presenti; check_translations 0 errori",
+      "verification": "Red/green di quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    }
+  ],
+  "alarms": [
+    {
+      "name": "Notifica di fallimento del workflow Release",
+      "owner": "Marco Martorana",
+      "status": "ready",
+      "reference": "Notifiche GitHub Actions per i workflow falliti avviati dal proprio push (impostazioni di notifica dell'account)",
+      "activation_plan": "",
+      "justification": "",
+      "evidence": [
+        {
+          "path": ".dfd/features/013-unforeseen-states-kit/evidence/11-actions-notifications.log",
+          "sha256": "3bc3b71c1dc6fe736b8efb3ec8f2b88d4b3f115d6c4024806de9fe1f895624f3"
+        }
+      ]
+    }
+  ],
+  "dashboards": [
+    {
+      "name": "Pagine Actions e Releases del repository",
+      "owner": "Marco Martorana",
+      "status": "ready",
+      "reference": "https://github.com/MartoEporedia/dfd-framework/actions e https://github.com/MartoEporedia/dfd-framework/releases",
+      "activation_plan": "",
+      "justification": "",
+      "evidence": [
+        {
+          "path": ".dfd/features/014-quoted-placeholders/evidence/04-ci.log",
+          "sha256": "d9ae55c852df555d2e2cf5b5469d644a293daa05631a8912fa895bf07a10afa6"
+        }
+      ]
+    }
+  ],
+  "feature_flag": {
+    "name": "Controllo dell'esposizione tramite tag",
+    "owner": "Marco Martorana",
+    "status": "excluded",
+    "reference": "",
+    "activation_plan": "",
+    "justification": "Senza tag v0.3.1 non esiste release: il push del tag è il controllo dell'esposizione e il rollback è eliminare release e tag.",
+    "evidence": []
+  },
+  "rollback_trigger": "Workflow Release fallito dopo la creazione della release, archivio mancante, checksum non corrispondente o doctor fallito sul binario scaricato",
+  "rollback_procedure": "gh release delete v0.3.1 --cleanup-tag --yes; correggere sul ramo; pubblicare v0.3.2 con la sua sezione nel changelog. La v0.3.0 resta disponibile.",
+  "rollback_verification": "gh release view v0.3.1 fallisce e la pagina Releases non mostra la v0.3.1; la release successiva supera la promozione",
+  "on_call": "Marco Martorana",
+  "communications": [
+    {
+      "audience": "manutentore e chi segue il repository",
+      "owner": "Marco Martorana",
+      "informed_at": "2026-11-19T00:50:30Z",
+      "reference": "https://github.com/MartoEporedia/dfd-framework/pull/23"
+    }
+  ],
+  "non_functional_tests": [
+    {
+      "area": "load",
+      "applicability": "excluded",
+      "justification": "Nessun servizio: un filtro sul testo della specifica; GitHub serve i file della release.",
+      "execution": null
+    },
+    {
+      "area": "resilience",
+      "applicability": "applicable",
+      "justification": "",
+      "execution": {
+        "command": "sh -c cargo fmt --all --check && cargo clippy --locked --offline --all-targets -- -D warnings && cargo test --locked --offline && cargo build --locked --offline --release && ./target/release/dfd doctor && python3 -m unittest discover -s tests -p 'test_*.py' && python3 scripts/check_translations.py",
+        "executed_at": "2026-11-19T00:44:36.380041Z",
+        "exit_code": 0,
+        "log": {
+          "path": ".dfd/features/014-quoted-placeholders/evidence/03-exec-suite.log",
+          "sha256": "65e4c4698634d43eb63418d3189da93bf576f8156e8dd6dfec2cd89da44110cd"
+        }
+      }
+    },
+    {
+      "area": "security",
+      "applicability": "applicable",
+      "justification": "",
+      "execution": {
+        "command": "cargo test --locked --offline --test workflow quoted_placeholders_do_not_block_review",
+        "executed_at": "2026-11-19T00:43:40.923310Z",
+        "exit_code": 0,
+        "log": {
+          "path": ".dfd/features/014-quoted-placeholders/evidence/02-exec-green-quoted-placeholders.log",
+          "sha256": "18b109743a27dde3d4dfd7f1d5aaa639784bfdef00b80703e48ca28de91a54db"
+        }
+      }
+    }
+  ],
+  "open_questions": []
+}
