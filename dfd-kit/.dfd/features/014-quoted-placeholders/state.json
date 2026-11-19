@@ -5,7 +5,7 @@
   "domain": "dfd-kit",
   "kind": "feature",
   "scope": "Funzione di controllo dei segnaposto della specifica in src/lib.rs (validate_design): il testo tra virgolette doppie (\"...\" o “...”) su una riga, il codice inline tra backtick e i blocchi di codice recintati non contano come segnaposto. Test di regressione in tests/workflow.rs e voce nei CHANGELOG. Nessuna modifica ai template, alle skill, agli schemi JSON o agli altri controlli TODO (piano, rollout, setup).",
-  "phase": "pre-release",
+  "phase": "release-reviewed",
   "created_at": "2026-11-19T00:36:08.707191Z",
   "risk": "low",
   "route": "light",

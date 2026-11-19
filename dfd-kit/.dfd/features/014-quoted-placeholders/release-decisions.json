@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "decisions": [
+    {
+      "decision": "approved",
+      "reviewer": "Marco Martorana",
+      "role": "tech-lead",
+      "note": "Release v0.3.1 approvata",
+      "conditions": [],
+      "recorded_at": "2026-11-19T01:40:11.991362Z",
+      "fingerprint": "6b5f7900644d1ef5ab7fe5ba4ec449407b006e3243b91ff35bb2ba6ef10668d6",
+      "snapshot": {
+        ".dfd/features/014-quoted-placeholders/evidence.json": "ce9918efd547ec5fda61213365a4819ad0b798158434cf73d445b71497a6d3a3",
+        ".dfd/features/014-quoted-placeholders/evidence/01-exec-red-quoted-placeholders.log": "afd887d061849c70f55c552f70833c98447a3ca267cb9d8ef9ebd5532e7961b9",
+        ".dfd/features/014-quoted-placeholders/evidence/02-exec-green-quoted-placeholders.log": "18b109743a27dde3d4dfd7f1d5aaa639784bfdef00b80703e48ca28de91a54db",
+        ".dfd/features/014-quoted-placeholders/evidence/03-exec-suite.log": "65e4c4698634d43eb63418d3189da93bf576f8156e8dd6dfec2cd89da44110cd",
+        ".dfd/features/014-quoted-placeholders/evidence/04-ci.log": "d9ae55c852df555d2e2cf5b5469d644a293daa05631a8912fa895bf07a10afa6",
+        ".dfd/features/014-quoted-placeholders/plan.json": "5bd44e4114b0268bc4177d4b6d33510e565391dbfd48fe25d82bf74c56466953",
+        ".dfd/features/014-quoted-placeholders/plan.md": "3804934905f0fb8f612c782ca343b5460e84809c900085451441ddc5fc59c082",
+        ".dfd/features/014-quoted-placeholders/release-notes.md": "absent",
+        ".dfd/features/014-quoted-placeholders/rollout.json": "b4a87a046208f0318a800ae1fb1c74c05bcd5c50d9327fc5ec8d9da919469979",
+        ".dfd/features/014-quoted-placeholders/rollout.md": "ff9eaf9865b27ce2273d5887dab683b92bb6d376a70712fa978635c30061ffc9",
+        "CHANGELOG.md": "5bcac2e24fb21dcad4661f6d05695bf66ee7091d840a44175d1e6f237dca58e4",
+        "Cargo.lock": "7e9300240564349457afd9e67d25f883a75a00e6fb382233198628602c4b7642",
+        "Cargo.toml": "47d96c14e31aa9d8a941a0644070bf50b9091673668b571356ab0d8531e56864",
+        "design": "1bc1311df41561523b512177b4ca09a9e43325a140bd3fd0808868bf06c70d7e",
+        "design-decision": "7a96a5ed9f98ada0c11a7327077b44192dea62a372c0bc8902d198a8495aa359",
+        "i18n/documents.json": "be721e018cf400e3b1ab87ddc074dae0cc642cbeca3f214819302b61a247703a",
+        "it/CHANGELOG.md": "26cb9f22add0e35c839c25c2e75a5e1391e729d6a9c9214a1803a0c16d4ba5d1",
+        "mutations/gates.json": "7a46c7b1d2569bad94abf0c9899351c6668031959038f4477796bb2ea755acce",
+        "src/lib.rs": "ccae2b5fa7b630eaa56bbc593d36bfae999b8b37b68e7448a27a28f9002e9a17",
+        "tests/workflow.rs": "bf3ea395fee497c35fcaa2a535770f19eb54e66bce4e8410d39b54932a48e33d"
+      }
+    }
+  ]
+}
