@@ -102,6 +102,17 @@
         "path": ".dfd/changes/fix-todo-in-quotes/suite.log",
         "sha256": "6798255aa64b606f48b051c55230d73fe2cf522e1d887c7d67e765c3a2393497"
       }
+    },
+    {
+      "task": null,
+      "kind": "ci",
+      "command": "GitHub Actions DFD Kit run 44428901035 (pull_request #22, commit bf90d11cb0d3a255db66da4c3140318e7a14b46d): quality, mutations, binaries x4",
+      "executed_at": "2026-11-19T00:30:58Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/changes/fix-todo-in-quotes/ci.log",
+        "sha256": "3ae19c5c8eeca4b9c6ed6c747d8c26f2e450e5b05370d7f8869d1361b9841c47"
+      }
     }
   ],
   "verification_notes": "Red prima della correzione: la specifica con le parole del richiedente tra virgolette (\"TODO design: ...\"), “TODO”, codice inline e un blocco di codice con TODO veniva bloccata (exit 2 invece di 0). Green dopo without_quotations in validate_design. Lo stesso test verifica che un 'Owner: TODO' nel testo libero continui a bloccare. Mutanti spec-placeholder-quotes-ignored e spec-placeholder-free-text-blocks uccisi (2/2). Il test esistente placeholder_design_blocks_approval resta verde.",
