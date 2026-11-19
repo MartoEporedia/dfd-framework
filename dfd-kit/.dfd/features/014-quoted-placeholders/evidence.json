@@ -89,6 +89,17 @@
       },
       "snapshot": {},
       "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "ci",
+      "command": "GitHub Actions DFD Kit run 44431507465 (pull_request #23, commit c04612ede4ec65cad0be118b51c6d56e2954f790): quality, mutations, binaries x4",
+      "executed_at": "2026-11-19T00:50:53Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/014-quoted-placeholders/evidence/04-ci.log",
+        "sha256": "d9ae55c852df555d2e2cf5b5469d644a293daa05631a8912fa895bf07a10afa6"
+      }
     }
   ],
   "refactor_notes": "Nessun refactor: una funzione nuova (without_quotations) applicata solo al controllo dei segnaposto della specifica; gli altri controlli dei segnaposto (piano, rollout, setup) restano invariati. Red eseguito con src/lib.rs del commit 1405854 (prima del fix) e poi ripristinato; il record rapido fix-todo-in-quotes contiene il red/green originale. Osservabilità: nessuna strumentazione necessaria, messaggi ed exit code invariati. Avviso 'skipped' nel log CI, se presente: passo interno condizionale di dtolnay/rust-toolchain, come nelle feature precedenti."

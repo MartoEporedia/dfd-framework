@@ -1,7 +1,10 @@
 # DFD development verification
 
-Gate: "blocked-evidence"
+Gate: "ready-for-pre-release"
 
-- Evidence of a passing full suite in CI required.
+
+## Warnings
+
+- Log .dfd/features/014-quoted-placeholders/evidence/04-ci.log (ci, exit 0) contains the marker “skipped”.
 
 Structural checks of declared evidence and local hashes do not certify log authenticity, code quality or release approval.
