@@ -6,6 +6,10 @@ Tutte le modifiche rilevanti di DFD Kit. Il formato segue [Keep a Changelog](htt
 
 ## [Unreleased]
 
+### Corretto
+
+- `review-design` non tratta più `TODO`, `YYYY-MM-DD` o `[Nome Feature]` come segnaposto da completare quando compaiono tra virgolette doppie, in codice inline o in blocchi di codice della specifica, così le parole del richiedente si possono citare alla lettera. I segnaposto nel testo libero continuano a bloccare la review.
+
 ## [0.3.0] - 2026-11-18
 
 ### Aggiunto
