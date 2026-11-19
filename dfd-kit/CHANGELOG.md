@@ -6,6 +6,8 @@ All notable changes to DFD Kit. The format follows [Keep a Changelog](https://ke
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-11-19
+
 ### Fixed
 
 - `review-design` no longer treats `TODO`, `YYYY-MM-DD` or `[Feature Name]` as unresolved placeholders when they appear inside double quotes, inline code or fenced code blocks of the specification, so the requester's words can be quoted verbatim. Placeholders in free text still block the review.

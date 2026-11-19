@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "owner": "manutentore del repository",
+  "objective": "review-design non blocca le parole del richiedente citate alla lettera che contengono segnaposto, continua a bloccare i segnaposto nel testo libero, e la correzione esce come release v0.3.1.",
+  "business_metrics": [
+    "Test di regressione red/green e mutanti mirati intercettati",
+    "Release GitHub v0.3.1 pubblicata dal workflow di release con CI verde, archivi e checksum verificati"
+  ],
+  "epic": {
+    "reference": "Richiesta del manutentore in chat il 2026-11-19 ('Intanto correggi il bug del TODO nelle citazioni', 'Unisci la #22 e rilascia la 0.3.1'); PR #22",
+    "approved_by": "manutentore del repository",
+    "approved_at": "2026-11-19T00:36:44Z"
+  },
+  "criteria": [
+    {
+      "id": "OBS-01",
+      "applicability": "excluded",
+      "justification": "Messaggi ed exit code invariati."
+    },
+    {
+      "id": "OBS-02",
+      "applicability": "excluded",
+      "justification": "Meccanismo delle evidenze invariato."
+    },
+    {
+      "id": "SEC-01",
+      "applicability": "excluded",
+      "justification": "Nessun percorso o input nuovo."
+    },
+    {
+      "id": "SEC-02",
+      "applicability": "excluded",
+      "justification": "Nessuna scrittura cambiata."
+    },
+    {
+      "id": "SEC-03",
+      "applicability": "applicable",
+      "implementation": "Il controllo dei segnaposto resta attivo sul testo libero; la review umana non cambia.",
+      "verification": "Red/green di quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SLO-01",
+      "applicability": "applicable",
+      "implementation": "Comandi e contratti invariati.",
+      "verification": "Red/green di quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SLO-02",
+      "applicability": "applicable",
+      "implementation": "Suite, doctor, check_translations e CI verdi.",
+      "verification": "Red/green di quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "SLO-03",
+      "applicability": "excluded",
+      "justification": "Scritture e lock invariati."
+    },
+    {
+      "id": "COST-01",
+      "applicability": "excluded",
+      "justification": "Binario offline invariato."
+    },
+    {
+      "id": "COST-02",
+      "applicability": "applicable",
+      "implementation": "Due mutanti mirati, nessuna verifica sproporzionata.",
+      "verification": "Red/green di quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "UX-01",
+      "applicability": "applicable",
+      "implementation": "Le parole del richiedente si citano alla lettera come chiede dfd-specify.",
+      "verification": "Red/green di quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    },
+    {
+      "id": "UX-02",
+      "applicability": "excluded",
+      "justification": "Skill invariate."
+    }
+  ],
+  "test_plan": "Red/green di quoted_placeholders_do_not_block_review (citazioni, codice inline e blocchi non bloccano; testo libero sì); placeholder_design_blocks_approval resta verde; mutanti spec-placeholder-quotes-ignored e spec-placeholder-free-text-blocks; suite completa e CI.",
+  "guardrails": "Nessun allentamento fuori da citazioni e codice; nessun gate nuovo; template, skill e schemi invariati.",
+  "open_questions": []
+}

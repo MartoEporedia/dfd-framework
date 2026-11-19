@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "1bc1311df41561523b512177b4ca09a9e43325a140bd3fd0808868bf06c70d7e",
+  "tasks": [
+    {
+      "id": "quoted-placeholders",
+      "owner": "manutentore del repository",
+      "description": "Segnaposto tra virgolette e nel codice ignorati dalla review di design",
+      "criteria": [
+        "SEC-03",
+        "SLO-01",
+        "SLO-02",
+        "COST-02",
+        "UX-01"
+      ],
+      "implementation": "without_quotations in src/lib.rs rimuove testo tra virgolette doppie, codice inline e blocchi recintati prima del controllo dei segnaposto in validate_design; mutanti spec-placeholder-quotes-ignored e spec-placeholder-free-text-blocks; CHANGELOG EN/IT; versione 0.3.1.",
+      "verification": "Red (src/lib.rs prima del fix, 1405854) e green di cargo test quoted_placeholders_do_not_block_review; mutanti mirati; suite locale (fmt, Clippy, test, doctor, check_translations, test Python); CI reale sulla PR."
+    }
+  ],
+  "open_questions": []
+}

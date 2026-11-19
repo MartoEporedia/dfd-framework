@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "design_fingerprint": "1bc1311df41561523b512177b4ca09a9e43325a140bd3fd0808868bf06c70d7e",
+  "plan_hash": "0369b018ab5253ec03fc0dda2acd3b1c9080ca39c4f6b23e7a4770e739b939c4",
+  "files": [
+    {
+      "path": "src/lib.rs",
+      "sha256": "ccae2b5fa7b630eaa56bbc593d36bfae999b8b37b68e7448a27a28f9002e9a17"
+    },
+    {
+      "path": "tests/workflow.rs",
+      "sha256": "bf3ea395fee497c35fcaa2a535770f19eb54e66bce4e8410d39b54932a48e33d"
+    },
+    {
+      "path": "mutations/gates.json",
+      "sha256": "7a46c7b1d2569bad94abf0c9899351c6668031959038f4477796bb2ea755acce"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "5bcac2e24fb21dcad4661f6d05695bf66ee7091d840a44175d1e6f237dca58e4"
+    },
+    {
+      "path": "it/CHANGELOG.md",
+      "sha256": "26cb9f22add0e35c839c25c2e75a5e1391e729d6a9c9214a1803a0c16d4ba5d1"
+    },
+    {
+      "path": "i18n/documents.json",
+      "sha256": "be721e018cf400e3b1ab87ddc074dae0cc642cbeca3f214819302b61a247703a"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "47d96c14e31aa9d8a941a0644070bf50b9091673668b571356ab0d8531e56864"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "7e9300240564349457afd9e67d25f883a75a00e6fb382233198628602c4b7642"
+    }
+  ],
+  "checks": [
+    {
+      "task": "quoted-placeholders",
+      "kind": "red",
+      "command": "cargo test --locked --offline --test workflow quoted_placeholders_do_not_block_review",
+      "executed_at": "2026-11-19T00:43:31.290039Z",
+      "exit_code": 101,
+      "log": {
+        "path": ".dfd/features/014-quoted-placeholders/evidence/01-exec-red-quoted-placeholders.log",
+        "sha256": "afd887d061849c70f55c552f70833c98447a3ca267cb9d8ef9ebd5532e7961b9"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-02": "ce4d776f69d18456f8ecd3de5ad630170ea1ad7f7d564d7ca30079d6808afb80",
+        "SEC-03": "78159291dcea6b249045ea81c44a14dfbe9c7caa7efdd5e2a4cddafe65069430",
+        "SLO-01": "e2a930bd7a637fabac54910fab9587c9b11b9719fa738df5fa4e36e18007ea4b",
+        "SLO-02": "35593a52c377f67621158db0f47de12efe5cc8f9a7f166820e36f4640d940e05",
+        "UX-01": "1b9ef94260c459fda6f4be1945a356a15fb0a4fd88a7e88e5df1653677dbe3c2"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": "quoted-placeholders",
+      "kind": "green",
+      "command": "cargo test --locked --offline --test workflow quoted_placeholders_do_not_block_review",
+      "executed_at": "2026-11-19T00:43:40.923310Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/014-quoted-placeholders/evidence/02-exec-green-quoted-placeholders.log",
+        "sha256": "18b109743a27dde3d4dfd7f1d5aaa639784bfdef00b80703e48ca28de91a54db"
+      },
+      "snapshot": {},
+      "criteria_fingerprints": {
+        "COST-02": "ce4d776f69d18456f8ecd3de5ad630170ea1ad7f7d564d7ca30079d6808afb80",
+        "SEC-03": "78159291dcea6b249045ea81c44a14dfbe9c7caa7efdd5e2a4cddafe65069430",
+        "SLO-01": "e2a930bd7a637fabac54910fab9587c9b11b9719fa738df5fa4e36e18007ea4b",
+        "SLO-02": "35593a52c377f67621158db0f47de12efe5cc8f9a7f166820e36f4640d940e05",
+        "UX-01": "1b9ef94260c459fda6f4be1945a356a15fb0a4fd88a7e88e5df1653677dbe3c2"
+      },
+      "recorded_by": "dfd"
+    },
+    {
+      "task": null,
+      "kind": "suite",
+      "command": "sh -c cargo fmt --all --check && cargo clippy --locked --offline --all-targets -- -D warnings && cargo test --locked --offline && cargo build --locked --offline --release && ./target/release/dfd doctor && python3 -m unittest discover -s tests -p 'test_*.py' && python3 scripts/check_translations.py",
+      "executed_at": "2026-11-19T00:44:36.380041Z",
+      "exit_code": 0,
+      "log": {
+        "path": ".dfd/features/014-quoted-placeholders/evidence/03-exec-suite.log",
+        "sha256": "65e4c4698634d43eb63418d3189da93bf576f8156e8dd6dfec2cd89da44110cd"
+      },
+      "snapshot": {},
+      "recorded_by": "dfd"
+    }
+  ],
+  "refactor_notes": "Nessun refactor: una funzione nuova (without_quotations) applicata solo al controllo dei segnaposto della specifica; gli altri controlli dei segnaposto (piano, rollout, setup) restano invariati. Red eseguito con src/lib.rs del commit 1405854 (prima del fix) e poi ripristinato; il record rapido fix-todo-in-quotes contiene il red/green originale. Osservabilità: nessuna strumentazione necessaria, messaggi ed exit code invariati. Avviso 'skipped' nel log CI, se presente: passo interno condizionale di dtolnay/rust-toolchain, come nelle feature precedenti."
+}
